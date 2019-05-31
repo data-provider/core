@@ -6,7 +6,7 @@ Cache listeners will be added too to this returned Selector, so, if returned sou
 
 ```js
 
-import { Api } from "@nex/mercury-api";
+import { Api } from "@xbyorange/mercury-api";
 
 const commonBookModel = new Api("http://common-api/books/:id");
 

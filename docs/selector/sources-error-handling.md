@@ -5,8 +5,8 @@ Dependant sources of a Selector can return an error. Then, the full Selector wil
 Use the `catch` property of a custom source to catch his errors:
 
 ```js
-import { Selector } from "@nex/reactive-data-source";
-import { Api } from "@nex/mercury-api";
+import { Selector } from "@xbyorange/mercury";
+import { Api } from "@xbyorange/mercury-api";
 
 const alternativeBooksCollectionApi = new Api("http://foo-alternative-api/books")
 

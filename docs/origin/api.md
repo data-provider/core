@@ -30,7 +30,7 @@ Available methods for internal usage:
 #### Example
 
 ```js
-import { Origin } from "@nex/mercury";
+import { Origin } from "@xbyorange/mercury";
 import requestPromise from "request-promise";
 
 export class Request extends Origin {

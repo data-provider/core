@@ -7,7 +7,7 @@ Selectors can be queried in the same way as Origins. Please read before the [ori
 The query parameters can be passed to each source used in the selector, as well as the results of the previous sources as an array. For doing this, the source to be used has to be defined inside an object with the format:
 
 ```js
-import { Selector } from "@nex/reactive-data-source";
+import { Selector } from "@xbyorange/mercury";
 
 const specificAuthorBooks = new Selector(
   {
