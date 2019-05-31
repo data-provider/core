@@ -1,7 +1,3 @@
-[![pipeline status](https://gitlab.com/OrangeX/frontend/libs/mercury/badges/master/pipeline.svg)](https://gitlab.com/OrangeX/frontend/libs/mercury/commits/master)
-[![coverage report](https://gitlab.com/OrangeX/frontend/libs/mercury/badges/master/coverage.svg)](https://gitlab.com/OrangeX/frontend/libs/mercury/commits/master)
-[SonarQube](https://sonarqube.apps.pre.xbyorange.com/dashboard?id=mercury%3Amaster)
-
 # Reactive CRUD data abstraction layer
 
 ![Mercury Logo](assets/logos/mercury_name_black_500.png)
@@ -122,8 +118,8 @@ Connect a source to all components that need it. Mercury will fetch data only wh
 
 Components will became reactive to CRUD actions automatically (dispatch a `create` action over a collection, and Mercury will refresh it automatically on any rendered binded component)
 
-[mercury-api-url]: https://gitlab.com/OrangeX/frontend/libs/mercury-api
-[mercury-memory-url]: https://gitlab.com/OrangeX/frontend/libs/mercury-memory
-[mercury-browser-storage-url]: https://gitlab.com/OrangeX/frontend/libs/mercury-browser-storage
-[mercury-prismic-url]: https://gitlab.com/OrangeX/frontend/libs/mercury-prismic
-[react-mercury-url]: https://gitlab.com/OrangeX/frontend/libs/react-mercury
+[mercury-api-url]: https://github.com/xbyorange/mercury-api
+[mercury-memory-url]: https://github.com/xbyorange/mercury-memory
+[mercury-browser-storage-url]: https://github.com/xbyorange/mercury-browser-storage
+[mercury-prismic-url]: https://github.com/xbyorange/mercury-prismic
+[react-mercury-url]: https://github.com/xbyorange/react-mercury
