@@ -1,7 +1,3 @@
-[![pipeline status](https://gitlab.com/OrangeX/frontend/libs/mercury/badges/master/pipeline.svg)](https://gitlab.com/OrangeX/frontend/libs/mercury/commits/master)
-[![coverage report](https://gitlab.com/OrangeX/frontend/libs/mercury/badges/master/coverage.svg)](https://gitlab.com/OrangeX/frontend/libs/mercury/commits/master)
-[SonarQube](https://sonarqube.apps.pre.xbyorange.com/dashboard?id=mercury%3Amaster)
-
 # Reactive CRUD data abstraction layer
 
 ![Mercury Logo](assets/logos/mercury_name_black_500.png)
@@ -13,29 +9,29 @@ __Mercury__ provides an asynchronous CRUD data abstraction layer that can be use
 Provides:
 
 * __"Origin"__ class from which your own specific origin implementation should extend.
-	* __CRUD__. Define different methods for `read`, `create`, `update`, `delete` actions.
-	* __Asynchronous__. Three properties are available for each method: `value`, `loading`, `error`.
-	* __Queryable__. Applies queries to your CRUD methods using the built-in `query` method.
-	* __Chainable__. Queries can be chained, the resultant query will be the extension of all.
-	* __Customizable__. Custom queries can be added to the instances.
-	* __Cache__. Use built-in cache to avoid the same query being executed more than once if not necessary.
-	* __Clean__ cache on demand with the built-in `clean` method.
-	* __Events__ emitter.You can add listeners to changes and cache events.
-	* __Extensible__. Implement your own origins connectors, or use one of the already existant:
-		* [Api][mercury-api-url]
-		* [Memory Storage][mercury-memory-url]
-		* [Local Storage][mercury-browser-storage-url]
-		* [Session Storage][mercury-browser-storage-url]
-		* [Prismic CMS][mercury-prismic-url]
+  * __CRUD__. Define different methods for `read`, `create`, `update`, `delete` actions.
+  * __Asynchronous__. Three properties are available for each method: `value`, `loading`, `error`.
+  * __Queryable__. Applies queries to your CRUD methods using the built-in `query` method.
+  * __Chainable__. Queries can be chained, the resultant query will be the extension of all.
+  * __Customizable__. Custom queries can be added to the instances.
+  * __Cache__. Use built-in cache to avoid the same query being executed more than once if not necessary.
+  * __Clean__ cache on demand with the built-in `clean` method.
+  * __Events__ emitter.You can add listeners to changes and cache events.
+  * __Extensible__. Implement your own origins connectors, or use one of the already existant:
+    * [Api][mercury-api-url]
+    * [Memory Storage][mercury-memory-url]
+    * [Local Storage][mercury-browser-storage-url]
+    * [Session Storage][mercury-browser-storage-url]
+    * [Prismic CMS][mercury-prismic-url]
 * __"Selector"__ constructor for combining or transforming the result of one or many origins.
-	* __Declarative__. Declare which Origins your Selector needs to consume. Mercury will do the rest for you.
-	* __Composable__. Can fetch data from Origins or from another Selectors.
-	* __Homogeneus__. Provides exactly the same interface than origins. Consumers don't need to know if they are consuming an Origin or a Selector.
-	* __Cache__. Implements a cache that avoids the execution of the same Selector and query more than once.
-	* __Reactive__. When one of the related sources cache is cleaned, the Selector cache is cleaned too.
-	* __Switchable__. Consumed "source" can be changed programatically.
-	* __Parallellizable__. Can fetch data from declared sources in series or in parallel.
-	* __Queryable__. Queries can be applied as in Origins. You can pass the `query` data to sources, or use it in the `parser` function, after all related sources data have been fetched.
+  * __Declarative__. Declare which Origins your Selector needs to consume. Mercury will do the rest for you.
+  * __Composable__. Can fetch data from Origins or from another Selectors.
+  * __Homogeneus__. Provides exactly the same interface than origins. Consumers don't need to know if they are consuming an Origin or a Selector.
+  * __Cache__. Implements a cache that avoids the execution of the same Selector and query more than once.
+  * __Reactive__. When one of the related sources cache is cleaned, the Selector cache is cleaned too.
+  * __Switchable__. Consumed "source" can be changed programatically.
+  * __Parallellizable__. Can fetch data from declared sources in series or in parallel.
+  * __Queryable__. Queries can be applied as in Origins. You can pass the `query` data to sources, or use it in the `parser` function, after all related sources data have been fetched.
 
 ## Install
 
@@ -122,8 +118,8 @@ Connect a source to all components that need it. Mercury will fetch data only wh
 
 Components will became reactive to CRUD actions automatically (dispatch a `create` action over a collection, and Mercury will refresh it automatically on any rendered binded component)
 
-[mercury-api-url]: https://gitlab.com/OrangeX/frontend/libs/mercury-api
-[mercury-memory-url]: https://gitlab.com/OrangeX/frontend/libs/mercury-memory
-[mercury-browser-storage-url]: https://gitlab.com/OrangeX/frontend/libs/mercury-browser-storage
-[mercury-prismic-url]: https://gitlab.com/OrangeX/frontend/libs/mercury-prismic
-[react-mercury-url]: https://gitlab.com/OrangeX/frontend/libs/react-mercury
+[mercury-api-url]: https://github.com/xbyorange/mercury-api
+[mercury-memory-url]: https://github.com/xbyorange/mercury-memory
+[mercury-browser-storage-url]: https://github.com/xbyorange/mercury-browser-storage
+[mercury-prismic-url]: https://github.com/xbyorange/mercury-prismic
+[react-mercury-url]: https://github.com/xbyorange/react-mercury
