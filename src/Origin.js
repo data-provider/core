@@ -15,10 +15,10 @@ import {
 } from "./helpers";
 
 export class Origin {
-  constructor(id = "", defaultValue) {
+  constructor(id, defaultValue) {
     this._eventEmitter = new EventEmitter();
     this._queries = {};
-    this._id = id;
+    this._id = id || "";
     this._cache = new Cache(this._eventEmitter, this._id);
     this._defaultValue =
       typeof defaultValue !== "undefined" ? cloneDeep(defaultValue) : defaultValue;
