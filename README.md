@@ -8,7 +8,7 @@
 
 ## Overview
 
-This package provides a Mercury Memory origin for storing objects.
+This package provides a Mercury origin for handling memory objects.
 
 * __Mercury queries__ based on object keys.
 * __Reactivity__ to CRUD actions. When a "create", "update" or "delete" method is called over an instance, the cache clean events are dispatched.
