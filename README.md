@@ -118,6 +118,11 @@ Connect a source to all components that need it. Mercury will fetch data only wh
 
 Components will became reactive to CRUD actions automatically (dispatch a `create` action over a collection, and Mercury will refresh it automatically on any rendered binded component)
 
+## Contributing
+
+Contributors are welcome.
+Please read the [contributing guidelines](.github/CONTRIBUTING.md) and [code of conduct](.github/CODE_OF_CONDUCT.md).
+
 [mercury-api-url]: https://github.com/xbyorange/mercury-api
 [mercury-memory-url]: https://github.com/xbyorange/mercury-memory
 [mercury-browser-storage-url]: https://github.com/xbyorange/mercury-browser-storage
