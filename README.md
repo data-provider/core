@@ -8,7 +8,7 @@
 
 ## Overview
 
-This package provides a Mercury Browser Storage origin. It "wraps" localStorage and sessionStorage with a [Mercury][mercury-url] interface, providing:
+This package provides Mercury browser localStorage and sessionStorage origins. It "wraps" localStorage and sessionStorage with a [Mercury][mercury-url] interface, providing:
 
 * __Mercury queries__ based on object keys.
 * __Reactivity__ to CRUD actions. When a "create", "update" or "delete" method is called over an instance, the cache clean events are dispatched.
