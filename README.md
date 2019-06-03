@@ -26,8 +26,8 @@ Provides:
   * __Extensible__. Implement your own origins connectors, or use one of the already existant:
     * [Api][mercury-api-url]
     * [Memory Storage][mercury-memory-url]
-    * [Local Storage][mercury-browser-storage-url]
-    * [Session Storage][mercury-browser-storage-url]
+    * [Browser Local Storage][mercury-browser-storage-url]
+    * [Broswer Session Storage][mercury-browser-storage-url]
     * [Prismic CMS][mercury-prismic-url]
 * __"Selector"__ constructor for combining or transforming the result of one or many origins.
   * __Declarative__. Declare which Origins your Selector needs to consume. Mercury will do the rest for you.
@@ -84,8 +84,8 @@ const results = await booksWithAuthors.read();
 
 * [Api][mercury-api-url]
 * [Memory Storage][mercury-memory-url]
-* [Local Storage][mercury-browser-storage-url]
-* [Session Storage][mercury-browser-storage-url]
+* [Browser Local Storage][mercury-browser-storage-url]
+* [Browser Session Storage][mercury-browser-storage-url]
 * [Prismic CMS][mercury-prismic-url]
 
 ### Creating a new Origin implementation.
