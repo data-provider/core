@@ -16,7 +16,7 @@ The following is a set of guidelines for contributing to this project. These are
   * [Git Commit Messages](#git-commit-messages)
   * [JavaScript Styleguide](#javascript-styleguide)
   * [Tests Styleguide](#tests-styleguide)
-* [Developer's certificate of origin](developers-certificate-of-origin-1.1)
+* [Developer's certificate of origin](#developers-certificate-of-origin-1.1)
 
 ## Code of Conduct
 
