@@ -14,8 +14,8 @@ test.describe("Origin error", () => {
       _read() {
         return new Promise((resolve, reject) => {
           setTimeout(() => {
-            reject(fooError), 50;
-          });
+            reject(fooError);
+          }, 50);
         });
       }
     };

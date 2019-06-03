@@ -13,8 +13,8 @@ test.describe("Origin loading", () => {
       _read() {
         return new Promise(resolve => {
           setTimeout(() => {
-            resolve(), 50;
-          });
+            resolve();
+          }, 50);
         });
       }
     };
