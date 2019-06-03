@@ -183,7 +183,7 @@ describe("Api events", () => {
       };
 
       const setAnyCalled = () => {
-        anyCalled = true;
+        calledAny = true;
       };
 
       books.onChangeAny(setAnyCalled);
