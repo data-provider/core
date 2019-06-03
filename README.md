@@ -147,7 +147,7 @@ Please read the [contributing guidelines](.github/CONTRIBUTING.md) and [code of 
 [npm-downloads-url]: https://www.npmjs.com/package/@xbyorange/mercury
 [npm-dependencies-image]: https://img.shields.io/david/xbyorange/mercury.svg
 [npm-dependencies-url]: https://david-dm.org/xbyorange/mercury
-[quality-gate-image]: https://sonarcloud.io/api/project_badges/measure?project=mercury&metric=alert_status
-[quality-gate-url]: https://sonarcloud.io/dashboard?id=mercury
+[quality-gate-image]: https://sonarcloud.io/api/project_badges/measure?project=xbyorange-mercury&metric=alert_status
+[quality-gate-url]: https://sonarcloud.io/dashboard?id=xbyorange-mercury
 [release-image]: https://img.shields.io/github/release-date/xbyorange/mercury.svg
 [release-url]: https://github.com/xbyorange/mercury/releases
