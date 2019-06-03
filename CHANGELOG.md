@@ -11,18 +11,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Removed
 ### BREAKING CHANGES
 
-## [1.0.2] - 2019-05-24
-### Fixed
-- Fixed typo and links in documentation
-
-## [1.0.1] - 2019-05-24
-### Fixed
-- Fixed api origin examples in documentation.
-- Fixed mercury origin libraries urls in documentation.
-
-## [1.0.0] - 2019-05-24
+## [1.0.0] - 2019-06-03
 ### BREAKING CHANGES
-- Forked from xByOrange reactive-data-source v1.7.0 library. (Only Origin and Selector are exposed from now)
+- Forked from xByOrange reactive-data-source v1.7.0 private library. (Only Origin and Selector are exposed from now)
 - Change "filter" property to "query"
 - Change property "\_isDataSource" to "\_isSourceMethod" and "\_isSource"
 - Change "addCustomFilters" and "addCustomFilter" by "addCustomQueries" and "addCustomQuery"
