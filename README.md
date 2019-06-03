@@ -1,3 +1,9 @@
+[![Build status][travisci-image]][travisci-url] [![Coverage Status][coveralls-image]][coveralls-url] [![Quality Gate][quality-gate-image]][quality-gate-url]
+
+[![NPM dependencies][npm-dependencies-image]][npm-dependencies-url] [![Last commit][last-commit-image]][last-commit-url] [![Last release][release-image]][release-url] 
+
+[![NPM downloads][npm-downloads-image]][npm-downloads-url] [![License][license-image]][license-url]
+
 # Reactive CRUD data abstraction layer
 
 ![Mercury Logo](assets/logos/mercury_name_black_500.png)
@@ -128,3 +134,20 @@ Please read the [contributing guidelines](.github/CONTRIBUTING.md) and [code of 
 [mercury-browser-storage-url]: https://github.com/xbyorange/mercury-browser-storage
 [mercury-prismic-url]: https://github.com/xbyorange/mercury-prismic
 [react-mercury-url]: https://github.com/xbyorange/react-mercury
+
+[coveralls-image]: https://coveralls.io/repos/github/xbyorange/mercury/badge.svg
+[coveralls-url]: https://coveralls.io/github/xbyorange/mercury
+[travisci-image]: https://travis-ci.com/xbyorange/mercury.svg?branch=master
+[travisci-url]: https://travis-ci.com/xbyorange/mercury
+[last-commit-image]: https://img.shields.io/github/last-commit/xbyorange/mercury.svg
+[last-commit-url]: https://github.com/xbyorange/mercury/commits
+[license-image]: https://img.shields.io/npm/l/@xbyorange/mercury.svg
+[license-url]: https://github.com/xbyorange/mercury/blob/master/LICENSE
+[npm-downloads-image]: https://img.shields.io/npm/dm/@xbyorange/mercury.svg
+[npm-downloads-url]: https://www.npmjs.com/package/@xbyorange/mercury
+[npm-dependencies-image]: https://img.shields.io/david/xbyorange/mercury.svg
+[npm-dependencies-url]: https://david-dm.org/xbyorange/mercury
+[quality-gate-image]: https://sonarcloud.io/api/project_badges/measure?project=mercury&metric=alert_status
+[quality-gate-url]: https://sonarcloud.io/dashboard?id=mercury
+[release-image]: https://img.shields.io/github/release-date/xbyorange/mercury.svg
+[release-url]: https://github.com/xbyorange/mercury/releases
