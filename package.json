@@ -11,6 +11,9 @@
   "author": "XByOrange",
   "license": "Apache-2.0",
   "repository": "https://github.com/xbyorange/mercury",
+  "publishConfig": {
+    "access": "public"
+  },
   "files": [
     "dist"
   ],

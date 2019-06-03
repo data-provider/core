@@ -22,3 +22,11 @@ script:
   - npm run build
   - npm run coveralls
   - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then sonar-scanner; fi'
+
+deploy:
+  provider: npm
+  email: "devops@xbyorange.com"
+  api_key: "$NPM_TOKEN"
+  on:
+    tags: true
+  skip_cleanup: true
