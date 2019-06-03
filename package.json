@@ -21,7 +21,7 @@
     "test": "nyc mocha --recursive test",
     "lint": "eslint src test",
     "lint-staged": "lint-staged",
-    "coveralls": "cat ./.coverage/lcov.info | coveralls"
+    "coveralls": "cat ./coverage/lcov.info | coveralls"
   },
   "dependencies": {
     "is-promise": "^2.1.0",
