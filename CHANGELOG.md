@@ -16,9 +16,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Upgrade Axios dependency to fix a potential vulnerability.
 - Fix events unit test.
 
-### Changed
-- query and params becomes queryString and urlParams. Old keys are maintained for retrocompatibility.
-
 ## [1.0.0] - 2019-06-03
 ### BREAKING CHANGES
 - Forked from xByOrange reactive-data-source v1.7.0 library. (Only origins.Api is exposed from now)
