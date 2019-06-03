@@ -16,7 +16,7 @@ The following is a set of guidelines for contributing to this project. These are
   * [Git Commit Messages](#git-commit-messages)
   * [JavaScript Styleguide](#javascript-styleguide)
   * [Tests Styleguide](#tests-styleguide)
-* [Developer's certificate of origin](#developer's-certificate-of-origin)
+* [Developer's certificate of origin](#developers-certificate-of-origin)
 
 ## Code of Conduct
 
@@ -70,7 +70,7 @@ This document may also be subject to pull-requests or changes by contributors wh
 
 All JavaScript must adhere to the style defined in the `.eslintrc.json` file.
 
-### Tests Styleguide'
+### Tests Styleguide
 
 - Fail tests first. How do you know if it is actually testing anything if the assert never failed?
 - Treat `describe` as a noun or situation (Situations usually start with "when").
