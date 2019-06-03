@@ -135,8 +135,8 @@ Please read the [contributing guidelines](.github/CONTRIBUTING.md) and [code of 
 [mercury-prismic-url]: https://github.com/xbyorange/mercury-prismic
 [react-mercury-url]: https://github.com/xbyorange/react-mercury
 
-[coveralls-image]: https://coveralls.io/repos/github/xbyorange/mercury/badge.svg
-[coveralls-url]: https://coveralls.io/github/xbyorange/mercury
+[coveralls-image]: https://coveralls.io/repos/github/XbyOrange/mercury/badge.svg
+[coveralls-url]: https://coveralls.io/github/XbyOrange/mercury
 [travisci-image]: https://travis-ci.com/xbyorange/mercury.svg?branch=master
 [travisci-url]: https://travis-ci.com/xbyorange/mercury
 [last-commit-image]: https://img.shields.io/github/last-commit/xbyorange/mercury.svg
