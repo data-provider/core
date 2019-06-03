@@ -39,7 +39,7 @@ module.exports = [
     output: {
       file: "dist/mercury-browser-storage.umd.js",
       format: "umd",
-      name: "mercury-memory",
+      name: "mercury-browser-storage",
       globals: GLOBALS
     }
   },
