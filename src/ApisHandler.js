@@ -2,6 +2,8 @@
 
 import { each, isArray } from "lodash";
 
+import { defaultConfig } from "./defaultConfig";
+
 export class ApisHandler {
   constructor() {
     this._all = [];
@@ -86,7 +88,7 @@ export class ApisHandler {
   getConfig(customConfig) {
     const clonedCustomConfig = { ...customConfig };
     delete clonedCustomConfig.tags;
-    let totalConfig = { ...this._baseConfig, ...clonedCustomConfig };
+    let totalConfig = { ...defaultConfig, ...this._baseConfig, ...clonedCustomConfig };
     this._ensureArray(customConfig.tags).forEach(tag => {
       totalConfig = {
         ...totalConfig,
@@ -108,7 +110,7 @@ export class ApisHandler {
     return headers;
   }
 
-  setConfig(configuration, tags) {
+  config(configuration, tags) {
     const config = { ...configuration };
     if (!tags) {
       this._setBaseConfig(config);
