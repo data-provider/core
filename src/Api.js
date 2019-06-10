@@ -1,8 +1,12 @@
+"use strict";
+
 import { once } from "lodash";
 import pathToRegexp from "path-to-regexp";
 import axios from "axios";
 import axiosRetry from "axios-retry";
 import { Origin } from "@xbyorange/mercury";
+
+import Apis from "./ApisHandler";
 
 const PATH_SEP = "/";
 
@@ -30,6 +34,8 @@ const defaultConfig = {
     return Promise.reject(errorToReturn);
   }
 };
+
+export const apis = new Apis();
 
 export class Api extends Origin {
   constructor(url, config = {}) {
