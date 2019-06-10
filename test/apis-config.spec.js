@@ -1,25 +1,7 @@
-const AxiosMock = require("./Axios.mock.js");
-
 const { Api, apis } = require("../src/index");
 
-describe("apis handler", () => {
-  let axios;
+describe("apis config", () => {
   let testsApis = [];
-
-  beforeAll(() => {
-    axios = new AxiosMock();
-  });
-
-  afterAll(() => {
-    axios.restore();
-  });
-
-  beforeEach(() => {
-    axios.stubs.instance.resolves({
-      data: "foo"
-    });
-    axios.stubs.instance.resetHistory();
-  });
 
   describe("when configuring each api", () => {
     describe("if no apis.config method was called", () => {
@@ -138,9 +120,9 @@ describe("apis handler", () => {
       it("should not set configuration for any api if any have a matching tag", () => {
         apis.config(
           {
-            retries: 8
+            retries: 12
           },
-          "foo-tag-3"
+          "foo-tag-unexistant"
         );
         testsApis.forEach(testApi => {
           if (testApi._url === "/foo-6" || testApi._url === "/foo-7") {
@@ -172,9 +154,9 @@ describe("apis handler", () => {
       it("should not set configuration for any existant apis if any has a tag matching with it", () => {
         apis.config(
           {
-            retries: 9
+            retries: 15
           },
-          ["foo"]
+          ["foo-unexistant"]
         );
         testsApis.forEach(testApi => {
           if (testApi._url === "/foo-6" || testApi._url === "/foo-7") {
