@@ -75,7 +75,7 @@ export class ApisHandler {
     });
   }
 
-  registerApi(api, tags) {
+  register(api, tags) {
     this._all.push(api);
     this._ensureArray(tags).forEach(tag => {
       this._tagged[tag] = this._tagged[tag] || [];
@@ -84,13 +84,13 @@ export class ApisHandler {
   }
 
   getConfig(customConfig) {
-    const clonedCustomConfig = { ...customConfig }.delete("tags");
-    let totalConfig = { ...this._baseConfig };
+    const clonedCustomConfig = { ...customConfig };
+    delete clonedCustomConfig.tags;
+    let totalConfig = { ...this._baseConfig, ...clonedCustomConfig };
     this._ensureArray(customConfig.tags).forEach(tag => {
       totalConfig = {
         ...totalConfig,
-        ...this._configs[tag],
-        ...clonedCustomConfig
+        ...this._configs[tag]
       };
     });
     return totalConfig;

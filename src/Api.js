@@ -41,11 +41,12 @@ export class Api extends Origin {
   constructor(url, config = {}) {
     super(`api-${url}`, config && config.defaultValue);
     this._url = url;
-    this._headers = {};
 
-    const configuration = { ...defaultConfig, ...config };
+    apis.register(this);
+    const configuration = apis.getConfig({ ...defaultConfig, ...config });
     this._config(configuration);
     this._addOnBeforeRequest(configuration.onceBeforeRequest);
+    this._headers = apis.getHeaders(config.tags);
   }
 
   _addOnBeforeRequest(onceBeforeRequest) {
