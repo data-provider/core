@@ -26,7 +26,7 @@
     "lint-staged": "lint-staged",
     "build": "rollup --config",
     "test": "jest",
-    "test-ci": "npm run test -- --coverage --ci --verbose=false --coverageReporters=lcov --coverageReporters=text-summary",
+    "test-ci": "npm run test -- --coverage --ci --verbose=false --coverageReporters=lcov --coverageReporters=text-summary --detectOpenHandles",
     "coveralls": "cat ./coverage/lcov.info | coveralls"
   },
   "dependencies": {
