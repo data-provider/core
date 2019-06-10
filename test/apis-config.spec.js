@@ -1,6 +1,6 @@
 const { Api, apis } = require("../src/index");
 
-describe("apis config", () => {
+describe("apis config method", () => {
   let testsApis = [];
 
   describe("when configuring each api", () => {
