@@ -205,7 +205,7 @@ console.log(booksWithAuthors.read.value); //Value still remain the same
 booksCollection.create({
   author: "George Orwell",
   book: "1984"
-})
+});
 
 // Request to books is dispatched again, as cache was cleaned. Authors are still cached.
 await booksWithAuthors.read();
@@ -214,7 +214,7 @@ await booksWithAuthors.read();
 const booksOfOrwell = await booksWithAuthors.query("George Orwell").read();
 
 // Request is already cached. It will not be repeated.
-await booksWithAuthors.query("George Orwell")
+await booksWithAuthors.query("George Orwell");
 
 ```
 
