@@ -6,7 +6,7 @@ import axios from "axios";
 import axiosRetry from "axios-retry";
 import { Origin } from "@xbyorange/mercury";
 
-import Apis from "./ApisHandler";
+import { ApisHandler } from "./ApisHandler";
 
 const PATH_SEP = "/";
 
@@ -35,7 +35,7 @@ const defaultConfig = {
   }
 };
 
-export const apis = new Apis();
+export const apis = new ApisHandler();
 
 export class Api extends Origin {
   constructor(url, config = {}) {

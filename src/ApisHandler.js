@@ -2,7 +2,7 @@
 
 import { each, isArray } from "lodash";
 
-export class Apis {
+export class ApisHandler {
   constructor() {
     this._all = [];
     this._tagged = {};
