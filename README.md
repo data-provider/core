@@ -8,9 +8,60 @@
 
 ## Overview
 
-This package provides a [Mercury][mercury-url] origin for reading data from Prismic CMS API.
+This package provides a [Mercury][mercury-url] origin for reading data from Prismic CMS API. As underlay, it uses the [prismic-javascript][prismic-javascript-url] client to provide the Prismic data.
+
+## Api
+
+`import { Prismic } from "@xbyorange/mercury-prismic"`
+
+`new Prismic(url, options)`
+* Arguments
+	* url - _`<String>`_. Prismic api url.
+	* options - _`<Object>`_ Containing options:
+		* defaultValue - _`<Any>`_ - Default value of origin until real data is returned.
+		* fullResponse - _`<Boolean>`_ - If `true`, the full response of the Prismic api will be used as value. If `false`, only the `response.results` property will be returned, which is the default behavior.
+		* release - _`<String>`_ - Prismic release to be read. This parameter will be passed as `ref` to the [prismic-javascript][prismic-javascript-url]
+
+## Methods
+
+### query
+
+`prismic.query(queryObject)`
+* Arguments
+	* queryObject - `<Object>` containing properties:
+		* documentType - `<String>` Prismic document type to filter by. (It will be used to build a [prismic-javascript][prismic-javascript-url] query as in `PrismicJs.Predicates.at("document.type", documentType)`)
+* Returns - New queried instance having all common [Mercury][mercury-url] methods.
+
+## Example
+
+Next example will be easier to understand if you are already familiarized with the [mercury][mercury-url] syntax.
+
+```js
+import { Prismic } from "@xbyorange/mercury-prismic";
+
+const prismic = new Prismic("https://foo-prismic-repository.cdn.prismic.io/api/v2", {
+  release: "foo-release"
+});
+
+prismic
+  .query({ documentType: "banner-home" })
+  .read()
+  .then(results => {
+    console.log("Prismic content for banner home in foo-release", results);
+  });
+```
+
+## Usage with frameworks
+
+### React
+
+Please refer to the [react-mercury][react-mercury-url] documentation to see how simple is the data-binding between React Components and the Mercury Prismic.
+
+Connect a source to all components that need it. Mercury will fetch data only when needed, and will avoid making it more than once, no matter how many components need the data.
 
 [mercury-url]: https://github.com/xbyorange/mercury
+[prismic-javascript-url]: https://www.npmjs.com/package/prismic-javascript
+[react-mercury-url]: https://github.com/xbyorange/react-mercury
 
 [coveralls-image]: https://coveralls.io/repos/github/XbyOrange/mercury-prismic/badge.svg
 [coveralls-url]: https://coveralls.io/github/XbyOrange/mercury-prismic
