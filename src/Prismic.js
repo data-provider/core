@@ -10,6 +10,7 @@ export class Prismic extends Origin {
   constructor(url, config = {}) {
     super(`prismic-${url}`, config && config.defaultValue);
     const configuration = { ...defaultConfig, ...config };
+    this._url = url;
     this._config(configuration);
   }
 
@@ -21,14 +22,14 @@ export class Prismic extends Origin {
 
   _prismicQuery(query) {
     const prismicQuery = [];
-    if (query.documentType) {
+    if (query && query.documentType) {
       prismicQuery.push(PrismicClient.Predicates.at("document.type", query.documentType));
     }
     return prismicQuery;
   }
 
   _prismicRequest(query) {
-    this._prismicApi = this._prismicApi || PrismicClient.api(url);
+    this._prismicApi = this._prismicApi || PrismicClient.api(this._url);
     return this._prismicApi.then(api => {
       const apiParams = {};
       if (this._release) {
