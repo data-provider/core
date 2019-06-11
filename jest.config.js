@@ -37,7 +37,8 @@ module.exports = {
     "**/test/index.spec.js",
     "**/test/methods.spec.js",
     "**/test/queries.spec.js",
-    "**/test/selectors.spec.js"
+    "**/test/selectors.spec.js",
+    "**/test/apis-config.spec.js"
   ],
 
   transform: {

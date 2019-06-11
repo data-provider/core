@@ -8,6 +8,9 @@ describe("apis config method", () => {
   });
 
   afterAll(() => {
+    apis.config({
+      expirationTime: 0
+    });
     apis.reset();
   });
 
