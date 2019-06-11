@@ -1,7 +1,7 @@
 {
   "name": "@xbyorange/mercury-api",
   "version": "1.1.0",
-  "description": "Mercury api origin",
+  "description": "Mercury REST API origin",
   "keywords": [
     "reactive",
     "data",
@@ -10,7 +10,7 @@
     "api",
     "rest"
   ],
-  "author": "XByOrange",
+  "author": "XbyOrange",
   "license": "Apache-2.0",
   "repository": "https://github.com/xbyorange/mercury-api",
   "publishConfig": {

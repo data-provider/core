@@ -65,8 +65,8 @@ This package provides a Mercury Api origin.
 `api.query(queryObject)`
 * Arguments
 	* queryObject - `<Object>` containing properties:
-		* queryString - `<Object>` Keys of the object will be passed as query string variables.
-		* urlParams - `<Object>` Keys of the object will be replaced by correspondant url parameters defined in the url as ":param"
+		* queryString - `<Object>` Keys of the object will be passed as query strings in the url of the request.
+		* urlParams - `<Object>` Keys of the object will be replaced by correspondant url parameters defined in the url as ":param". Please refer to the [path-to-regexp][path-to-regex-url] package for further info.
 * Returns - New queried api instance having all methods described in this chapter.
 
 ### clean cache
