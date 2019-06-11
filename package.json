@@ -1,0 +1,70 @@
+{
+  "name": "@xbyorange/mercury-prismic",
+  "version": "1.0.0",
+  "description": "Mercury origin for reading data from Prismic CMS API",
+  "keywords": [
+    "mercury",
+    "origin",
+    "cms",
+    "prismic",
+    "client",
+    "api-client",
+    "reactive"
+  ],
+  "author": "XbyOrange",
+  "license": "Apache-2.0",
+  "repository": "https://github.com/xbyorange/mercury-prismic",
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist"
+  ],
+  "main": "dist/mercury-prismic.umd.js",
+  "module": "dist/mercury-prismic.esm.js",
+  "scripts": {
+    "lint": "eslint src test",
+    "lint-staged": "lint-staged",
+    "build": "rollup --config",
+    "test": "jest",
+    "test-ci": "npm run test -- --coverage --ci --verbose=false --coverageReporters=lcov --coverageReporters=text-summary",
+    "coveralls": "cat ./coverage/lcov.info | coveralls"
+  },
+  "dependencies": {
+    "@xbyorange/mercury": "1.0.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.4.5",
+    "@babel/preset-env": "^7.4.5",
+    "@babel/preset-react": "^7.0.0",
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-jest": "^24.8.0",
+    "babel-polyfill": "^6.26.0",
+    "coveralls": "^3.0.4",
+    "eslint": "5.16.0",
+    "eslint-config-prettier": "^4.3.0",
+    "eslint-plugin-prettier": "^3.1.0",
+    "husky": "2.4.0",
+    "jest": "24.8.0",
+    "lint-staged": "^8.2.0",
+    "prettier": "^1.17.1",
+    "rollup": "^1.14.2",
+    "rollup-plugin-babel": "^4.3.2",
+    "rollup-plugin-commonjs": "^10.0.0",
+    "rollup-plugin-json": "^4.0.0",
+    "rollup-plugin-node-builtins": "^2.1.2",
+    "rollup-plugin-node-globals": "^1.4.0",
+    "rollup-plugin-node-resolve": "^5.0.1",
+    "rollup-plugin-uglify": "^6.0.2",
+    "sinon": "^7.3.2"
+  },
+  "lint-staged": {
+    "src/**/*.js": "eslint",
+    "test/**/*.js": "eslint"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint-staged"
+    }
+  }
+}
