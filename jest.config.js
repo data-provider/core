@@ -34,7 +34,5 @@ module.exports = {
     ".js$": "babel-jest"
   },
 
-  setupFiles: ["<rootDir>/jest.init.js"],
-
-  testSequencer: "<rootDir>/jest.testSequencer.js"
+  setupFiles: ["<rootDir>/jest.init.js"]
 };

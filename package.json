@@ -31,7 +31,8 @@
     "coveralls": "cat ./coverage/lcov.info | coveralls"
   },
   "dependencies": {
-    "@xbyorange/mercury": "1.0.0"
+    "@xbyorange/mercury": "1.0.0",
+    "prismic-javascript": "^2.0.3"
   },
   "devDependencies": {
     "@babel/core": "^7.4.5",
