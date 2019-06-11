@@ -1,16 +1,18 @@
 const AxiosMock = require("./Axios.mock.js");
 
-const { Api } = require("../src/index");
+const { Api, apis } = require("../src/index");
 
 describe("Api data sources", () => {
   let axios;
 
   beforeAll(() => {
     axios = new AxiosMock();
+    apis.reset();
   });
 
   afterAll(() => {
     axios.restore();
+    apis.reset();
   });
 
   describe("Available methods", () => {

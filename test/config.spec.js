@@ -2,17 +2,19 @@ const sinon = require("sinon");
 
 const AxiosMock = require("./Axios.mock.js");
 
-const { Api } = require("../src/index");
+const { Api, apis } = require("../src/index");
 
 describe("Api configuration", () => {
   let axios;
 
   beforeAll(() => {
     axios = new AxiosMock();
+    apis.reset();
   });
 
   afterAll(() => {
     axios.restore();
+    apis.reset();
   });
 
   beforeEach(() => {
@@ -358,17 +360,17 @@ describe("Api configuration", () => {
       expect(axios.stubs.instance.getCall(0).args[0].validateStatus).toBe(validateStatus);
     });
 
-    it("should consider error responses with status lower than 200 by default", async () => {
+    it("should consider error responses with status lower than 200 by default", () => {
       const books = new Api("/books");
       expect(books._validateStatus(140)).toEqual(false);
     });
 
-    it("should consider error responses with status upper than 300 by default", async () => {
+    it("should consider error responses with status upper than 300 by default", () => {
       const books = new Api("/books");
       expect(books._validateStatus(320)).toEqual(false);
     });
 
-    it("should consider valid responses with status between 200 and 300", async () => {
+    it("should consider valid responses with status between 200 and 300", () => {
       const books = new Api("/books");
       expect(books._validateStatus(200)).toEqual(true);
     });
