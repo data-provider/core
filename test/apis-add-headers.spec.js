@@ -3,6 +3,14 @@ const { Api, apis } = require("../src/index");
 describe("apis addHeaders method", () => {
   let testsApis = [];
 
+  beforeAll(() => {
+    apis.reset();
+  });
+
+  afterAll(() => {
+    apis.reset();
+  });
+
   describe("when creating api", () => {
     describe("if apis addHeaders method was not called previously", () => {
       it("should not set any header", () => {

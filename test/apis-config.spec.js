@@ -3,6 +3,14 @@ const { Api, apis } = require("../src/index");
 describe("apis config method", () => {
   let testsApis = [];
 
+  beforeAll(() => {
+    apis.reset();
+  });
+
+  afterAll(() => {
+    apis.reset();
+  });
+
   describe("when configuring each api", () => {
     describe("if no apis.config method was called", () => {
       it("should set received api configuration", () => {

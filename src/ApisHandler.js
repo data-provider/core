@@ -152,4 +152,15 @@ export class ApisHandler {
       });
     }
   }
+
+  reset() {
+    this._all = [];
+    this._tagged = {};
+    this._baseConfig = {};
+    this._configs = {};
+    this._baseHeaders = {};
+    this._headers = {};
+    this._baseAddedHeaders = {};
+    this._addedHeaders = {};
+  }
 }

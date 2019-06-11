@@ -9,6 +9,7 @@ describe("apis clean method", () => {
   let api_3;
 
   beforeAll(() => {
+    apis.reset();
     api_1 = new Api("foo-1");
     api_2 = new Api("foo-2", {
       tags: "tag-1"
@@ -27,6 +28,10 @@ describe("apis clean method", () => {
 
   afterEach(() => {
     sandbox.restore();
+  });
+
+  afterAll(() => {
+    apis.reset();
   });
 
   describe("when calling apis clean method", () => {
