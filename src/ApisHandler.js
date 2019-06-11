@@ -6,14 +6,7 @@ import { defaultConfig } from "./defaultConfig";
 
 export class ApisHandler {
   constructor() {
-    this._all = [];
-    this._tagged = {};
-    this._baseConfig = {};
-    this._configs = {};
-    this._baseHeaders = {};
-    this._headers = {};
-    this._baseAddedHeaders = {};
-    this._addedHeaders = {};
+    this.reset();
   }
 
   _ensureArray(tags) {
