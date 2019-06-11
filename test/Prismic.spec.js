@@ -123,4 +123,26 @@ describe("Prismic", () => {
       expect(error).toEqual(fooError);
     });
   });
+
+  describe("config method", () => {
+    it("should extend previously defined config", () => {
+      expect.assertions(6);
+      prismic.config({
+        fullResponse: false,
+        release: "foo"
+      });
+      expect(prismic._release).toEqual("foo");
+      expect(prismic._fullResponse).toEqual(false);
+      prismic.config({
+        fullResponse: true
+      });
+      expect(prismic._release).toEqual("foo");
+      expect(prismic._fullResponse).toEqual(true);
+      prismic.config({
+        release: "foo-release"
+      });
+      expect(prismic._release).toEqual("foo-release");
+      expect(prismic._fullResponse).toEqual(true);
+    });
+  });
 });
