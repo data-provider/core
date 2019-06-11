@@ -25,12 +25,13 @@ const BASE_PLUGINS = [
 
 const BASE_CONFIG = {
   input: "src/index.js",
-  external: ["@xbyorange/mercury"],
+  external: ["@xbyorange/mercury", "prismic-javascript"],
   plugins: [...BASE_PLUGINS, uglifier.uglify()]
 };
 
 const GLOBALS = {
-  "@xbyorange/mercury": "mercury"
+  "@xbyorange/mercury": "mercury",
+  "prismic-javascript": "PrismicJS"
 };
 
 module.exports = [
