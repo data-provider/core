@@ -20,7 +20,7 @@ This package provides a [Mercury][mercury-url] origin for reading data from Pris
 	* options - _`<Object>`_ Containing options:
 		* defaultValue - _`<Any>`_ - Default value of origin until real data is returned.
 		* fullResponse - _`<Boolean>`_ - If `true`, the full response of the Prismic api will be used as value. If `false`, only the `response.results` property will be returned, which is the default behavior.
-		* release - _`<String>`_ - Prismic release to be read. This parameter will be passed as `ref` to the [prismic-javascript][prismic-javascript-url]
+		* release - _`<String>`_ - Prismic release to be read. This parameter will be passed as `ref` to the [prismic-javascript][prismic-javascript-url] query.
 
 ## Methods
 
