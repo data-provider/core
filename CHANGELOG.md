@@ -15,6 +15,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - Add `apis` method, which allows to configure, manage headers or clean multiple apis at a time. Groups of apis can be defined using new config property called `tags`.
 
+### Changed
+- Upgrade dependencies
+
 ## [1.0.1] - 2019-06-03
 ### Fixed
 - Upgrade Axios dependency to fix a potential vulnerability.
