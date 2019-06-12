@@ -44,10 +44,10 @@ const prismic = new Prismic("https://foo-prismic-repository.cdn.prismic.io/api/v
 });
 
 prismic
-  .query({ documentType: "banner-home" })
+  .query({ documentType: "home-banner" })
   .read()
   .then(results => {
-    console.log("Prismic content for banner home in foo-release", results);
+    console.log("Prismic content for home banner in foo-release", results);
   });
 ```
 
