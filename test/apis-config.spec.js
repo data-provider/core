@@ -71,6 +71,42 @@ describe("apis config method", () => {
         });
       });
 
+      describe("when different values are provided for same option in different tags", () => {
+        beforeEach(() => {
+          apis.config(
+            {
+              retries: 10
+            },
+            ["foo-retries-1"]
+          );
+          apis.config(
+            {
+              retries: 20
+            },
+            ["foo-retries-2"]
+          );
+        });
+
+        it("should get the value of defined tag if there is no tags conflict", () => {
+          const api = new Api("/foo-6", {
+            tags: ["foo-retries-1"]
+          });
+          expect(api._configuration.retries).toEqual(10);
+        });
+
+        it("should get the value of last defined tag if there is tags conflict", () => {
+          expect.assertions(2);
+          let api = new Api("/foo-6", {
+            tags: ["foo-retries-1", "foo-retries-2"]
+          });
+          expect(api._configuration.retries).toEqual(20);
+          api = new Api("/foo-6", {
+            tags: ["foo-retries-2", "foo-retries-1"]
+          });
+          expect(api._configuration.retries).toEqual(10);
+        });
+      });
+
       describe("when provided tag is an array", () => {
         it("should inherit common config previously defined, and config previously defined for the tag if one of them match", () => {
           apis.config(

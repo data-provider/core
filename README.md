@@ -115,9 +115,11 @@ Config method can be invoked at any time to change the configuration. The result
 
 ## Handling many api instances at a time.
 
-`apis` object methods allow to configure, set headers or clean many instances at a time. Apis can be grouped and categorized using tags, and this methods will be applied only to apis matching provided tags.
+`apis` object methods allow to configure, set headers or clean many instances at a time. Apis can be grouped and categorized using tags (through the `tags` option), and this methods will be applied only to apis matching provided tags.
 
 If no tags are provided when invoking methods, they will be applied to all api instances.
+
+> An [example of multiple configuration](docs/apis-config.md) is available in the docs.
 
 `import { apis } from "@xbyorange/mercury-api"`
 
@@ -222,10 +224,11 @@ await booksWithAuthors.query("George Orwell");
 
 The [mercury][mercury-url] library uses this origin in his examples, so you can refer to the [library documentation][mercury-url] to found more examples.
 
-Specific api implementation examples:
+Specific api origin examples:
 
+* [configuration](docs/config.md)
+* [configuring multiple instance at a time](docs/apis-config.md)
 * [authentication](docs/authentication.md)
-
 
 ## Contributing
 

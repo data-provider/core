@@ -12,6 +12,7 @@ As second argument, a configuration object can be passed. This will define the d
 
 ```js
 const booksCollection = new Api("/books", {
+  tags: [],
   baseUrl: "",
   readMethod: "get",
   updateMethod: "patch",
