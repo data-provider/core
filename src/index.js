@@ -1,0 +1,1 @@
+export { Prismic } from "./Prismic";
