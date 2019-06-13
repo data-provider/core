@@ -1,45 +1,27 @@
+"use strict";
+
 import { once } from "lodash";
 import pathToRegexp from "path-to-regexp";
 import axios from "axios";
 import axiosRetry from "axios-retry";
 import { Origin } from "@xbyorange/mercury";
 
+import { ApisHandler } from "./ApisHandler";
+
 const PATH_SEP = "/";
 
-const defaultConfig = {
-  baseUrl: "",
-  readMethod: "get",
-  updateMethod: "patch",
-  createMethod: "post",
-  deleteMethod: "delete",
-  authErrorStatus: 401,
-  authErrorHandler: null,
-  onBeforeRequest: null,
-  onceBeforeRequest: null,
-  expirationTime: 0,
-  retries: 3,
-  cache: true,
-  fullResponse: false,
-  validateStatus: status => status >= 200 && status < 300,
-  validateResponse: null,
-  errorHandler: error => {
-    const errorMessage =
-      (error.response && error.response.statusText) || error.message || "Request error";
-    const errorToReturn = new Error(errorMessage);
-    errorToReturn.data = error.response && error.response.data;
-    return Promise.reject(errorToReturn);
-  }
-};
+export const apis = new ApisHandler();
 
 export class Api extends Origin {
   constructor(url, config = {}) {
     super(`api-${url}`, config && config.defaultValue);
     this._url = url;
-    this._headers = {};
 
-    const configuration = { ...defaultConfig, ...config };
+    apis.register(this, config.tags);
+    const configuration = apis.getConfig(config);
     this._config(configuration);
     this._addOnBeforeRequest(configuration.onceBeforeRequest);
+    this._headers = apis.getHeaders(config.tags);
   }
 
   _addOnBeforeRequest(onceBeforeRequest) {

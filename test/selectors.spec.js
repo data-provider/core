@@ -1,7 +1,7 @@
 const { Selector } = require("@xbyorange/mercury");
 
 const AxiosMock = require("./Axios.mock.js");
-const { Api } = require("../src/index");
+const { Api, apis } = require("../src/index");
 
 describe("Api data sources", () => {
   const fooBooks = [
@@ -20,10 +20,12 @@ describe("Api data sources", () => {
 
   beforeAll(() => {
     axios = new AxiosMock();
+    apis.reset();
   });
 
   afterAll(() => {
     axios.restore();
+    apis.reset();
   });
 
   beforeEach(() => {

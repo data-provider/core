@@ -1,16 +1,18 @@
 const AxiosMock = require("./Axios.mock.js");
 
-const { Api } = require("../src/index");
+const { Api, apis } = require("../src/index");
 
 describe("Api queries", () => {
   let axios;
 
   beforeAll(() => {
     axios = new AxiosMock();
+    apis.reset();
   });
 
   afterAll(() => {
     axios.restore();
+    apis.reset();
   });
 
   describe("Custom queried sources", () => {
@@ -221,7 +223,7 @@ describe("Api queries", () => {
       });
     });
 
-    it("should be accesible through getter", async () => {
+    it("should be accesible through getter", () => {
       expect.assertions(1);
       return books.read().then(() => {
         expect(books.read.getters.loading()).toEqual(false);
@@ -269,7 +271,7 @@ describe("Api queries", () => {
       });
     });
 
-    it("should be accesible through getter", async () => {
+    it("should be accesible through getter", () => {
       axios.stubs.instance.resolves({
         data: ""
       });
