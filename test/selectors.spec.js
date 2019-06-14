@@ -504,7 +504,7 @@ describe("Api data sources", () => {
       let selector;
 
       beforeEach(() => {
-        selector = new Selector(authors, booksSelector, (authors, book) => book.title);
+        selector = new Selector(authors, booksSelector, (authorsResults, book) => book.title);
       });
 
       it("should be true while resource is being loaded, false when finished", () => {
@@ -551,7 +551,7 @@ describe("Api data sources", () => {
       let selector;
 
       beforeEach(() => {
-        selector = new Selector(authors, booksSelector, (authors, book) => book.title);
+        selector = new Selector(authors, booksSelector, (authorsResults, book) => book.title);
       });
 
       it("should be null while resource is being loaded, null when finished successfully", () => {
@@ -590,7 +590,7 @@ describe("Api data sources", () => {
       let selector;
 
       beforeEach(() => {
-        selector = new Selector(authors, booksSelector, (authors, book) => book.title);
+        selector = new Selector(authors, booksSelector, (authorsResults, book) => book.title);
       });
 
       it("should be undefined while resource is being loaded, and returned value when finished successfully", () => {
@@ -614,7 +614,7 @@ describe("Api data sources", () => {
         selector = new Selector(
           authors,
           booksSelector,
-          (authors, book) => book.title,
+          (authorsResults, book) => book.title,
           defaultValue
         );
         const promise = selector.read();
@@ -645,7 +645,7 @@ describe("Api data sources", () => {
               return hemingwayBookIndex;
             }
           },
-          (authors, bookResult) => bookResult.title
+          (authorsResults, bookResult) => bookResult.title
         );
       });
 
