@@ -36,5 +36,7 @@ module.exports = {
 
   setupFiles: ["<rootDir>/jest.init.js"],
 
-  testSequencer: "<rootDir>/jest.testSequencer.js"
+  testSequencer: "<rootDir>/jest.testSequencer.js",
+
+  testResultsProcessor: "jest-sonar-reporter"
 };
