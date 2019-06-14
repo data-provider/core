@@ -49,7 +49,6 @@
     "eslint-plugin-prettier": "^3.1.0",
     "husky": "2.4.0",
     "jest": "24.8.0",
-    "jest-sonar-reporter": "^2.0.0",
     "lint-staged": "^8.2.0",
     "prettier": "^1.17.1",
     "rollup": "^1.14.2",
@@ -70,10 +69,5 @@
     "hooks": {
       "pre-commit": "npm run lint-staged"
     }
-  },
-  "jestSonar": {
-    "reportPath": "coverage",
-    "reportFile": "test-reporter.xml",
-    "indent": 4
   }
 }
