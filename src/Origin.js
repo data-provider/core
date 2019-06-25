@@ -220,6 +220,7 @@ export class Origin {
     newQuery._id = `${this._id}${queryUniqueId ? `-${queryUniqueId}` : ""}`;
     newQuery.actions = actions;
     newQuery._isSource = true;
+    newQuery._root = this;
 
     newQuery.query = queryExtension => this.query(merge(query, queryExtension));
     newQuery.customQueries = this._customQueries;

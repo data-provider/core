@@ -202,6 +202,20 @@ test.describe("Origin queries", () => {
         test.expect(testOrigin.query(FOO_QUERY).customQueries.byId).to.not.be.undefined();
       });
 
+      test.it(
+        "should have available _id property of root instance in the _root._id property",
+        () => {
+          test.expect(testOrigin.query(FOO_QUERY)._root._id).to.equal(testOrigin._id);
+        }
+      );
+
+      test.it(
+        "should have available all properties of root instance in the _root property",
+        () => {
+          test.expect(testOrigin.query(FOO_QUERY)._root).to.equal(testOrigin);
+        }
+      );
+
       test.it("custom query should be still available", () => {
         test.expect(testOrigin.query(FOO_QUERY).byId).to.not.be.undefined();
       });
@@ -241,6 +255,7 @@ test.describe("Origin queries", () => {
         })
       });
     });
+
     test.it("should apply the result of the custom queries functions results extended", () => {
       return testOrigin
         .byId(FOO_ID)
@@ -256,6 +271,10 @@ test.describe("Origin queries", () => {
             }
           });
         });
+    });
+
+    test.it("should have available all properties of root instance in the _root property", () => {
+      test.expect(testOrigin.byId(FOO_ID).byName(FOO_NAME)._root).to.equal(testOrigin);
     });
   });
 });
