@@ -170,8 +170,8 @@ test.describe("Origin queries", () => {
       });
     });
 
-    test.describe("public interface", () => {
-      test.it("should be available at the customQueries property", () => {
+    test.describe("when created", () => {
+      test.it("public customQueries property should be available", () => {
         test.expect(testOrigin.customQueries.byId(FOO_ID)).to.deep.equal(FOO_CUSTOM_QUERY_RESULT);
       });
     });
