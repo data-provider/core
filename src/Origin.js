@@ -24,6 +24,7 @@ export class Origin {
       typeof defaultValue !== "undefined" ? cloneDeep(defaultValue) : defaultValue;
 
     this._customQueries = {};
+    this.customQueries = {};
     this.test = {};
 
     this._createBaseMethods();
@@ -221,6 +222,7 @@ export class Origin {
     newQuery._isSource = true;
 
     newQuery.query = queryExtension => this.query(merge(query, queryExtension));
+    newQuery.customQueries = this._customQueries;
 
     Object.keys(this._customQueries).forEach(queryKey => {
       newQuery[queryKey] = queryExtension => {
@@ -236,6 +238,7 @@ export class Origin {
   addCustomQueries(customQueries) {
     Object.keys(customQueries).forEach(queryKey => {
       this._customQueries[queryKey] = customQueries[queryKey];
+      this.customQueries[queryKey] = customQueries[queryKey];
       this.test.customQueries = this.test.customQueries || {};
       this.test.customQueries[queryKey] = customQueries[queryKey];
       this[queryKey] = query => {

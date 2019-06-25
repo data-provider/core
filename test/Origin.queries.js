@@ -170,6 +170,12 @@ test.describe("Origin queries", () => {
       });
     });
 
+    test.describe("public interface", () => {
+      test.it("should be available at the customQueries property", () => {
+        test.expect(testOrigin.customQueries.byId(FOO_ID)).to.deep.equal(FOO_CUSTOM_QUERY_RESULT);
+      });
+    });
+
     test.describe("when testing", () => {
       test.it("should be available at the test.customQueries object", () => {
         test
@@ -177,6 +183,7 @@ test.describe("Origin queries", () => {
           .to.deep.equal(FOO_CUSTOM_QUERY_RESULT);
       });
     });
+
     test.describe("when instance is not queried", () => {
       test.it("should apply the result of the custom query function as query", () => {
         return testOrigin
@@ -191,6 +198,10 @@ test.describe("Origin queries", () => {
     });
 
     test.describe("when instance is queried", () => {
+      test.it("customQueries property should be still available", () => {
+        test.expect(testOrigin.query(FOO_QUERY).customQueries.byId).to.not.be.undefined();
+      });
+
       test.it("custom query should be still available", () => {
         test.expect(testOrigin.query(FOO_QUERY).byId).to.not.be.undefined();
       });
