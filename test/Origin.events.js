@@ -131,6 +131,22 @@ test.describe("Origin events", () => {
       });
     });
 
+    test.it("should emit a cleanAny event containing data about the cleaned source", () => {
+      let eventData;
+      testOrigin.onCleanAny(data => {
+        eventData = data;
+      });
+      return testOrigin.read().then(() => {
+        testOrigin.clean();
+        return Promise.all([
+          test.expect(eventData.action).to.equal("clean"),
+          test.expect(eventData.source._id).to.equal(testOrigin._id),
+          test.expect(eventData.source._queryId).to.equal(null),
+          test.expect(eventData.source._root).to.equal(testOrigin)
+        ]);
+      });
+    });
+
     test.it("should remove cleanAny event with removeCleanAnyListener method", () => {
       let called = false;
       const eventHandler = () => {
@@ -251,6 +267,22 @@ test.describe("Origin events", () => {
       return queriedOrigin.read().then(() => {
         queriedOrigin.clean();
         return test.expect(called).to.be.true();
+      });
+    });
+
+    test.it("should emit a cleanAny event containing data about the cleaned source", () => {
+      let eventData;
+      testOrigin.onCleanAny(data => {
+        eventData = data;
+      });
+      return queriedOrigin.read().then(() => {
+        queriedOrigin.clean();
+        return Promise.all([
+          test.expect(eventData.action).to.equal("clean"),
+          test.expect(eventData.source._id).to.equal(queriedOrigin._id),
+          test.expect(eventData.source._queryId).to.equal(JSON.stringify(FOO_QUERY)),
+          test.expect(eventData.source._root).to.equal(testOrigin)
+        ]);
       });
     });
 

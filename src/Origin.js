@@ -83,7 +83,7 @@ export class Origin {
   }
 
   _clean(query) {
-    this._cache.clean(query);
+    this._cache.clean(query, this);
   }
 
   _createQueryMethods(query, queryId) {
