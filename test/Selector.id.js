@@ -5,9 +5,13 @@ const { Selector } = require("../src/Selector");
 
 test.describe("Selector id", () => {
   const FOO_ID = "foo-origin-id";
+  const FOO_ID_2 = "foo-origin-2";
+  const FOO_ID_3 = "foo-origin-3";
   let sandbox;
   let TestOrigin;
   let testOrigin;
+  let testOrigin2;
+  let testOrigin3;
   let testSelector;
 
   test.beforeEach(() => {
@@ -18,6 +22,8 @@ test.describe("Selector id", () => {
       }
     };
     testOrigin = new TestOrigin(FOO_ID);
+    testOrigin2 = new TestOrigin(FOO_ID_2);
+    testOrigin3 = new TestOrigin(FOO_ID_3);
     testSelector = new Selector(testOrigin, originResult => originResult);
   });
 
@@ -52,6 +58,43 @@ test.describe("Selector id", () => {
           originResult => originResult
         );
         test.expect(testSelector._id).to.equal(`select:${FOO_ID}`);
+      }
+    );
+  });
+
+  test.describe("when sources are concurrent", () => {
+    test.it(
+      "private property _id should be equal to sources ids adding 'select:' prefix and the query id",
+      () => {
+        testSelector = new Selector(
+          [testOrigin3, testOrigin2],
+          testOrigin,
+          originResult => originResult
+        );
+        test.expect(testSelector._id).to.equal(`select:${FOO_ID_3}:${FOO_ID_2}:${FOO_ID}`);
+      }
+    );
+  });
+
+  test.describe("when sources are concurrently queryied", () => {
+    test.it(
+      "private property _id should be equal to sources ids adding 'select:' prefix and the query id",
+      () => {
+        testSelector = new Selector(
+          testOrigin3,
+          [
+            {
+              source: testOrigin,
+              query: query => query
+            },
+            {
+              source: testOrigin2,
+              query: query => query
+            }
+          ],
+          originResult => originResult
+        );
+        test.expect(testSelector._id).to.equal(`select:${FOO_ID_3}:${FOO_ID}:${FOO_ID_2}`);
       }
     );
   });
