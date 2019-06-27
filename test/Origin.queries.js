@@ -61,13 +61,13 @@ test.describe("Origin queries", () => {
     });
 
     test.describe("whith query", () => {
-      const FOO_QUERY = { foo: "foo", foo2: "foo-2" };
+      const FOO_CUSTOM_QUERY = { foo: "foo", foo2: "foo-2" };
       test.it("should pass the query value to the method", () => {
         return testOrigin
-          .query(FOO_QUERY)
+          .query(FOO_CUSTOM_QUERY)
           .create()
           .then(() => {
-            return test.expect(spys.create.getCall(0).args[0]).to.deep.equal(FOO_QUERY);
+            return test.expect(spys.create.getCall(0).args[0]).to.deep.equal(FOO_CUSTOM_QUERY);
           });
       });
 

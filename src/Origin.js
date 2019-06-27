@@ -86,7 +86,7 @@ export class Origin {
     this._cache.clean(query, this);
   }
 
-  _createQueryMethods(query, queryId) {
+  _createQueryMethods(query, id) {
     const methods = {};
 
     const updateData = (data, methodName, action, params) => {
@@ -107,7 +107,7 @@ export class Origin {
         methods[methodName].error = newData.error;
         this._emitChange(query, methodName);
         this._emitChangeAny({
-          source: this._queries[queryId],
+          source: this._queries[id],
           method: methodName,
           action,
           params
