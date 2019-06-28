@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Removed
 ### BREAKING CHANGES
 
+## [1.1.0] - 2019-06-28
+### Changed
+- Upgrade mercury version
+
 ## [1.0.0] - 2019-06-11
 ### BREAKING CHANGES
 - Forked from xByOrange reactive-data-source v1.7.0 library. (Only origins.Prismic is exposed from now)

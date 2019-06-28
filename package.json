@@ -1,6 +1,6 @@
 {
   "name": "@xbyorange/mercury-prismic",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Mercury origin for reading data from Prismic CMS API",
   "keywords": [
     "mercury",
@@ -31,7 +31,7 @@
     "coveralls": "cat ./coverage/lcov.info | coveralls"
   },
   "dependencies": {
-    "@xbyorange/mercury": "1.0.0",
+    "@xbyorange/mercury": "1.1.0",
     "prismic-javascript": "^2.0.3"
   },
   "devDependencies": {
