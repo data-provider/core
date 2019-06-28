@@ -1,6 +1,6 @@
 {
   "name": "@xbyorange/mercury-api",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Mercury REST API origin",
   "keywords": [
     "reactive",
@@ -30,7 +30,7 @@
     "coveralls": "cat ./coverage/lcov.info | coveralls"
   },
   "dependencies": {
-    "@xbyorange/mercury": "1.0.0",
+    "@xbyorange/mercury": "1.1.0",
     "axios": "^0.19.0",
     "axios-retry": "^3.1.2",
     "lodash": "4.17.11",
