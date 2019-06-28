@@ -32,114 +32,105 @@ test.describe("Origin events", () => {
 
   test.describe("Without query", () => {
     test.it("should emit a change event when Origin change any property", () => {
-      let called = false;
-      testOrigin.onChange(() => {
-        called = true;
-      });
+      let spy = sandbox.spy();
+      testOrigin.onChange(spy);
       return testOrigin.read().then(() => {
-        return test.expect(called).to.be.true();
+        return test.expect(spy).to.have.been.called();
       });
     });
 
     test.it("should remove change listener with removeChangeListener method", () => {
-      let called = false;
-      const eventHandler = () => {
-        called = true;
-      };
-      testOrigin.onChange(eventHandler);
-      testOrigin.removeChangeListener(eventHandler);
+      let spy = sandbox.spy();
+      testOrigin.onChange(spy);
+      testOrigin.removeChangeListener(spy);
       return testOrigin.read().then(() => {
-        return test.expect(called).to.be.false();
+        return test.expect(spy).to.not.have.been.called();
       });
     });
 
     test.it("should emit a changeAny event when Origin method is dispatched", () => {
-      let eventProperties = [];
-      testOrigin.onChangeAny(props => {
-        eventProperties.push(props);
-      });
+      let spy = sandbox.spy();
+      testOrigin.onChangeAny(spy);
       return testOrigin.read().then(() => {
-        return test.expect(eventProperties[0].action).to.equal("readDispatch");
+        return test.expect(spy.getCall(0).args[0].action).to.equal("readDispatch");
       });
     });
 
     test.it("should emit a changeAny event when Origin method finish loading", () => {
-      let eventProperties = [];
-      testOrigin.onChangeAny(props => {
-        eventProperties.push(props);
-      });
+      let spy = sandbox.spy();
+      testOrigin.onChangeAny(spy);
       return testOrigin.read().then(() => {
-        return test.expect(eventProperties[1].action).to.equal("readSuccess");
+        return test.expect(spy.getCall(1).args[0].action).to.equal("readSuccess");
       });
     });
 
     test.it("should remove changeAny event with removeChangeAnyListener method", () => {
-      let eventProperties = [];
-      const eventHandler = props => {
-        eventProperties.push(props);
-      };
-      testOrigin.onChangeAny(eventHandler);
-      testOrigin.removeChangeAnyListener(eventHandler);
+      let spy = sandbox.spy();
+      testOrigin.onChangeAny(spy);
+      testOrigin.removeChangeAnyListener(spy);
       return testOrigin.read().then(() => {
-        return test.expect(eventProperties.length).to.equal(0);
+        return test.expect(spy).to.not.have.been.called();
       });
     });
 
     test.it("should emit a clean event when Origin cache is cleaned", () => {
-      let called = false;
-      testOrigin.onClean(() => {
-        called = true;
-      });
+      let spy = sandbox.spy();
+      testOrigin.onClean(spy);
       return testOrigin.read().then(() => {
         testOrigin.clean();
-        return test.expect(called).to.be.true();
+        return test.expect(spy).to.have.been.called();
       });
     });
 
     test.it("should execute clean event only once when it is added using onceClean method", () => {
-      let called = 0;
-      testOrigin.onceClean(() => {
-        called = called + 1;
-      });
+      let spy = sandbox.spy();
+      testOrigin.onceClean(spy);
       return testOrigin.read().then(() => {
         testOrigin.clean();
         testOrigin.clean();
-        return test.expect(called).to.equal(1);
+        return test.expect(spy.callCount).to.equal(1);
       });
     });
 
     test.it("should remove clean event with removeCleanListener method", () => {
-      let called = false;
-      const eventHandler = () => {
-        called = true;
-      };
-      testOrigin.onClean(eventHandler);
-      testOrigin.removeCleanListener(eventHandler);
+      let spy = sandbox.spy();
+      testOrigin.onClean(spy);
+      testOrigin.removeCleanListener(spy);
       return testOrigin.read().then(() => {
-        return test.expect(called).to.be.false();
+        return test.expect(spy).to.not.have.been.called();
       });
     });
 
     test.it("should emit a cleanAny event when Origin cache is cleaned", () => {
-      let called = false;
-      testOrigin.onCleanAny(() => {
-        called = true;
-      });
+      let spy = sandbox.spy();
+      testOrigin.onCleanAny(spy);
       return testOrigin.read().then(() => {
         testOrigin.clean();
-        return test.expect(called).to.be.true();
+        return test.expect(spy).to.have.been.called();
+      });
+    });
+
+    test.it("should emit a cleanAny event containing data about the cleaned source", () => {
+      let spy = sandbox.spy();
+      testOrigin.onCleanAny(spy);
+      return testOrigin.read().then(() => {
+        testOrigin.clean();
+        const eventData = spy.getCall(0).args[0];
+        return Promise.all([
+          test.expect(eventData.action).to.equal("clean"),
+          test.expect(eventData.source._id).to.equal(testOrigin._id),
+          test.expect(eventData.source._queryId).to.equal(null),
+          test.expect(eventData.source._root).to.equal(testOrigin)
+        ]);
       });
     });
 
     test.it("should remove cleanAny event with removeCleanAnyListener method", () => {
-      let called = false;
-      const eventHandler = () => {
-        called = true;
-      };
-      testOrigin.onCleanAny(eventHandler);
-      testOrigin.removeCleanAnyListener(eventHandler);
+      let spy = sandbox.spy();
+      testOrigin.onCleanAny(spy);
+      testOrigin.removeCleanAnyListener(spy);
       return testOrigin.read().then(() => {
-        return test.expect(called).to.be.false();
+        return test.expect(spy).to.not.have.been.called();
       });
     });
   });
@@ -155,114 +146,105 @@ test.describe("Origin events", () => {
     });
 
     test.it("should emit a change event when Origin change any property", () => {
-      let called = false;
-      queriedOrigin.onChange(() => {
-        called = true;
-      });
+      let spy = sandbox.spy();
+      queriedOrigin.onChange(spy);
       return queriedOrigin.read().then(() => {
-        return test.expect(called).to.be.true();
+        return test.expect(spy).to.have.been.called();
       });
     });
 
     test.it("should remove change listener with removeChangeListener method", () => {
-      let called = false;
-      const eventHandler = () => {
-        called = true;
-      };
-      queriedOrigin.onChange(eventHandler);
-      queriedOrigin.removeChangeListener(eventHandler);
+      let spy = sandbox.spy();
+      queriedOrigin.onChange(spy);
+      queriedOrigin.removeChangeListener(spy);
       return queriedOrigin.read().then(() => {
-        return test.expect(called).to.be.false();
+        return test.expect(spy).to.not.have.been.called();
       });
     });
 
     test.it("should emit a changeAny event when Origin method is dispatched", () => {
-      let eventProperties = [];
-      testOrigin.onChangeAny(props => {
-        eventProperties.push(props);
-      });
+      let spy = sandbox.spy();
+      testOrigin.onChangeAny(spy);
       return queriedOrigin.read().then(() => {
-        return test.expect(eventProperties[0].action).to.equal("readDispatch");
+        return test.expect(spy.getCall(0).args[0].action).to.equal("readDispatch");
       });
     });
 
     test.it("should emit a changeAny event when Origin method finish loading", () => {
-      let eventProperties = [];
-      testOrigin.onChangeAny(props => {
-        eventProperties.push(props);
-      });
+      let spy = sandbox.spy();
+      testOrigin.onChangeAny(spy);
       return queriedOrigin.read().then(() => {
-        return test.expect(eventProperties[1].action).to.equal("readSuccess");
+        return test.expect(spy.getCall(1).args[0].action).to.equal("readSuccess");
       });
     });
 
     test.it("should remove changeAny event with removeChangeAnyListener method", () => {
-      let eventProperties = [];
-      const eventHandler = props => {
-        eventProperties.push(props);
-      };
-      testOrigin.onChangeAny(eventHandler);
-      testOrigin.removeChangeAnyListener(eventHandler);
+      let spy = sandbox.spy();
+      testOrigin.onChangeAny(spy);
+      testOrigin.removeChangeAnyListener(spy);
       return queriedOrigin.read().then(() => {
-        return test.expect(eventProperties.length).to.equal(0);
+        return test.expect(spy).to.not.have.been.called();
       });
     });
 
     test.it("should emit a clean event when Origin cache is cleaned", () => {
-      let called = false;
-      queriedOrigin.onClean(() => {
-        called = true;
-      });
+      let spy = sandbox.spy();
+      queriedOrigin.onClean(spy);
       return queriedOrigin.read().then(() => {
         queriedOrigin.clean();
-        return test.expect(called).to.be.true();
+        return test.expect(spy).to.have.been.called();
       });
     });
 
     test.it("should execute clean event only once when it is added using onceClean method", () => {
-      let called = 0;
-      queriedOrigin.onceClean(() => {
-        called = called + 1;
-      });
+      let spy = sandbox.spy();
+      queriedOrigin.onceClean(spy);
       return queriedOrigin.read().then(() => {
         queriedOrigin.clean();
         queriedOrigin.clean();
-        return test.expect(called).to.equal(1);
+        return test.expect(spy.callCount).to.equal(1);
       });
     });
 
     test.it("should remove clean event with removeCleanListener method", () => {
-      let called = false;
-      const eventHandler = () => {
-        called = true;
-      };
-      queriedOrigin.onClean(eventHandler);
-      queriedOrigin.removeCleanListener(eventHandler);
+      let spy = sandbox.spy();
+      queriedOrigin.onClean(spy);
+      queriedOrigin.removeCleanListener(spy);
       return queriedOrigin.read().then(() => {
-        return test.expect(called).to.be.false();
+        return test.expect(spy).to.not.have.been.called();
       });
     });
 
     test.it("should emit a cleanAny event when Origin cache is cleaned", () => {
-      let called = false;
-      testOrigin.onCleanAny(() => {
-        called = true;
-      });
+      let spy = sandbox.spy();
+      testOrigin.onCleanAny(spy);
       return queriedOrigin.read().then(() => {
         queriedOrigin.clean();
-        return test.expect(called).to.be.true();
+        return test.expect(spy).to.have.been.called();
+      });
+    });
+
+    test.it("should emit a cleanAny event containing data about the cleaned source", () => {
+      let spy = sandbox.spy();
+      testOrigin.onCleanAny(spy);
+      return queriedOrigin.read().then(() => {
+        queriedOrigin.clean();
+        const eventData = spy.getCall(0).args[0];
+        return Promise.all([
+          test.expect(eventData.action).to.equal("clean"),
+          test.expect(eventData.source._id).to.equal(queriedOrigin._id),
+          test.expect(eventData.source._queryId).to.equal(JSON.stringify(FOO_QUERY)),
+          test.expect(eventData.source._root).to.equal(testOrigin)
+        ]);
       });
     });
 
     test.it("should remove cleanAny event with removeCleanAnyListener method", () => {
-      let called = false;
-      const eventHandler = () => {
-        called = true;
-      };
-      testOrigin.onCleanAny(eventHandler);
-      testOrigin.removeCleanAnyListener(eventHandler);
+      let spy = sandbox.spy();
+      testOrigin.onCleanAny(spy);
+      testOrigin.removeCleanAnyListener(spy);
       return queriedOrigin.read().then(() => {
-        return test.expect(called).to.be.false();
+        return test.expect(spy).to.not.have.been.called();
       });
     });
   });

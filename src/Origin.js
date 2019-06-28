@@ -24,6 +24,7 @@ export class Origin {
       typeof defaultValue !== "undefined" ? cloneDeep(defaultValue) : defaultValue;
 
     this._customQueries = {};
+    this.customQueries = {};
     this.test = {};
 
     this._createBaseMethods();
@@ -82,10 +83,10 @@ export class Origin {
   }
 
   _clean(query) {
-    this._cache.clean(query);
+    this._cache.clean(query, this);
   }
 
-  _createQueryMethods(query, queryId) {
+  _createQueryMethods(query, id) {
     const methods = {};
 
     const updateData = (data, methodName, action, params) => {
@@ -106,7 +107,7 @@ export class Origin {
         methods[methodName].error = newData.error;
         this._emitChange(query, methodName);
         this._emitChangeAny({
-          source: this._queries[queryId],
+          source: this._queries[id],
           method: methodName,
           action,
           params
@@ -219,8 +220,10 @@ export class Origin {
     newQuery._id = `${this._id}${queryUniqueId ? `-${queryUniqueId}` : ""}`;
     newQuery.actions = actions;
     newQuery._isSource = true;
+    newQuery._root = this;
 
     newQuery.query = queryExtension => this.query(merge(query, queryExtension));
+    newQuery.customQueries = this._customQueries;
 
     Object.keys(this._customQueries).forEach(queryKey => {
       newQuery[queryKey] = queryExtension => {
@@ -236,6 +239,7 @@ export class Origin {
   addCustomQueries(customQueries) {
     Object.keys(customQueries).forEach(queryKey => {
       this._customQueries[queryKey] = customQueries[queryKey];
+      this.customQueries[queryKey] = customQueries[queryKey];
       this.test.customQueries = this.test.customQueries || {};
       this.test.customQueries[queryKey] = customQueries[queryKey];
       this[queryKey] = query => {

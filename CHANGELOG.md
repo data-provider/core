@@ -11,6 +11,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Removed
 ### BREAKING CHANGES
 
+## [1.1.0] - 2019-06-25
+### Added
+- Expose `_root` property in queried instances to allow identify the root instance.
+- Emit `_root` property on cleanAny events.
+
+### Fixed
+- Expose custom queries methods in `customQueries` property, as described in documentation.
+- Expose test.queries properties for concurrent sources.
+
 ## [1.0.0] - 2019-06-03
 ### BREAKING CHANGES
 - Forked from xByOrange reactive-data-source v1.7.0 private library. (Only Origin and Selector are exposed from now)

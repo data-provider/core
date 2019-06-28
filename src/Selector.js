@@ -16,17 +16,27 @@ export class Selector extends Origin {
       lastIndex = args.length - 2;
     }
 
-    const testQueries = [];
-
     const sources = args.slice(0, lastIndex);
+
     const sourceIds = [];
-    sources.forEach(source => {
-      const hasQuery = !!source.source;
-      sourceIds.push(hasQuery ? source.source._id : source._id);
-      if (hasQuery) {
-        testQueries.push(source.query);
-      }
-    });
+
+    const getTestQueries = sourcesOfLevel => {
+      const queries = [];
+      sourcesOfLevel.forEach(source => {
+        if (isArray(source)) {
+          queries.push(getTestQueries(source));
+        } else {
+          const hasQuery = !!source.source;
+          sourceIds.push(hasQuery ? source.source._id : source._id);
+          if (hasQuery) {
+            queries.push(source.query);
+          }
+        }
+      });
+      return queries;
+    };
+
+    const testQueries = getTestQueries(sources);
 
     super(`select:${sourceIds.join(":")}`, defaultValue);
 
