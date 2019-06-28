@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Removed
 ### BREAKING CHANGES
 
+## [1.2.0] - 2019-06-28
+### Changed
+- Upgrade mercury version
+
 ## [1.1.0] - 2019-06-10
 ### Added
 - Add `apis` method, which allows to configure, manage headers or clean multiple apis at a time. Groups of apis can be defined using new config property called `tags`.
