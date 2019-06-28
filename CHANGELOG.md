@@ -11,6 +11,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Removed
 ### BREAKING CHANGES
 
+## [1.1.0] - 2019-06-28
+### Changed
+- Upgrade mercury version
+
+### Fixed
+- Fix license
+
 ## [1.0.0] - 2019-06-03
 ### BREAKING CHANGES
 - Forked from xByOrange reactive-data-source v1.7.0 private library. (Only origins.Api is exposed from now)
