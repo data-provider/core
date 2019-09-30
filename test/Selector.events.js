@@ -237,7 +237,7 @@ test.describe("Selector events", () => {
           test.expect(eventData.action).to.equal("clean"),
           test.expect(eventData.source._id).to.equal(queriedSelector._id),
           test.expect(eventData.source._queryId).to.equal(JSON.stringify(FOO_QUERY)),
-          test.expect(eventData.source._root).to.equal(testOrigin)
+          test.expect(eventData.source._root).to.equal(testSelector)
         ]);
       });
     });
