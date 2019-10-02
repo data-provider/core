@@ -52,7 +52,7 @@ export class Selector extends Origin {
     let selectorResult;
     let selectorResultIsSource;
     const cleanQuery = once(() => {
-      this._cache.clean(query);
+      this.clean(query);
     });
 
     const readSource = sourceToRead => {

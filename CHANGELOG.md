@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Removed
 ### BREAKING CHANGES
 
+## [1.2.0] - 2019-10-01
+### Fixed
+- Emit `_root` property on cleanAny events of Selectors.
+
 ## [1.1.0] - 2019-06-25
 ### Added
 - Expose `_root` property in queried instances to allow identify the root instance.
