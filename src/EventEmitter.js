@@ -1,10 +1,12 @@
+import { isUndefined } from "./helpers";
+
 export class EventEmitter {
   constructor() {
     this.events = {};
   }
 
   _getEventListByName(eventName) {
-    if (typeof this.events[eventName] === "undefined") {
+    if (isUndefined(this.events[eventName])) {
       this.events[eventName] = new Set();
     }
     return this.events[eventName];

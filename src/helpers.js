@@ -46,3 +46,25 @@ export const actions = {
     error: `${DELETE_METHOD}${ERROR}`
   }
 };
+
+const dashJoin = arr => arr.join("-");
+
+export const hash = str => {
+  return `${str.split("").reduce((a, b) => {
+    a = (a << 5) - a + b.charCodeAt(0);
+    return a & a;
+  }, 0)}`;
+};
+
+export const isUndefined = variable => typeof variable === "undefined";
+
+export const uniqueId = (id, defaultValue) => hash(`${id}${JSON.stringify(defaultValue)}`);
+
+export const queriedUniqueId = (uniqueId, queryUniqueId) => dashJoin([uniqueId, queryUniqueId]);
+
+export const seemsToBeSelectorOptions = defaultValueOrOptions => {
+  if (isUndefined(defaultValueOrOptions)) {
+    return false;
+  }
+  return !!defaultValueOrOptions.defaultValue || !!defaultValueOrOptions.uuid;
+};

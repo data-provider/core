@@ -1,4 +1,10 @@
-import { CLEAN_ANY_EVENT_NAME, queryId, cleanCacheEventName, isCacheEventName } from "./helpers";
+import {
+  CLEAN_ANY_EVENT_NAME,
+  queryId,
+  cleanCacheEventName,
+  isCacheEventName,
+  queriedUniqueId
+} from "./helpers";
 
 export class Cache {
   constructor(eventEmitter, id) {
@@ -20,7 +26,7 @@ export class Cache {
     return {
       action: "clean",
       source: {
-        _id: `${this._id}${queryUniqueId ? `-${queryUniqueId}` : ""}`,
+        _id: queriedUniqueId(this._id, queryUniqueId),
         _queryId: queryUniqueId,
         _root
       }
