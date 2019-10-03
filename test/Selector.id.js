@@ -44,8 +44,15 @@ test.describe("Selector id", () => {
       }
     );
 
+    test.it("private property _id should be equal to custom uuid", () => {
+      testSelector = new Selector(testOrigin, testOrigin2, originResult => originResult, {
+        uuid: FOO_CUSTOM_UUID
+      });
+      test.expect(testSelector._id).to.equal(FOO_CUSTOM_UUID);
+    });
+
     test.it(
-      "private property _id should be calculated using sources ids adding 'select:' prefix",
+      "private property _id should be calculated using sources ids adding 'select:' prefix and default value when provided in deprecated way",
       () => {
         testSelector = new Selector(
           testOrigin,
@@ -59,12 +66,17 @@ test.describe("Selector id", () => {
       }
     );
 
-    test.it("private property _id should be equal to custom uuid", () => {
-      testSelector = new Selector(testOrigin, testOrigin2, originResult => originResult, {
-        uuid: FOO_CUSTOM_UUID
-      });
-      test.expect(testSelector._id).to.equal(FOO_CUSTOM_UUID);
-    });
+    test.it(
+      "private property _id should be calculated using sources ids adding 'select:' prefix and default value",
+      () => {
+        testSelector = new Selector(testOrigin, testOrigin2, originResult => originResult, {
+          defaultValue: "foo-default-value"
+        });
+        test
+          .expect(helpers.uniqueId)
+          .to.have.been.calledWith(`select:${FOO_UUID}:${FOO_UUID}`, "foo-default-value");
+      }
+    );
   });
 
   test.describe("with query", () => {
