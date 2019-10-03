@@ -3,7 +3,8 @@ import {
   queryId,
   cleanCacheEventName,
   isCacheEventName,
-  queriedUniqueId
+  queriedUniqueId,
+  isUndefined
 } from "./helpers";
 
 export class Cache {
@@ -34,14 +35,14 @@ export class Cache {
   }
 
   clean(query, _root) {
-    if (query) {
+    if (!isUndefined(query)) {
       const queryIdentifier = queryId(query);
       delete this._cachedData[queryIdentifier];
       this._eventEmitter.emit(cleanCacheEventName(query), query);
       this._eventEmitter.emit(CLEAN_ANY_EVENT_NAME, this.getAnyData(queryIdentifier, _root));
     } else {
       this._reset();
-      this._eventEmitter.emit(CLEAN_ANY_EVENT_NAME, this.getAnyData(null, _root));
+      this._eventEmitter.emit(CLEAN_ANY_EVENT_NAME, this.getAnyData(query, _root));
     }
   }
 

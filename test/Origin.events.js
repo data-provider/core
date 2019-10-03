@@ -119,7 +119,7 @@ test.describe("Origin events", () => {
         return Promise.all([
           test.expect(eventData.action).to.equal("clean"),
           test.expect(eventData.source._id).to.equal(testOrigin._id),
-          test.expect(eventData.source._queryId).to.equal(null),
+          test.expect(eventData.source._queryId).to.equal(undefined),
           test.expect(eventData.source._root).to.equal(testOrigin)
         ]);
       });
@@ -233,7 +233,7 @@ test.describe("Origin events", () => {
         return Promise.all([
           test.expect(eventData.action).to.equal("clean"),
           test.expect(eventData.source._id).to.equal(queriedOrigin._id),
-          test.expect(eventData.source._queryId).to.equal(JSON.stringify(FOO_QUERY)),
+          test.expect(eventData.source._queryId).to.equal(`(${JSON.stringify(FOO_QUERY)})`),
           test.expect(eventData.source._root).to.equal(testOrigin)
         ]);
       });
