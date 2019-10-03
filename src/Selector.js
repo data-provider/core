@@ -17,7 +17,7 @@ export class Selector extends Origin {
     let defaultValue;
     let options;
 
-    // Check if last argument is default value
+    // Check if last argument is default value or options
     if (!isFunction(args[lastIndex])) {
       defaultValue = args[lastIndex];
       lastIndex = args.length - 2;
