@@ -21,7 +21,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Last argument in Selectors now can be an object containing "defaultValue" and/or "uuid" options.
 
 ### Changed
-- `_id` private property now is a hash of default id and default value
+- `_id` private property now is a hash of default id and default value (if no "uuid" option is received)
 - Objects without query now will emit "undefined" as "_queryId" property in "cleanAny" events, instead of "null".
 
 ### Fixed
