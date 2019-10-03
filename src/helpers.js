@@ -63,8 +63,11 @@ export const uniqueId = (id, defaultValue) => hash(`${id}${JSON.stringify(defaul
 export const queriedUniqueId = (uniqueId, queryUniqueId) => dashJoin([uniqueId, queryUniqueId]);
 
 export const seemsToBeSelectorOptions = defaultValueOrOptions => {
-  if (isUndefined(defaultValueOrOptions)) {
+  if (!defaultValueOrOptions) {
     return false;
   }
-  return !!defaultValueOrOptions.defaultValue || !!defaultValueOrOptions.uuid;
+  return (
+    defaultValueOrOptions.hasOwnProperty("defaultValue") ||
+    defaultValueOrOptions.hasOwnProperty("uuid")
+  );
 };

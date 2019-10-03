@@ -30,4 +30,41 @@ test.describe("helpers", () => {
       test.expect(helpers.queriedUniqueId("foo", "foo2")).to.equal("foo-foo2");
     });
   });
+
+  test.describe("seemsToBeSelectorOptions method", () => {
+    test.it("should return false if receives undefined", () => {
+      test.expect(helpers.seemsToBeSelectorOptions()).to.equal(false);
+    });
+
+    test.it("should return false if receives null", () => {
+      test.expect(helpers.seemsToBeSelectorOptions(null)).to.equal(false);
+    });
+
+    test.it("should return false if receives and array", () => {
+      test.expect(helpers.seemsToBeSelectorOptions([])).to.equal(false);
+    });
+
+    test.it("should return false if receives and string", () => {
+      test.expect(helpers.seemsToBeSelectorOptions("foo")).to.equal(false);
+    });
+
+    test.it("should return false if receives and object", () => {
+      test.expect(helpers.seemsToBeSelectorOptions({})).to.equal(false);
+    });
+
+    test.it(
+      "should return true if receives and object with 'defaultValue' property, even when has false value",
+      () => {
+        test.expect(helpers.seemsToBeSelectorOptions({ defaultValue: false })).to.equal(true);
+      }
+    );
+
+    test.it("should return true if receives and object with 'defaultValue' property", () => {
+      test.expect(helpers.seemsToBeSelectorOptions({ defaultValue: [] })).to.equal(true);
+    });
+
+    test.it("should return true if receives and object with 'uuid' property", () => {
+      test.expect(helpers.seemsToBeSelectorOptions({ uuid: "foo" })).to.equal(true);
+    });
+  });
 });
