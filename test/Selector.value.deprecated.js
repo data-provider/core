@@ -3,7 +3,7 @@ const test = require("mocha-sinon-chai");
 const { Origin, sources } = require("../src/Origin");
 const { Selector } = require("../src/Selector");
 
-test.describe("Selector value", () => {
+test.describe("Selector value defining default value in deprecated way", () => {
   const FOO_ORIGIN_VALUE = {
     foo: "foo"
   };
@@ -76,9 +76,7 @@ test.describe("Selector value", () => {
           ...originResult,
           ...origin2Result
         }),
-        {
-          defaultValue: DEFAULT_VALUE
-        }
+        DEFAULT_VALUE
       );
     });
 
@@ -106,9 +104,7 @@ test.describe("Selector value", () => {
           ...originResult,
           ...origin2Result
         }),
-        {
-          defaultValue: DEFAULT_VALUE
-        }
+        DEFAULT_VALUE
       );
     });
 
@@ -137,9 +133,7 @@ test.describe("Selector value", () => {
           ...originResult,
           ...origin2Result
         }),
-        {
-          defaultValue: DEFAULT_VALUE
-        }
+        DEFAULT_VALUE
       );
     });
 
@@ -199,9 +193,7 @@ test.describe("Selector value", () => {
           ...origin2Result,
           ...selectorResult
         }),
-        {
-          defaultValue: DEFAULT_VALUE
-        }
+        DEFAULT_VALUE
       );
     });
 
@@ -262,9 +254,7 @@ test.describe("Selector value", () => {
           ...originResult,
           ...origin2Result
         }),
-        {
-          defaultValue: DEFAULT_VALUE
-        }
+        DEFAULT_VALUE
       );
     });
 
@@ -297,9 +287,7 @@ test.describe("Selector value", () => {
           ...originResult,
           ...origin2Result
         }),
-        {
-          defaultValue: DEFAULT_VALUE
-        }
+        DEFAULT_VALUE
       );
     });
 
@@ -335,9 +323,7 @@ test.describe("Selector value", () => {
             }, 50);
           });
         },
-        {
-          defaultValue: DEFAULT_VALUE
-        }
+        DEFAULT_VALUE
       );
     });
 
@@ -359,9 +345,7 @@ test.describe("Selector value", () => {
         (originResult, origin2Result, query) => {
           return testOrigin3.query(query);
         },
-        {
-          defaultValue: DEFAULT_VALUE
-        }
+        DEFAULT_VALUE
       );
     });
 
@@ -382,9 +366,7 @@ test.describe("Selector value", () => {
         () => {
           return testOriginSelector;
         },
-        {
-          defaultValue: DEFAULT_VALUE
-        }
+        DEFAULT_VALUE
       );
     });
 

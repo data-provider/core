@@ -11,7 +11,20 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Removed
 ### BREAKING CHANGES
 
-## [1.2.0] - 2019-10-01
+## [TO BE DEPRECATED]
+- Last argument of Selectors will stop being assigned as "defaultValue". To define default value, it will be mandatory to pass an options object as last argument, containing a "defaultValue" property.
+
+## [1.2.0] - 2019-10-03
+### Added
+- Accept options object in Origin constructor as last argument.
+- Assign to the `_id` private property the value received in new option "uuid", when received.
+- Last argument in Selectors now can be an object containing "defaultValue" and/or "uuid" options.
+- Add "sources" handler for managing all instantiated mercury objects as a group.
+
+### Changed
+- `_id` private property now is a hash of default id and default value (if no "uuid" option is received)
+- Objects without query now will emit "undefined" as "_queryId" property in "cleanAny" events, instead of "null".
+
 ### Fixed
 - Emit `_root` property on cleanAny events of Selectors.
 

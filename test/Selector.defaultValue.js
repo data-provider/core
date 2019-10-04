@@ -19,7 +19,6 @@ test.describe("Selector defaultValue", () => {
       }
     };
     testOrigin = new TestOrigin();
-    testSelector = new Selector(testOrigin, originResult => originResult, DEFAULT_VALUE);
   });
 
   test.afterEach(() => {
@@ -27,8 +26,21 @@ test.describe("Selector defaultValue", () => {
     sources.clear();
   });
 
-  test.describe("when Origin has defaultValue defined", () => {
+  test.describe("when has defaultValue defined in deprecated way", () => {
     test.it("should return defaultValue until real value is returned", () => {
+      testSelector = new Selector(testOrigin, originResult => originResult, DEFAULT_VALUE);
+      test.expect(testSelector.read.value).to.equal(DEFAULT_VALUE);
+      return testSelector.read().then(() => {
+        return test.expect(testSelector.read.value).to.equal(VALUE);
+      });
+    });
+  });
+
+  test.describe("when has defaultValue defined", () => {
+    test.it("should return defaultValue until real value is returned", () => {
+      testSelector = new Selector(testOrigin, originResult => originResult, {
+        defaultValue: DEFAULT_VALUE
+      });
       test.expect(testSelector.read.value).to.equal(DEFAULT_VALUE);
       return testSelector.read().then(() => {
         return test.expect(testSelector.read.value).to.equal(VALUE);

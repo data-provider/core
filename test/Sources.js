@@ -3,8 +3,12 @@ const test = require("mocha-sinon-chai");
 const { Origin, sources } = require("../src/Origin");
 const { Selector } = require("../src/Selector");
 
-test.describe.only("sources handler", () => {
+test.describe("sources handler", () => {
   const FooOrigin = class extends Origin {
+    constructor(id) {
+      super(id, null, { uuid: id });
+    }
+
     _read() {
       return Promise.resolve(5);
     }

@@ -10,10 +10,13 @@ import {
   CLEAN_ANY_EVENT_NAME,
   cleanCacheEventName,
   changeEventName,
+  uniqueId,
   queryId,
   actions,
   ensureArray,
-  removeFalsy
+  removeFalsy,
+  queriedUniqueId,
+  isUndefined
 } from "./helpers";
 
 let automaticIdCounter = 0;
@@ -24,13 +27,13 @@ const getAutomaticId = () => {
 };
 
 export class Origin {
-  constructor(id, defaultValue, options = {}) {
+  constructor(defaultId, defaultValue, options = {}) {
     this._eventEmitter = new EventEmitter();
     this._queries = {};
-    this._id = id || getAutomaticId();
+
+    this._defaultValue = !isUndefined(defaultValue) ? cloneDeep(defaultValue) : defaultValue;
+    this._id = options.uuid || uniqueId(defaultId || getAutomaticId(), this._defaultValue);
     this._cache = new Cache(this._eventEmitter, this._id);
-    this._defaultValue =
-      typeof defaultValue !== "undefined" ? cloneDeep(defaultValue) : defaultValue;
 
     this._customQueries = {};
     this.customQueries = {};
@@ -228,7 +231,7 @@ export class Origin {
     newQuery.onCleanAny = listener => this._onCleanAny(listener);
     newQuery.removeCleanAnyListener = listener => this._removeCleanAnyListener(listener);
     newQuery._queryId = queryUniqueId;
-    newQuery._id = `${this._id}${queryUniqueId ? `-${queryUniqueId}` : ""}`;
+    newQuery._id = queriedUniqueId(this._id, queryUniqueId);
     newQuery.actions = actions;
     newQuery._isSource = true;
     newQuery._root = this;

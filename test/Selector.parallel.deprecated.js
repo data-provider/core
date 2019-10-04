@@ -3,7 +3,7 @@ const test = require("mocha-sinon-chai");
 const { Origin, sources } = require("../src/Origin");
 const { Selector } = require("../src/Selector");
 
-test.describe("Selector using parallel sources", () => {
+test.describe("Selector using parallel sources defining default value in deprecated way", () => {
   const FORCE_ERROR = "force-error";
   const FOO_ORIGIN_VALUE = {
     foo: "foo"
@@ -125,9 +125,7 @@ test.describe("Selector using parallel sources", () => {
           spies.testSelectorRead();
           return originResults;
         },
-        {
-          defaultValue: DEFAULT_VALUE
-        }
+        DEFAULT_VALUE
       );
     });
 
@@ -179,9 +177,7 @@ test.describe("Selector using parallel sources", () => {
           spies.testSelectorRead();
           return originResults;
         },
-        {
-          defaultValue: DEFAULT_VALUE
-        }
+        DEFAULT_VALUE
       );
     });
 
@@ -212,9 +208,7 @@ test.describe("Selector using parallel sources", () => {
           spies.testSelectorRead();
           return originResults;
         },
-        {
-          defaultValue: DEFAULT_VALUE
-        }
+        DEFAULT_VALUE
       );
     });
 
@@ -276,9 +270,7 @@ test.describe("Selector using parallel sources", () => {
           spies.testSelectorRead();
           return originResults;
         },
-        {
-          defaultValue: DEFAULT_VALUE
-        }
+        DEFAULT_VALUE
       );
     });
 
@@ -350,9 +342,7 @@ test.describe("Selector using parallel sources", () => {
           parallel: parallelResults,
           single: origin3Results
         }),
-        {
-          defaultValue: DEFAULT_VALUE
-        }
+        DEFAULT_VALUE
       );
     });
 
@@ -404,9 +394,7 @@ test.describe("Selector using parallel sources", () => {
           parallel: parallelResults,
           single: origin3Results
         }),
-        {
-          defaultValue: DEFAULT_VALUE
-        }
+        DEFAULT_VALUE
       );
     });
 
@@ -424,9 +412,11 @@ test.describe("Selector using parallel sources", () => {
 
   test.describe("with chained parallel requests", () => {
     test.beforeEach(() => {
-      testSelector = new Selector([testOrigin, [testOrigin2, testOrigin3]], results => results, {
-        defaultValue: DEFAULT_VALUE
-      });
+      testSelector = new Selector(
+        [testOrigin, [testOrigin2, testOrigin3]],
+        results => results,
+        DEFAULT_VALUE
+      );
     });
 
     test.it("should return value returned by parser function", () => {
@@ -462,9 +452,7 @@ test.describe("Selector using parallel sources", () => {
               single: origin3Results
             };
           },
-          {
-            defaultValue: DEFAULT_VALUE
-          }
+          DEFAULT_VALUE
         );
       });
 
@@ -559,9 +547,7 @@ test.describe("Selector using parallel sources", () => {
               single: origin3Results
             };
           },
-          {
-            defaultValue: DEFAULT_VALUE
-          }
+          DEFAULT_VALUE
         );
       });
 

@@ -1,4 +1,11 @@
-import { CLEAN_ANY_EVENT_NAME, queryId, cleanCacheEventName, isCacheEventName } from "./helpers";
+import {
+  CLEAN_ANY_EVENT_NAME,
+  queryId,
+  cleanCacheEventName,
+  isCacheEventName,
+  queriedUniqueId,
+  isUndefined
+} from "./helpers";
 
 export class Cache {
   constructor(eventEmitter, id) {
@@ -20,7 +27,7 @@ export class Cache {
     return {
       action: "clean",
       source: {
-        _id: `${this._id}${queryUniqueId ? `-${queryUniqueId}` : ""}`,
+        _id: queriedUniqueId(this._id, queryUniqueId),
         _queryId: queryUniqueId,
         _root
       }
@@ -28,14 +35,14 @@ export class Cache {
   }
 
   clean(query, _root) {
-    if (query) {
+    if (!isUndefined(query)) {
       const queryIdentifier = queryId(query);
       delete this._cachedData[queryIdentifier];
       this._eventEmitter.emit(cleanCacheEventName(query), query);
       this._eventEmitter.emit(CLEAN_ANY_EVENT_NAME, this.getAnyData(queryIdentifier, _root));
     } else {
       this._reset();
-      this._eventEmitter.emit(CLEAN_ANY_EVENT_NAME, this.getAnyData(null, _root));
+      this._eventEmitter.emit(CLEAN_ANY_EVENT_NAME, this.getAnyData(query, _root));
     }
   }
 

@@ -2,18 +2,33 @@ import { once, isFunction } from "lodash";
 import isPromise from "is-promise";
 
 import { Origin } from "./Origin";
-import { READ_METHOD, CREATE_METHOD, UPDATE_METHOD, DELETE_METHOD } from "./helpers";
+import {
+  READ_METHOD,
+  CREATE_METHOD,
+  UPDATE_METHOD,
+  DELETE_METHOD,
+  seemsToBeSelectorOptions
+} from "./helpers";
 
 export class Selector extends Origin {
   constructor() {
     const args = Array.from(arguments);
     let lastIndex = args.length - 1;
     let defaultValue;
+    let options;
 
-    // Check if last argument is default value
+    // Check if last argument is default value or options
     if (!isFunction(args[lastIndex])) {
       defaultValue = args[lastIndex];
       lastIndex = args.length - 2;
+      if (seemsToBeSelectorOptions(defaultValue)) {
+        options = defaultValue;
+        defaultValue = defaultValue.defaultValue;
+      } else {
+        console.warn(
+          "Please provide an object with 'defaultValue' property. Defining default value as last argument will be deprecated in next versions"
+        );
+      }
     }
 
     const sources = args.slice(0, lastIndex);
@@ -38,7 +53,7 @@ export class Selector extends Origin {
 
     const testQueries = getTestQueries(sources);
 
-    super(`select:${sourceIds.join(":")}`, defaultValue);
+    super(`select:${sourceIds.join(":")}`, defaultValue, options);
 
     this._sources = sources;
     this._resultsParser = args[lastIndex];
