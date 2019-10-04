@@ -39,4 +39,25 @@ test.describe("sources handler", () => {
       ]);
     });
   });
+
+  test.describe("size property", () => {
+    test.afterEach(() => {
+      sources.clear();
+    });
+
+    test.it("should be zero if no sources have been created", () => {
+      return test.expect(sources.size).to.equal(0);
+    });
+
+    test.it("should contain new created sources", () => {
+      new FooOrigin();
+      return test.expect(sources.size).to.equal(1);
+    });
+
+    test.it("should contain as much elements as sources have been created", () => {
+      const fooOrigin = new FooOrigin();
+      new Selector(fooOrigin, () => {});
+      return test.expect(sources.size).to.equal(2);
+    });
+  });
 });
