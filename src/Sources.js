@@ -42,7 +42,7 @@ export class SourcesHandler {
   }
 
   get elements() {
-    return this._sources.values();
+    return Array.from(this._sources.values());
   }
 }
 
