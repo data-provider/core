@@ -65,18 +65,6 @@
 	* Returns
 		* `<selector instance>` - Will return a selector instance unique for the query provided. Returned instances will be the same if query is the same.
 * addCustomQueries `selector.addCustomQueries(customQueryObject)`
-<<<<<<< HEAD
-  * Aliases
-    * addCustomQuery `selector.addCustomQuery({ queryName: queryCallback(query)})`
-  * Arguments
-    * customQueryObject - `<Object>` containing properties:
-      * [key] - `<String>` Key will be used as name of the new selector method that will execute the custom query.
-        * queryCallback - `<Function>`
-          * Arguments
-            * query - `<Any>` Query provided by the user when using custom query method.
-          * Returns
-            * currentQuery - `<Any>` Query that will be used as current query, and passed to the CRUD methods when executed.
-=======
 	* Aliases
 		* addCustomQuery `selector.addCustomQuery({ queryName: queryCallback(query)})`
 	* Arguments
@@ -87,4 +75,3 @@
 						* query - `<Any>` Query provided by the user when using custom query method.
 					* Returns
 						* currentQuery - `<Any>` Query that will be used as current query, and passed to the CRUD methods when executed.
->>>>>>> manual-unique-id
