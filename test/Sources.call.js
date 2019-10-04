@@ -3,7 +3,7 @@ const test = require("mocha-sinon-chai");
 const { Origin, sources } = require("../src/Origin");
 const { Selector } = require("../src/Selector");
 
-test.describe.only("sources handler call method", () => {
+test.describe("sources handler call method", () => {
   const FooOrigin = class extends Origin {
     constructor(id, tags) {
       super(id, null, { uuid: id, tags });
@@ -65,6 +65,17 @@ test.describe.only("sources handler call method", () => {
 
     test.it("should return an array containing results of all sources", () => {
       test.expect(sources.call("fooMethod")).to.deep.equal(["foo-1", "foo-2", "foo-3", undefined]);
+    });
+  });
+
+  test.describe("when method does not exist in source", () => {
+    test.beforeEach(() => {
+      sandbox.stub(console, "warn");
+    });
+
+    test.it("should print a trace with the source id", () => {
+      sources.call("fooMethod");
+      test.expect(console.warn.getCall(0).args[0]).to.contain("foo-4");
     });
   });
 
