@@ -22,14 +22,13 @@ export class SourcesHandler {
     const args = Array.from(arguments);
     const methodName = args[0];
     args.shift();
-    this._sources.forEach(source => {
+    return this.elements.map(source => {
       if (source[methodName] instanceof Function) {
-        source[methodName].apply(source, args);
+        return source[methodName].apply(source, args);
       } else {
         console.warn(`Source with id "${source._id}" has not method "${methodName}"`);
       }
     });
-    return this;
   }
 
   clear() {
@@ -69,7 +68,7 @@ export class Sources {
 
   getByTag(tag) {
     if (Array.isArray(tag)) {
-      return this.getByTag(tag);
+      return this.getByTags(tag);
     }
     return this._tags.get(tag) || this._noSources;
   }
