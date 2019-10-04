@@ -27,7 +27,7 @@ Provides:
     * [Api][mercury-api-url]
     * [Memory Storage][mercury-memory-url]
     * [Browser Local Storage][mercury-browser-storage-url]
-    * [Broswer Session Storage][mercury-browser-storage-url]
+    * [Browser Session Storage][mercury-browser-storage-url]
     * [Prismic CMS][mercury-prismic-url]
 * __"Selector"__ constructor for combining or transforming the result of one or many origins.
   * __Declarative__. Declare which Origins your Selector needs to consume. Mercury will do the rest for you.
