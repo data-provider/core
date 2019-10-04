@@ -2,11 +2,14 @@ const test = require("mocha-sinon-chai");
 
 const { Origin } = require("../src/Origin");
 const { Selector } = require("../src/Selector");
+const helpers = require("../src/helpers");
 
 test.describe("Selector id", () => {
   const FOO_ID = "foo-origin-id";
   const FOO_ID_2 = "foo-origin-2";
   const FOO_ID_3 = "foo-origin-3";
+  const FOO_UUID = "foo-uuid";
+  const FOO_CUSTOM_UUID = "foo-custom-uuid";
   let sandbox;
   let TestOrigin;
   let testOrigin;
@@ -16,6 +19,8 @@ test.describe("Selector id", () => {
 
   test.beforeEach(() => {
     sandbox = test.sinon.createSandbox();
+    sandbox.stub(helpers, "uniqueId").returns(FOO_UUID);
+    sandbox.stub(helpers, "queriedUniqueId").returns("foo-query-uuid");
     TestOrigin = class extends Origin {
       _read() {
         return Promise.resolve();
@@ -32,23 +37,69 @@ test.describe("Selector id", () => {
   });
 
   test.describe("without query", () => {
-    test.it("private property _id should be equal to sources ids adding 'select:' prefix", () => {
-      test.expect(testSelector._id).to.equal(`select:${FOO_ID}`);
-    });
-  });
-
-  test.describe("with query", () => {
     test.it(
-      "private property _id should be equal to sources ids adding 'select:' prefix and the query id",
+      "private property _id should be calculated using source id adding 'select:' prefix",
       () => {
-        test.expect(testSelector.query("foo")._id).to.equal(`select:${FOO_ID}-"foo"`);
+        test.expect(helpers.uniqueId).to.have.been.calledWith(`select:${FOO_UUID}`, undefined);
+      }
+    );
+
+    test.it("private property _id should be equal to custom uuid", () => {
+      testSelector = new Selector(testOrigin, testOrigin2, originResult => originResult, {
+        uuid: FOO_CUSTOM_UUID
+      });
+      test.expect(testSelector._id).to.equal(FOO_CUSTOM_UUID);
+    });
+
+    test.it(
+      "private property _id should be calculated using sources ids adding 'select:' prefix and default value when provided in deprecated way",
+      () => {
+        testSelector = new Selector(
+          testOrigin,
+          testOrigin2,
+          originResult => originResult,
+          "foo-default-value"
+        );
+        test
+          .expect(helpers.uniqueId)
+          .to.have.been.calledWith(`select:${FOO_UUID}:${FOO_UUID}`, "foo-default-value");
+      }
+    );
+
+    test.it(
+      "private property _id should be calculated using sources ids adding 'select:' prefix and default value",
+      () => {
+        testSelector = new Selector(testOrigin, testOrigin2, originResult => originResult, {
+          defaultValue: "foo-default-value"
+        });
+        test
+          .expect(helpers.uniqueId)
+          .to.have.been.calledWith(`select:${FOO_UUID}:${FOO_UUID}`, "foo-default-value");
       }
     );
   });
 
+  test.describe("with query", () => {
+    test.it(
+      "private property _id should be calculated using sources ids adding 'select:' prefix and the query id",
+      () => {
+        testSelector.query("foo");
+        test.expect(helpers.queriedUniqueId).to.have.been.calledWith(FOO_UUID, '("foo")');
+      }
+    );
+
+    test.it("private property _id should be calculated using custom id and the query id", () => {
+      testSelector = new Selector(testOrigin, originResult => originResult, {
+        uuid: FOO_CUSTOM_UUID
+      });
+      testSelector.query("foo");
+      test.expect(helpers.queriedUniqueId).to.have.been.calledWith(FOO_CUSTOM_UUID, '("foo")');
+    });
+  });
+
   test.describe("when sources are queryied", () => {
     test.it(
-      "private property _id should be equal to sources ids adding 'select:' prefix and the query id",
+      "private property _id of queried resources should be calculated using sources ids and the query id",
       () => {
         testSelector = new Selector(
           {
@@ -56,22 +107,47 @@ test.describe("Selector id", () => {
             query: query => query
           },
           originResult => originResult
-        );
-        test.expect(testSelector._id).to.equal(`select:${FOO_ID}`);
+        ).query("foo");
+        test.expect(helpers.queriedUniqueId).to.have.been.calledWith(FOO_UUID, '("foo")');
       }
     );
+
+    test.it("private property _id should be calculated using custom uuid and the query id", () => {
+      testSelector = new Selector(
+        {
+          source: testOrigin,
+          query: query => query
+        },
+        originResult => originResult,
+        {
+          uuid: FOO_CUSTOM_UUID
+        }
+      ).query("foo");
+      test.expect(helpers.queriedUniqueId).to.have.been.calledWith(FOO_CUSTOM_UUID, '("foo")');
+    });
   });
 
   test.describe("when sources are concurrent", () => {
     test.it(
       "private property _id should be equal to sources ids adding 'select:' prefix and the query id",
       () => {
+        testOrigin = new TestOrigin(FOO_ID, undefined, {
+          uuid: FOO_ID
+        });
+        testOrigin2 = new TestOrigin(FOO_ID_2, undefined, {
+          uuid: FOO_ID_2
+        });
+        testOrigin3 = new TestOrigin(FOO_ID_3, undefined, {
+          uuid: FOO_ID_3
+        });
         testSelector = new Selector(
           [testOrigin3, testOrigin2],
           testOrigin,
           originResult => originResult
         );
-        test.expect(testSelector._id).to.equal(`select:${FOO_ID_3}:${FOO_ID_2}:${FOO_ID}`);
+        test
+          .expect(helpers.uniqueId)
+          .to.have.been.calledWith(`select:${FOO_ID_3}:${FOO_ID_2}:${FOO_ID}`, undefined);
       }
     );
   });
@@ -80,6 +156,15 @@ test.describe("Selector id", () => {
     test.it(
       "private property _id should be equal to sources ids adding 'select:' prefix and the query id",
       () => {
+        testOrigin = new TestOrigin(FOO_ID, undefined, {
+          uuid: FOO_ID
+        });
+        testOrigin2 = new TestOrigin(FOO_ID_2, undefined, {
+          uuid: FOO_ID_2
+        });
+        testOrigin3 = new TestOrigin(FOO_ID_3, undefined, {
+          uuid: FOO_ID_3
+        });
         testSelector = new Selector(
           testOrigin3,
           [
@@ -94,7 +179,9 @@ test.describe("Selector id", () => {
           ],
           originResult => originResult
         );
-        test.expect(testSelector._id).to.equal(`select:${FOO_ID_3}:${FOO_ID}:${FOO_ID_2}`);
+        test
+          .expect(helpers.uniqueId)
+          .to.have.been.calledWith(`select:${FOO_ID_3}:${FOO_ID}:${FOO_ID_2}`, undefined);
       }
     );
   });
@@ -122,7 +209,7 @@ test.describe("Selector id", () => {
           },
           originResult => originResult
         );
-        test.expect(testSelector._id).to.equal(`select:select:foo-origin-id`);
+        test.expect(helpers.uniqueId).to.have.been.calledWith(`select:${FOO_UUID}`, undefined);
       }
     );
 
@@ -135,8 +222,8 @@ test.describe("Selector id", () => {
             query: query => query
           },
           originResult => originResult
-        );
-        test.expect(testSelector.query("foo")._id).to.equal(`select:select:foo-origin-id-"foo"`);
+        ).query("foo");
+        test.expect(helpers.queriedUniqueId).to.have.been.calledWith(FOO_UUID, '("foo")');
       }
     );
   });

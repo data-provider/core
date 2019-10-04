@@ -122,7 +122,7 @@ test.describe("Selector events", () => {
         return Promise.all([
           test.expect(eventData.action).to.equal("clean"),
           test.expect(eventData.source._id).to.equal(testSelector._id),
-          test.expect(eventData.source._queryId).to.equal(null),
+          test.expect(eventData.source._queryId).to.equal(undefined),
           test.expect(eventData.source._root).to.equal(testSelector)
         ]);
       });
@@ -236,7 +236,7 @@ test.describe("Selector events", () => {
         return Promise.all([
           test.expect(eventData.action).to.equal("clean"),
           test.expect(eventData.source._id).to.equal(queriedSelector._id),
-          test.expect(eventData.source._queryId).to.equal(JSON.stringify(FOO_QUERY)),
+          test.expect(eventData.source._queryId).to.equal(`(${JSON.stringify(FOO_QUERY)})`),
           test.expect(eventData.source._root).to.equal(testSelector)
         ]);
       });
