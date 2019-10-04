@@ -1,6 +1,6 @@
 const test = require("mocha-sinon-chai");
 
-const { Origin } = require("../src/Origin");
+const { Origin, sources } = require("../src/Origin");
 const { Selector } = require("../src/Selector");
 
 const CUD_ERROR = "CUD methods can be used only when returning sources";
@@ -55,6 +55,7 @@ test.describe("Selector cud methods", () => {
 
   test.afterEach(() => {
     sandbox.restore();
+    sources.clear();
   });
 
   const testMethod = methodName => {

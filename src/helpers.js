@@ -46,3 +46,7 @@ export const actions = {
     error: `${DELETE_METHOD}${ERROR}`
   }
 };
+
+export const removeFalsy = array => array.filter(el => !!el);
+
+export const ensureArray = els => (Array.isArray(els) ? els : [els]);

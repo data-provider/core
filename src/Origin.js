@@ -1,8 +1,8 @@
 import { isEqual, cloneDeep, merge } from "lodash";
 
 import { Cache } from "./Cache";
-
 import { EventEmitter } from "./EventEmitter";
+import { sources as sourcesHandler } from "./Sources";
 import {
   READ_METHOD,
   VALID_METHODS,
@@ -11,14 +11,23 @@ import {
   cleanCacheEventName,
   changeEventName,
   queryId,
-  actions
+  actions,
+  ensureArray,
+  removeFalsy
 } from "./helpers";
 
+let automaticIdCounter = 0;
+
+const getAutomaticId = () => {
+  automaticIdCounter++;
+  return (Date.now() + automaticIdCounter).toString();
+};
+
 export class Origin {
-  constructor(id, defaultValue) {
+  constructor(id, defaultValue, options = {}) {
     this._eventEmitter = new EventEmitter();
     this._queries = {};
-    this._id = id || "";
+    this._id = id || getAutomaticId();
     this._cache = new Cache(this._eventEmitter, this._id);
     this._defaultValue =
       typeof defaultValue !== "undefined" ? cloneDeep(defaultValue) : defaultValue;
@@ -26,8 +35,10 @@ export class Origin {
     this._customQueries = {};
     this.customQueries = {};
     this.test = {};
+    this._tags = removeFalsy(ensureArray(options.tags));
 
     this._createBaseMethods();
+    sourcesHandler.add(this);
   }
 
   // EVENT HANDLERS
@@ -252,3 +263,5 @@ export class Origin {
     this.addCustomQueries(customQuery);
   }
 }
+
+export const sources = sourcesHandler;

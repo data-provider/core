@@ -1,6 +1,6 @@
 const test = require("mocha-sinon-chai");
 
-const { Origin } = require("../src/Origin");
+const { Origin, sources } = require("../src/Origin");
 
 test.describe("Origin value", () => {
   const DEFAULT_VALUE = [];
@@ -21,6 +21,7 @@ test.describe("Origin value", () => {
 
   test.afterEach(() => {
     sandbox.restore();
+    sources.clear();
   });
 
   test.describe("using getter", () => {

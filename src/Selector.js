@@ -1,4 +1,4 @@
-import { once, isFunction, isArray } from "lodash";
+import { once, isFunction } from "lodash";
 import isPromise from "is-promise";
 
 import { Origin } from "./Origin";
@@ -23,7 +23,7 @@ export class Selector extends Origin {
     const getTestQueries = sourcesOfLevel => {
       const queries = [];
       sourcesOfLevel.forEach(source => {
-        if (isArray(source)) {
+        if (Array.isArray(source)) {
           queries.push(getTestQueries(source));
         } else {
           const hasQuery = !!source.source;
@@ -56,7 +56,7 @@ export class Selector extends Origin {
     });
 
     const readSource = sourceToRead => {
-      if (isArray(sourceToRead)) {
+      if (Array.isArray(sourceToRead)) {
         return Promise.all(sourceToRead.map(readSource));
       }
       const isQueried = !!sourceToRead.source;

@@ -1,6 +1,6 @@
 const test = require("mocha-sinon-chai");
 
-const { Origin } = require("../src/Origin");
+const { Origin, sources } = require("../src/Origin");
 
 test.describe("Origin id", () => {
   const FOO_ID = "foo-id";
@@ -12,6 +12,7 @@ test.describe("Origin id", () => {
 
   test.afterEach(() => {
     sandbox.restore();
+    sources.clear();
   });
 
   test.describe("Without query", () => {

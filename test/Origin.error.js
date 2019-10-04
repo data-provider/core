@@ -1,6 +1,6 @@
 const test = require("mocha-sinon-chai");
 
-const { Origin } = require("../src/Origin");
+const { Origin, sources } = require("../src/Origin");
 
 test.describe("Origin error", () => {
   const fooError = new Error("foo-error");
@@ -24,6 +24,7 @@ test.describe("Origin error", () => {
 
   test.afterEach(() => {
     sandbox.restore();
+    sources.clear();
   });
 
   test.describe("using getter", () => {
