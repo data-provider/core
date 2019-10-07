@@ -53,11 +53,10 @@ console.log(sources.size);
 sources.getById("foo").clean();
 
 sources.getByTags(["api", "need-auth"]).call("addHeaders", {
-	authentication: "foo-header"
+  authentication: "foo-header"
 }); // Call "addHeaders" in sources containing "api" or "need-auth" tags.
 
 sources.elements.forEach(source => {
-	console.log(source._id);
+  console.log(source._id);
 });
-
 ```
