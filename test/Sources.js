@@ -165,5 +165,50 @@ test.describe("sources handler", () => {
         ]);
       });
     });
+
+    test.describe("when refiltering by many tags", () => {
+      test.it(
+        "should return handler containing sources with any of provided tags, and any of the second group of tags",
+        () => {
+          const TAG_1 = "foo-tag-1";
+          const TAG_2 = "foo-tag-2";
+
+          new FooOrigin("foo-1", ["foo-tag-3"]);
+          new FooOrigin("foo-2", "foo-tag-4");
+          const origin = new FooOrigin("foo-3", [TAG_1, "foo-tag-3"]);
+          const origin2 = new FooOrigin("foo-4", ["foo-tag-4", TAG_2]);
+
+          const result = sources.getByTag([TAG_1, TAG_2]).getByTag(["foo-tag-3", "foo-tag-4"]);
+
+          return Promise.all([
+            test.expect(result.size).to.equal(2),
+            test.expect(result.elements[0]).to.equal(origin),
+            test.expect(result.elements[1]).to.equal(origin2)
+          ]);
+        }
+      );
+    });
+
+    test.describe("when refiltering by many tags", () => {
+      test.it(
+        "should return handler containing sources with any of provided tags, and any of the second group of tags",
+        () => {
+          const TAG_1 = "foo-tag-1";
+          const TAG_2 = "foo-tag-2";
+
+          new FooOrigin("foo-1", ["foo-tag-3"]);
+          new FooOrigin("foo-2", "foo-tag-4");
+          const origin = new FooOrigin("foo-3", [TAG_1, "foo-tag-3"]);
+          new FooOrigin("foo-4", ["foo-tag-4", TAG_2]);
+
+          const result = sources.getByTag([TAG_1, TAG_2]).getByTag(["foo-tag-3"]);
+
+          return Promise.all([
+            test.expect(result.size).to.equal(1),
+            test.expect(result.elements[0]).to.equal(origin)
+          ]);
+        }
+      );
+    });
   });
 });
