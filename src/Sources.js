@@ -1,7 +1,25 @@
+import { ensureArray } from "./helpers";
+
 export class SourcesHandler {
   constructor(source) {
     this._sources = new Set();
     this.add(source);
+  }
+
+  getByTags(tags) {
+    const handler = new SourcesHandler();
+    ensureArray(tags).forEach(tag => {
+      this.elements.forEach(source => {
+        if (source._tags.includes(tag)) {
+          handler.add(source);
+        }
+      });
+    });
+    return handler;
+  }
+
+  getByTag(tag) {
+    return this.getByTags(tag);
   }
 
   add(source) {
