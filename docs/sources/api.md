@@ -7,9 +7,9 @@
 * getBytags `sources.getByTags(tags)`
 	* Alias - `getByTag`
 	* Arguments
-		* tags - `<String> or <Array of Strings>` Results returned by the `read` - method of the sources.
+		* tags - `<String> or <Array of Strings>` Tags to filter sources by. If an array is provided, will act as an `||` operator (will return sources containing TAG_1 or TAG_2, or TAG_3, etc.)
 	* Returns
-		* A "sources group", containing methods described below.
+		* A "sources group", containing methods described below. Will return "sources" containing any of the tags provided as arguments.
 * getById `sources.getById(id)`
 	* Arguments
 		* id - `<String>` Id of the mercury source to get.
@@ -54,7 +54,7 @@ sources.getById("foo").clean();
 
 sources.getByTags(["api", "need-auth"]).call("addHeaders", {
 	authentication: "foo-header"
-});
+}); // Call "addHeaders" in sources containing "api" or "need-auth" tags.
 
 sources.elements.forEach(source => {
 	console.log(source._id);
