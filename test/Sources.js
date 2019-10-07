@@ -146,6 +146,25 @@ test.describe("sources handler", () => {
       );
     });
 
+    test.describe("when refiltering using one tag", () => {
+      test.it(
+        "should return handler containing sources with provided tag and second provided tag",
+        () => {
+          const TAG = "foo-tag-2";
+          const FOO_TAG = "foo-tag-3";
+          new FooOrigin("foo", ["foo-tag"]);
+          new FooOrigin("foo-2", TAG);
+          const origin2 = new FooOrigin("foo-3", [TAG, FOO_TAG]);
+          new FooOrigin("foo-4", [FOO_TAG]);
+          const result = sources.getByTag(TAG).getByTag(FOO_TAG);
+          return Promise.all([
+            test.expect(result.size).to.equal(1),
+            test.expect(result.elements[0]).to.equal(origin2)
+          ]);
+        }
+      );
+    });
+
     test.describe("when filtering by many tags", () => {
       test.it("should return handler containing sources with any of the provided tags", () => {
         const TAG_1 = "foo-tag-1";
@@ -187,9 +206,7 @@ test.describe("sources handler", () => {
           ]);
         }
       );
-    });
 
-    test.describe("when refiltering by many tags", () => {
       test.it(
         "should return handler containing sources with any of provided tags, and any of the second group of tags",
         () => {
