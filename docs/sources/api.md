@@ -7,7 +7,7 @@
 * getBytags `sources.getByTags(tags)`
 	* Alias - `getByTag`
 	* Arguments
-		* tags - `<String> or <Array of Strings>` Tags to filter sources by. If an array is provided, will act as an `||` operator (will return sources containing TAG_1 or TAG_2, or TAG_3, etc.)
+		* tags - `<String> or <Array of Strings>` Tags to filter sources by. If an array is provided, will act as an `||` operator (will return sources containing "tag 1", or "tag 2", or "tag 3", etc.)
 	* Returns
 		* A "sources group", containing methods described below. Will return "sources" containing any of the tags provided as arguments.
 * getById `sources.getById(id)`
