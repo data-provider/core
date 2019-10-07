@@ -10,4 +10,8 @@ test.describe("index", () => {
   test.it("should export Selector", () => {
     test.expect(index.Selector).to.not.be.undefined();
   });
+
+  test.it("should export sources", () => {
+    test.expect(index.sources).to.not.be.undefined();
+  });
 });
