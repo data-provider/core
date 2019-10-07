@@ -27,12 +27,18 @@
 
 #### Sources group
 
-* `size` - Getter returning current size of mercury sources group.
-* `elements` - Getter returning an `<Array>` containing all mercury sources in the group.
+* size `sources.size` - Getter returning current size of mercury sources group.
+* elements `group.elements` - Getter returning an `<Array>` containing all mercury sources in the group.
+* getBytags `group.getByTags(tags)`
+	* Alias - `getByTag`
+	* Arguments
+		* tags - `<String> or <Array of Strings>` Tags to filter group of sources by. If an array is provided, will act as an `||` operator (will return sources containing "tag 1", or "tag 2", or "tag 3", etc.)
+	* Returns
+		* A "sources group", containing methods described below. Will return "sources" containing any of the tags provided as arguments.
 * clean `group.clean()` - Dispatches clean method of all mercury sources in the group.
 	* Returns
 		* same "sources group", for chainability purposes.
-* call `sources.call(methodName[, argument1[, ...]])` - Executes a certain method in all mercury sources in the group.
+* call `group.call(methodName[, argument1[, ...]])` - Executes a certain method in all mercury sources in the group.
 	* Arguments
 		* methodName - `<String>` Name of the method to call.
 		* [...] - The rest of arguments will be passed to the sources original methods when are executed.
@@ -55,6 +61,10 @@ sources.getById("foo").clean();
 sources.getByTags(["api", "need-auth"]).call("addHeaders", {
   authentication: "foo-header"
 }); // Call "addHeaders" in sources containing "api" or "need-auth" tags.
+
+ sources.getByTags("api").getByTags("need-auth").call("addHeaders", {
+  authentication: "foo-header"
+}); // Call "addHeaders" in sources containing "api" and "need-auth" tags.
 
 sources.elements.forEach(source => {
   console.log(source._id);
