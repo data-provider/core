@@ -147,7 +147,7 @@ test.describe("sources handler", () => {
     });
 
     test.describe("when filtering by many tags", () => {
-      test.it("should return handler containing sources with provided tags", () => {
+      test.it("should return handler containing sources with any of the provided tags", () => {
         const TAG_1 = "foo-tag-1";
         const TAG_2 = "foo-tag-2";
 
