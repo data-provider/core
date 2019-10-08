@@ -2,7 +2,7 @@ const test = require("mocha-sinon-chai");
 
 const { Origin, sources } = require("../src/Origin");
 
-test.describe.only("sources handler config method", () => {
+test.describe("sources handler config method", () => {
   const FooOrigin = class extends Origin {
     constructor(id, tags) {
       super(id, null, { uuid: id, tags });
@@ -389,7 +389,7 @@ test.describe.only("sources handler config method", () => {
     });
 
     test.it("should extend current configuration of source with provided id", () => {
-      sources.getById("tag-3").config({
+      sources.getById("foo-3").config({
         foo: "foo"
       });
 
@@ -401,7 +401,7 @@ test.describe.only("sources handler config method", () => {
     });
 
     test.it("should be applied to new created sources", () => {
-      sources.getById("tag-4").config({
+      sources.getById("foo-4").config({
         foo: "foo"
       });
 

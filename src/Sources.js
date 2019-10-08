@@ -116,10 +116,17 @@ export class Sources {
   }
 
   add(source) {
-    if (this._allSourcesById.get(source._id)) {
-      console.warn(`Duplicated Mercury source id "${source._id}"`);
+    const idGroup = this._allSourcesById.get(source._id);
+    if (idGroup) {
+      if (idGroup.size > 0) {
+        console.warn(`Duplicated Mercury source id "${source._id}"`);
+        this._createIdEmptyGroup(source._id).add(source);
+      } else {
+        idGroup.add(source);
+      }
+    } else {
+      this._createIdEmptyGroup(source._id).add(source);
     }
-    this._createIdEmptyGroup(source._id).add(source);
     this._allSources.add(source);
     source._tags.forEach(tag => {
       this.getByTag(tag).add(source);
