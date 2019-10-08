@@ -1,7 +1,8 @@
-import { ensureArray } from "./helpers";
+import { ensureArray, mergeCloned } from "./helpers";
 
 export class SourcesHandler {
   constructor(source) {
+    this._config = {};
     this._sources = new Set();
     this.add(source);
   }
@@ -25,8 +26,14 @@ export class SourcesHandler {
   add(source) {
     if (source) {
       this._sources.add(source);
+      source.config(this._config);
     }
     return this;
+  }
+
+  config(options) {
+    this._config = mergeCloned(this._config, options);
+    this._sources.forEach(source => source.config(this._config));
   }
 
   clean() {
@@ -118,6 +125,10 @@ export class Sources {
   }
 
   // Expose methods of all sources
+  config(options) {
+    return this._allSources.config(options);
+  }
+
   clean() {
     return this._allSources.clean();
   }
