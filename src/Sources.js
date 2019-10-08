@@ -79,6 +79,18 @@ export class Sources {
     this._allSourcesById = new Map();
   }
 
+  _createIdEmptyGroup(id) {
+    const sourcesHandler = new SourcesHandler();
+    this._allSourcesById.set(id, sourcesHandler);
+    return sourcesHandler;
+  }
+
+  _createTagEmptyGroup(tag) {
+    const sourcesHandler = new SourcesHandler();
+    this._tags.set(tag, sourcesHandler);
+    return sourcesHandler;
+  }
+
   getByTags(tags) {
     if (!Array.isArray(tags)) {
       return this.getByTag(tags);
@@ -96,25 +108,21 @@ export class Sources {
     if (Array.isArray(tag)) {
       return this.getByTags(tag);
     }
-    return this._tags.get(tag) || this._noSources;
+    return this._tags.get(tag) || this._createTagEmptyGroup(tag);
   }
 
   getById(id) {
-    return this._allSourcesById.get(id) || this._noSources;
+    return this._allSourcesById.get(id) || this._createIdEmptyGroup(id);
   }
 
   add(source) {
     if (this._allSourcesById.get(source._id)) {
       console.warn(`Duplicated Mercury source id "${source._id}"`);
     }
-    this._allSourcesById.set(source._id, new SourcesHandler(source));
+    this._createIdEmptyGroup(source._id).add(source);
     this._allSources.add(source);
     source._tags.forEach(tag => {
-      if (!this._tags.has(tag)) {
-        this._tags.set(tag, new SourcesHandler(source));
-      } else {
-        this.getByTag(tag).add(source);
-      }
+      this.getByTag(tag).add(source);
     });
     return this;
   }
