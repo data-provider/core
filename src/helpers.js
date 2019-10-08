@@ -79,3 +79,9 @@ export const seemsToBeSelectorOptions = defaultValueOrOptions => {
     defaultValueOrOptions.hasOwnProperty("uuid")
   );
 };
+
+export const tagsGroupId = tags => {
+  return removeFalsy(ensureArray(tags))
+    .sort()
+    .join("-");
+};

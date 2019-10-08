@@ -131,8 +131,6 @@ test.describe("sources handler config method", () => {
     });
   });
 
-  // TODO, test getByTags, getById, getByTags.getByTags().
-
   test.describe("when applied to groups of sources using getByTag method", () => {
     test.it("should apply config to all sources in group", () => {
       sources.getByTag("tag-3").config({
@@ -251,6 +249,8 @@ test.describe("sources handler config method", () => {
       });
     });
   });
+
+  // TODO, getByTags.getByTags. (test sorting in different order)
 
   test.describe("when applied to groups of sources using getByTags method", () => {
     test.it("should apply config to all sources in group", () => {

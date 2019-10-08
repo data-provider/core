@@ -1,13 +1,18 @@
-import { ensureArray, mergeCloned } from "./helpers";
+import { ensureArray, mergeCloned, removeFalsy, tagsGroupId } from "./helpers";
 
 export class SourcesHandler {
-  constructor(source) {
+  constructor(baseTags) {
+    this._baseTags = removeFalsy(ensureArray(baseTags));
     this._config = {};
     this._sources = new Set();
-    this.add(source);
   }
 
   getByTags(tags) {
+    /* const allTags = this._baseTags.concat(tags);
+    const handler =
+      allTags.length > tags.length
+        ? sources.getContainingAllTags(this._baseTags.concat(tags))
+        : new SourcesHandler(tags); */
     const handler = new SourcesHandler();
     ensureArray(tags).forEach(tag => {
       this.elements.forEach(source => {
@@ -74,8 +79,9 @@ export class SourcesHandler {
 export class Sources {
   constructor() {
     this._allSources = new SourcesHandler();
-    this._noSources = new SourcesHandler();
+    this._containsAllTags = new Map();
     this._tags = new Map();
+    this._tagGroups = new Set();
     this._allSourcesById = new Map();
   }
 
@@ -86,8 +92,19 @@ export class Sources {
   }
 
   _createTagEmptyGroup(tag) {
-    const sourcesHandler = new SourcesHandler();
+    const sourcesHandler = new SourcesHandler(tag);
     this._tags.set(tag, sourcesHandler);
+    return sourcesHandler;
+  }
+
+  getContainingAllTags(tags) {
+    const groupId = tagsGroupId(tags);
+    let sourcesHandler = this._containsAllTags.get(groupId);
+    if (!sourcesHandler) {
+      sourcesHandler = new SourcesHandler(tags);
+      this._containsAllTags.set(groupId, sourcesHandler);
+    }
+
     return sourcesHandler;
   }
 
@@ -95,7 +112,7 @@ export class Sources {
     if (!Array.isArray(tags)) {
       return this.getByTag(tags);
     }
-    const handler = new SourcesHandler();
+    const handler = new SourcesHandler(tags);
     tags.forEach(tag => {
       this.getByTag(tag).elements.forEach(source => {
         handler.add(source);
@@ -131,6 +148,7 @@ export class Sources {
     source._tags.forEach(tag => {
       this.getByTag(tag).add(source);
     });
+    // TODO, if tags length > 1, call config of containing all tags
     return this;
   }
 
