@@ -39,8 +39,9 @@ export class Origin {
     this._customQueries = {};
     this.customQueries = {};
     this.test = {};
-    this._options = options;
-    this._tags = removeFalsy(ensureArray(options.tags));
+    options.tags = removeFalsy(ensureArray(options.tags));
+    this._configuration = options;
+    this._tags = options.tags;
 
     this._createBaseMethods();
     sourcesHandler.add(this);
@@ -216,9 +217,9 @@ export class Origin {
   // PUBLIC METHODS
 
   config(options) {
-    this._options = mergeCloned(this._options, options);
+    this._configuration = mergeCloned(this._configuration, options);
     if (this._config) {
-      this._config(this._options);
+      this._config(this._configuration);
     }
   }
 

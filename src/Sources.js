@@ -58,6 +58,7 @@ export class SourcesHandler {
 
   clear() {
     this._sources.clear();
+    this._config = {};
     return this;
   }
 
@@ -119,6 +120,7 @@ export class Sources {
   }
 
   clear() {
+    this._allSources.clear();
     this._allSourcesById.clear();
     this._tags.clear();
     return this._allSources.clear();
