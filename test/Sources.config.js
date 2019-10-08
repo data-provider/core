@@ -133,7 +133,7 @@ test.describe.only("sources handler config method", () => {
 
   // TODO, test getByTags, getById, getByTags.getByTags().
 
-  test.describe("when applied to groups of sources", () => {
+  test.describe("when applied to groups of sources using getByTag method", () => {
     test.it("should apply config to all sources in group", () => {
       sources.getByTag("tag-3").config({
         foo: "foo"
@@ -239,6 +239,211 @@ test.describe.only("sources handler config method", () => {
       fooSource4._config = sandbox.stub();
 
       sources.getByTag("tag-4").config({
+        foo2: "new-foo2",
+        foo3: "foo3"
+      });
+
+      return test.expect(fooSource4._config).to.have.been.calledWith({
+        foo2: "new-foo2",
+        foo3: "foo3",
+        tags: ["tag-4"],
+        uuid: "foo-4"
+      });
+    });
+  });
+
+  test.describe("when applied to groups of sources using getByTags method", () => {
+    test.it("should apply config to all sources in group", () => {
+      sources.getByTags(["tag-3"]).config({
+        foo: "foo"
+      });
+
+      return Promise.all([
+        test.expect(fooSource2._configuration.foo).to.equal("foo"),
+        test.expect(fooSource3._configuration.foo).to.equal("foo")
+      ]);
+    });
+
+    test.it("should not apply config to non-belonging sources", () => {
+      sources.getByTags(["tag-3"]).config({
+        foo: "foo"
+      });
+
+      return test.expect(fooSource._configuration.foo).to.equal(undefined);
+    });
+
+    test.it("should extend current configuration of all sources belonging to group", () => {
+      sources.getByTags(["tag-3"]).config({
+        foo: "foo"
+      });
+
+      return Promise.all([
+        test.expect(fooSource._configuration).to.deep.equal({
+          tags: ["tag-1"],
+          uuid: "foo-1"
+        }),
+        test.expect(fooSource2._configuration).to.deep.equal({
+          foo: "foo",
+          tags: ["tag-2", "tag-3"],
+          uuid: "foo-2"
+        }),
+        test.expect(fooSource3._configuration).to.deep.equal({
+          foo: "foo",
+          tags: ["tag-3"],
+          uuid: "foo-3"
+        })
+      ]);
+    });
+
+    test.it("should be applied to new created sources", () => {
+      sources.getByTags(["tag-4"]).config({
+        foo: "foo"
+      });
+
+      const fooSource4 = new FooOrigin("foo-4", "tag-4");
+
+      return Promise.all([
+        test.expect(fooSource4._configuration).to.deep.equal({
+          foo: "foo",
+          tags: ["tag-4"],
+          uuid: "foo-4"
+        })
+      ]);
+    });
+
+    test.it("should extend previously defined configuration", () => {
+      sources.getByTags(["tag-3"]).config({
+        foo: "foo",
+        foo2: "foo2"
+      });
+
+      const fooSource4 = new FooOrigin("foo-4", "tag-3");
+
+      sources.getByTags(["tag-3"]).config({
+        foo2: "new-foo2",
+        foo3: "foo3"
+      });
+
+      return Promise.all([
+        test.expect(fooSource._configuration).to.deep.equal({
+          tags: ["tag-1"],
+          uuid: "foo-1"
+        }),
+        test.expect(fooSource2._configuration).to.deep.equal({
+          foo: "foo",
+          foo2: "new-foo2",
+          foo3: "foo3",
+          tags: ["tag-2", "tag-3"],
+          uuid: "foo-2"
+        }),
+        test.expect(fooSource3._configuration).to.deep.equal({
+          foo: "foo",
+          foo2: "new-foo2",
+          foo3: "foo3",
+          tags: ["tag-3"],
+          uuid: "foo-3"
+        }),
+        test.expect(fooSource4._configuration).to.deep.equal({
+          foo: "foo",
+          foo2: "new-foo2",
+          foo3: "foo3",
+          tags: ["tag-3"],
+          uuid: "foo-4"
+        })
+      ]);
+    });
+
+    test.it("should call to sources _config method with the resultant configuration", () => {
+      const fooSource4 = new FooOrigin("foo-4", "tag-4");
+      fooSource4._config = sandbox.stub();
+
+      sources.getByTags(["tag-4"]).config({
+        foo2: "new-foo2",
+        foo3: "foo3"
+      });
+
+      return test.expect(fooSource4._config).to.have.been.calledWith({
+        foo2: "new-foo2",
+        foo3: "foo3",
+        tags: ["tag-4"],
+        uuid: "foo-4"
+      });
+    });
+  });
+
+  test.describe("when applied to groups of sources using getById method", () => {
+    test.it("should apply config to source with id", () => {
+      sources.getById("foo-2").config({
+        foo: "foo"
+      });
+
+      return test.expect(fooSource2._configuration.foo).to.equal("foo");
+    });
+
+    test.it("should not apply config to non-belonging sources", () => {
+      sources.getById("foo-2").config({
+        foo: "foo"
+      });
+
+      return test.expect(fooSource._configuration.foo).to.equal(undefined);
+    });
+
+    test.it("should extend current configuration of source with provided id", () => {
+      sources.getById("tag-3").config({
+        foo: "foo"
+      });
+
+      return test.expect(fooSource3._configuration).to.deep.equal({
+        foo: "foo",
+        tags: ["tag-3"],
+        uuid: "foo-3"
+      });
+    });
+
+    test.it("should be applied to new created sources", () => {
+      sources.getById("tag-4").config({
+        foo: "foo"
+      });
+
+      const fooSource4 = new FooOrigin("foo-4", "tag-4");
+
+      return Promise.all([
+        test.expect(fooSource4._configuration).to.deep.equal({
+          foo: "foo",
+          tags: ["tag-4"],
+          uuid: "foo-4"
+        })
+      ]);
+    });
+
+    test.it("should extend previously defined configuration", () => {
+      sources.getById("foo-4").config({
+        foo: "foo",
+        foo2: "foo2"
+      });
+
+      const fooSource4 = new FooOrigin("foo-4", "tag-4");
+
+      sources.getById("foo-4").config({
+        foo2: "new-foo2",
+        foo3: "foo3"
+      });
+
+      return;
+      test.expect(fooSource4._configuration).to.deep.equal({
+        foo: "foo",
+        foo2: "new-foo2",
+        foo3: "foo3",
+        tags: ["tag-4"],
+        uuid: "foo-4"
+      });
+    });
+
+    test.it("should call to sources _config method with the resultant configuration", () => {
+      const fooSource4 = new FooOrigin("foo-4", "tag-4");
+      fooSource4._config = sandbox.stub();
+
+      sources.getById("foo-4").config({
         foo2: "new-foo2",
         foo3: "foo3"
       });
