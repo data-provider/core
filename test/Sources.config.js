@@ -2,7 +2,7 @@ const test = require("mocha-sinon-chai");
 
 const { Origin, sources } = require("../src/Origin");
 
-test.describe.only("sources handler config method", () => {
+test.describe("sources handler config method", () => {
   const FooOrigin = class extends Origin {
     constructor(id, tags) {
       super(id, null, { uuid: id, tags });
