@@ -115,9 +115,12 @@ test.describe("Selector cache", () => {
     test.it(
       "should not execute selector function when read method is executed more than once in parallel",
       () => {
-        return Promise.all([testSelector.read(), testSelector.read(), testSelector.read()]).then(
-          dispatchReadAndCheckHasBeenCalledOnce
-        );
+        return Promise.all([
+          testSelector.read(),
+          testSelector.read(),
+          testSelector.read(),
+          testSelector.read()
+        ]).then(dispatchReadAndCheckHasBeenCalledOnce);
       }
     );
 
