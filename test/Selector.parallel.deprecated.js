@@ -30,6 +30,20 @@ test.describe("Selector using parallel sources defining default value in depreca
       single: origin3Results
     };
   };
+  const queryAndReadTwiceAndCheckCalledOnce = () => {
+    const QUERY = "foo-query";
+    return testSelector
+      .query(QUERY)
+      .read()
+      .then(() => {
+        return testSelector
+          .query(QUERY)
+          .read()
+          .then(() => {
+            return test.expect(spies.testSelectorRead).to.have.been.calledOnce();
+          });
+      });
+  };
   let sandbox;
   let TestOrigin;
   let testOrigin;
@@ -323,20 +337,7 @@ test.describe("Selector using parallel sources defining default value in depreca
       });
 
       test.describe("when no source cache is cleaned", () => {
-        test.it("should not execute method twice", () => {
-          const QUERY = "foo-query";
-          return testSelector
-            .query(QUERY)
-            .read()
-            .then(() => {
-              return testSelector
-                .query(QUERY)
-                .read()
-                .then(() => {
-                  return test.expect(spies.testSelectorRead).to.have.been.calledOnce();
-                });
-            });
-        });
+        test.it("should execute method once", queryAndReadTwiceAndCheckCalledOnce);
       });
     });
   });
@@ -557,19 +558,7 @@ test.describe("Selector using parallel sources defining default value in depreca
 
       test.describe("cache", () => {
         test.describe("when no cache is cleaned", () => {
-          test.it("should execute read method once", () => {
-            return testSelector
-              .query(QUERY)
-              .read()
-              .then(() => {
-                return testSelector
-                  .query(QUERY)
-                  .read()
-                  .then(() => {
-                    return test.expect(spies.testSelectorRead).to.have.been.calledOnce();
-                  });
-              });
-          });
+          test.it("should execute read method once", queryAndReadTwiceAndCheckCalledOnce);
         });
 
         test.describe("when a source cache is cleaned", () => {
