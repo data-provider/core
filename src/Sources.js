@@ -14,6 +14,7 @@ export class SourcesHandler {
         ? sources.getContainingAllTags(this._baseTags.concat(tags))
         : new SourcesHandler(tags); */
     const handler = new SourcesHandler();
+    // TODO, iterate and create as many tag groups as received tags;
     ensureArray(tags).forEach(tag => {
       this.elements.forEach(source => {
         if (source._tags.includes(tag)) {

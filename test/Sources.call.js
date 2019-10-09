@@ -3,6 +3,8 @@ const test = require("mocha-sinon-chai");
 const { Origin, sources } = require("../src/Origin");
 const { Selector } = require("../src/Selector");
 
+// TODO, ensure is called once when getByTags is used
+
 test.describe("sources handler call method", () => {
   const FooOrigin = class extends Origin {
     constructor(id, tags) {
