@@ -77,5 +77,16 @@ test.describe("sources handler clean method", () => {
         test.expect(fooSource4.clean).to.have.been.called()
       ]);
     });
+
+    test.it("should call to clean method of all selected sources", () => {
+      sources.getByTag("tag-3").clean();
+
+      return Promise.all([
+        test.expect(fooSource.clean).to.not.have.been.called(),
+        test.expect(fooSource2.clean).to.have.been.called(),
+        test.expect(fooSource3.clean).to.have.been.called(),
+        test.expect(fooSource4.clean).to.not.have.been.called()
+      ]);
+    });
   });
 });

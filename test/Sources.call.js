@@ -125,6 +125,21 @@ test.describe("sources handler call method", () => {
       return test.expect(fooSource2.fooMethod).to.have.been.calledWith("foo", "foo2", "foo3");
     });
 
+    test.it("should apply passed arguments to all sources methods", () => {
+      sources.getByTag("tag-3").call("fooMethod", "foo", "foo2", "foo3");
+
+      return Promise.all([
+        test.expect(fooSource2.fooMethod).to.have.been.calledWith("foo", "foo2", "foo3"),
+        test.expect(fooSource3.fooMethod).to.have.been.calledWith("foo", "foo2", "foo3")
+      ]);
+    });
+
+    test.it("should not call to sources not tagged with provided tag", () => {
+      sources.getByTag("tag-3").call("fooMethod", "foo", "foo2", "foo3");
+
+      return test.expect(fooSource.fooMethod).to.not.have.been.called();
+    });
+
     test.it("should return an array containing results of selected sources", () => {
       test.expect(sources.getByTag("tag-3").call("fooMethod")).to.deep.equal(["foo-2", "foo-3"]);
     });
