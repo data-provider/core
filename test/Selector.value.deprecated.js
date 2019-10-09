@@ -25,6 +25,15 @@ test.describe("Selector value defining default value in deprecated way", () => {
   let testSelector;
   let spies;
 
+  const checkSelectorValue = () => {
+    return testSelector.read().then(value => {
+      return test.expect(value).to.deep.equal({
+        ...FOO_ORIGIN_VALUE,
+        ...FOO_ORIGIN_2_VALUE
+      });
+    });
+  };
+
   test.beforeEach(() => {
     sandbox = test.sinon.createSandbox();
     spies = {
@@ -93,14 +102,7 @@ test.describe("Selector value defining default value in deprecated way", () => {
   });
 
   test.describe("without query", () => {
-    test.it("should return value returned by parser function", () => {
-      return testSelector.read().then(value => {
-        return test.expect(value).to.deep.equal({
-          ...FOO_ORIGIN_VALUE,
-          ...FOO_ORIGIN_2_VALUE
-        });
-      });
-    });
+    test.it("should return value returned by parser function", checkSelectorValue);
   });
 
   test.describe("with queried sources", () => {
@@ -122,14 +124,7 @@ test.describe("Selector value defining default value in deprecated way", () => {
       );
     });
 
-    test.it("should return value returned by parser function", () => {
-      return testSelector.read().then(value => {
-        return test.expect(value).to.deep.equal({
-          ...FOO_ORIGIN_VALUE,
-          ...FOO_ORIGIN_2_VALUE
-        });
-      });
-    });
+    test.it("should return value returned by parser function", checkSelectorValue);
 
     test.describe("when no query is passed", () => {
       test.it("should dispatch read methods of sources applying the resultant queries", () => {

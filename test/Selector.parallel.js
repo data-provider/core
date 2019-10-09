@@ -35,6 +35,13 @@ test.describe("Selector using parallel sources", () => {
       return test.expect(spies.testSelectorRead).to.have.been.calledOnce();
     });
   };
+  const selectorMethod = (parallelResults, origin3Results) => {
+    spies.testSelectorRead();
+    return {
+      parallel: parallelResults,
+      single: origin3Results
+    };
+  };
 
   test.beforeEach(() => {
     sandbox = test.sinon.createSandbox();
@@ -456,13 +463,7 @@ test.describe("Selector using parallel sources", () => {
         testSelector = new Selector(
           [testOrigin, testOriginSelector],
           testOrigin3,
-          (parallelResults, origin3Results) => {
-            spies.testSelectorRead();
-            return {
-              parallel: parallelResults,
-              single: origin3Results
-            };
-          },
+          selectorMethod,
           {
             defaultValue: DEFAULT_VALUE
           }
@@ -545,13 +546,7 @@ test.describe("Selector using parallel sources", () => {
             source: testOrigin3,
             query: query => query
           },
-          (parallelResults, origin3Results) => {
-            spies.testSelectorRead();
-            return {
-              parallel: parallelResults,
-              single: origin3Results
-            };
-          },
+          selectorMethod,
           {
             defaultValue: DEFAULT_VALUE
           }
