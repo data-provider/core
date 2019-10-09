@@ -190,6 +190,22 @@ test.describe("sources handler config method", () => {
       ]);
     });
 
+    test.it("should be applied to new created sources containing tag", () => {
+      sources.getByTag("tag-4").config({
+        foo: "foo"
+      });
+
+      const fooSource4 = new FooOrigin("foo-4", ["tag-4", "tag-2"]);
+
+      return Promise.all([
+        test.expect(fooSource4._configuration).to.deep.equal({
+          foo: "foo",
+          tags: ["tag-4", "tag-2"],
+          uuid: "foo-4"
+        })
+      ]);
+    });
+
     test.it("should extend previously defined configuration", () => {
       sources.getByTag("tag-3").config({
         foo: "foo",
@@ -231,6 +247,32 @@ test.describe("sources handler config method", () => {
         })
       ]);
     });
+
+    test.it(
+      "should extend previously defined configuration when creating source containing tag",
+      () => {
+        sources.getByTag("tag-3").config({
+          foo: "foo",
+          foo2: "foo2"
+        });
+
+        const fooSource4 = new FooOrigin("foo-4", ["tag-3", "tag-5"]);
+
+        sources.getByTag("tag-3").config({
+          foo2: "new-foo2",
+          foo3: "foo3"
+        });
+
+        return;
+        test.expect(fooSource4._configuration).to.deep.equal({
+          foo: "foo",
+          foo2: "new-foo2",
+          foo3: "foo3",
+          tags: ["tag-3", "tag-5"],
+          uuid: "foo-4"
+        });
+      }
+    );
 
     test.it("should call to sources _config method with the resultant configuration", () => {
       const fooSource4 = new FooOrigin("foo-4", "tag-4");
@@ -279,7 +321,7 @@ test.describe("sources handler config method", () => {
       });
     });
 
-    test.it("should be applied to new created sources", () => {
+    test.it("should be applied to new created sources tagged with same tag", () => {
       sources.getById("foo-4").config({
         foo: "foo"
       });
