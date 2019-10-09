@@ -49,8 +49,8 @@ export const actions = {
 
 export const hash = str => {
   return `${str.split("").reduce((a, b) => {
-    a = (a << 5) - a + b.charCodeAt(0);
-    return a & a;
+    const c = (a << 5) - a + b.charCodeAt(0);
+    return c & c;
   }, 0)}`;
 };
 
@@ -66,7 +66,7 @@ export const dashJoin = arr => arr.filter(val => !isUndefined(val)).join("-");
 
 export const uniqueId = (id, defaultValue) => hash(`${id}${JSON.stringify(defaultValue)}`);
 
-export const queriedUniqueId = (uniqueId, queryUniqueId) => dashJoin([uniqueId, queryUniqueId]);
+export const queriedUniqueId = (uuid, queryUniqueId) => dashJoin([uuid, queryUniqueId]);
 
 export const ensureArray = els => (Array.isArray(els) ? els : [els]);
 

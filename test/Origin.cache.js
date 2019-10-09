@@ -41,20 +41,20 @@ test.describe("Origin cache", () => {
   });
 
   test.describe("without query", () => {
-    test.it("should not execute method more than once if it is cached", () => {
+    const expectCalledOnce = () => () => {
       return testOrigin.read().then(() => {
-        return testOrigin.read().then(() => {
-          return test.expect(spys.read.callCount).to.equal(1);
-        });
+        return test.expect(spys.read.callCount).to.equal(1);
       });
+    };
+
+    test.it("should not execute method more than once if it is cached", () => {
+      return testOrigin.read().then(expectCalledOnce);
     });
 
     test.it("should not execute method more than once when it is called in parallel", () => {
-      return Promise.all([testOrigin.read(), testOrigin.read(), testOrigin.read()]).then(() => {
-        return testOrigin.read().then(() => {
-          return test.expect(spys.read.callCount).to.equal(1);
-        });
-      });
+      return Promise.all([testOrigin.read(), testOrigin.read(), testOrigin.read()]).then(
+        expectCalledOnce
+      );
     });
 
     test.it(
