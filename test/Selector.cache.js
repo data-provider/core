@@ -87,6 +87,12 @@ test.describe("Selector cache", () => {
   });
 
   test.describe("when returns value", () => {
+    const haveBeenCalledOnce = () => {
+      return testSelector.read().then(() => {
+        return test.expect(spies.testSelector.callCount).to.equal(1);
+      });
+    };
+
     test.beforeEach(() => {
       testSelector = new Selector(
         testOrigin,
@@ -104,11 +110,7 @@ test.describe("Selector cache", () => {
     test.it(
       "should not execute selector function when read method is executed more than once",
       () => {
-        return testSelector.read().then(() => {
-          return testSelector.read().then(() => {
-            return test.expect(spies.testSelector.callCount).to.equal(1);
-          });
-        });
+        return testSelector.read().then(haveBeenCalledOnce);
       }
     );
 
@@ -116,11 +118,7 @@ test.describe("Selector cache", () => {
       "should not execute selector function when read method is executed more than once in parallel",
       () => {
         return Promise.all([testSelector.read(), testSelector.read(), testSelector.read()]).then(
-          () => {
-            return testSelector.read().then(() => {
-              return test.expect(spies.testSelector.callCount).to.equal(1);
-            });
-          }
+          haveBeenCalledOnce
         );
       }
     );
