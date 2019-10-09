@@ -13,6 +13,7 @@ Call `super` from your own constructor, passing:
 		* `defaultValue` Resultant origin will have this value in the `value` property until data is fetched.
 		* `options` Object containing another options, such as:
 			* `uuid` If provided, the resultant instance will have this property as `_id`. It will not be "hashed".
+			* `tags` Tags to be assigned to the instance when created. Tags are used by "sources" handler. For further info [read the `sources` documentation](../sources/api.md).
 
 Crud methods will receive two arguments:
 

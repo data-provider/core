@@ -1,6 +1,6 @@
 const test = require("mocha-sinon-chai");
 
-const { Origin } = require("../src/Origin");
+const { Origin, sources } = require("../src/Origin");
 const { Selector } = require("../src/Selector");
 const helpers = require("../src/helpers");
 
@@ -34,6 +34,7 @@ test.describe("Selector id", () => {
 
   test.afterEach(() => {
     sandbox.restore();
+    sources.clear();
   });
 
   test.describe("without query", () => {

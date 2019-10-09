@@ -27,7 +27,7 @@ Provides:
     * [Api][mercury-api-url]
     * [Memory Storage][mercury-memory-url]
     * [Browser Local Storage][mercury-browser-storage-url]
-    * [Broswer Session Storage][mercury-browser-storage-url]
+    * [Browser Session Storage][mercury-browser-storage-url]
     * [Prismic CMS][mercury-prismic-url]
 * __"Selector"__ constructor for combining or transforming the result of one or many origins.
   * __Declarative__. Declare which Origins your Selector needs to consume. Mercury will do the rest for you.
@@ -38,6 +38,8 @@ Provides:
   * __Switchable__. Consumed "source" can be changed programatically.
   * __Parallellizable__. Can fetch data from declared sources in series or in parallel.
   * __Queryable__. Queries can be applied as in Origins. You can pass the `query` data to sources, or use it in the `parser` function, after all related sources data have been fetched.
+* __"sources"__ singleton containing methods for managing all created mercury sources at a time.
+	* __Tags__ Mercury instances can be tagged to create "management" groups. "Cleaning" cache of all mercury sources tagged with "api" tag calling to a single method is easy, for example.
 
 ## Install
 
@@ -48,7 +50,7 @@ npm i @xbyorange/mercury --save
 ## A simple example
 
 ```js
-import { Selector } from "@xbyorange/mercury";
+import { Selector, sources } from "@xbyorange/mercury";
 import { Api } from "@xbyorange/mercury-api";
 
 const booksCollection = new Api("http://api.library.com/books");
@@ -67,6 +69,8 @@ const booksWithAuthors = new Selector(
 // Each book now includes an "authorName" property.
 const results = await booksWithAuthors.read();
 
+// Clean cache of books, authors, and booksWithAuthors at a time.
+sources.clean();
 ```
 
 > This example uses the Api origin, which is not distributed in this package, but can clearly illustrate the usage of an Origin, and the intention of the library.
@@ -113,6 +117,28 @@ Read the full [Selector API documentation](docs/selector/api.md).
 ### Unit testing
 
 Some utilities are provided to make easier the task of testing Selectors. Please red the [testing selectors docs](docs/selector/testing.md).
+
+## Sources
+
+All created Mercury origins or selectors are registered in the "sources" object, which provides methods for managing them all together, or by groups based in tags.
+
+### A simple example
+
+```js
+import { sources } from "@xbyorange/mercury";
+
+sources.clean();
+
+sources.getByTag(["api", "need-auth"]).config({
+  headers: {
+    "authentication": "foo"
+  }
+})
+```
+
+### Api
+
+Read the full [sources API documentation](docs/sources/api.md).
 
 ## Usage with frameworks
 

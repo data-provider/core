@@ -52,6 +52,8 @@ export const hash = str => {
   }, 0)}`;
 };
 
+export const removeFalsy = array => array.filter(el => !!el);
+
 export const isUndefined = variable => typeof variable === "undefined";
 
 export const queryId = query => (isUndefined(query) ? query : `(${JSON.stringify(query)})`);
@@ -61,6 +63,8 @@ export const dashJoin = arr => arr.filter(val => !isUndefined(val)).join("-");
 export const uniqueId = (id, defaultValue) => hash(`${id}${JSON.stringify(defaultValue)}`);
 
 export const queriedUniqueId = (uniqueId, queryUniqueId) => dashJoin([uniqueId, queryUniqueId]);
+
+export const ensureArray = els => (Array.isArray(els) ? els : [els]);
 
 export const seemsToBeSelectorOptions = defaultValueOrOptions => {
   if (!defaultValueOrOptions) {

@@ -1,4 +1,4 @@
-import { Origin } from "./Origin";
+import { Origin, sources } from "./Origin";
 import { Selector } from "./Selector";
 
-export { Origin, Selector };
+export { Origin, Selector, sources };

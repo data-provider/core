@@ -1,6 +1,6 @@
 const test = require("mocha-sinon-chai");
 
-const { Origin } = require("../src/Origin");
+const { Origin, sources } = require("../src/Origin");
 const { Selector } = require("../src/Selector");
 
 test.describe("Selector cache", () => {
@@ -83,6 +83,7 @@ test.describe("Selector cache", () => {
 
   test.afterEach(() => {
     sandbox.restore();
+    sources.clear();
   });
 
   test.describe("when returns value", () => {

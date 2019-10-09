@@ -1,6 +1,6 @@
 const test = require("mocha-sinon-chai");
 
-const { Origin } = require("../src/Origin");
+const { Origin, sources } = require("../src/Origin");
 const { Selector } = require("../src/Selector");
 
 test.describe("Selector using parallel sources defining default value in deprecated way", () => {
@@ -114,6 +114,7 @@ test.describe("Selector using parallel sources defining default value in depreca
 
   test.afterEach(() => {
     sandbox.restore();
+    sources.clear();
   });
 
   test.describe("with parallel sources", () => {

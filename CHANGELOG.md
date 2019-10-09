@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Accept options object in Origin constructor as last argument.
 - Assign to the `_id` private property the value received in new option "uuid", when received.
 - Last argument in Selectors now can be an object containing "defaultValue" and/or "uuid" options.
+- Add "sources" handler for managing all instantiated mercury sources as a group.
 
 ### Changed
 - `_id` private property now is a hash of default id and default value (if no "uuid" option is received)
