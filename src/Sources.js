@@ -1,4 +1,4 @@
-import { ensureArray, mergeCloned, removeFalsy, tagsGroupId } from "./helpers";
+import { ensureArray, mergeCloned, removeFalsy } from "./helpers";
 
 export class SourcesHandler {
   constructor(baseTags) {
@@ -7,33 +7,9 @@ export class SourcesHandler {
     this._sources = new Set();
   }
 
-  getByTags(tags) {
-    /* const allTags = this._baseTags.concat(tags);
-    const handler =
-      allTags.length > tags.length
-        ? sources.getContainingAllTags(this._baseTags.concat(tags))
-        : new SourcesHandler(tags); */
-    const handler = new SourcesHandler();
-    // TODO, iterate and create as many tag groups as received tags;
-    ensureArray(tags).forEach(tag => {
-      this.elements.forEach(source => {
-        if (source._tags.includes(tag)) {
-          handler.add(source);
-        }
-      });
-    });
-    return handler;
-  }
-
-  getByTag(tag) {
-    return this.getByTags(tag);
-  }
-
-  add(source) {
-    if (source) {
-      this._sources.add(source);
-      source.config(this._config);
-    }
+  _add(source) {
+    this._sources.add(source);
+    source.config(this._config);
     return this;
   }
 
@@ -98,34 +74,7 @@ export class Sources {
     return sourcesHandler;
   }
 
-  getContainingAllTags(tags) {
-    const groupId = tagsGroupId(tags);
-    let sourcesHandler = this._containsAllTags.get(groupId);
-    if (!sourcesHandler) {
-      sourcesHandler = new SourcesHandler(tags);
-      this._containsAllTags.set(groupId, sourcesHandler);
-    }
-
-    return sourcesHandler;
-  }
-
-  getByTags(tags) {
-    if (!Array.isArray(tags)) {
-      return this.getByTag(tags);
-    }
-    const handler = new SourcesHandler(tags);
-    tags.forEach(tag => {
-      this.getByTag(tag).elements.forEach(source => {
-        handler.add(source);
-      });
-    });
-    return handler;
-  }
-
   getByTag(tag) {
-    if (Array.isArray(tag)) {
-      return this.getByTags(tag);
-    }
     return this._tags.get(tag) || this._createTagEmptyGroup(tag);
   }
 
@@ -133,23 +82,22 @@ export class Sources {
     return this._allSourcesById.get(id) || this._createIdEmptyGroup(id);
   }
 
-  add(source) {
+  _add(source) {
     const idGroup = this._allSourcesById.get(source._id);
     if (idGroup) {
       if (idGroup.size > 0) {
         console.warn(`Duplicated Mercury source id "${source._id}"`);
-        this._createIdEmptyGroup(source._id).add(source);
+        this._createIdEmptyGroup(source._id)._add(source);
       } else {
-        idGroup.add(source);
+        idGroup._add(source);
       }
     } else {
-      this._createIdEmptyGroup(source._id).add(source);
+      this._createIdEmptyGroup(source._id)._add(source);
     }
-    this._allSources.add(source);
+    this._allSources._add(source);
     source._tags.forEach(tag => {
-      this.getByTag(tag).add(source);
+      this.getByTag(tag)._add(source);
     });
-    // TODO, if tags length > 1, call config of containing all tags
     return this;
   }
 

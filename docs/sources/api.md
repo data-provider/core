@@ -4,12 +4,12 @@
 
 * size `sources.size` - Getter returning current size of mercury sources created.
 * elements `sources.elements` - Getter returning an `<Array>` containing all mercury sources created.
-* getBytags `sources.getByTags(tags)`
+* getBytag `sources.getByTags(tag)`
 	* Alias - `getByTag`
 	* Arguments
-		* tags - `<String> or <Array of Strings>` Tags to filter sources by. If an array is provided, will act as an `||` operator (will return sources containing "tag 1", or "tag 2", or "tag 3", etc.)
+		* tag - `<String>` Tag to filter sources by.
 	* Returns
-		* A "sources group", containing methods described below. Will return "sources" containing any of the tags provided as arguments.
+		* A "sources group", containing methods described below. Will return "sources" containing tag provided as argument.
 * getById `sources.getById(id)`
 	* Arguments
 		* id - `<String>` Id of the mercury source to get.
@@ -29,12 +29,6 @@
 
 * size `sources.size` - Getter returning current size of mercury sources group.
 * elements `group.elements` - Getter returning an `<Array>` containing all mercury sources in the group.
-* getBytags `group.getByTags(tags)`
-	* Alias - `getByTag`
-	* Arguments
-		* tags - `<String> or <Array of Strings>` Tags to filter group of sources by. If an array is provided, will act as an `||` operator (will return sources containing "tag 1", or "tag 2", or "tag 3", etc.)
-	* Returns
-		* A "sources group", containing methods described below. Will return "sources" containing any of the tags provided as arguments.
 * clean `group.clean()` - Dispatches clean method of all mercury sources in the group.
 	* Returns
 		* same "sources group", for chainability purposes.
@@ -58,15 +52,17 @@ console.log(sources.size);
 
 sources.getById("foo").clean();
 
-sources.getByTags(["api", "need-auth"]).call("addHeaders", {
+// Call "addHeaders" in sources containing "need-auth" tag.
+sources.getByTag("need-auth").call("addHeaders", {
   authentication: "foo-header"
-}); // Call "addHeaders" in sources containing "api" or "need-auth" tags.
+}); 
 
- sources.getByTags("api").getByTags("need-auth").call("addHeaders", {
-  authentication: "foo-header"
-}); // Call "addHeaders" in sources containing "api" and "need-auth" tags.
-
+// Trace all sources ids.
 sources.elements.forEach(source => {
   console.log(source._id);
+});
+
+sources.getByTag("api").elements.forEach(source => {
+  console.log('This source is tagged as "api"', source._id);
 });
 ```

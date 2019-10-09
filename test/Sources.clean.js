@@ -3,8 +3,6 @@ const test = require("mocha-sinon-chai");
 const { Origin, sources } = require("../src/Origin");
 const { Selector } = require("../src/Selector");
 
-// TODO, ensure is called once when getByTags is used
-
 test.describe("sources handler clean method", () => {
   const FooOrigin = class extends Origin {
     constructor(id, tags) {
@@ -68,7 +66,7 @@ test.describe("sources handler clean method", () => {
     });
   });
 
-  test.describe("when used with getByTags", () => {
+  test.describe("when used with getByTag", () => {
     test.it("should call to clean method only of selected sources", () => {
       sources.getByTag("tag-2").clean();
 

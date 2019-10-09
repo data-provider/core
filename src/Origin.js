@@ -44,7 +44,7 @@ export class Origin {
     this._tags = options.tags;
 
     this._createBaseMethods();
-    sourcesHandler.add(this);
+    sourcesHandler._add(this);
   }
 
   // EVENT HANDLERS

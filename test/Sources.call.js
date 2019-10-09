@@ -3,8 +3,6 @@ const test = require("mocha-sinon-chai");
 const { Origin, sources } = require("../src/Origin");
 const { Selector } = require("../src/Selector");
 
-// TODO, ensure is called once when getByTags is used
-
 test.describe("sources handler call method", () => {
   const FooOrigin = class extends Origin {
     constructor(id, tags) {
@@ -110,7 +108,7 @@ test.describe("sources handler call method", () => {
     });
   });
 
-  test.describe("when used with getByTags", () => {
+  test.describe("when used with getByTag", () => {
     test.it("should call to defined method only of selected sources", () => {
       sources.getByTag("tag-2").call("fooMethod");
 
