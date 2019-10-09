@@ -60,6 +60,17 @@ test.describe("Selector value", () => {
       },
       results => results
     );
+    testSelector = new Selector(
+      testOrigin,
+      testOrigin2,
+      (originResult, origin2Result) => ({
+        ...originResult,
+        ...origin2Result
+      }),
+      {
+        defaultValue: DEFAULT_VALUE
+      }
+    );
   });
 
   test.afterEach(() => {
@@ -68,20 +79,6 @@ test.describe("Selector value", () => {
   });
 
   test.describe("using getter", () => {
-    test.beforeEach(() => {
-      testSelector = new Selector(
-        testOrigin,
-        testOrigin2,
-        (originResult, origin2Result) => ({
-          ...originResult,
-          ...origin2Result
-        }),
-        {
-          defaultValue: DEFAULT_VALUE
-        }
-      );
-    });
-
     test.it("should return a clone of defaultValue until it load first time", () => {
       test.expect(testSelector.read.getters.value()).to.deep.equal(DEFAULT_VALUE);
       test.expect(testSelector.read.getters.value()).to.not.equal(DEFAULT_VALUE);
@@ -98,20 +95,6 @@ test.describe("Selector value", () => {
   });
 
   test.describe("without query", () => {
-    test.beforeEach(() => {
-      testSelector = new Selector(
-        testOrigin,
-        testOrigin2,
-        (originResult, origin2Result) => ({
-          ...originResult,
-          ...origin2Result
-        }),
-        {
-          defaultValue: DEFAULT_VALUE
-        }
-      );
-    });
-
     test.it("should return value returned by parser function", () => {
       return testSelector.read().then(value => {
         return test.expect(value).to.deep.equal({

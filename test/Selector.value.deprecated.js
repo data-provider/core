@@ -25,18 +25,6 @@ test.describe("Selector value defining default value in deprecated way", () => {
   let testSelector;
   let spies;
 
-  const createTestSelector = () => {
-    testSelector = new Selector(
-      testOrigin,
-      testOrigin2,
-      (originResult, origin2Result) => ({
-        ...originResult,
-        ...origin2Result
-      }),
-      DEFAULT_VALUE
-    );
-  };
-
   test.beforeEach(() => {
     sandbox = test.sinon.createSandbox();
     spies = {
@@ -72,6 +60,15 @@ test.describe("Selector value defining default value in deprecated way", () => {
       },
       results => results
     );
+    testSelector = new Selector(
+      testOrigin,
+      testOrigin2,
+      (originResult, origin2Result) => ({
+        ...originResult,
+        ...origin2Result
+      }),
+      DEFAULT_VALUE
+    );
   });
 
   test.afterEach(() => {
@@ -80,10 +77,6 @@ test.describe("Selector value defining default value in deprecated way", () => {
   });
 
   test.describe("using getter", () => {
-    test.beforeEach(() => {
-      createTestSelector();
-    });
-
     test.it("should return a clone of defaultValue until it load first time", () => {
       test.expect(testSelector.read.getters.value()).to.deep.equal(DEFAULT_VALUE);
       test.expect(testSelector.read.getters.value()).to.not.equal(DEFAULT_VALUE);
@@ -100,10 +93,6 @@ test.describe("Selector value defining default value in deprecated way", () => {
   });
 
   test.describe("without query", () => {
-    test.beforeEach(() => {
-      createTestSelector();
-    });
-
     test.it("should return value returned by parser function", () => {
       return testSelector.read().then(value => {
         return test.expect(value).to.deep.equal({
