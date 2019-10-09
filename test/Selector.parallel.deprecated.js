@@ -18,6 +18,11 @@ test.describe("Selector using parallel sources defining default value in depreca
     foo4: "foo4"
   };
   const DEFAULT_VALUE = { foo: "default" };
+  const testSelectorCalledOnce = () => {
+    return testSelector.read().then(() => {
+      return test.expect(spies.testSelectorRead).to.have.been.calledOnce();
+    });
+  };
   let sandbox;
   let TestOrigin;
   let testOrigin;
@@ -219,11 +224,7 @@ test.describe("Selector using parallel sources defining default value in depreca
     });
 
     test.it("should not clean cache in any source cache is cleaned", () => {
-      return testSelector.read().then(() => {
-        return testSelector.read().then(() => {
-          return test.expect(spies.testSelectorRead).to.have.been.calledOnce();
-        });
-      });
+      return testSelector.read().then(testSelectorCalledOnce);
     });
 
     test.it("should clean cache when source returned in catch is cleaned", () => {
@@ -496,11 +497,7 @@ test.describe("Selector using parallel sources defining default value in depreca
       test.describe("cache", () => {
         test.describe("when source caches are not cleaned", () => {
           test.it("should execute read method once", () => {
-            return testSelector.read().then(() => {
-              return testSelector.read().then(() => {
-                return test.expect(spies.testSelectorRead).to.have.been.calledOnce();
-              });
-            });
+            return testSelector.read().then(testSelectorCalledOnce);
           });
 
           test.it("should execute read method once when read is executed in parallel", () => {
@@ -509,11 +506,7 @@ test.describe("Selector using parallel sources defining default value in depreca
               testSelector.read(),
               testSelector.read(),
               testSelector.read()
-            ]).then(() => {
-              return testSelector.read().then(() => {
-                return test.expect(spies.testSelectorRead).to.have.been.calledOnce();
-              });
-            });
+            ]).then(testSelectorCalledOnce);
           });
         });
       });
