@@ -82,6 +82,24 @@ test.describe("sources handler", () => {
       return test.expect(sources.getById("foo-id").elements[0]).to.equal(origin);
     });
 
+    test.it("should return only one element in elements property", () => {
+      new FooOrigin("foo");
+      new FooOrigin("foo-2");
+      new FooOrigin("foo-3");
+      return test.expect(sources.getById("foo").elements.length).to.equal(1);
+    });
+
+    test.it(
+      "should return only one element in elements property even when id is duplicated",
+      () => {
+        new FooOrigin("foo");
+        new FooOrigin("foo-2");
+        new FooOrigin("foo-3");
+        new FooOrigin("foo");
+        return test.expect(sources.getById("foo").elements.length).to.equal(1);
+      }
+    );
+
     test.it("should return only one element", () => {
       new FooOrigin("foo");
       new FooOrigin("foo-2");
