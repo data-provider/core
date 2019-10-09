@@ -32,7 +32,10 @@ export class Origin {
     this._eventEmitter = new EventEmitter();
     this._queries = {};
 
-    this._defaultValue = !isUndefined(defaultValue) ? cloneDeep(defaultValue) : defaultValue;
+    this._defaultValue =
+      !isUndefined(defaultValue) && !isFunction(defaultValue)
+        ? cloneDeep(defaultValue)
+        : defaultValue;
     this._id = options.uuid || uniqueId(defaultId || getAutomaticId(), this._defaultValue);
     this._cache = new Cache(this._eventEmitter, this._id);
 
