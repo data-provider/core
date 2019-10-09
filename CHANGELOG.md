@@ -15,7 +15,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Last argument of Selectors will stop being assigned as "defaultValue". To define default value, it will be mandatory to pass an options object as last argument, containing a "defaultValue" property.
 
 ## [1.3.0] - 2019-10-10
-
+- Add utility for testing catch functions of selector sources.
 
 ## [1.2.0] - 2019-10-03
 ### Added
