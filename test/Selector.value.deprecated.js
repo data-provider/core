@@ -25,6 +25,18 @@ test.describe("Selector value defining default value in deprecated way", () => {
   let testSelector;
   let spies;
 
+  const createTestSelector = () => {
+    testSelector = new Selector(
+      testOrigin,
+      testOrigin2,
+      (originResult, origin2Result) => ({
+        ...originResult,
+        ...origin2Result
+      }),
+      DEFAULT_VALUE
+    );
+  };
+
   test.beforeEach(() => {
     sandbox = test.sinon.createSandbox();
     spies = {
@@ -69,15 +81,7 @@ test.describe("Selector value defining default value in deprecated way", () => {
 
   test.describe("using getter", () => {
     test.beforeEach(() => {
-      testSelector = new Selector(
-        testOrigin,
-        testOrigin2,
-        (originResult, origin2Result) => ({
-          ...originResult,
-          ...origin2Result
-        }),
-        DEFAULT_VALUE
-      );
+      createTestSelector();
     });
 
     test.it("should return a clone of defaultValue until it load first time", () => {
@@ -97,15 +101,7 @@ test.describe("Selector value defining default value in deprecated way", () => {
 
   test.describe("without query", () => {
     test.beforeEach(() => {
-      testSelector = new Selector(
-        testOrigin,
-        testOrigin2,
-        (originResult, origin2Result) => ({
-          ...originResult,
-          ...origin2Result
-        }),
-        DEFAULT_VALUE
-      );
+      createTestSelector();
     });
 
     test.it("should return value returned by parser function", () => {
