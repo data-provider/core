@@ -56,9 +56,7 @@ export class SourcesHandler {
 export class Sources {
   constructor() {
     this._allSources = new SourcesHandler();
-    this._containsAllTags = new Map();
     this._tags = new Map();
-    this._tagGroups = new Set();
     this._allSourcesById = new Map();
   }
 
