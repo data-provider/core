@@ -1,4 +1,4 @@
-import { cloneDeep, merge } from "lodash";
+import { cloneDeep, merge, isFunction } from "lodash";
 
 const CACHE_EVENT_PREFIX = "clean-cache-";
 const CHANGE_EVENT_PREFIX = "change-";
@@ -64,7 +64,8 @@ export const queryId = query => (isUndefined(query) ? query : `(${JSON.stringify
 
 export const dashJoin = arr => arr.filter(val => !isUndefined(val)).join("-");
 
-export const uniqueId = (id, defaultValue) => hash(`${id}${JSON.stringify(defaultValue)}`);
+export const uniqueId = (id, defaultValue) =>
+  hash(`${id}${isFunction(defaultValue) ? "" : JSON.stringify(defaultValue)}`);
 
 export const queriedUniqueId = (uuid, queryUniqueId) => dashJoin([uuid, queryUniqueId]);
 

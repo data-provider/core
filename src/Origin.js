@@ -1,4 +1,4 @@
-import { isEqual, cloneDeep, merge } from "lodash";
+import { isEqual, cloneDeep, merge, isFunction } from "lodash";
 import { mergeCloned } from "./helpers";
 
 import { Cache } from "./Cache";
@@ -178,7 +178,12 @@ export class Origin {
 
         methods[methodName] = dispatchMethod;
         methods[methodName].dispatch = dispatchMethod;
-        methods[methodName].value = methodName === READ_METHOD ? this._defaultValue : undefined;
+        methods[methodName].value =
+          methodName === READ_METHOD
+            ? isFunction(this._defaultValue)
+              ? this._defaultValue(query)
+              : this._defaultValue
+            : undefined;
         methods[methodName].error = null;
         methods[methodName].loading = false;
         methods[methodName]._source = methods;
