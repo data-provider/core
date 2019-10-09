@@ -23,6 +23,13 @@ test.describe("Selector using parallel sources defining default value in depreca
       return test.expect(spies.testSelectorRead).to.have.been.calledOnce();
     });
   };
+  const selectorMethod = (parallelResults, origin3Results) => {
+    spies.testSelectorRead();
+    return {
+      parallel: parallelResults,
+      single: origin3Results
+    };
+  };
   let sandbox;
   let TestOrigin;
   let testOrigin;
@@ -446,13 +453,7 @@ test.describe("Selector using parallel sources defining default value in depreca
         testSelector = new Selector(
           [testOrigin, testOriginSelector],
           testOrigin3,
-          (parallelResults, origin3Results) => {
-            spies.testSelectorRead();
-            return {
-              parallel: parallelResults,
-              single: origin3Results
-            };
-          },
+          selectorMethod,
           DEFAULT_VALUE
         );
       });
@@ -533,13 +534,7 @@ test.describe("Selector using parallel sources defining default value in depreca
             source: testOrigin3,
             query: query => query
           },
-          (parallelResults, origin3Results) => {
-            spies.testSelectorRead();
-            return {
-              parallel: parallelResults,
-              single: origin3Results
-            };
-          },
+          selectorMethod,
           DEFAULT_VALUE
         );
       });
