@@ -38,6 +38,24 @@ test.describe("Selector cache", () => {
     return testSelector.read().then(checkHasBeenCalledOnce);
   };
 
+  const checkReadWithFailIsNotCached = () => {
+    return testSelector.read().then(
+      () => {
+        return test.assert.fail();
+      },
+      () => {
+        return testSelector.read().then(
+          () => {
+            return test.assert.fail();
+          },
+          () => {
+            return test.expect(spies.testSelector.callCount).to.equal(2);
+          }
+        );
+      }
+    );
+  };
+
   test.beforeEach(() => {
     sandbox = test.sinon.createSandbox();
     spies = {
@@ -151,21 +169,7 @@ test.describe("Selector cache", () => {
           return Promise.reject(new Error());
         }
       );
-      return testSelector.read().then(
-        () => {
-          return test.assert.fail();
-        },
-        () => {
-          return testSelector.read().then(
-            () => {
-              return test.assert.fail();
-            },
-            () => {
-              return test.expect(spies.testSelector.callCount).to.equal(2);
-            }
-          );
-        }
-      );
+      return checkReadWithFailIsNotCached();
     });
   });
 
@@ -250,21 +254,7 @@ test.describe("Selector cache", () => {
           return Promise.reject(new Error());
         }
       );
-      return testSelector.read().then(
-        () => {
-          return test.assert.fail();
-        },
-        () => {
-          return testSelector.read().then(
-            () => {
-              return test.assert.fail();
-            },
-            () => {
-              return test.expect(spies.testSelector.callCount).to.equal(2);
-            }
-          );
-        }
-      );
+      return checkReadWithFailIsNotCached();
     });
   });
 
