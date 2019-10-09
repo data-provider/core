@@ -34,6 +34,12 @@ test.describe("Selector value defining default value in deprecated way", () => {
     });
   };
 
+  const checkSelectorHasOrigin3Value = () => {
+    return testSelector.read().then(result => {
+      return test.expect(result).to.deep.equal(FOO_ORIGIN_3_VALUE);
+    });
+  };
+
   test.beforeEach(() => {
     sandbox = test.sinon.createSandbox();
     spies = {
@@ -330,11 +336,10 @@ test.describe("Selector value defining default value in deprecated way", () => {
     });
 
     test.describe("when no query is applied", () => {
-      test.it("it should return the result returned by read method of the returned source", () => {
-        return testSelector.read().then(result => {
-          return test.expect(result).to.deep.equal(FOO_ORIGIN_3_VALUE);
-        });
-      });
+      test.it(
+        "it should return the result returned by read method of the returned source",
+        checkSelectorHasOrigin3Value
+      );
     });
   });
 
@@ -353,11 +358,7 @@ test.describe("Selector value defining default value in deprecated way", () => {
     test.describe("when no query is applied", () => {
       test.it(
         "it should return the result returned by read method of the returned selector",
-        () => {
-          return testSelector.read().then(result => {
-            return test.expect(result).to.deep.equal(FOO_ORIGIN_3_VALUE);
-          });
-        }
+        checkSelectorHasOrigin3Value
       );
     });
   });
