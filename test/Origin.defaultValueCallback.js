@@ -22,7 +22,7 @@ test.describe("Origin defaultValue as callback", () => {
           () => {
             const TestOrigin = class extends Origin {
               constructor(id, defaultValue, options) {
-                const getDefaultValue = defaultValue => {
+                const getDefaultValue = () => {
                   return defaultValue + 2;
                 };
                 super(id, getDefaultValue, options);
