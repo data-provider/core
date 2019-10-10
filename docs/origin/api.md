@@ -9,11 +9,11 @@ If you don't define one of this methods, the correspondant CRUD method will not 
 Call `super` from your own constructor, passing:
 * `super([id, defaultValue, options])`
 	* Arguments:
-		* `defaultId` Used for debugging purposes. The `_id` of the resultant source will be a hash calculated using this default id and default value.
-		* `defaultValue` Resultant origin will have this value in the `value` property until data is fetched.
-		* `options` Object containing another options, such as:
-			* `uuid` If provided, the resultant instance will have this property as `_id`. It will not be "hashed".
-			* `tags` Tags to be assigned to the instance when created. Tags are used by "sources" handler. For further info [read the `sources` documentation](../sources/api.md).
+		* `defaultId` - `<String>` Used for debugging purposes. The `_id` of the resultant source will be a hash calculated using this default id and default value (only in case it is not a callback).
+		* `defaultValue` - `<Any>` Resultant origin will have this value in the `value` property until data is fetched. If a `<Function>` is provided, it will be executed to obtain the default value, passing the current `query` as argument.
+		* `options` - `<Object>` Object containing another options, such as:
+			* `uuid` - `<String>` If provided, the resultant instance will have this property as `_id`. It will not be "hashed".
+			* `tags` - `<String> or <Array of Strings>` Tags to be assigned to the instance when created. Tags are used by "sources" handler. For further info [read the `sources` documentation](../sources/api.md).
 
 Crud methods will receive two arguments:
 
