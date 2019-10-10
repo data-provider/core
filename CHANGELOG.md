@@ -16,8 +16,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [1.3.0] - 2019-10-10
 
-
-## [1.2.0] - 2019-10-03
+## [1.2.0] - 2019-10-10
 ### Added
 - Accept options object in Origin constructor as last argument.
 - Assign to the `_id` private property the value received in new option "uuid", when received.
