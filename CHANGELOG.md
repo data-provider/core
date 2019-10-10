@@ -15,7 +15,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Last argument of Selectors will stop being assigned as "defaultValue". To define default value, it will be mandatory to pass an options object as last argument, containing a "defaultValue" property.
 
 ## [1.3.0] - 2019-10-10
-
+### Added
+- defaultValue argument in Origin Constructor now can be a function. It will be called to obtain the defaultValue, passing to it the current query as argument.
 
 ## [1.2.0] - 2019-10-03
 ### Added
