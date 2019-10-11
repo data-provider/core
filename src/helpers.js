@@ -79,3 +79,20 @@ export const seemsToBeSelectorOptions = defaultValueOrOptions => {
     defaultValueOrOptions.hasOwnProperty("uuid")
   );
 };
+
+export const isSource = objectToCheck => {
+  return (
+    objectToCheck &&
+    (objectToCheck._isSource === true || (objectToCheck.source && objectToCheck.source._isSource))
+  );
+};
+
+export const areSources = arrayToCheck => {
+  let allAreSources = true;
+  ensureArray(arrayToCheck).forEach(arrayElement => {
+    if (!isSource(arrayElement)) {
+      allAreSources = false;
+    }
+  });
+  return allAreSources;
+};

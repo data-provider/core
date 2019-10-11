@@ -7,7 +7,8 @@ import {
   CREATE_METHOD,
   UPDATE_METHOD,
   DELETE_METHOD,
-  seemsToBeSelectorOptions
+  seemsToBeSelectorOptions,
+  areSources
 } from "./helpers";
 
 export class Selector extends Origin {
@@ -64,8 +65,6 @@ export class Selector extends Origin {
   _readAllSourcesAndDispatch(query, extraParams, methodToDispatch) {
     const sourcesResults = [];
     const sources = [];
-    let selectorResult;
-    let selectorResultIsSource;
     const cleanQuery = once(() => {
       this.clean(query);
     });
@@ -86,9 +85,9 @@ export class Selector extends Origin {
       return source[READ_METHOD].dispatch().catch(error => {
         if (hasToCatch) {
           const catchResult = sourceToRead.catch(error, query);
-          if (catchResult._isSource) {
+          if (areSources(catchResult)) {
             sources.push(catchResult);
-            return catchResult[READ_METHOD].dispatch();
+            return readSource(catchResult);
           }
           return catchResult;
         }
@@ -111,21 +110,27 @@ export class Selector extends Origin {
       sources.forEach(source => {
         source.onceClean(cleanQuery);
       });
-      if (selectorResultIsSource) {
-        selectorResult.onceClean(cleanQuery);
-      }
     };
 
     return readSourceIndex(0)
       .then(result => {
-        selectorResult = result;
-        selectorResultIsSource = selectorResult && selectorResult._isSource;
+        const selectorResult = result;
+        const selectorResultIsSource = areSources(selectorResult);
         if (methodToDispatch !== READ_METHOD && !selectorResultIsSource) {
           return Promise.reject(new Error("CUD methods can be used only when returning sources"));
         }
-        return selectorResultIsSource
-          ? selectorResult[methodToDispatch].dispatch(extraParams)
-          : Promise.resolve(selectorResult);
+        if (selectorResultIsSource) {
+          if (methodToDispatch === READ_METHOD) {
+            return readSource(selectorResult);
+          }
+          if (Array.isArray(selectorResult)) {
+            return Promise.all(
+              selectorResult.map(source => source[methodToDispatch].dispatch(extraParams))
+            );
+          }
+          return selectorResult[methodToDispatch].dispatch(extraParams);
+        }
+        return Promise.resolve(selectorResult);
       })
       .then(result => {
         addCleanQueryListeners();
