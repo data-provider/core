@@ -1,6 +1,6 @@
 ## Sources error handling
 
-Dependant sources of a Selector can return an error. Then, the full Selector will not be resolved. You can catch those source errors and transform them into a data of your convenience, or even delegate or "retry" that source into another source.
+Dependant sources of a Selector can return an error. Then, the full Selector will not be resolved. You can catch those source errors and transform them into a data of your convenience, or even delegate or "retry" that source into another source or array of sources.
 
 Use the `catch` property of a custom source to catch his errors:
 
