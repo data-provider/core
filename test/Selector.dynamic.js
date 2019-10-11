@@ -195,5 +195,52 @@ test.describe("Selector returning another sources", () => {
         });
       });
     });
+
+    test.describe("when returns another sources recursively", () => {
+      let recursiveSelector;
+      test.beforeEach(() => {
+        dynamicSelector = new Selector(testOrigin, () => {
+          return testOrigin;
+        });
+
+        recursiveSelector = new Selector(testOrigin, () => {
+          return dynamicSelector;
+        });
+      });
+
+      test.it("should call to same method of last source", () => {
+        return recursiveSelector.update().then(result => {
+          return test.expect(result).to.equal(updateOriginResult);
+        });
+      });
+    });
+
+    test.describe("when returns multiple sources recursively", () => {
+      let testOrigin2;
+      let recursiveSelector;
+      let updateResult2;
+
+      test.beforeEach(() => {
+        updateResult2 = "update-result-2";
+        testOrigin2 = new TestOrigin({
+          readResult: testOriginResult,
+          updateResult: updateResult2
+        });
+
+        dynamicSelector = new Selector(testOrigin, () => {
+          return [testOrigin, testOrigin2];
+        });
+
+        recursiveSelector = new Selector(testOrigin, () => {
+          return dynamicSelector;
+        });
+      });
+
+      test.it("should call to same method of last source", () => {
+        return recursiveSelector.update().then(result => {
+          return test.expect(result).to.deep.equal([updateOriginResult, updateResult2]);
+        });
+      });
+    });
   });
 });
