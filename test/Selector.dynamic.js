@@ -81,6 +81,48 @@ test.describe("Selector returning another sources", () => {
       });
     });
 
+    test.describe("when returns another source with catch", () => {
+      test.beforeEach(() => {
+        dynamicSelector = new Selector(testOrigin, () => {
+          return {
+            source: testSelector,
+            catch: () => Promise.resolve("Foo catch result")
+          };
+        });
+      });
+
+      test.it("should return the result returned by catch", () => {
+        sandbox.stub(testSelector.read, "dispatch").rejects(new Error());
+        return dynamicSelector.read().then(result => {
+          return test.expect(result).to.equal("Foo catch result");
+        });
+      });
+    });
+
+    test.describe("when returns multiple sources with catch", () => {
+      test.beforeEach(() => {
+        dynamicSelector = new Selector(testOrigin, () => {
+          return [
+            {
+              source: testSelector,
+              catch: () => Promise.resolve("Foo catch result")
+            },
+            {
+              source: testSelector2,
+              query: () => "foo2"
+            }
+          ];
+        });
+      });
+
+      test.it("should return the sources results, including result returned by catch", () => {
+        sandbox.stub(testSelector.read, "dispatch").rejects(new Error());
+        return dynamicSelector.read().then(result => {
+          return test.expect(result).to.deep.equal(["Foo catch result", testSelector2Result]);
+        });
+      });
+    });
+
     test.describe("when returns multiple sources with queries", () => {
       test.beforeEach(() => {
         dynamicSelector = new Selector(testOrigin, () => {
@@ -109,6 +151,7 @@ test.describe("Selector returning another sources", () => {
         });
       });
     });
+
     test.describe("when returns sources recursively", () => {
       let recursiveSelector;
       test.beforeEach(() => {
