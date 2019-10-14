@@ -1,5 +1,4 @@
 import { isEqual, cloneDeep, merge, isFunction } from "lodash";
-import { mergeCloned } from "./helpers";
 
 import { Cache } from "./Cache";
 import { EventEmitter } from "./EventEmitter";
@@ -17,7 +16,8 @@ import {
   ensureArray,
   removeFalsy,
   queriedUniqueId,
-  isUndefined
+  isUndefined,
+  mergeCloned
 } from "./helpers";
 
 let automaticIdCounter = 0;
