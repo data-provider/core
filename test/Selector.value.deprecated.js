@@ -25,6 +25,21 @@ test.describe("Selector value defining default value in deprecated way", () => {
   let testSelector;
   let spies;
 
+  const checkSelectorValue = () => {
+    return testSelector.read().then(value => {
+      return test.expect(value).to.deep.equal({
+        ...FOO_ORIGIN_VALUE,
+        ...FOO_ORIGIN_2_VALUE
+      });
+    });
+  };
+
+  const checkSelectorHasOrigin3Value = () => {
+    return testSelector.read().then(result => {
+      return test.expect(result).to.deep.equal(FOO_ORIGIN_3_VALUE);
+    });
+  };
+
   test.beforeEach(() => {
     sandbox = test.sinon.createSandbox();
     spies = {
@@ -60,6 +75,15 @@ test.describe("Selector value defining default value in deprecated way", () => {
       },
       results => results
     );
+    testSelector = new Selector(
+      testOrigin,
+      testOrigin2,
+      (originResult, origin2Result) => ({
+        ...originResult,
+        ...origin2Result
+      }),
+      DEFAULT_VALUE
+    );
   });
 
   test.afterEach(() => {
@@ -68,18 +92,6 @@ test.describe("Selector value defining default value in deprecated way", () => {
   });
 
   test.describe("using getter", () => {
-    test.beforeEach(() => {
-      testSelector = new Selector(
-        testOrigin,
-        testOrigin2,
-        (originResult, origin2Result) => ({
-          ...originResult,
-          ...origin2Result
-        }),
-        DEFAULT_VALUE
-      );
-    });
-
     test.it("should return a clone of defaultValue until it load first time", () => {
       test.expect(testSelector.read.getters.value()).to.deep.equal(DEFAULT_VALUE);
       test.expect(testSelector.read.getters.value()).to.not.equal(DEFAULT_VALUE);
@@ -96,26 +108,7 @@ test.describe("Selector value defining default value in deprecated way", () => {
   });
 
   test.describe("without query", () => {
-    test.beforeEach(() => {
-      testSelector = new Selector(
-        testOrigin,
-        testOrigin2,
-        (originResult, origin2Result) => ({
-          ...originResult,
-          ...origin2Result
-        }),
-        DEFAULT_VALUE
-      );
-    });
-
-    test.it("should return value returned by parser function", () => {
-      return testSelector.read().then(value => {
-        return test.expect(value).to.deep.equal({
-          ...FOO_ORIGIN_VALUE,
-          ...FOO_ORIGIN_2_VALUE
-        });
-      });
-    });
+    test.it("should return value returned by parser function", checkSelectorValue);
   });
 
   test.describe("with queried sources", () => {
@@ -137,14 +130,7 @@ test.describe("Selector value defining default value in deprecated way", () => {
       );
     });
 
-    test.it("should return value returned by parser function", () => {
-      return testSelector.read().then(value => {
-        return test.expect(value).to.deep.equal({
-          ...FOO_ORIGIN_VALUE,
-          ...FOO_ORIGIN_2_VALUE
-        });
-      });
-    });
+    test.it("should return value returned by parser function", checkSelectorValue);
 
     test.describe("when no query is passed", () => {
       test.it("should dispatch read methods of sources applying the resultant queries", () => {
@@ -350,11 +336,10 @@ test.describe("Selector value defining default value in deprecated way", () => {
     });
 
     test.describe("when no query is applied", () => {
-      test.it("it should return the result returned by read method of the returned source", () => {
-        return testSelector.read().then(result => {
-          return test.expect(result).to.deep.equal(FOO_ORIGIN_3_VALUE);
-        });
-      });
+      test.it(
+        "it should return the result returned by read method of the returned source",
+        checkSelectorHasOrigin3Value
+      );
     });
   });
 
@@ -373,11 +358,7 @@ test.describe("Selector value defining default value in deprecated way", () => {
     test.describe("when no query is applied", () => {
       test.it(
         "it should return the result returned by read method of the returned selector",
-        () => {
-          return testSelector.read().then(result => {
-            return test.expect(result).to.deep.equal(FOO_ORIGIN_3_VALUE);
-          });
-        }
+        checkSelectorHasOrigin3Value
       );
     });
   });

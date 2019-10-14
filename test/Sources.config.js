@@ -263,8 +263,7 @@ test.describe("sources handler config method", () => {
           foo3: "foo3"
         });
 
-        return;
-        test.expect(fooSource4._configuration).to.deep.equal({
+        return test.expect(fooSource4._configuration).to.deep.equal({
           foo: "foo",
           foo2: "new-foo2",
           foo3: "foo3",
@@ -350,8 +349,7 @@ test.describe("sources handler config method", () => {
         foo3: "foo3"
       });
 
-      return;
-      test.expect(fooSource4._configuration).to.deep.equal({
+      return test.expect(fooSource4._configuration).to.deep.equal({
         foo: "foo",
         foo2: "new-foo2",
         foo3: "foo3",

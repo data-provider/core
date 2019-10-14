@@ -18,6 +18,47 @@ test.describe("Selector using parallel sources defining default value in depreca
     foo4: "foo4"
   };
   const DEFAULT_VALUE = { foo: "default" };
+  const testSelectorCalledOnce = () => {
+    return testSelector.read().then(() => {
+      return test.expect(spies.testSelectorRead).to.have.been.calledOnce();
+    });
+  };
+  const selectorMethod = (parallelResults, origin3Results) => {
+    spies.testSelectorRead();
+    return {
+      parallel: parallelResults,
+      single: origin3Results
+    };
+  };
+  const queryAndReadTwiceAndCheckCalledOnce = () => {
+    const QUERY = "foo-query";
+    return testSelector
+      .query(QUERY)
+      .read()
+      .then(() => {
+        return testSelector
+          .query(QUERY)
+          .read()
+          .then(() => {
+            return test.expect(spies.testSelectorRead).to.have.been.calledOnce();
+          });
+      });
+  };
+  const queryAndCleanAndCheckCalledTwice = () => {
+    const QUERY = "foo-query";
+    return testSelector
+      .query(QUERY)
+      .read()
+      .then(() => {
+        testOrigin.query(QUERY).clean();
+        return testSelector
+          .query(QUERY)
+          .read()
+          .then(() => {
+            return test.expect(spies.testSelectorRead).to.have.been.calledTwice();
+          });
+      });
+  };
   let sandbox;
   let TestOrigin;
   let testOrigin;
@@ -219,11 +260,7 @@ test.describe("Selector using parallel sources defining default value in depreca
     });
 
     test.it("should not clean cache in any source cache is cleaned", () => {
-      return testSelector.read().then(() => {
-        return testSelector.read().then(() => {
-          return test.expect(spies.testSelectorRead).to.have.been.calledOnce();
-        });
-      });
+      return testSelector.read().then(testSelectorCalledOnce);
     });
 
     test.it("should clean cache when source returned in catch is cleaned", () => {
@@ -297,38 +334,11 @@ test.describe("Selector using parallel sources defining default value in depreca
 
     test.describe("cache", () => {
       test.describe("when one source cache is cleaned", () => {
-        test.it("should clean cache", () => {
-          const QUERY = "foo-query";
-          return testSelector
-            .query(QUERY)
-            .read()
-            .then(() => {
-              testOrigin.query(QUERY).clean();
-              return testSelector
-                .query(QUERY)
-                .read()
-                .then(() => {
-                  return test.expect(spies.testSelectorRead).to.have.been.calledTwice();
-                });
-            });
-        });
+        test.it("should clean cache", queryAndCleanAndCheckCalledTwice);
       });
 
       test.describe("when no source cache is cleaned", () => {
-        test.it("should not execute method twice", () => {
-          const QUERY = "foo-query";
-          return testSelector
-            .query(QUERY)
-            .read()
-            .then(() => {
-              return testSelector
-                .query(QUERY)
-                .read()
-                .then(() => {
-                  return test.expect(spies.testSelectorRead).to.have.been.calledOnce();
-                });
-            });
-        });
+        test.it("should execute method once", queryAndReadTwiceAndCheckCalledOnce);
       });
     });
   });
@@ -445,13 +455,7 @@ test.describe("Selector using parallel sources defining default value in depreca
         testSelector = new Selector(
           [testOrigin, testOriginSelector],
           testOrigin3,
-          (parallelResults, origin3Results) => {
-            spies.testSelectorRead();
-            return {
-              parallel: parallelResults,
-              single: origin3Results
-            };
-          },
+          selectorMethod,
           DEFAULT_VALUE
         );
       });
@@ -496,11 +500,7 @@ test.describe("Selector using parallel sources defining default value in depreca
       test.describe("cache", () => {
         test.describe("when source caches are not cleaned", () => {
           test.it("should execute read method once", () => {
-            return testSelector.read().then(() => {
-              return testSelector.read().then(() => {
-                return test.expect(spies.testSelectorRead).to.have.been.calledOnce();
-              });
-            });
+            return testSelector.read().then(testSelectorCalledOnce);
           });
 
           test.it("should execute read method once when read is executed in parallel", () => {
@@ -509,11 +509,7 @@ test.describe("Selector using parallel sources defining default value in depreca
               testSelector.read(),
               testSelector.read(),
               testSelector.read()
-            ]).then(() => {
-              return testSelector.read().then(() => {
-                return test.expect(spies.testSelectorRead).to.have.been.calledOnce();
-              });
-            });
+            ]).then(testSelectorCalledOnce);
           });
         });
       });
@@ -540,13 +536,7 @@ test.describe("Selector using parallel sources defining default value in depreca
             source: testOrigin3,
             query: query => query
           },
-          (parallelResults, origin3Results) => {
-            spies.testSelectorRead();
-            return {
-              parallel: parallelResults,
-              single: origin3Results
-            };
-          },
+          selectorMethod,
           DEFAULT_VALUE
         );
       });
@@ -569,36 +559,11 @@ test.describe("Selector using parallel sources defining default value in depreca
 
       test.describe("cache", () => {
         test.describe("when no cache is cleaned", () => {
-          test.it("should execute read method once", () => {
-            return testSelector
-              .query(QUERY)
-              .read()
-              .then(() => {
-                return testSelector
-                  .query(QUERY)
-                  .read()
-                  .then(() => {
-                    return test.expect(spies.testSelectorRead).to.have.been.calledOnce();
-                  });
-              });
-          });
+          test.it("should execute read method once", queryAndReadTwiceAndCheckCalledOnce);
         });
 
         test.describe("when a source cache is cleaned", () => {
-          test.it("should clean cache", () => {
-            return testSelector
-              .query(QUERY)
-              .read()
-              .then(() => {
-                testOrigin.query(QUERY).clean();
-                return testSelector
-                  .query(QUERY)
-                  .read()
-                  .then(() => {
-                    return test.expect(spies.testSelectorRead).to.have.been.calledTwice();
-                  });
-              });
-          });
+          test.it("should clean cache", queryAndCleanAndCheckCalledTwice);
         });
 
         test.describe("when returned source cache is cleaned", () => {
