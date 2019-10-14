@@ -108,7 +108,7 @@ test.describe("sources handler call method", () => {
     });
   });
 
-  test.describe("when used with getByTags", () => {
+  test.describe("when used with getByTag", () => {
     test.it("should call to defined method only of selected sources", () => {
       sources.getByTag("tag-2").call("fooMethod");
 

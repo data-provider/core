@@ -1,4 +1,5 @@
 import { isEqual, cloneDeep, merge } from "lodash";
+import { mergeCloned } from "./helpers";
 
 import { Cache } from "./Cache";
 import { EventEmitter } from "./EventEmitter";
@@ -38,10 +39,12 @@ export class Origin {
     this._customQueries = {};
     this.customQueries = {};
     this.test = {};
-    this._tags = removeFalsy(ensureArray(options.tags));
+    options.tags = removeFalsy(ensureArray(options.tags));
+    this._configuration = options;
+    this._tags = options.tags;
 
     this._createBaseMethods();
-    sourcesHandler.add(this);
+    sourcesHandler._add(this);
   }
 
   // EVENT HANDLERS
@@ -212,6 +215,13 @@ export class Origin {
   }
 
   // PUBLIC METHODS
+
+  config(options) {
+    this._configuration = mergeCloned(this._configuration, options);
+    if (this._config) {
+      this._config(this._configuration);
+    }
+  }
 
   query(originalQuery) {
     const query = cloneDeep(originalQuery);

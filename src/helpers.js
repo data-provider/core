@@ -1,3 +1,5 @@
+import { cloneDeep, merge } from "lodash";
+
 const CACHE_EVENT_PREFIX = "clean-cache-";
 const CHANGE_EVENT_PREFIX = "change-";
 const ANY_SUFIX = "any";
@@ -51,6 +53,8 @@ export const hash = str => {
     return a & a;
   }, 0)}`;
 };
+
+export const mergeCloned = (dest, origin) => merge(dest, cloneDeep(origin));
 
 export const removeFalsy = array => array.filter(el => !!el);
 

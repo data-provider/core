@@ -66,7 +66,7 @@ test.describe("sources handler clean method", () => {
     });
   });
 
-  test.describe("when used with getByTags", () => {
+  test.describe("when used with getByTag", () => {
     test.it("should call to clean method only of selected sources", () => {
       sources.getByTag("tag-2").clean();
 

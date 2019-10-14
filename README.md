@@ -129,7 +129,7 @@ import { sources } from "@xbyorange/mercury";
 
 sources.clean();
 
-sources.getByTag(["api", "need-auth"]).config({
+sources.getByTag("need-auth").config({
   headers: {
     "authentication": "foo"
   }

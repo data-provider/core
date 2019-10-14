@@ -1,32 +1,21 @@
-import { ensureArray } from "./helpers";
+import { ensureArray, mergeCloned, removeFalsy } from "./helpers";
 
 export class SourcesHandler {
-  constructor(source) {
+  constructor(baseTags) {
+    this._baseTags = removeFalsy(ensureArray(baseTags));
+    this._config = {};
     this._sources = new Set();
-    this.add(source);
   }
 
-  getByTags(tags) {
-    const handler = new SourcesHandler();
-    ensureArray(tags).forEach(tag => {
-      this.elements.forEach(source => {
-        if (source._tags.includes(tag)) {
-          handler.add(source);
-        }
-      });
-    });
-    return handler;
-  }
-
-  getByTag(tag) {
-    return this.getByTags(tag);
-  }
-
-  add(source) {
-    if (source) {
-      this._sources.add(source);
-    }
+  _add(source) {
+    this._sources.add(source);
+    source.config(this._config);
     return this;
+  }
+
+  config(options) {
+    this._config = mergeCloned(this._config, options);
+    this._sources.forEach(source => source.config(this._config));
   }
 
   clean() {
@@ -51,6 +40,7 @@ export class SourcesHandler {
 
   clear() {
     this._sources.clear();
+    this._config = {};
     return this;
   }
 
@@ -66,58 +56,61 @@ export class SourcesHandler {
 export class Sources {
   constructor() {
     this._allSources = new SourcesHandler();
-    this._noSources = new SourcesHandler();
     this._tags = new Map();
     this._allSourcesById = new Map();
   }
 
-  getByTags(tags) {
-    if (!Array.isArray(tags)) {
-      return this.getByTag(tags);
-    }
-    const handler = new SourcesHandler();
-    tags.forEach(tag => {
-      this.getByTag(tag).elements.forEach(source => {
-        handler.add(source);
-      });
-    });
-    return handler;
+  _createIdEmptyGroup(id) {
+    const sourcesHandler = new SourcesHandler();
+    this._allSourcesById.set(id, sourcesHandler);
+    return sourcesHandler;
+  }
+
+  _createTagEmptyGroup(tag) {
+    const sourcesHandler = new SourcesHandler(tag);
+    this._tags.set(tag, sourcesHandler);
+    return sourcesHandler;
   }
 
   getByTag(tag) {
-    if (Array.isArray(tag)) {
-      return this.getByTags(tag);
-    }
-    return this._tags.get(tag) || this._noSources;
+    return this._tags.get(tag) || this._createTagEmptyGroup(tag);
   }
 
   getById(id) {
-    return this._allSourcesById.get(id) || this._noSources;
+    return this._allSourcesById.get(id) || this._createIdEmptyGroup(id);
   }
 
-  add(source) {
-    if (this._allSourcesById.get(source._id)) {
-      console.warn(`Duplicated Mercury source id "${source._id}"`);
-    }
-    this._allSourcesById.set(source._id, new SourcesHandler(source));
-    this._allSources.add(source);
-    source._tags.forEach(tag => {
-      if (!this._tags.has(tag)) {
-        this._tags.set(tag, new SourcesHandler(source));
+  _add(source) {
+    const idGroup = this._allSourcesById.get(source._id);
+    if (idGroup) {
+      if (idGroup.size > 0) {
+        console.warn(`Duplicated Mercury source id "${source._id}"`);
+        this._createIdEmptyGroup(source._id)._add(source);
       } else {
-        this.getByTag(tag).add(source);
+        idGroup._add(source);
       }
+    } else {
+      this._createIdEmptyGroup(source._id)._add(source);
+    }
+    this._allSources._add(source);
+    source._tags.forEach(tag => {
+      this.getByTag(tag)._add(source);
     });
     return this;
   }
 
   clear() {
+    this._allSources.clear();
     this._allSourcesById.clear();
     this._tags.clear();
     return this._allSources.clear();
   }
 
   // Expose methods of all sources
+  config(options) {
+    return this._allSources.config(options);
+  }
+
   clean() {
     return this._allSources.clean();
   }
