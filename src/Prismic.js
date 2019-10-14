@@ -3,19 +3,19 @@ import { Origin } from "@xbyorange/mercury";
 
 const defaultConfig = {
   release: null,
-  fullResponse: false
+  fullResponse: false,
+  url: "",
+  tags: ["prismic"]
 };
 
 export class Prismic extends Origin {
-  constructor(url, config = {}) {
-    super(`prismic-${url}`, config && config.defaultValue);
-    const configuration = { ...defaultConfig, ...config };
-    this._url = url;
-    this._config(configuration);
+  constructor(url, options = {}) {
+    const defaultValue = options.defaultValue;
+    super(`prismic-${url}`, defaultValue, { ...defaultConfig, ...{ url }, ...options });
   }
 
   _config(configuration) {
-    this._configuration = { ...configuration };
+    this._url = `${configuration.url}`;
     this._fullResponse = configuration.fullResponse;
     this._release = configuration.release;
   }
@@ -52,9 +52,5 @@ export class Prismic extends Origin {
     });
     this._cache.set(query, request);
     return request;
-  }
-
-  config(configuration) {
-    this._config({ ...this._configuration, ...configuration });
   }
 }
