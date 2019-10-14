@@ -14,6 +14,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [TO BE DEPRECATED]
 - Last argument of Selectors will stop being assigned as "defaultValue". To define default value, it will be mandatory to pass an options object as last argument, containing a "defaultValue" property.
 
+## [1.5.0] - 2019-10-14
+
 ## [1.4.0] - 2019-10-14
 ### Added
 - Selectors can now return an array of sources.
