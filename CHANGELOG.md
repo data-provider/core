@@ -18,6 +18,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - Add `stats` property containing counters of method actions executions.
 
+### Changed
+- Upgrade devDependencies
+
 ## [1.4.0] - 2019-10-14
 ### Added
 - Selectors can now return an array of sources.
