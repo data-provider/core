@@ -43,6 +43,10 @@
 		* error - `<Error>` If read method returns an error, it will be accessible at this property.
 		* loading - `<Boolean>` Will be true while Selector read is in progress.
 		* value - `<Any>` Value returned by `read` method.
+		* stats - `<Object>` Object containing stats about method executions:
+			* dispatch - `<Number>` Counter of times that read method has been dispatched when there was no cache.
+			* success - `<Number>` Counter of times that read method has been resolved. No matter if result came from cache or not.
+			* error - `<Number>` Counter of times that read method has been rejected. No matter if result came from cache or not. 
 	* Returns
 		* `<Any>` - Result of the parser function.
 * create, update, delete `selector.create(data)` These methods can be used only when Selector returns another source.
@@ -50,6 +54,10 @@
 		* error - `<Error>` If read method returns an error, it will be accessible at this property.
 		* loading - `<Boolean>` Will be true while Selector read is in progress.
 		* value - `<Any>` Value returned by `read` method.
+		* stats - `<Object>` Object containing stats about method executions:
+			* dispatch - `<Number>` Counter of times that read method has been dispatched when there was no cache.
+			* success - `<Number>` Counter of times that read method has been resolved. No matter if result came from cache or not.
+			* error - `<Number>` Counter of times that read method has been rejected. No matter if result came from cache or not.
 	* Arguments
 		* data - `<Any>` Data that will be passed to the correspondant create, update or delete method of the returned source.
 	* Returns
