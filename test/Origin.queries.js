@@ -1,10 +1,15 @@
 const test = require("mocha-sinon-chai");
 
-const { Origin } = require("../src/Origin");
+const { Origin, sources } = require("../src/Origin");
 
 test.describe("Origin queries", () => {
   const FOO_QUERY = { foo: "foo", foo2: "foo-2" };
   const FOO_QUERY_2 = { foo3: "foo3" };
+  const idToUrlParam = id => ({
+    urlParams: {
+      id
+    }
+  });
   let sandbox;
   let spys;
   let TestOrigin;
@@ -42,6 +47,7 @@ test.describe("Origin queries", () => {
 
   test.afterEach(() => {
     sandbox.restore();
+    sources.clear();
   });
 
   test.describe("when executing methods", () => {
@@ -162,11 +168,7 @@ test.describe("Origin queries", () => {
     };
     test.beforeEach(() => {
       testOrigin.addCustomQuery({
-        byId: id => ({
-          urlParams: {
-            id
-          }
-        })
+        byId: idToUrlParam
       });
     });
 
@@ -243,11 +245,7 @@ test.describe("Origin queries", () => {
     const FOO_NAME = "foo-name";
     test.beforeEach(() => {
       testOrigin.addCustomQueries({
-        byId: id => ({
-          urlParams: {
-            id
-          }
-        }),
+        byId: idToUrlParam,
         byName: name => ({
           urlQuery: {
             name

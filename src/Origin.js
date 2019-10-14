@@ -1,8 +1,9 @@
 import { isEqual, cloneDeep, merge } from "lodash";
+import { mergeCloned } from "./helpers";
 
 import { Cache } from "./Cache";
-
 import { EventEmitter } from "./EventEmitter";
+import { sources as sourcesHandler } from "./Sources";
 import {
   READ_METHOD,
   VALID_METHODS,
@@ -10,24 +11,40 @@ import {
   CLEAN_ANY_EVENT_NAME,
   cleanCacheEventName,
   changeEventName,
+  uniqueId,
   queryId,
-  actions
+  actions,
+  ensureArray,
+  removeFalsy,
+  queriedUniqueId,
+  isUndefined
 } from "./helpers";
 
+let automaticIdCounter = 0;
+
+const getAutomaticId = () => {
+  automaticIdCounter++;
+  return (Date.now() + automaticIdCounter).toString();
+};
+
 export class Origin {
-  constructor(id, defaultValue) {
+  constructor(defaultId, defaultValue, options = {}) {
     this._eventEmitter = new EventEmitter();
     this._queries = {};
-    this._id = id || "";
+
+    this._defaultValue = !isUndefined(defaultValue) ? cloneDeep(defaultValue) : defaultValue;
+    this._id = options.uuid || uniqueId(defaultId || getAutomaticId(), this._defaultValue);
     this._cache = new Cache(this._eventEmitter, this._id);
-    this._defaultValue =
-      typeof defaultValue !== "undefined" ? cloneDeep(defaultValue) : defaultValue;
 
     this._customQueries = {};
     this.customQueries = {};
     this.test = {};
+    options.tags = removeFalsy(ensureArray(options.tags));
+    this._configuration = options;
+    this._tags = options.tags;
 
     this._createBaseMethods();
+    sourcesHandler._add(this);
   }
 
   // EVENT HANDLERS
@@ -199,6 +216,13 @@ export class Origin {
 
   // PUBLIC METHODS
 
+  config(options) {
+    this._configuration = mergeCloned(this._configuration, options);
+    if (this._config) {
+      this._config(this._configuration);
+    }
+  }
+
   query(originalQuery) {
     const query = cloneDeep(originalQuery);
     const queryUniqueId = queryId(query);
@@ -217,7 +241,7 @@ export class Origin {
     newQuery.onCleanAny = listener => this._onCleanAny(listener);
     newQuery.removeCleanAnyListener = listener => this._removeCleanAnyListener(listener);
     newQuery._queryId = queryUniqueId;
-    newQuery._id = `${this._id}${queryUniqueId ? `-${queryUniqueId}` : ""}`;
+    newQuery._id = queriedUniqueId(this._id, queryUniqueId);
     newQuery.actions = actions;
     newQuery._isSource = true;
     newQuery._root = this;
@@ -252,3 +276,5 @@ export class Origin {
     this.addCustomQueries(customQuery);
   }
 }
+
+export const sources = sourcesHandler;

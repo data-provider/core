@@ -1,3 +1,5 @@
+import { cloneDeep, merge } from "lodash";
+
 const CACHE_EVENT_PREFIX = "clean-cache-";
 const CHANGE_EVENT_PREFIX = "change-";
 const ANY_SUFIX = "any";
@@ -15,8 +17,6 @@ export const VALID_METHODS = [CREATE_METHOD, READ_METHOD, UPDATE_METHOD, DELETE_
 
 export const CHANGE_ANY_EVENT_NAME = `${CHANGE_EVENT_PREFIX}${ANY_SUFIX}`;
 export const CLEAN_ANY_EVENT_NAME = `${CACHE_EVENT_PREFIX}${ANY_SUFIX}`;
-
-export const queryId = query => JSON.stringify(query);
 
 export const isCacheEventName = eventName =>
   eventName.indexOf(CACHE_EVENT_PREFIX) === 0 && eventName !== CLEAN_ANY_EVENT_NAME;
@@ -45,4 +45,37 @@ export const actions = {
     success: `${DELETE_METHOD}${SUCCESS}`,
     error: `${DELETE_METHOD}${ERROR}`
   }
+};
+
+export const hash = str => {
+  return `${str.split("").reduce((a, b) => {
+    const c = (a << 5) - a + b.charCodeAt(0);
+    return c & c;
+  }, 0)}`;
+};
+
+export const mergeCloned = (dest, origin) => merge(dest, cloneDeep(origin));
+
+export const removeFalsy = array => array.filter(el => !!el);
+
+export const isUndefined = variable => typeof variable === "undefined";
+
+export const queryId = query => (isUndefined(query) ? query : `(${JSON.stringify(query)})`);
+
+export const dashJoin = arr => arr.filter(val => !isUndefined(val)).join("-");
+
+export const uniqueId = (id, defaultValue) => hash(`${id}${JSON.stringify(defaultValue)}`);
+
+export const queriedUniqueId = (uuid, queryUniqueId) => dashJoin([uuid, queryUniqueId]);
+
+export const ensureArray = els => (Array.isArray(els) ? els : [els]);
+
+export const seemsToBeSelectorOptions = defaultValueOrOptions => {
+  if (!defaultValueOrOptions) {
+    return false;
+  }
+  return (
+    defaultValueOrOptions.hasOwnProperty("defaultValue") ||
+    defaultValueOrOptions.hasOwnProperty("uuid")
+  );
 };

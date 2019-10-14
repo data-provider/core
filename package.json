@@ -1,6 +1,6 @@
 {
   "name": "@xbyorange/mercury",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Mercury. Reactive CRUD data layer",
   "keywords": [
     "reactive",
@@ -28,7 +28,7 @@
   },
   "dependencies": {
     "is-promise": "^2.1.0",
-    "lodash": "4.17.11"
+    "lodash": "4.17.15"
   },
   "devDependencies": {
     "@babel/core": "^7.2.2",

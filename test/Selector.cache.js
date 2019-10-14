@@ -1,9 +1,9 @@
 const test = require("mocha-sinon-chai");
 
-const { Origin } = require("../src/Origin");
+const { Origin, sources } = require("../src/Origin");
 const { Selector } = require("../src/Selector");
 
-test.describe("Selector value", () => {
+test.describe("Selector cache", () => {
   const FOO_ORIGIN_VALUE = {
     foo: "foo"
   };
@@ -23,6 +23,38 @@ test.describe("Selector value", () => {
   let testOriginSelector;
   let testSelector;
   let spies;
+  const selectorResult = (originResult, origin2Result, query) => {
+    spies.testSelector(query);
+    return {
+      ...originResult,
+      ...origin2Result
+    };
+  };
+  const checkHasBeenCalledOnce = () => {
+    return test.expect(spies.testSelector.callCount).to.equal(1);
+  };
+
+  const dispatchReadAndCheckHasBeenCalledOnce = () => {
+    return testSelector.read().then(checkHasBeenCalledOnce);
+  };
+
+  const checkReadWithFailIsNotCached = () => {
+    return testSelector.read().then(
+      () => {
+        return test.assert.fail();
+      },
+      () => {
+        return testSelector.read().then(
+          () => {
+            return test.assert.fail();
+          },
+          () => {
+            return test.expect(spies.testSelector.callCount).to.equal(2);
+          }
+        );
+      }
+    );
+  };
 
   test.beforeEach(() => {
     sandbox = test.sinon.createSandbox();
@@ -83,44 +115,30 @@ test.describe("Selector value", () => {
 
   test.afterEach(() => {
     sandbox.restore();
+    sources.clear();
   });
 
   test.describe("when returns value", () => {
     test.beforeEach(() => {
-      testSelector = new Selector(
-        testOrigin,
-        testOrigin2,
-        (originResult, origin2Result, query) => {
-          spies.testSelector(query);
-          return {
-            ...originResult,
-            ...origin2Result
-          };
-        }
-      );
+      testSelector = new Selector(testOrigin, testOrigin2, selectorResult);
     });
 
     test.it(
       "should not execute selector function when read method is executed more than once",
       () => {
-        return testSelector.read().then(() => {
-          return testSelector.read().then(() => {
-            return test.expect(spies.testSelector.callCount).to.equal(1);
-          });
-        });
+        return testSelector.read().then(dispatchReadAndCheckHasBeenCalledOnce);
       }
     );
 
     test.it(
       "should not execute selector function when read method is executed more than once in parallel",
       () => {
-        return Promise.all([testSelector.read(), testSelector.read(), testSelector.read()]).then(
-          () => {
-            return testSelector.read().then(() => {
-              return test.expect(spies.testSelector.callCount).to.equal(1);
-            });
-          }
-        );
+        return Promise.all([
+          testSelector.read(),
+          testSelector.read(),
+          testSelector.read(),
+          testSelector.read()
+        ]).then(dispatchReadAndCheckHasBeenCalledOnce);
       }
     );
 
@@ -151,21 +169,7 @@ test.describe("Selector value", () => {
           return Promise.reject(new Error());
         }
       );
-      return testSelector.read().then(
-        () => {
-          return test.assert.fail();
-        },
-        () => {
-          return testSelector.read().then(
-            () => {
-              return test.assert.fail();
-            },
-            () => {
-              return test.expect(spies.testSelector.callCount).to.equal(2);
-            }
-          );
-        }
-      );
+      return checkReadWithFailIsNotCached();
     });
   });
 
@@ -183,24 +187,14 @@ test.describe("Selector value", () => {
           source: testOrigin2,
           query: () => QUERY_2
         },
-        (originResult, origin2Result, query) => {
-          spies.testSelector(query);
-          return {
-            ...originResult,
-            ...origin2Result
-          };
-        }
+        selectorResult
       );
     });
 
     test.it(
       "should not execute selector function when read method is executed more than once",
       () => {
-        return testSelector.read().then(() => {
-          return testSelector.read().then(() => {
-            return test.expect(spies.testSelector.callCount).to.equal(1);
-          });
-        });
+        return testSelector.read().then(dispatchReadAndCheckHasBeenCalledOnce);
       }
     );
 
@@ -208,11 +202,7 @@ test.describe("Selector value", () => {
       "should not execute selector function when read method is executed more than once in parallel",
       () => {
         return Promise.all([testSelector.read(), testSelector.read(), testSelector.read()]).then(
-          () => {
-            return testSelector.read().then(() => {
-              return test.expect(spies.testSelector.callCount).to.equal(1);
-            });
-          }
+          dispatchReadAndCheckHasBeenCalledOnce
         );
       }
     );
@@ -229,9 +219,7 @@ test.describe("Selector value", () => {
     test.it("should not clean cache when one of the sources is cleaned with another query", () => {
       return testSelector.read().then(() => {
         testOrigin.query("foo-query-3").clean();
-        return testSelector.read().then(() => {
-          return test.expect(spies.testSelector.callCount).to.equal(1);
-        });
+        return dispatchReadAndCheckHasBeenCalledOnce();
       });
     });
 
@@ -247,9 +235,7 @@ test.describe("Selector value", () => {
     test.it("should not clean cache when the another source is cleaned with another query", () => {
       return testSelector.read().then(() => {
         testOrigin2.query("foo-query-3").clean();
-        return testSelector.read().then(() => {
-          return test.expect(spies.testSelector.callCount).to.equal(1);
-        });
+        return dispatchReadAndCheckHasBeenCalledOnce();
       });
     });
 
@@ -268,21 +254,7 @@ test.describe("Selector value", () => {
           return Promise.reject(new Error());
         }
       );
-      return testSelector.read().then(
-        () => {
-          return test.assert.fail();
-        },
-        () => {
-          return testSelector.read().then(
-            () => {
-              return test.assert.fail();
-            },
-            () => {
-              return test.expect(spies.testSelector.callCount).to.equal(2);
-            }
-          );
-        }
-      );
+      return checkReadWithFailIsNotCached();
     });
   });
 
@@ -336,9 +308,7 @@ test.describe("Selector value", () => {
             return testSelector
               .query(FOO_QUERY)
               .read()
-              .then(() => {
-                return test.expect(spies.testSelector.callCount).to.equal(1);
-              });
+              .then(checkHasBeenCalledOnce);
           });
       });
     });

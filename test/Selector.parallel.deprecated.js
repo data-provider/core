@@ -3,7 +3,7 @@ const test = require("mocha-sinon-chai");
 const { Origin, sources } = require("../src/Origin");
 const { Selector } = require("../src/Selector");
 
-test.describe("Selector using parallel sources", () => {
+test.describe("Selector using parallel sources defining default value in deprecated way", () => {
   const FORCE_ERROR = "force-error";
   const FOO_ORIGIN_VALUE = {
     foo: "foo"
@@ -18,18 +18,6 @@ test.describe("Selector using parallel sources", () => {
     foo4: "foo4"
   };
   const DEFAULT_VALUE = { foo: "default" };
-  let sandbox;
-  let TestOrigin;
-  let testOrigin;
-  let TestOrigin2;
-  let testOrigin2;
-  let TestOrigin3;
-  let testOrigin3;
-  let TestOrigin4;
-  let testOrigin4;
-  let testOriginSelector;
-  let testSelector;
-  let spies;
   const testSelectorCalledOnce = () => {
     return testSelector.read().then(() => {
       return test.expect(spies.testSelectorRead).to.have.been.calledOnce();
@@ -71,6 +59,18 @@ test.describe("Selector using parallel sources", () => {
           });
       });
   };
+  let sandbox;
+  let TestOrigin;
+  let testOrigin;
+  let TestOrigin2;
+  let testOrigin2;
+  let TestOrigin3;
+  let testOrigin3;
+  let TestOrigin4;
+  let testOrigin4;
+  let testOriginSelector;
+  let testSelector;
+  let spies;
 
   test.beforeEach(() => {
     sandbox = test.sinon.createSandbox();
@@ -166,9 +166,7 @@ test.describe("Selector using parallel sources", () => {
           spies.testSelectorRead();
           return originResults;
         },
-        {
-          defaultValue: DEFAULT_VALUE
-        }
+        DEFAULT_VALUE
       );
     });
 
@@ -220,9 +218,7 @@ test.describe("Selector using parallel sources", () => {
           spies.testSelectorRead();
           return originResults;
         },
-        {
-          defaultValue: DEFAULT_VALUE
-        }
+        DEFAULT_VALUE
       );
     });
 
@@ -253,9 +249,7 @@ test.describe("Selector using parallel sources", () => {
           spies.testSelectorRead();
           return originResults;
         },
-        {
-          defaultValue: DEFAULT_VALUE
-        }
+        DEFAULT_VALUE
       );
     });
 
@@ -313,9 +307,7 @@ test.describe("Selector using parallel sources", () => {
           spies.testSelectorRead();
           return originResults;
         },
-        {
-          defaultValue: DEFAULT_VALUE
-        }
+        DEFAULT_VALUE
       );
     });
 
@@ -346,7 +338,7 @@ test.describe("Selector using parallel sources", () => {
       });
 
       test.describe("when no source cache is cleaned", () => {
-        test.it("should not execute method twice", queryAndReadTwiceAndCheckCalledOnce);
+        test.it("should execute method once", queryAndReadTwiceAndCheckCalledOnce);
       });
     });
   });
@@ -360,9 +352,7 @@ test.describe("Selector using parallel sources", () => {
           parallel: parallelResults,
           single: origin3Results
         }),
-        {
-          defaultValue: DEFAULT_VALUE
-        }
+        DEFAULT_VALUE
       );
     });
 
@@ -414,9 +404,7 @@ test.describe("Selector using parallel sources", () => {
           parallel: parallelResults,
           single: origin3Results
         }),
-        {
-          defaultValue: DEFAULT_VALUE
-        }
+        DEFAULT_VALUE
       );
     });
 
@@ -434,9 +422,11 @@ test.describe("Selector using parallel sources", () => {
 
   test.describe("with chained parallel requests", () => {
     test.beforeEach(() => {
-      testSelector = new Selector([testOrigin, [testOrigin2, testOrigin3]], results => results, {
-        defaultValue: DEFAULT_VALUE
-      });
+      testSelector = new Selector(
+        [testOrigin, [testOrigin2, testOrigin3]],
+        results => results,
+        DEFAULT_VALUE
+      );
     });
 
     test.it("should return value returned by parser function", () => {
@@ -466,9 +456,7 @@ test.describe("Selector using parallel sources", () => {
           [testOrigin, testOriginSelector],
           testOrigin3,
           selectorMethod,
-          {
-            defaultValue: DEFAULT_VALUE
-          }
+          DEFAULT_VALUE
         );
       });
 
@@ -549,9 +537,7 @@ test.describe("Selector using parallel sources", () => {
             query: query => query
           },
           selectorMethod,
-          {
-            defaultValue: DEFAULT_VALUE
-          }
+          DEFAULT_VALUE
         );
       });
 

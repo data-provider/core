@@ -1,6 +1,6 @@
 const test = require("mocha-sinon-chai");
 
-const { Origin } = require("../src/Origin");
+const { Origin, sources } = require("../src/Origin");
 
 test.describe("Origin methods", () => {
   let sandbox;
@@ -11,6 +11,7 @@ test.describe("Origin methods", () => {
 
   test.afterEach(() => {
     sandbox.restore();
+    sources.clear();
   });
 
   const testMethod = methodName => {
