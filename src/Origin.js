@@ -1,5 +1,4 @@
-import { isEqual, cloneDeep, merge } from "lodash";
-import { mergeCloned } from "./helpers";
+import { isEqual, cloneDeep, merge, isFunction } from "lodash";
 
 import { Cache } from "./Cache";
 import { EventEmitter } from "./EventEmitter";
@@ -17,7 +16,8 @@ import {
   ensureArray,
   removeFalsy,
   queriedUniqueId,
-  isUndefined
+  isUndefined,
+  mergeCloned
 } from "./helpers";
 
 let automaticIdCounter = 0;
@@ -32,7 +32,10 @@ export class Origin {
     this._eventEmitter = new EventEmitter();
     this._queries = {};
 
-    this._defaultValue = !isUndefined(defaultValue) ? cloneDeep(defaultValue) : defaultValue;
+    this._defaultValue =
+      !isUndefined(defaultValue) && !isFunction(defaultValue)
+        ? cloneDeep(defaultValue)
+        : defaultValue;
     this._id = options.uuid || uniqueId(defaultId || getAutomaticId(), this._defaultValue);
     this._cache = new Cache(this._eventEmitter, this._id);
 
@@ -178,7 +181,12 @@ export class Origin {
 
         methods[methodName] = dispatchMethod;
         methods[methodName].dispatch = dispatchMethod;
-        methods[methodName].value = methodName === READ_METHOD ? this._defaultValue : undefined;
+        methods[methodName].value =
+          methodName === READ_METHOD
+            ? isFunction(this._defaultValue)
+              ? this._defaultValue(query)
+              : this._defaultValue
+            : undefined;
         methods[methodName].error = null;
         methods[methodName].loading = false;
         methods[methodName]._source = methods;
