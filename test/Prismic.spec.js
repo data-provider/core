@@ -1,3 +1,5 @@
+const { sources } = require("@xbyorange/mercury");
+
 const PrismicMock = require("./PrismicJs.mock");
 
 const { Prismic } = require("../src/Prismic");
@@ -143,6 +145,91 @@ describe("Prismic", () => {
       });
       expect(prismic._release).toEqual("foo-release");
       expect(prismic._fullResponse).toEqual(true);
+    });
+
+    it("should override previously defined url", async () => {
+      expect.assertions(1);
+      const FOO_NEW_URL = "foo-prismic-url-2";
+      prismic.config({
+        url: FOO_NEW_URL
+      });
+      await prismic.read();
+      expect(mock.stubs.api.getCall(0).args[0]).toEqual(FOO_NEW_URL);
+    });
+
+    it("should override previously defined url when using mercury sources handler", async () => {
+      expect.assertions(1);
+      const FOO_NEW_URL = "foo-prismic-url-2";
+      sources.getByTag("prismic").config({
+        url: FOO_NEW_URL
+      });
+      await prismic.read();
+      expect(mock.stubs.api.getCall(0).args[0]).toEqual(FOO_NEW_URL);
+    });
+
+    it("should override previously defined url when using mercury sources handler even when source has its own tag defined", async () => {
+      expect.assertions(1);
+      prismic = new Prismic(fooPrismicUrl, {
+        tags: "foo-tag"
+      });
+      const FOO_NEW_URL = "foo-prismic-url-3";
+      sources.getByTag("prismic").config({
+        url: FOO_NEW_URL
+      });
+      await prismic.read();
+      expect(mock.stubs.api.getCall(0).args[0]).toEqual(FOO_NEW_URL);
+    });
+
+    it("should override previously defined url when using mercury sources handler even when source has its own prismic tag defined", async () => {
+      expect.assertions(1);
+      prismic = new Prismic(fooPrismicUrl, {
+        tags: "prismic"
+      });
+      const FOO_NEW_URL = "foo-prismic-url-3";
+      sources.getByTag("prismic").config({
+        url: FOO_NEW_URL
+      });
+      await prismic.read();
+      expect(mock.stubs.api.getCall(0).args[0]).toEqual(FOO_NEW_URL);
+    });
+
+    it("should work when using mercury sources handler even when source has its own tags defined", async () => {
+      expect.assertions(1);
+      prismic = new Prismic(fooPrismicUrl, {
+        tags: ["foo-tag", "foo-tag-2"]
+      });
+      const FOO_NEW_URL = "foo-prismic-url-4";
+      sources.getByTag("prismic").config({
+        url: FOO_NEW_URL
+      });
+      await prismic.read();
+      expect(mock.stubs.api.getCall(0).args[0]).toEqual(FOO_NEW_URL);
+    });
+
+    it("should work when using mercury sources handler and specific tags", async () => {
+      expect.assertions(1);
+      prismic = new Prismic(fooPrismicUrl, {
+        tags: "foo-tag"
+      });
+      const FOO_NEW_URL = "foo-prismic-url-5";
+      sources.getByTag("foo-tag").config({
+        url: FOO_NEW_URL
+      });
+      await prismic.read();
+      expect(mock.stubs.api.getCall(0).args[0]).toEqual(FOO_NEW_URL);
+    });
+
+    it("should work when using mercury sources handler and an specific tag that is present in defined tags", async () => {
+      expect.assertions(1);
+      prismic = new Prismic(fooPrismicUrl, {
+        tags: ["foo-tag", "foo-tag-3"]
+      });
+      const FOO_NEW_URL = "foo-prismic-url-5";
+      sources.getByTag("foo-tag-3").config({
+        url: FOO_NEW_URL
+      });
+      await prismic.read();
+      expect(mock.stubs.api.getCall(0).args[0]).toEqual(FOO_NEW_URL);
     });
   });
 });

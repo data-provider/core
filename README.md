@@ -50,7 +50,7 @@ Read about how to configure all mercury-prismic instances at a time using the [m
 Example of how to change all `mercury-api` requests urls at a time:
 
 ```js
-import { sources } from "mercury";
+import { sources } from "@xbyorange/mercury";
 
 sources.getByTag("prismic").config({
 	url: "https://foo-prismic-repository.cdn.prismic.io/api/v2"
