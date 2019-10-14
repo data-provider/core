@@ -55,7 +55,7 @@ prismic
 
 ### React
 
-Please refer to the [react-mercury][react-mercury-url] documentation to see how simple is the data-binding between React Components and the Mercury Prismic.
+Please refer to the [react-mercury][react-mercury-url] documentation to see how simple is the data-binding between React Components and Mercury Prismic.
 
 Connect a source to all components that need it. Mercury will fetch data only when needed, and will avoid making it more than once, no matter how many components need the data.
 
