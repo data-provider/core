@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [1.2.0] - 2019-10-15
 ### Changed
 - Upgrade mercury version and define it as peer dependency
+- Upgrade devDependencies
 
 ## [1.1.0] - 2019-06-28
 ### Changed
