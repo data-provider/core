@@ -121,6 +121,12 @@ export class Origin {
         loading: methods[methodName].loading,
         ...data
       };
+      const actionName = actions[methodName][action];
+      methods[methodName].stats = {
+        ...methods[methodName].stats,
+        [action]: methods[methodName].stats[action] + 1
+      };
+
       if (!isEqual(oldData, newData)) {
         methods[methodName].value = newData.value;
         methods[methodName].loading = newData.loading;
@@ -129,7 +135,7 @@ export class Origin {
         this._emitChangeAny({
           source: this._queries[id],
           method: methodName,
-          action,
+          action: actionName,
           params
         });
       }
@@ -139,13 +145,14 @@ export class Origin {
       if (this._hasToPublishMethod(methodName)) {
         const dispatchMethod = extraParams => {
           const methodPromise = this[`_${methodName}`](query, extraParams);
-          if (!methodPromise.isFulfilled) {
+          if (!methodPromise.isFulfilled && !methodPromise.dispatchEmitted) {
+            methodPromise.dispatchEmitted = true;
             updateData(
               {
                 loading: true
               },
               methodName,
-              actions[methodName].dispatch,
+              "dispatch",
               extraParams
             );
           }
@@ -158,7 +165,7 @@ export class Origin {
                   value: result
                 },
                 methodName,
-                actions[methodName].success,
+                "success",
                 extraParams
               );
               methodPromise.isFulfilled = true;
@@ -171,7 +178,7 @@ export class Origin {
                   error
                 },
                 methodName,
-                actions[methodName].error,
+                "error",
                 extraParams
               );
               methodPromise.isFulfilled = true;
@@ -189,6 +196,11 @@ export class Origin {
             : undefined;
         methods[methodName].error = null;
         methods[methodName].loading = false;
+        methods[methodName].stats = {
+          dispatch: 0,
+          success: 0,
+          error: 0
+        };
         methods[methodName]._source = methods;
         methods[methodName]._isSourceMethod = true;
         methods[methodName]._methodName = methodName;
@@ -205,7 +217,8 @@ export class Origin {
         methods[methodName].getters = {
           error: createGetter("error"),
           loading: createGetter("loading"),
-          value: createGetter("value")
+          value: createGetter("value"),
+          stats: createGetter("stats")
         };
       }
     });

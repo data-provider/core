@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Last argument of Selectors will stop being assigned as "defaultValue". To define default value, it will be mandatory to pass an options object as last argument, containing a "defaultValue" property.
 
 ## [1.5.0] - 2019-10-14
+### Added
+- Add `stats` property containing counters of method actions executions.
 
 ## [1.4.0] - 2019-10-14
 ### Added
