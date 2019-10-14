@@ -4,7 +4,7 @@
 
 * size `sources.size` - Getter returning current size of mercury sources created.
 * elements `sources.elements` - Getter returning an `<Array>` containing all mercury sources created.
-* getBytag `sources.getByTags(tag)`
+* getBytag `sources.getByTag(tag)`
 	* Alias - `getByTag`
 	* Arguments
 		* tag - `<String>` Tag to filter sources by.
