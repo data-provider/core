@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Removed
 ### BREAKING CHANGES
 
+## [1.2.0] - 2019-10-15
+
 ## [1.1.0] - 2019-06-28
 ### Changed
 - Upgrade mercury version
