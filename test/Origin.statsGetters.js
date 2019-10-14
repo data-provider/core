@@ -2,7 +2,7 @@ const test = require("mocha-sinon-chai");
 
 const { Origin, sources } = require("../src/Origin");
 
-test.describe("Origin stats", () => {
+test.describe("Origin stats getters", () => {
   let sandbox;
   let TestOrigin;
   let testOrigin;
@@ -39,12 +39,12 @@ test.describe("Origin stats", () => {
   test.describe("without query", () => {
     test.describe("dispatch property", () => {
       test.it("should return 0 until read is dispatched", () => {
-        test.expect(testOrigin.read.stats.dispatch).to.equal(0);
+        test.expect(testOrigin.read.getters.stats().dispatch).to.equal(0);
       });
 
       test.it("should return 1 when read is dispatched", () => {
         testOrigin.read();
-        test.expect(testOrigin.read.stats.dispatch).to.equal(1);
+        test.expect(testOrigin.read.getters.stats().dispatch).to.equal(1);
       });
 
       test.it(
@@ -54,7 +54,7 @@ test.describe("Origin stats", () => {
           testOrigin.read();
           testOrigin.read();
           testOrigin.read();
-          test.expect(testOrigin.read.stats.dispatch).to.equal(1);
+          test.expect(testOrigin.read.getters.stats().dispatch).to.equal(1);
         }
       );
 
@@ -66,19 +66,19 @@ test.describe("Origin stats", () => {
           testOrigin.read();
           testOrigin.read();
           testOrigin.read();
-          test.expect(testOrigin.read.stats.dispatch).to.equal(2);
+          test.expect(testOrigin.read.getters.stats().dispatch).to.equal(2);
         }
       );
     });
 
     test.describe("success property", () => {
       test.it("should return 0 until read method has finished", () => {
-        test.expect(testOrigin.read.stats.success).to.equal(0);
+        test.expect(testOrigin.read.getters.stats().success).to.equal(0);
       });
 
       test.it("should return 1 when read has finished", () => {
         return testOrigin.read().then(() => {
-          return test.expect(testOrigin.read.stats.success).to.equal(1);
+          return test.expect(testOrigin.read.getters.stats().success).to.equal(1);
         });
       });
 
@@ -89,14 +89,14 @@ test.describe("Origin stats", () => {
           testOrigin.read(),
           testOrigin.read()
         ]).then(() => {
-          return test.expect(testOrigin.read.stats.success).to.equal(4);
+          return test.expect(testOrigin.read.getters.stats().success).to.equal(4);
         });
       });
     });
 
     test.describe("error property", () => {
       test.it("should return 0 until read method has finished", () => {
-        test.expect(testOrigin.read.stats.error).to.equal(0);
+        test.expect(testOrigin.read.getters.stats().error).to.equal(0);
       });
 
       test.it("should return 1 when read has finished with an error", () => {
@@ -106,7 +106,7 @@ test.describe("Origin stats", () => {
             return test.assert.fail();
           },
           () => {
-            return test.expect(testOrigin.read.stats.error).to.equal(1);
+            return test.expect(testOrigin.read.getters.stats().error).to.equal(1);
           }
         );
       });
@@ -125,7 +125,7 @@ test.describe("Origin stats", () => {
               return test.assert.fail();
             },
             () => {
-              return test.expect(testOrigin.read.stats.error).to.equal(4);
+              return test.expect(testOrigin.read.getters.stats().error).to.equal(4);
             }
           );
         }
@@ -136,12 +136,12 @@ test.describe("Origin stats", () => {
   test.describe("with query", () => {
     test.describe("dispatch property", () => {
       test.it("should return 0 until read is dispatched", () => {
-        test.expect(queriedOrigin.read.stats.dispatch).to.equal(0);
+        test.expect(queriedOrigin.read.getters.stats().dispatch).to.equal(0);
       });
 
       test.it("should return 1 when read is dispatched", () => {
         queriedOrigin.read();
-        test.expect(queriedOrigin.read.stats.dispatch).to.equal(1);
+        test.expect(queriedOrigin.read.getters.stats().dispatch).to.equal(1);
       });
 
       test.it(
@@ -151,7 +151,7 @@ test.describe("Origin stats", () => {
           queriedOrigin.read();
           queriedOrigin.read();
           queriedOrigin.read();
-          test.expect(queriedOrigin.read.stats.dispatch).to.equal(1);
+          test.expect(queriedOrigin.read.getters.stats().dispatch).to.equal(1);
         }
       );
 
@@ -163,19 +163,19 @@ test.describe("Origin stats", () => {
           queriedOrigin.read();
           queriedOrigin.read();
           queriedOrigin.read();
-          test.expect(queriedOrigin.read.stats.dispatch).to.equal(2);
+          test.expect(queriedOrigin.read.getters.stats().dispatch).to.equal(2);
         }
       );
     });
 
     test.describe("success property", () => {
       test.it("should return 0 until read method has finished", () => {
-        test.expect(queriedOrigin.read.stats.success).to.equal(0);
+        test.expect(queriedOrigin.read.getters.stats().success).to.equal(0);
       });
 
       test.it("should return 1 when read has finished", () => {
         return queriedOrigin.read().then(() => {
-          return test.expect(queriedOrigin.read.stats.success).to.equal(1);
+          return test.expect(queriedOrigin.read.getters.stats().success).to.equal(1);
         });
       });
 
@@ -186,14 +186,14 @@ test.describe("Origin stats", () => {
           queriedOrigin.read(),
           queriedOrigin.read()
         ]).then(() => {
-          return test.expect(queriedOrigin.read.stats.success).to.equal(4);
+          return test.expect(queriedOrigin.read.getters.stats().success).to.equal(4);
         });
       });
     });
 
     test.describe("error property", () => {
       test.it("should return 0 until read method has finished", () => {
-        test.expect(queriedOrigin.read.stats.error).to.equal(0);
+        test.expect(queriedOrigin.read.getters.stats().error).to.equal(0);
       });
 
       test.it("should return 1 when read has finished with an error", () => {
@@ -203,7 +203,7 @@ test.describe("Origin stats", () => {
             return test.assert.fail();
           },
           () => {
-            return test.expect(queriedOrigin.read.stats.error).to.equal(1);
+            return test.expect(queriedOrigin.read.getters.stats().error).to.equal(1);
           }
         );
       });
@@ -222,7 +222,7 @@ test.describe("Origin stats", () => {
               return test.assert.fail();
             },
             () => {
-              return test.expect(queriedOrigin.read.stats.error).to.equal(4);
+              return test.expect(queriedOrigin.read.getters.stats().error).to.equal(4);
             }
           );
         }
