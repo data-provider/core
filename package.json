@@ -30,14 +30,17 @@
     "test-ci": "npm run test -- --coverage --ci --verbose=false --coverageReporters=lcov --coverageReporters=text-summary",
     "coveralls": "cat ./coverage/lcov.info | coveralls"
   },
+  "peerDependencies": {
+    "@xbyorange/mercury": "1.4.0"
+  },
   "dependencies": {
-    "@xbyorange/mercury": "1.1.0",
     "prismic-javascript": "^2.0.3"
   },
   "devDependencies": {
     "@babel/core": "^7.4.5",
     "@babel/preset-env": "^7.4.5",
     "@babel/preset-react": "^7.0.0",
+    "@xbyorange/mercury": "1.4.0",
     "babel-core": "^7.0.0-bridge.0",
     "babel-jest": "^24.8.0",
     "babel-polyfill": "^6.26.0",
