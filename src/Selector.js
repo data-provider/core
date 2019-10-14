@@ -41,9 +41,9 @@ export class Selector extends Origin {
       const catches = [];
       sourcesOfLevel.forEach(source => {
         if (Array.isArray(source)) {
-          const testObjects = getTestObjects(source);
-          queries.push(testObjects.queries);
-          catches.push(testObjects.catches);
+          const childTestObjects = getTestObjects(source);
+          queries.push(childTestObjects.queries);
+          catches.push(childTestObjects.catches);
         } else {
           const isSourceObject = !!source.source;
           sourceIds.push(isSourceObject ? source.source._id : source._id);
