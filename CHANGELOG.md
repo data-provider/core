@@ -14,11 +14,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [TO BE DEPRECATED]
 - Last argument of Selectors will stop being assigned as "defaultValue". To define default value, it will be mandatory to pass an options object as last argument, containing a "defaultValue" property.
 
-## [1.3.0] - 2019-10-10
+## [1.3.0] - 2019-10-14
 ### Added
 - defaultValue argument in Origin Constructor now can be a function. It will be called to obtain the defaultValue, passing to it the current query as argument.
+- Add utility for testing catch functions of selector sources.
 
-## [1.2.0] - 2019-10-03
+## [1.2.0] - 2019-10-14
 ### Added
 - Accept options object in Origin constructor as last argument.
 - Assign to the `_id` private property the value received in new option "uuid", when received.
