@@ -35,29 +35,39 @@ export class Selector extends Origin {
 
     const sourceIds = [];
 
-    const getTestQueries = sourcesOfLevel => {
+    const getTestObjects = sourcesOfLevel => {
       const queries = [];
+      const catches = [];
       sourcesOfLevel.forEach(source => {
         if (Array.isArray(source)) {
-          queries.push(getTestQueries(source));
+          const testObjects = getTestObjects(source);
+          queries.push(testObjects.queries);
+          catches.push(testObjects.catches);
         } else {
-          const hasQuery = !!source.source;
-          sourceIds.push(hasQuery ? source.source._id : source._id);
-          if (hasQuery) {
+          const isSourceObject = !!source.source;
+          sourceIds.push(isSourceObject ? source.source._id : source._id);
+          if (isSourceObject && source.query) {
             queries.push(source.query);
+          }
+          if (isSourceObject && source.catch) {
+            catches.push(source.catch);
           }
         }
       });
-      return queries;
+      return {
+        queries,
+        catches
+      };
     };
 
-    const testQueries = getTestQueries(sources);
+    const testObjects = getTestObjects(sources);
 
     super(`select:${sourceIds.join(":")}`, defaultValue, options);
 
     this._sources = sources;
     this._resultsParser = args[lastIndex];
-    this.test.queries = testQueries;
+    this.test.queries = testObjects.queries;
+    this.test.catches = testObjects.catches;
     this.test.selector = this._resultsParser;
   }
 
