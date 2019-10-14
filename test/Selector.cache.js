@@ -258,60 +258,65 @@ test.describe("Selector cache", () => {
     });
   });
 
-  test.describe("when returns another source", () => {
-    test.beforeEach(() => {
-      testSelector = new Selector(
-        testOrigin,
-        testOrigin2,
-        (originResult, origin2Result, query) => {
-          spies.testSelector(query);
-          return testOriginSelector.query(query);
-        }
-      );
-    });
+  const testDynamicSelectors = (description, selectorCallback) => {
+    test.describe(description, () => {
+      test.beforeEach(() => {
+        testSelector = new Selector(testOrigin, testOrigin2, selectorCallback);
+      });
 
-    test.describe("when no query is passed", () => {
-      test.it("should clean cache when source cache is cleaned", () => {
-        return testSelector.read().then(() => {
-          testOriginSelector.clean();
+      test.describe("when no query is passed", () => {
+        test.it("should clean cache when source cache is cleaned", () => {
           return testSelector.read().then(() => {
-            return test.expect(spies.testSelector.callCount).to.equal(2);
+            testOriginSelector.clean();
+            return testSelector.read().then(() => {
+              return test.expect(spies.testSelector.callCount).to.equal(2);
+            });
           });
         });
       });
-    });
 
-    test.describe("when query is passed", () => {
-      test.it("should clean cache when source cache is cleaned with same query", () => {
-        const FOO_QUERY = "foo-query";
-        return testSelector
-          .query(FOO_QUERY)
-          .read()
-          .then(() => {
-            testOriginSelector.query(FOO_QUERY).clean();
-            return testSelector
-              .query(FOO_QUERY)
-              .read()
-              .then(() => {
-                return test.expect(spies.testSelector.callCount).to.equal(2);
-              });
-          });
-      });
+      test.describe("when query is passed", () => {
+        test.it("should clean cache when source cache is cleaned with same query", () => {
+          const FOO_QUERY = "foo-query";
+          return testSelector
+            .query(FOO_QUERY)
+            .read()
+            .then(() => {
+              testOriginSelector.query(FOO_QUERY).clean();
+              return testSelector
+                .query(FOO_QUERY)
+                .read()
+                .then(() => {
+                  return test.expect(spies.testSelector.callCount).to.equal(2);
+                });
+            });
+        });
 
-      test.it("should not clean cache when source cache is cleaned with another query", () => {
-        const FOO_QUERY = "foo-query";
-        return testSelector
-          .query(FOO_QUERY)
-          .read()
-          .then(() => {
-            testOriginSelector.query("foo").clean();
-            return testSelector
-              .query(FOO_QUERY)
-              .read()
-              .then(checkHasBeenCalledOnce);
-          });
+        test.it("should not clean cache when source cache is cleaned with another query", () => {
+          const FOO_QUERY = "foo-query";
+          return testSelector
+            .query(FOO_QUERY)
+            .read()
+            .then(() => {
+              testOriginSelector.query("foo").clean();
+              return testSelector
+                .query(FOO_QUERY)
+                .read()
+                .then(checkHasBeenCalledOnce);
+            });
+        });
       });
     });
+  };
+
+  testDynamicSelectors("when returns another source", (originResult, origin2Result, query) => {
+    spies.testSelector(query);
+    return testOriginSelector.query(query);
+  });
+
+  testDynamicSelectors("when returns multiple sources", (originResult, origin2Result, query) => {
+    spies.testSelector(query);
+    return [testOriginSelector.query(query), testOriginSelector];
   });
 
   test.describe("cud methods", () => {
