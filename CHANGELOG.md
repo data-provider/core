@@ -11,7 +11,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Removed
 ### BREAKING CHANGES
 
-## [1.2.0] - 2019-10-15
+## [1.2.0] - 2019-10-14
+### Added
+- Add `url` property to config options.
+
 ### Changed
 - Upgrade mercury version and define it as peer dependency
 - Upgrade devDependencies
