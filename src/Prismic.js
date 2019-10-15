@@ -21,7 +21,7 @@ export class Prismic extends Origin {
   }
 
   _config(configuration) {
-    this._url = `${configuration.url}`;
+    this._url = configuration.url;
     this._fullResponse = configuration.fullResponse;
     this._release = configuration.release;
   }
