@@ -11,10 +11,22 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Removed
 ### BREAKING CHANGES
 
-## [1.2.0] - 2019-10-15
+## [TO BE DEPRECATED]
+- "useLegacyDefaultValue" option has to be removed.
+- Options should be accepted only as second argument. "uuid" should be defined only using the "uuid" option, not as second argument.
+
+## [2.0.0] - 2019-10-15
+### BREAKING CHANGES
+- Queried instances will have default value corresponding to the value of query "key" in the default value object (until new option "useLegacyDefaultValue" is received, in which case the behavior of "default value" will be the same than in previous versions)
+
+### Added
+- Add "useLegacyDefaultValue" option.
+- Add "uuid" and "tags" options.
+- Accept options object as second argument. (And still accepts "id" as second argument, and options as third argument in order to maintain retro-compatibility)
+
 ### Changed
-- Upgrade mercury version and define it as peer dependency
-- Upgrade devDependencies
+- Upgrade mercury version and define it as peer dependency.
+- Upgrade devDependencies.
 
 ## [1.1.0] - 2019-06-28
 ### Changed

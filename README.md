@@ -21,10 +21,14 @@ npm i @xbyorange/mercury-memory --save
 
 ## Api
 
-`new Memory(object[, id])`
+`new Memory(defaultValue[, options || uuid][, options])`
 * Arguments
-  * object - _`<Object>`_. Object to be stored. Default value is assigned too at the same time.
-  * id - _`<String>`_ Id of the Mercury Object. Optional, only useful for debugging purposes.
+	* defaultValue - _`<Object>`_. Object to be stored. Default value is assigned too at the same time.
+	* uuid - _`<String>`_. Unique id to assign to returned Mercury instance. Useful when using [mercury `sources` handler][mercury-sources-docs-url]. __To be deprecated in next releases. Options object should be passed as second argument instead of uuid.__
+	* options - `<Object>` containing properties:
+		* useLegacyDefaultValue - _`<Boolean>`_ If `true`, the default value of queried sources will be the full `defaultValue` object. If not provided, the default value of queried sources will be the value of the "key" in the query.
+		* uuid - _`<String>`_ Unique id to assign to returned Mercury instance. Useful when using [mercury `sources` handler][mercury-sources-docs-url].
+		* tags - _`<String> or <Array of Strings>`_ Tags to assign to the instance. Useful when using [mercury `sources` handler][mercury-sources-docs-url]. A "prismic" tag will be always added to provided tags by default.
 
 ## Methods
 
@@ -36,10 +40,8 @@ npm i @xbyorange/mercury-memory --save
 
 ### cache
 
-The `clean` events will be dispatched when the `update`, `delete` or `create` methods are executed for an specific query as in other mercury origins:
+All cache will be cleaned when the `update`, `delete` or `create` methods are executed for any specific query.
 
-* If `update` or `delete` methods are executed over the origin without query, cache of all queried resources will be cleaned too.
-* All `cache` will be cleaned if the `create` method is executed.
 
 ## Examples
 
@@ -111,6 +113,7 @@ Contributors are welcome.
 Please read the [contributing guidelines](.github/CONTRIBUTING.md) and [code of conduct](.github/CODE_OF_CONDUCT.md).
 
 [mercury-url]: https://github.com/xbyorange/mercury
+[mercury-sources-docs-url]: https://github.com/XbyOrange/mercury/blob/master/docs/sources/api.md
 
 [coveralls-image]: https://coveralls.io/repos/github/XbyOrange/mercury-memory/badge.svg
 [coveralls-url]: https://coveralls.io/github/XbyOrange/mercury-memory
