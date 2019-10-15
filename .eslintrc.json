@@ -20,5 +20,12 @@
     "no-unused-vars": ["error", { "vars": "all", "args": "after-used", "ignoreRestSiblings": false }]
   },
   "extends": ["prettier"],
-  "root": true
+  "root": true,
+  "globals": {
+    "beforeAll": true,
+    "beforeEach": true,
+    "describe": true,
+    "expect": true,
+    "it": true
+  }
 }
