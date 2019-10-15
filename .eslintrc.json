@@ -3,7 +3,7 @@
     "node": true,
     "es6": true
   },
-  "parserOptions": { 
+  "parserOptions": {
     "ecmaVersion": "2018",
     "sourceType": "module"
   },
@@ -16,7 +16,8 @@
         "parser": "flow"
       }
     ],
-    "no-unused-vars": ["error", { "vars": "all", "args": "after-used", "ignoreRestSiblings": false }]
+    "no-unused-vars": ["error", { "vars": "all", "args": "after-used", "ignoreRestSiblings": false }],
+    "no-undef": "error"
   },
   "extends": ["prettier"],
   "root": true
