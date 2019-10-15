@@ -1,9 +1,20 @@
 import { Origin } from "@xbyorange/mercury";
 import { cloneDeep } from "lodash";
 
+const TAG = "memory";
+
 export class Memory extends Origin {
-  constructor(value, id) {
-    super(id || "memory", value);
+  constructor(value, id, options = {}) {
+    const tags = Array.isArray(options.tags) ? options.tags : [options.tags];
+    tags.push(TAG);
+    const baseOptions = {
+      ...options,
+      tags
+    };
+    if (!options.uuid && id) {
+      baseOptions.uuid = id;
+    }
+    super(id || "memory", value, baseOptions);
     this._memory = cloneDeep(value || {});
     this.update(this._memory);
   }
