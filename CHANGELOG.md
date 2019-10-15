@@ -25,6 +25,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Accept options object as second argument. (And still accepts "id" as second argument, and options as third argument in order to maintain retro-compatibility)
 
 ### Changed
+- Emit "clean" event over root instance when an "update" is executed on any queried instance. (Full object is modified too).
 - Upgrade mercury version and define it as peer dependency.
 - Upgrade devDependencies.
 

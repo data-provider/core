@@ -78,7 +78,7 @@ export class Memory extends Origin {
     } else {
       this._memory = data;
     }
-    this._clean(query);
+    this._clean();
     return Promise.resolve();
   }
 
