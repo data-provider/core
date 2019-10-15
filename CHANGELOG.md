@@ -15,7 +15,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - "useLegacyDefaultValue" option has to be removed.
 - Accept options only as second argument. Id should be defined only using the "uuid" option.
 
-## [1.2.0] - 2019-10-15
+## [2.0.0] - 2019-10-15
 ### BREAKING CHANGES
 - Queried instances will have default value corresponding to the value of query "key" in the default value object (until new option "useLegacyDefaultValue" is received, in which case the behavior of "default value" will be the same than in previous versions)
 
