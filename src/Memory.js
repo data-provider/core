@@ -14,9 +14,20 @@ export class Memory extends Origin {
     if (!options.uuid && id) {
       baseOptions.uuid = id;
     }
-    super(id || "memory", value, baseOptions);
+    const getDefaultValue = function(query) {
+      const valueToReturn = value || {};
+      if (query && !options.useLegacyDefaultValue) {
+        return valueToReturn[query];
+      }
+      return valueToReturn;
+    };
+    super(id || "memory", getDefaultValue, baseOptions);
     this._memory = cloneDeep(value || {});
     this.update(this._memory);
+  }
+
+  _config(configuration) {
+    this._useLegacyDefaultValue = configuration.useLegacyDefaultValue;
   }
 
   _read(key) {

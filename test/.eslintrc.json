@@ -1,5 +1,6 @@
 {
   "globals": {
+    "afterEach": true,
     "beforeAll": true,
     "beforeEach": true,
     "describe": true,
