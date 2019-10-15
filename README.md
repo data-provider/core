@@ -28,7 +28,7 @@ npm i @xbyorange/mercury-memory --save
 	* options - `<Object>` containing properties:
 		* useLegacyDefaultValue - _`<Boolean>`_ If `true`, the default value of queried sources will be the full `defaultValue` object. If not provided, the default value of queried sources will be the value of the "key" in the query.
 		* uuid - _`<String>`_ Unique id to assign to returned Mercury instance. Useful when using [mercury `sources` handler][mercury-sources-docs-url].
-		* tags - _`<String> or <Array of Strings>`_ Tags to assign to the instance. Useful when using [mercury `sources` handler][mercury-sources-docs-url]. A "prismic" tag will be always added to provided tags by default.
+		* tags - _`<String> or <Array of Strings>`_ Tags to assign to the instance. Useful when using [mercury `sources` handler][mercury-sources-docs-url]. A "memory" tag will be always added to provided tags by default.
 
 ## Methods
 
