@@ -1,21 +1,27 @@
 import PrismicClient from "prismic-javascript";
 import { Origin } from "@xbyorange/mercury";
 
+const PRISMIC_TAG = "prismic";
 const defaultConfig = {
   release: null,
-  fullResponse: false
+  fullResponse: false,
+  url: ""
 };
 
 export class Prismic extends Origin {
-  constructor(url, config = {}) {
-    super(`prismic-${url}`, config && config.defaultValue);
-    const configuration = { ...defaultConfig, ...config };
-    this._url = url;
-    this._config(configuration);
+  constructor(url, options = {}) {
+    const tags = Array.isArray(options.tags) ? options.tags : [options.tags];
+    tags.push(PRISMIC_TAG);
+    super(`prismic-${url}`, options.defaultValue, {
+      ...defaultConfig,
+      ...{ url },
+      ...options,
+      tags
+    });
   }
 
   _config(configuration) {
-    this._configuration = { ...configuration };
+    this._url = configuration.url;
     this._fullResponse = configuration.fullResponse;
     this._release = configuration.release;
   }
@@ -52,9 +58,5 @@ export class Prismic extends Origin {
     });
     this._cache.set(query, request);
     return request;
-  }
-
-  config(configuration) {
-    this._config({ ...this._configuration, ...configuration });
   }
 }
