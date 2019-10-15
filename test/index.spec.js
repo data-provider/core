@@ -1,3 +1,5 @@
+/* global describe, it, expect */
+
 const index = require("../src/index");
 
 describe("index", () => {

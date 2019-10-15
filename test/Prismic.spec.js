@@ -1,3 +1,5 @@
+/* global describe, beforeEach, afterEach, it, expect  */
+
 const { sources } = require("@xbyorange/mercury");
 
 const PrismicMock = require("./PrismicJs.mock");
