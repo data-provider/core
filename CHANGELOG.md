@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [TO BE DEPRECATED]
 - "useLegacyDefaultValue" option has to be removed.
-- Accept options only as second argument. Id should be defined only using the "uuid" option.
+- Options should be accepted only as second argument. "uuid" should be defined only using the "uuid" option, not as second argument.
 
 ## [2.0.0] - 2019-10-15
 ### BREAKING CHANGES
