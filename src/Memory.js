@@ -3,16 +3,47 @@ import { cloneDeep } from "lodash";
 
 const TAG = "memory";
 
+const ensureId = id => id || TAG;
+const traceLegacyOptions = () => {
+  console.warn(
+    'Defining "id" as second argument will be deprecated in next major versions of "mercury-memory". Please define an options object with "uuid" property'
+  );
+};
+
+const getOptions = (receivedId, receivedOptions) => {
+  if (receivedOptions) {
+    traceLegacyOptions();
+    return {
+      ...receivedOptions,
+      uuid: receivedOptions.uuid || ensureId(receivedId)
+    };
+  } else if (receivedId && typeof receivedId === "object") {
+    return {
+      ...receivedId,
+      uuid: receivedId.uuid || TAG
+    };
+  }
+  if (receivedId) {
+    traceLegacyOptions();
+  }
+  return {
+    uuid: ensureId(receivedId)
+  };
+};
+
 export class Memory extends Origin {
-  constructor(value, id, options = {}) {
+  constructor(value, receivedId, receivedOptions) {
+    const options = getOptions(receivedId, receivedOptions);
     const tags = Array.isArray(options.tags) ? options.tags : [options.tags];
     tags.push(TAG);
     const baseOptions = {
       ...options,
       tags
     };
-    if (!options.uuid && id) {
-      baseOptions.uuid = id;
+    if (options.useLegacyDefaultValue) {
+      console.warn(
+        '"useLegacyDefaultValue" option will be deprecated in next major versions of "mercury-memory"'
+      );
     }
     const getDefaultValue = function(query) {
       const valueToReturn = value || {};
@@ -21,7 +52,7 @@ export class Memory extends Origin {
       }
       return valueToReturn;
     };
-    super(id || "memory", getDefaultValue, baseOptions);
+    super(null, getDefaultValue, baseOptions);
     this._memory = cloneDeep(value || {});
     this.update(this._memory);
   }
