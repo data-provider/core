@@ -18,9 +18,11 @@ This package provides a [Mercury][mercury-url] origin for reading data from Pris
 * Arguments
 	* url - _`<String>`_. Prismic api url.
 	* options - _`<Object>`_ Containing options:
-		* defaultValue - _`<Any>`_ - Default value of origin until real data is returned.
-		* fullResponse - _`<Boolean>`_ - If `true`, the full response of the Prismic api will be used as value. If `false`, only the `response.results` property will be returned, which is the default behavior.
-		* release - _`<String>`_ - Prismic release to be read. This parameter will be passed as `ref` to the [prismic-javascript][prismic-javascript-url] query.
+		* defaultValue - _`<Any>`_ Default value of origin until real data is returned.
+		* fullResponse - _`<Boolean>`_ If `true`, the full response of the Prismic api will be used as value. If `false`, only the `response.results` property will be returned, which is the default behavior.
+		* release - _`<String>`_ Prismic release to be read. This parameter will be passed as `ref` to the [prismic-javascript][prismic-javascript-url] query.
+		* uuid - _`<String>`_ Unique id to assign to the instance. Useful when using [mercury `sources` handler][mercury-sources-docs-url].
+		* tags - _`<String> or <Array of Strings>`_ Tags to assign to the instance. Useful when using [mercury `sources` handler][mercury-sources-docs-url]. A "prismic" tag will be always added to provided tags by default.
 
 ## Methods
 
@@ -31,6 +33,31 @@ This package provides a [Mercury][mercury-url] origin for reading data from Pris
 	* queryObject - `<Object>` containing properties:
 		* documentType - `<String>` Prismic document type to filter by. (It will be used to build a [prismic-javascript][prismic-javascript-url] query as in `PrismicJs.Predicates.at("document.type", documentType)`)
 * Returns - New queried instance having all common [Mercury][mercury-url] methods.
+
+### config
+
+Configure instance for all next `read` executions.
+
+`prismic.config(options)`
+* Arguments
+	* options - `<Object>` containing properties:
+		* url - _`<String>`_ Prismic api url.
+		* fullResponse - _`<Boolean>`_ If `true`, the full response of the Prismic api will be used as value. If `false`, only the `response.results` property will be returned, which is the default behavior.
+		* release - _`<String>`_ Prismic release to be read. This parameter will be passed as `ref` to the [prismic-javascript][prismic-javascript-url] query.
+
+Read about how to configure all mercury-prismic instances at a time using the [mercury `sources` handler][mercury-sources-docs-url].
+
+Example of how to change all `mercury-api` requests urls at a time:
+
+```js
+import { sources } from "@xbyorange/mercury";
+
+sources.getByTag("prismic").config({
+  url: "https://foo-prismic-repository.cdn.prismic.io/api/v2"
+});
+
+// All mercury-prismic instances will now be configured to request to provided url.
+```
 
 ## Example
 
@@ -55,11 +82,12 @@ prismic
 
 ### React
 
-Please refer to the [react-mercury][react-mercury-url] documentation to see how simple is the data-binding between React Components and the Mercury Prismic.
+Please refer to the [react-mercury][react-mercury-url] documentation to see how simple is the data-binding between React Components and Mercury Prismic.
 
 Connect a source to all components that need it. Mercury will fetch data only when needed, and will avoid making it more than once, no matter how many components need the data.
 
 [mercury-url]: https://github.com/xbyorange/mercury
+[mercury-sources-docs-url]: https://github.com/XbyOrange/mercury/blob/master/docs/sources/api.md
 [prismic-javascript-url]: https://www.npmjs.com/package/prismic-javascript
 [react-mercury-url]: https://github.com/xbyorange/react-mercury
 
