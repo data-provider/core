@@ -18,7 +18,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [1.2.0] - 2019-10-16
 ### Added
 - Add "queriesDefaultValue" option. If defined, queried instances will have default value corresponding to the value of query "key" in the default value object. If not, the behavior of "default value" will be the same than in previous versions, and will return the full object even for queried instances)
-- Add "useLegacyDefaultValue" option.
 - Add "uuid" and "tags" options.
 - Accept options object as second argument. (And still accepts "id" as second argument, and options as third argument in order to maintain retro-compatibility)
 
