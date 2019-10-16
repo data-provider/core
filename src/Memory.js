@@ -1,9 +1,58 @@
 import { Origin } from "@xbyorange/mercury";
 import { cloneDeep } from "lodash";
 
+const TAG = "memory";
+
+const ensureId = id => id || TAG;
+const traceLegacyOptions = () => {
+  console.warn(
+    'Defining "id" as second argument will be deprecated in next major versions of "mercury-memory". Please define an options object with "uuid" property'
+  );
+};
+
+const getOptions = (receivedId, receivedOptions) => {
+  if (receivedOptions) {
+    traceLegacyOptions();
+    return {
+      ...receivedOptions,
+      uuid: receivedOptions.uuid || ensureId(receivedId)
+    };
+  } else if (receivedId && typeof receivedId === "object") {
+    return {
+      ...receivedId,
+      uuid: receivedId.uuid || TAG
+    };
+  }
+  if (receivedId) {
+    traceLegacyOptions();
+  }
+  return {
+    uuid: ensureId(receivedId)
+  };
+};
+
 export class Memory extends Origin {
-  constructor(value, id) {
-    super(id || "memory", value);
+  constructor(value, receivedId, receivedOptions) {
+    const options = getOptions(receivedId, receivedOptions);
+    const tags = Array.isArray(options.tags) ? options.tags : [options.tags];
+    tags.push(TAG);
+    const baseOptions = {
+      ...options,
+      tags
+    };
+    if (!options.queriesDefaultValue) {
+      console.warn(
+        'Usage of "queriesDefaultValue" option is recommended to prepare your code for next major version of "mercury-memory"'
+      );
+    }
+    const getDefaultValue = function(query) {
+      const valueToReturn = value || {};
+      if (query && options.queriesDefaultValue) {
+        return valueToReturn[query];
+      }
+      return valueToReturn;
+    };
+    super(null, getDefaultValue, baseOptions);
     this._memory = cloneDeep(value || {});
     this.update(this._memory);
   }
@@ -25,7 +74,7 @@ export class Memory extends Origin {
     } else {
       this._memory = data;
     }
-    this._clean(query);
+    this._clean();
     return Promise.resolve();
   }
 
