@@ -386,4 +386,12 @@ describe("SessionStorage Storage", () => {
       });
     });
   });
+
+  describe("Instance id", () => {
+    it("should be assigned based on first parameter", () => {
+      const FOO_ID = "foo-id";
+      const fooData = new SessionStorage(FOO_ID);
+      expect(sources.getById(FOO_ID).elements[0]).toEqual(fooData);
+    });
+  });
 });
