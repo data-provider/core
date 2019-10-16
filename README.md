@@ -38,12 +38,9 @@ npm i @xbyorange/mercury-browser-storage --save
 * Arguments
   * key - `<String>` Key of the storage object to be read, updated, created or deleted.
 
-### cache
+## Cache
 
-The `clean` events will be dispatched when the `update`, `delete` or `create` methods are executed for an specific query as in other mercury origins:
-
-* If `update` or `delete` methods are executed over the origin without query, cache of all queried resources will be cleaned too.
-* All `cache` will be cleaned if the `create` method is executed.
+All cache will be cleaned when the `update`, `delete` or `create` methods are executed for any specific query.
 
 ## Examples
 
