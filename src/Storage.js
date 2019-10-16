@@ -2,6 +2,12 @@
 
 import { Origin } from "@xbyorange/mercury";
 
+const TAG = "browser-storage";
+const storageKeysTags = {
+  localStorage: "local-storage",
+  sessionStorage: "session-storage"
+};
+
 class StorageMock {
   constructor() {
     this._value = "{}";
@@ -18,8 +24,12 @@ class StorageMock {
 
 export class Storage extends Origin {
   constructor(namespace, defaultValue, storageKey, options = {}) {
+    const tags = Array.isArray(options.tags) ? options.tags : [options.tags];
+    tags.push(TAG);
+    tags.push(storageKeysTags[storageKey]);
     super(null, defaultValue, {
-      uuid: namespace
+      uuid: namespace,
+      tags
     });
     this._namespace = namespace;
     this._storage = this._getStorage(storageKey, options.root);

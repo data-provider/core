@@ -1,3 +1,4 @@
+const { sources } = require("@xbyorange/mercury");
 const Storage = require("./Storage.mock");
 
 const { LocalStorage } = require("../src/LocalStorage");
@@ -11,6 +12,7 @@ describe("Local Storage", () => {
 
   afterEach(() => {
     storage.restore();
+    sources.clear();
   });
 
   describe("Available methods", () => {
@@ -296,6 +298,75 @@ describe("Local Storage", () => {
           foo2: "foo-new"
         })
       );
+    });
+  });
+
+  describe("Instance tags", () => {
+    let fooData;
+
+    describe("when no options are defined", () => {
+      beforeEach(() => {
+        fooData = new LocalStorage("fooData");
+      });
+
+      it("should contain the browser-storage tag", () => {
+        expect(sources.getByTag("browser-storage").elements[0]).toEqual(fooData);
+      });
+
+      it("should contain the local-storage tag", () => {
+        expect(sources.getByTag("local-storage").elements[0]).toEqual(fooData);
+      });
+    });
+
+    describe("when passing tags", () => {
+      it("should contain the local-storage tag even when a custom tag is received", () => {
+        const fooData = new LocalStorage(
+          "fooData",
+          {},
+          {
+            tags: "foo-tag"
+          }
+        );
+        expect(sources.getByTag("local-storage").elements[0]).toEqual(fooData);
+      });
+
+      it("should contain the ocal-storage tag even when an array of custom tags is received", () => {
+        const fooData = new LocalStorage(
+          "fooData",
+          {},
+          {
+            tags: ["foo-tag", "foo-tag-2"]
+          }
+        );
+        expect(sources.getByTag("local-storage").elements[0]).toEqual(fooData);
+      });
+
+      it("should contain defined custom tag if received", () => {
+        const FOO_TAG = "foo-tag";
+        const fooData = new LocalStorage(
+          "fooData",
+          {},
+          {
+            tags: FOO_TAG
+          }
+        );
+        expect(sources.getByTag(FOO_TAG).elements[0]).toEqual(fooData);
+      });
+
+      it("should contain defined custom tags if received", () => {
+        expect.assertions(2);
+        const FOO_TAG = "foo-tag";
+        const FOO_TAG_2 = "foo-tag-2";
+        const fooData = new LocalStorage(
+          "fooData",
+          {},
+          {
+            tags: [FOO_TAG, FOO_TAG_2]
+          }
+        );
+        expect(sources.getByTag(FOO_TAG).elements[0]).toEqual(fooData);
+        expect(sources.getByTag(FOO_TAG_2).elements[0]).toEqual(fooData);
+      });
     });
   });
 });
