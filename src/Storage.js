@@ -27,6 +27,11 @@ export class Storage extends Origin {
     const tags = Array.isArray(options.tags) ? options.tags : [options.tags];
     tags.push(TAG);
     tags.push(storageKeysTags[storageKey]);
+    if (!options.queriesDefaultValue) {
+      console.warn(
+        'Usage of "queriesDefaultValue" option is recommended to prepare your code for next major version of "mercury-browser-storage"'
+      );
+    }
     const getDefaultValue = function(query) {
       if (query && options.queriesDefaultValue) {
         return defaultValue && defaultValue[query];
