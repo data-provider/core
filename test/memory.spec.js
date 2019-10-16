@@ -73,7 +73,7 @@ describe("Memory origin", () => {
       userData = new Memory(fooData);
     });
 
-    describe("whithout query", () => {
+    describe("without query", () => {
       it("should return default value while resource is being loaded", () => {
         expect.assertions(2);
         const promise = userData.read();
@@ -91,8 +91,11 @@ describe("Memory origin", () => {
     });
 
     describe("when queried", () => {
-      it("should return default value correspondent to query while resource is being loaded", () => {
+      it("should return default value correspondent to query while resource is being loaded if queriesDefaultValue option is set", () => {
         expect.assertions(2);
+        userData = new Memory(fooData, "foo-id", {
+          queriesDefaultValue: true
+        });
         let queriedData = userData.query("foo");
         const promise = queriedData.read();
         expect(queriedData.read.value).toEqual(fooData.foo);
@@ -101,11 +104,8 @@ describe("Memory origin", () => {
         });
       });
 
-      it("should return root default value if useLegacyDefaultValue option is set", () => {
+      it("should return root default value if queriesDefaultValue option is not set", () => {
         expect.assertions(2);
-        userData = new Memory(fooData, "foo-id", {
-          useLegacyDefaultValue: true
-        });
         let queriedData = userData.query("foo");
         const promise = queriedData.read();
         expect(queriedData.read.value).toEqual(fooData);

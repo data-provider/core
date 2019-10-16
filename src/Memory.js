@@ -40,14 +40,14 @@ export class Memory extends Origin {
       ...options,
       tags
     };
-    if (options.useLegacyDefaultValue) {
+    if (!options.queriesDefaultValue) {
       console.warn(
-        '"useLegacyDefaultValue" option will be deprecated in next major versions of "mercury-memory"'
+        'Usage of "queriesDefaultValue" option is recommended to prepare your code for next major version of "mercury-memory"'
       );
     }
     const getDefaultValue = function(query) {
       const valueToReturn = value || {};
-      if (query && !options.useLegacyDefaultValue) {
+      if (query && options.queriesDefaultValue) {
         return valueToReturn[query];
       }
       return valueToReturn;
@@ -55,10 +55,6 @@ export class Memory extends Origin {
     super(null, getDefaultValue, baseOptions);
     this._memory = cloneDeep(value || {});
     this.update(this._memory);
-  }
-
-  _config(configuration) {
-    this._useLegacyDefaultValue = configuration.useLegacyDefaultValue;
   }
 
   _read(key) {
