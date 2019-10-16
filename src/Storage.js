@@ -27,7 +27,13 @@ export class Storage extends Origin {
     const tags = Array.isArray(options.tags) ? options.tags : [options.tags];
     tags.push(TAG);
     tags.push(storageKeysTags[storageKey]);
-    super(null, defaultValue, {
+    const getDefaultValue = function(query) {
+      if (query && options.queriesDefaultValue) {
+        return defaultValue && defaultValue[query];
+      }
+      return defaultValue;
+    };
+    super(null, getDefaultValue, {
       uuid: namespace,
       tags
     });

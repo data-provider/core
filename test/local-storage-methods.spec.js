@@ -134,19 +134,33 @@ describe("Local Storage", () => {
       });
     });
 
-    it("should be undefined while resource is being loaded, and returned value when finished successfully", () => {
-      expect.assertions(2);
-      const promise = userData.read();
-      expect(userData.read.value).toEqual(undefined);
-      return promise.then(() => {
-        expect(userData.read.value).toEqual(fooData);
+    describe("without query", () => {
+      it("should be undefined while resource is being loaded, and returned value when finished successfully if no default value is defined", () => {
+        expect.assertions(2);
+        const promise = userData.read();
+        expect(userData.read.value).toEqual(undefined);
+        return promise.then(() => {
+          expect(userData.read.value).toEqual(fooData);
+        });
       });
-    });
 
-    it("should be accesible through getter", async () => {
-      expect.assertions(1);
-      await userData.read();
-      expect(userData.read.getters.value()).toEqual(fooData);
+      it("should be equal to default value while resource is being loaded, and returned value when finished successfully", () => {
+        expect.assertions(2);
+        userData = new LocalStorage("userData", fooData, {
+          root: storage.mock
+        });
+        const promise = userData.read();
+        expect(userData.read.value).toEqual(fooData);
+        return promise.then(() => {
+          expect(userData.read.value).toEqual(fooData);
+        });
+      });
+
+      it("should be accesible through getter", async () => {
+        expect.assertions(1);
+        await userData.read();
+        expect(userData.read.getters.value()).toEqual(fooData);
+      });
     });
 
     describe("when queried", () => {
@@ -154,6 +168,33 @@ describe("Local Storage", () => {
         let queriedData = userData.query("foo");
         const result = await queriedData.read();
         expect(result).toEqual("foo-value");
+      });
+
+      it("should return default value correspondent to query while resource is being loaded if queriesDefaultValue option is set", () => {
+        expect.assertions(2);
+        userData = new LocalStorage("userData", fooData, {
+          root: storage.mock,
+          queriesDefaultValue: true
+        });
+        let queriedData = userData.query("foo");
+        const promise = queriedData.read();
+        expect(queriedData.read.value).toEqual(fooData.foo);
+        return promise.then(() => {
+          expect(queriedData.read.value).toEqual(fooData.foo);
+        });
+      });
+
+      it("should return root default value if queriesDefaultValue option is not set", () => {
+        expect.assertions(2);
+        userData = new LocalStorage("userData", fooData, {
+          root: storage.mock
+        });
+        let queriedData = userData.query("foo");
+        const promise = queriedData.read();
+        expect(queriedData.read.value).toEqual(fooData);
+        return promise.then(() => {
+          expect(queriedData.read.value).toEqual(fooData.foo);
+        });
       });
     });
   });
