@@ -152,24 +152,25 @@ describe("Local Storage", () => {
       storage.stubs.getItem.returns(JSON.stringify(fooData));
       userData = new LocalStorage("userData", {}, storage.mock);
     });
-
-    it("should clean the cache when finish successfully", async () => {
-      expect.assertions(3);
-      let promise = userData.read();
-      expect(userData.read.loading).toEqual(true);
-      await promise;
-      await userData.update("");
-      promise = userData.read();
-      expect(userData.read.loading).toEqual(true);
-      return promise.then(() => {
-        expect(userData.read.loading).toEqual(false);
+    describe("without query", () => {
+      it("should clean the cache when finish successfully", async () => {
+        expect.assertions(3);
+        let promise = userData.read();
+        expect(userData.read.loading).toEqual(true);
+        await promise;
+        await userData.update("");
+        promise = userData.read();
+        expect(userData.read.loading).toEqual(true);
+        return promise.then(() => {
+          expect(userData.read.loading).toEqual(false);
+        });
       });
-    });
 
-    it("should set the new value", async () => {
-      const newValue = { foo2: "foo-new-value" };
-      await userData.update(newValue);
-      expect(storage.stubs.setItem.getCall(0).args[1]).toEqual(JSON.stringify(newValue));
+      it("should set the new value", async () => {
+        const newValue = { foo2: "foo-new-value" };
+        await userData.update(newValue);
+        expect(storage.stubs.setItem.getCall(0).args[1]).toEqual(JSON.stringify(newValue));
+      });
     });
 
     describe("when queried", () => {
@@ -181,6 +182,19 @@ describe("Local Storage", () => {
             foo: "foo-updated-value"
           })
         );
+      });
+
+      it("should clean the cache of root when finish successfully", async () => {
+        expect.assertions(3);
+        let promise = userData.read();
+        expect(userData.read.loading).toEqual(true);
+        await promise;
+        await userData.query("foo").update("");
+        promise = userData.read();
+        expect(userData.read.loading).toEqual(true);
+        return promise.then(() => {
+          expect(userData.read.loading).toEqual(false);
+        });
       });
     });
   });

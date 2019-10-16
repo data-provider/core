@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [1.2.0] - 2019-10-16
 ### Changed
+- Emit "clean" event over root instance when an "update" is executed on any queried instance. (Full object is modified too).
 - Upgrade mercury version and define it as peer dependency.
 - Upgrade devDependencies.
 

@@ -62,7 +62,7 @@ export class Storage extends Origin {
       rootValue = data;
     }
     this._setRootValue(rootValue);
-    this._clean(filter);
+    this._clean();
     return Promise.resolve();
   }
 
