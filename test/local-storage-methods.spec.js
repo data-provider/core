@@ -361,7 +361,7 @@ describe("Local Storage", () => {
 
     describe("when passing tags", () => {
       it("should contain the local-storage tag even when a custom tag is received", () => {
-        const fooData = new LocalStorage(
+        fooData = new LocalStorage(
           "fooData",
           {},
           {
@@ -372,7 +372,7 @@ describe("Local Storage", () => {
       });
 
       it("should contain the ocal-storage tag even when an array of custom tags is received", () => {
-        const fooData = new LocalStorage(
+        fooData = new LocalStorage(
           "fooData",
           {},
           {
@@ -384,7 +384,7 @@ describe("Local Storage", () => {
 
       it("should contain defined custom tag if received", () => {
         const FOO_TAG = "foo-tag";
-        const fooData = new LocalStorage(
+        fooData = new LocalStorage(
           "fooData",
           {},
           {
@@ -398,7 +398,7 @@ describe("Local Storage", () => {
         expect.assertions(2);
         const FOO_TAG = "foo-tag";
         const FOO_TAG_2 = "foo-tag-2";
-        const fooData = new LocalStorage(
+        fooData = new LocalStorage(
           "fooData",
           {},
           {

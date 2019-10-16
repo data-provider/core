@@ -337,7 +337,7 @@ describe("SessionStorage Storage", () => {
 
     describe("when passing tags", () => {
       it("should contain the session-storage tag even when a custom tag is received", () => {
-        const fooData = new SessionStorage(
+        fooData = new SessionStorage(
           "fooData",
           {},
           {
@@ -348,7 +348,7 @@ describe("SessionStorage Storage", () => {
       });
 
       it("should contain the session-storage tag even when an array of custom tags is received", () => {
-        const fooData = new SessionStorage(
+        fooData = new SessionStorage(
           "fooData",
           {},
           {
@@ -360,7 +360,7 @@ describe("SessionStorage Storage", () => {
 
       it("should contain defined custom tag if received", () => {
         const FOO_TAG = "foo-tag";
-        const fooData = new SessionStorage(
+        fooData = new SessionStorage(
           "fooData",
           {},
           {
@@ -374,7 +374,7 @@ describe("SessionStorage Storage", () => {
         expect.assertions(2);
         const FOO_TAG = "foo-tag";
         const FOO_TAG_2 = "foo-tag-2";
-        const fooData = new SessionStorage(
+        fooData = new SessionStorage(
           "fooData",
           {},
           {
