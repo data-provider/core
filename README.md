@@ -49,14 +49,14 @@ Next example will be easier to understand if you are already familiarized with t
 ```js
 import { SessionStorage } from "@xbyorange/mercury-browser-storage";
 
-const sessionDetails = new SessionStorage({
-  userId: null,
+const sessionDetails = new SessionStorage("user", {
+  id: null,
   isLogedIn: false
 });
 
-const userId = await sessionDetails.read("userId");
+const userId = await sessionDetails.query("id").read();
 
-sessionDetails.query("isLogedIn").update(true)
+sessionDetails.query("isLogedIn").update(true);
 
 ```
 
@@ -67,7 +67,7 @@ Use Mercury Browser Storage objects in combination with Api Origins, and take ad
 import { LocalStorage } from "@xbyorange/mercury-browser-storage";
 import { Api } from "@xbyorange/mercury-api";
 
-const currentAuthor = new LocalStorage({
+const currentAuthor = new LocalStorage("current-author", {
   id: null
 });
 const booksCollection = new Api("http://api.library.com/books");
