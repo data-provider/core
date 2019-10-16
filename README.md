@@ -25,10 +25,16 @@ npm i @xbyorange/mercury-browser-storage --save
 	* Arguments
 		* namespace - _`<String>`_. Namespace to be used in the sessionStorage object, in which the origin data will be persisted.
 		* defaultValue - _`<Any>`_ Default value until the first async read is resolved.
+		* options - `<Object>` containing properties:
+			* queriesDefaultValue - _`<Boolean>`_ If `true`, the default value of queried sources will be the value of the "key" in the query. If not defined, the default value of queried sources will be the full `defaultValue` object.
+			* tags - _`<String> or <Array of Strings>`_ Tags to assign to the instance. Useful when using [mercury `sources` handler][mercury-sources-docs-url]. Tags "browser-storage" and "session-storage" will be always added to provided tags by default.
 * LocalStorage - _`<Class>`_ `new LocalStorage(namespace[, defaultValue[, options]])` - Class for instancing mercury objects persisted in the browser localStorage.
 	* Arguments
 		* namespace - _`<String>`_. Namespace to be used in the localStorage object, in which the origin data will be persisted.
 		* defaultValue - _`<Any>`_ Default value until the first async read is resolved.
+		* options - `<Object>` containing properties:
+			* queriesDefaultValue - _`<Boolean>`_ If `true`, the default value of queried sources will be the value of the "key" in the query. If not defined, the default value of queried sources will be the full `defaultValue` object.
+			* tags - _`<String> or <Array of Strings>`_ Tags to assign to the instance. Useful when using [mercury `sources` handler][mercury-sources-docs-url]. Tags "browser-storage" and "local-storage" will be always added to provided tags by default.
 
 ## Common Methods
 
@@ -121,6 +127,7 @@ Contributors are welcome.
 Please read the [contributing guidelines](.github/CONTRIBUTING.md) and [code of conduct](.github/CODE_OF_CONDUCT.md).
 
 [mercury-url]: https://github.com/xbyorange/mercury
+[mercury-sources-docs-url]: https://github.com/XbyOrange/mercury/blob/master/docs/sources/api.md
 [react-mercury-url]: https://github.com/xbyorange/react-mercury
 
 [coveralls-image]: https://coveralls.io/repos/github/XbyOrange/mercury-browser-storage/badge.svg
