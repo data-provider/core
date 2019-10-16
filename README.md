@@ -38,10 +38,34 @@ npm i @xbyorange/mercury-memory --save
 * Arguments
   * key - `<String>` Key of the memory object to be read, updated, created or deleted.
 
-### cache
+## Cache
 
 All cache will be cleaned when the `update`, `delete` or `create` methods are executed for any specific query.
 
+## Default value
+
+The default value of a "queried" instance will be the complete `defaultValue` object until the "queriesDefaultValue" option is set as `true`, in which case the default value will be the value of the key corresponding to the query:
+
+```js
+import { Memory } from "@xbyorange/mercury-memory";
+
+const fooMemory = new Memory({
+  foo: "foo-value",
+  var: "var-value"
+});
+
+console.log(fooMemory.query("foo").read.value) // {foo: "foo-value", var: "var-value"}
+
+const fooMemory2 = new Memory({
+  foo: "foo-value",
+  var: "var-value"
+}, {
+  queriesDefaultValue: true
+});
+
+console.log(fooMemory.query("foo").read.value) // "foo"
+
+```
 
 ## Examples
 
