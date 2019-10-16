@@ -15,7 +15,13 @@ describe("Local Storage", () => {
 
   describe("Available methods", () => {
     it("should have all CRUD methods", () => {
-      const userData = new LocalStorage("userData", {}, storage.mock);
+      const userData = new LocalStorage(
+        "userData",
+        {},
+        {
+          root: storage.mock
+        }
+      );
       expect(userData.create).toBeDefined();
       expect(userData.read).toBeDefined();
       expect(userData.update).toBeDefined();
@@ -64,7 +70,13 @@ describe("Local Storage", () => {
     let userData;
 
     beforeAll(() => {
-      userData = new LocalStorage("userData", {}, storage.mock);
+      userData = new LocalStorage(
+        "userData",
+        {},
+        {
+          root: storage.mock
+        }
+      );
     });
 
     it("should be true while resource is being loaded, false when finished", () => {
@@ -115,7 +127,9 @@ describe("Local Storage", () => {
 
     beforeEach(() => {
       storage.stubs.getItem.returns(JSON.stringify(fooData));
-      userData = new LocalStorage("userData", undefined, storage.mock);
+      userData = new LocalStorage("userData", undefined, {
+        root: storage.mock
+      });
     });
 
     it("should be undefined while resource is being loaded, and returned value when finished successfully", () => {
@@ -150,7 +164,13 @@ describe("Local Storage", () => {
 
     beforeEach(() => {
       storage.stubs.getItem.returns(JSON.stringify(fooData));
-      userData = new LocalStorage("userData", {}, storage.mock);
+      userData = new LocalStorage(
+        "userData",
+        {},
+        {
+          root: storage.mock
+        }
+      );
     });
     describe("without query", () => {
       it("should clean the cache when finish successfully", async () => {
@@ -207,7 +227,13 @@ describe("Local Storage", () => {
 
     beforeEach(() => {
       storage.stubs.getItem.returns(JSON.stringify(fooData));
-      userData = new LocalStorage("userData", {}, storage.mock);
+      userData = new LocalStorage(
+        "userData",
+        {},
+        {
+          root: storage.mock
+        }
+      );
     });
 
     it("should clean the cache when finish successfully", async () => {
@@ -240,7 +266,13 @@ describe("Local Storage", () => {
 
     beforeEach(() => {
       storage.stubs.getItem.returns(JSON.stringify(fooData));
-      userData = new LocalStorage("userData", {}, storage.mock);
+      userData = new LocalStorage(
+        "userData",
+        {},
+        {
+          root: storage.mock
+        }
+      );
     });
 
     it("should clean the cache when finish successfully", async () => {

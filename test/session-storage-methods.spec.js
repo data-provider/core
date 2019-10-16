@@ -15,7 +15,13 @@ describe("SessionStorage Storage", () => {
 
   describe("Available methods", () => {
     it("should have all CRUD methods", () => {
-      const userData = new SessionStorage("userData", {}, storage.mock);
+      const userData = new SessionStorage(
+        "userData",
+        {},
+        {
+          root: storage.mock
+        }
+      );
       expect(userData.create).toBeDefined();
       expect(userData.read).toBeDefined();
       expect(userData.update).toBeDefined();
@@ -33,7 +39,13 @@ describe("SessionStorage Storage", () => {
     let userData;
 
     beforeAll(() => {
-      userData = new SessionStorage("userData", {}, storage.mock);
+      userData = new SessionStorage(
+        "userData",
+        {},
+        {
+          root: storage.mock
+        }
+      );
     });
 
     it("should be true while resource is being loaded, false when finished", () => {
@@ -84,7 +96,9 @@ describe("SessionStorage Storage", () => {
 
     beforeEach(() => {
       storage.stubs.getItem.returns(JSON.stringify(fooData));
-      userData = new SessionStorage("userData", undefined, storage.mock);
+      userData = new SessionStorage("userData", undefined, {
+        root: storage.mock
+      });
     });
 
     it("should be undefined while resource is being loaded, and returned value when finished successfully", () => {
@@ -119,7 +133,13 @@ describe("SessionStorage Storage", () => {
 
     beforeEach(() => {
       storage.stubs.getItem.returns(JSON.stringify(fooData));
-      userData = new SessionStorage("userData", {}, storage.mock);
+      userData = new SessionStorage(
+        "userData",
+        {},
+        {
+          root: storage.mock
+        }
+      );
     });
 
     describe("without query", () => {
@@ -177,7 +197,13 @@ describe("SessionStorage Storage", () => {
 
     beforeEach(() => {
       storage.stubs.getItem.returns(JSON.stringify(fooData));
-      userData = new SessionStorage("userData", {}, storage.mock);
+      userData = new SessionStorage(
+        "userData",
+        {},
+        {
+          root: storage.mock
+        }
+      );
     });
 
     it("should clean the cache when finish successfully", async () => {
@@ -210,7 +236,13 @@ describe("SessionStorage Storage", () => {
 
     beforeEach(() => {
       storage.stubs.getItem.returns(JSON.stringify(fooData));
-      userData = new SessionStorage("userData", {}, storage.mock);
+      userData = new SessionStorage(
+        "userData",
+        {},
+        {
+          root: storage.mock
+        }
+      );
     });
 
     it("should clean the cache when finish successfully", async () => {

@@ -17,10 +17,12 @@ class StorageMock {
 }
 
 export class Storage extends Origin {
-  constructor(namespace, defaultValue, storageKey, root) {
-    super(`${storageKey}-${namespace}`, defaultValue);
+  constructor(namespace, defaultValue, storageKey, options = {}) {
+    super(null, defaultValue, {
+      uuid: namespace
+    });
     this._namespace = namespace;
-    this._storage = this._getStorage(storageKey, root);
+    this._storage = this._getStorage(storageKey, options.root);
   }
 
   _getStorage(storageKey, root) {
