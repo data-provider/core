@@ -21,14 +21,20 @@ npm i @xbyorange/mercury-browser-storage --save
 
 ## Api
 
-* SessionStorage - _`<Class>`_ `new SessionStorage(namespace[, defaultValue])` - Class for instancing mercury objects persisted in the browser sessionStorage.
+* SessionStorage - _`<Class>`_ `new SessionStorage(namespace[, defaultValue[, options]])` - Class for instancing mercury objects persisted in the browser sessionStorage.
 	* Arguments
 		* namespace - _`<String>`_. Namespace to be used in the sessionStorage object, in which the origin data will be persisted.
 		* defaultValue - _`<Any>`_ Default value until the first async read is resolved.
-* LocalStorage - _`<Class>`_ `new LocalStorage(namespace[, defaultValue])` - Class for instancing mercury objects persisted in the browser localStorage.
+		* options - `<Object>` containing properties:
+			* queriesDefaultValue - _`<Boolean>`_ If `true`, the default value of queried sources will be the value of the "key" in the query. If not defined, the default value of queried sources will be the full `defaultValue` object.
+			* tags - _`<String> or <Array of Strings>`_ Tags to assign to the instance. Useful when using [mercury `sources` handler][mercury-sources-docs-url]. Tags "browser-storage" and "session-storage" will be always added to provided tags by default.
+* LocalStorage - _`<Class>`_ `new LocalStorage(namespace[, defaultValue[, options]])` - Class for instancing mercury objects persisted in the browser localStorage.
 	* Arguments
 		* namespace - _`<String>`_. Namespace to be used in the localStorage object, in which the origin data will be persisted.
 		* defaultValue - _`<Any>`_ Default value until the first async read is resolved.
+		* options - `<Object>` containing properties:
+			* queriesDefaultValue - _`<Boolean>`_ If `true`, the default value of queried sources will be the value of the "key" in the query. If not defined, the default value of queried sources will be the full `defaultValue` object.
+			* tags - _`<String> or <Array of Strings>`_ Tags to assign to the instance. Useful when using [mercury `sources` handler][mercury-sources-docs-url]. Tags "browser-storage" and "local-storage" will be always added to provided tags by default.
 
 ## Common Methods
 
@@ -38,12 +44,9 @@ npm i @xbyorange/mercury-browser-storage --save
 * Arguments
   * key - `<String>` Key of the storage object to be read, updated, created or deleted.
 
-### cache
+## Cache
 
-The `clean` events will be dispatched when the `update`, `delete` or `create` methods are executed for an specific query as in other mercury origins:
-
-* If `update` or `delete` methods are executed over the origin without query, cache of all queried resources will be cleaned too.
-* All `cache` will be cleaned if the `create` method is executed.
+All cache will be cleaned when the `update`, `delete` or `create` methods are executed for any specific query.
 
 ## Examples
 
@@ -52,14 +55,14 @@ Next example will be easier to understand if you are already familiarized with t
 ```js
 import { SessionStorage } from "@xbyorange/mercury-browser-storage";
 
-const sessionDetails = new SessionStorage({
-  userId: null,
+const sessionDetails = new SessionStorage("user", {
+  id: null,
   isLogedIn: false
 });
 
-const userId = await sessionDetails.read("userId");
+const userId = await sessionDetails.query("id").read();
 
-sessionDetails.query("isLogedIn").update(true)
+sessionDetails.query("isLogedIn").update(true);
 
 ```
 
@@ -70,7 +73,7 @@ Use Mercury Browser Storage objects in combination with Api Origins, and take ad
 import { LocalStorage } from "@xbyorange/mercury-browser-storage";
 import { Api } from "@xbyorange/mercury-api";
 
-const currentAuthor = new LocalStorage({
+const currentAuthor = new LocalStorage("current-author", {
   id: null
 });
 const booksCollection = new Api("http://api.library.com/books");
@@ -110,12 +113,22 @@ await currentAuthorBooks.read();
 
 ```
 
+## Usage with frameworks
+
+### React
+
+Please refer to the [react-mercury][react-mercury-url] documentation to see how simple is the data-binding between React Components and Mercury Browser Storage.
+
+Connect a source to all components that need it. Mercury will rerender automatically connected components when data in sources is updated.
+
 ## Contributing
 
 Contributors are welcome.
 Please read the [contributing guidelines](.github/CONTRIBUTING.md) and [code of conduct](.github/CODE_OF_CONDUCT.md).
 
 [mercury-url]: https://github.com/xbyorange/mercury
+[mercury-sources-docs-url]: https://github.com/XbyOrange/mercury/blob/master/docs/sources/api.md
+[react-mercury-url]: https://github.com/xbyorange/react-mercury
 
 [coveralls-image]: https://coveralls.io/repos/github/XbyOrange/mercury-browser-storage/badge.svg
 [coveralls-url]: https://coveralls.io/github/XbyOrange/mercury-browser-storage

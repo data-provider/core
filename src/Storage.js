@@ -1,4 +1,12 @@
+/* global window */
+
 import { Origin } from "@xbyorange/mercury";
+
+const TAG = "browser-storage";
+const storageKeysTags = {
+  localStorage: "local-storage",
+  sessionStorage: "session-storage"
+};
 
 class StorageMock {
   constructor() {
@@ -15,10 +23,27 @@ class StorageMock {
 }
 
 export class Storage extends Origin {
-  constructor(namespace, defaultValue, storageKey, root) {
-    super(`${storageKey}-${namespace}`, defaultValue);
+  constructor(namespace, defaultValue, storageKey, options = {}) {
+    const tags = Array.isArray(options.tags) ? options.tags : [options.tags];
+    tags.push(TAG);
+    tags.push(storageKeysTags[storageKey]);
+    if (!options.queriesDefaultValue) {
+      console.warn(
+        'Usage of "queriesDefaultValue" option is recommended to prepare your code for next major version of "mercury-browser-storage"'
+      );
+    }
+    const getDefaultValue = function(query) {
+      if (query && options.queriesDefaultValue) {
+        return defaultValue && defaultValue[query];
+      }
+      return defaultValue;
+    };
+    super(null, getDefaultValue, {
+      uuid: namespace,
+      tags
+    });
     this._namespace = namespace;
-    this._storage = this._getStorage(storageKey, root);
+    this._storage = this._getStorage(storageKey, options.root);
   }
 
   _getStorage(storageKey, root) {
@@ -60,7 +85,7 @@ export class Storage extends Origin {
       rootValue = data;
     }
     this._setRootValue(rootValue);
-    this._clean(filter);
+    this._clean();
     return Promise.resolve();
   }
 
