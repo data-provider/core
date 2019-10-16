@@ -1,3 +1,5 @@
+/* global window */
+
 import { Origin } from "@xbyorange/mercury";
 
 class StorageMock {
