@@ -21,11 +21,11 @@ npm i @xbyorange/mercury-browser-storage --save
 
 ## Api
 
-* SessionStorage - _`<Class>`_ `new SessionStorage(namespace[, defaultValue])` - Class for instancing mercury objects persisted in the browser sessionStorage.
+* SessionStorage - _`<Class>`_ `new SessionStorage(namespace[, defaultValue[, options]])` - Class for instancing mercury objects persisted in the browser sessionStorage.
 	* Arguments
 		* namespace - _`<String>`_. Namespace to be used in the sessionStorage object, in which the origin data will be persisted.
 		* defaultValue - _`<Any>`_ Default value until the first async read is resolved.
-* LocalStorage - _`<Class>`_ `new LocalStorage(namespace[, defaultValue])` - Class for instancing mercury objects persisted in the browser localStorage.
+* LocalStorage - _`<Class>`_ `new LocalStorage(namespace[, defaultValue[, options]])` - Class for instancing mercury objects persisted in the browser localStorage.
 	* Arguments
 		* namespace - _`<String>`_. Namespace to be used in the localStorage object, in which the origin data will be persisted.
 		* defaultValue - _`<Any>`_ Default value until the first async read is resolved.
@@ -107,12 +107,21 @@ await currentAuthorBooks.read();
 
 ```
 
+## Usage with frameworks
+
+### React
+
+Please refer to the [react-mercury][react-mercury-url] documentation to see how simple is the data-binding between React Components and Mercury Browser Storage.
+
+Connect a source to all components that need it. Mercury will rerender automatically connected components when data in sources is updated.
+
 ## Contributing
 
 Contributors are welcome.
 Please read the [contributing guidelines](.github/CONTRIBUTING.md) and [code of conduct](.github/CODE_OF_CONDUCT.md).
 
 [mercury-url]: https://github.com/xbyorange/mercury
+[react-mercury-url]: https://github.com/xbyorange/react-mercury
 
 [coveralls-image]: https://coveralls.io/repos/github/XbyOrange/mercury-browser-storage/badge.svg
 [coveralls-url]: https://coveralls.io/github/XbyOrange/mercury-browser-storage
