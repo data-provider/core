@@ -4,7 +4,7 @@ const { Api } = require("../src/index");
 describe("retry config", () => {
   let apiStatsCallCount;
   let apiStatsReset;
-  let booksError;
+  let booksServerError;
 
   beforeAll(async () => {
     sources.getByTag("mocks").config({
@@ -17,30 +17,43 @@ describe("retry config", () => {
     await apiStatsReset.create();
 
     apiStatsCallCount = new Api("/api/stats/call-count", {
-      defaultValue: {
-        callCount: 0
-      },
+      cache: false,
       tags: "mocks"
     });
 
-    booksError = new Api("/api/books/error", {
+    booksServerError = new Api("/api/books/server-error", {
       defaultValue: [],
       tags: "mocks"
     });
   });
 
-  afterAll(async () => {
+  afterEach(async () => {
     await apiStatsReset.create();
   });
 
   describe("when api GET fails with a 500 error", () => {
-    it("should retry 4 times by default", async () => {
+    it("should retry 3 times by default", async () => {
       expect.assertions(1);
       try {
-        await booksError.read();
+        await booksServerError.read();
       } catch (err) {
         const stats = await apiStatsCallCount.read();
-        expect(stats.books.error).toEqual(4);
+        expect(stats.books.serverError).toEqual(4);
+      }
+    });
+  });
+
+  describe("when api GET fails with a 404 error", () => {
+    it("should not retry", async () => {
+      const booksNotFoundError = new Api("/api/books/not-found-error", {
+        tags: "mocks"
+      });
+      expect.assertions(1);
+      try {
+        await booksNotFoundError.read();
+      } catch (err) {
+        const stats = await apiStatsCallCount.read();
+        expect(stats.books.notFoundError).toEqual(1);
       }
     });
   });

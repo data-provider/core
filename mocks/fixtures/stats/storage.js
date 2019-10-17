@@ -1,12 +1,17 @@
 const INITIAL_STATS = {
   books: {
-    error: 0
+    serverError: 0,
+    notFoundError: 0
   }
 };
 let stats;
 
-const addBooksError = () => {
-  stats.books.error = stats.books.error + 1;
+const addBooksServerError = () => {
+  stats.books.serverError = stats.books.serverError + 1;
+};
+
+const addBooksNotFoundError = () => {
+  stats.books.notFoundError = stats.books.notFoundError + 1;
 };
 
 const reset = () => {
@@ -18,7 +23,8 @@ const getAll = () => stats;
 reset();
 
 module.exports = {
-  addBooksError,
+  addBooksServerError,
+  addBooksNotFoundError,
   getAll,
   reset
 };
