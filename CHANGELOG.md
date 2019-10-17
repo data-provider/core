@@ -11,7 +11,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Removed
 ### BREAKING CHANGES
 
-## [1.3.0] - 2019-10-16
+## [TO BE DEPRECATED]
+- apis "config" and "clean" methods. Mercury "sources" methods should be used instead.
+ 
+## [1.3.0] - 2019-10-17
+### Changed
+- Upgrade mercury version. Use mercury "sources" in "apis".
 
 ## [1.2.0] - 2019-06-28
 ### Changed

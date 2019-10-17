@@ -1,19 +1,14 @@
 const sinon = require("sinon");
-const { sources } = require("@xbyorange/mercury");
 
 const { Api, apis } = require("../src/index");
 
-const TAG = "api";
-
-describe("sources clean method", () => {
+describe("apis clean method", () => {
   let sandbox;
   let api_1;
   let api_2;
   let api_3;
-  let allApiSources;
 
   beforeAll(() => {
-    allApiSources = sources.getByTag(TAG);
     apis.reset();
     api_1 = new Api("foo-1");
     api_2 = new Api("foo-2", {
@@ -36,13 +31,13 @@ describe("sources clean method", () => {
   });
 
   afterAll(() => {
-    allApiSources.clear();
+    apis.reset();
   });
 
   describe("when calling apis clean method", () => {
     describe("if no tags are defined", () => {
       it("should clean all existant apis", () => {
-        allApiSources.clean();
+        apis.clean();
         expect(api_1.clean.called).toEqual(true);
         expect(api_2.clean.called).toEqual(true);
         expect(api_3.clean.called).toEqual(true);
@@ -51,14 +46,14 @@ describe("sources clean method", () => {
 
     describe("if tag is defined as string", () => {
       it("should clean all existant apis having a tag matching with it", () => {
-        sources.getByTag("tag-1").clean();
+        apis.clean("tag-1");
         expect(api_1.clean.called).toEqual(false);
         expect(api_2.clean.called).toEqual(true);
         expect(api_3.clean.called).toEqual(true);
       });
 
       it("should not clean any api if any have a matching tag", () => {
-        sources.getByTag("tag-foo").clean();
+        apis.clean("tag-foo");
         expect(api_1.clean.called).toEqual(false);
         expect(api_2.clean.called).toEqual(false);
         expect(api_3.clean.called).toEqual(false);
@@ -67,16 +62,14 @@ describe("sources clean method", () => {
 
     describe("if tag is an array", () => {
       it("should clean all existant apis having a tag matching with any of it", () => {
-        sources.getByTag("tag-1").clean();
-        sources.getByTag("foo").clean();
+        apis.clean(["tag-1", "foo"]);
         expect(api_1.clean.called).toEqual(false);
         expect(api_2.clean.called).toEqual(true);
         expect(api_3.clean.called).toEqual(true);
       });
 
       it("should not clean any api if any have a matching tag", () => {
-        sources.getByTag("tag-foo").clean();
-        sources.getByTag("foo").clean();
+        apis.clean(["tag-foo", "foo"]);
         expect(api_1.clean.called).toEqual(false);
         expect(api_2.clean.called).toEqual(false);
         expect(api_3.clean.called).toEqual(false);
