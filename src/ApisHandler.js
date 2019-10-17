@@ -4,12 +4,18 @@ import { sources } from "@xbyorange/mercury";
 
 export const TAG = "api";
 
+const SET_HEADERS_METHOD = "setHeaders";
+const ADD_HEADERS_METHOD = "addHeaders";
+
 export class ApisHandler {
   _ensureArray(tags) {
     return Array.isArray(tags) ? tags : [tags];
   }
 
   config(configuration, tags) {
+    console.warn(
+      "mercury-api apis.config method will be deprecated. Use mercury sources.config instead"
+    );
     if (!tags) {
       sources.getByTag(TAG).config(configuration);
     } else {
@@ -32,12 +38,12 @@ export class ApisHandler {
     if (!tags) {
       const allSources = sources.getByTag(TAG);
       allSources._apiHeaders = headers;
-      allSources.call("setHeaders", headers);
+      allSources.call(SET_HEADERS_METHOD, headers);
     } else {
       this._ensureArray(tags).forEach(tag => {
         const byTagSources = sources.getByTag(tag);
         byTagSources._apiHeaders = headers;
-        sources.getByTag(tag).call("setHeaders", headers);
+        sources.getByTag(tag).call(SET_HEADERS_METHOD, headers);
       });
     }
   }
@@ -46,17 +52,20 @@ export class ApisHandler {
     if (!tags) {
       const allSources = sources.getByTag(TAG);
       allSources._apiHeaders = { ...allSources._apiHeaders, ...headers };
-      allSources.call("addHeaders", headers);
+      allSources.call(ADD_HEADERS_METHOD, headers);
     } else {
       this._ensureArray(tags).forEach(tag => {
         const byTagSources = sources.getByTag(tag);
         byTagSources._apiHeaders = { ...byTagSources._apiHeaders, ...headers };
-        sources.getByTag(tag).call("addHeaders", headers);
+        sources.getByTag(tag).call(ADD_HEADERS_METHOD, headers);
       });
     }
   }
 
   clean(tags) {
+    console.warn(
+      "mercury-api apis.clean method will be deprecated. Use mercury sources.clean instead"
+    );
     if (!tags) {
       sources.getByTag(TAG).clean();
     } else {
