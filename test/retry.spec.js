@@ -6,15 +6,15 @@ describe("retry config", () => {
   let apiStatsReset;
   let booksError;
 
-  beforeAll(() => {
+  beforeAll(async () => {
     sources.getByTag("mocks").config({
-      baseUrl: "http://localhost:3100",
-      retries: 0
+      baseUrl: "http://localhost:3100"
     });
 
     apiStatsReset = new Api("/api/stats/reset", {
       tags: "mocks"
     });
+    await apiStatsReset.create();
 
     apiStatsCallCount = new Api("/api/stats/call-count", {
       defaultValue: {
@@ -40,7 +40,7 @@ describe("retry config", () => {
         await booksError.read();
       } catch (err) {
         const stats = await apiStatsCallCount.read();
-        expect(stats.books.error).toEqual(5);
+        expect(stats.books.error).toEqual(4);
       }
     });
   });
