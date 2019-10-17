@@ -42,6 +42,7 @@
     "@babel/core": "^7.6.4",
     "@babel/preset-env": "^7.6.3",
     "@xbyorange/mercury": "1.5.0",
+    "@xbyorange/mocks-server": "1.0.1",
     "babel-core": "^7.0.0-bridge.0",
     "babel-jest": "^24.9.0",
     "babel-polyfill": "^6.26.0",
