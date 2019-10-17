@@ -3,11 +3,17 @@ const { Api } = require("../src/index");
 
 describe("retry config", () => {
   let apiStatsCallCount;
+  let apiStatsReset;
   let booksError;
 
   beforeAll(() => {
     sources.getByTag("mocks").config({
-      baseUrl: "http://localhost:3100"
+      baseUrl: "http://localhost:3100",
+      retries: 0
+    });
+
+    apiStatsReset = new Api("/api/stats/reset", {
+      tags: "mocks"
     });
 
     apiStatsCallCount = new Api("/api/stats/call-count", {
@@ -23,8 +29,8 @@ describe("retry config", () => {
     });
   });
 
-  afterAll(() => {
-    apiStatsCallCount.reset();
+  afterAll(async () => {
+    await apiStatsReset.create();
   });
 
   describe("when api GET fails with a 500 error", () => {
@@ -33,8 +39,8 @@ describe("retry config", () => {
       try {
         await booksError.read();
       } catch (err) {
-        const { callCount } = await apiStatsCallCount.read();
-        expect(callCount).toEqual(5);
+        const stats = await apiStatsCallCount.read();
+        expect(stats.books.error).toEqual(5);
       }
     });
   });

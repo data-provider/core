@@ -6,6 +6,7 @@ const resetStats = {
   response: (req, res) => {
     reset();
     res.status(200);
+    res.send();
   }
 };
 
