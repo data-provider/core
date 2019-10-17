@@ -22,7 +22,7 @@ This package provides a Mercury Api origin.
 * Arguments
 	* url - _`<String>`_. Api url. Parameters can be defined using ":parameterName". Please refer to the [path-to-regexp][path-to-regex-url] package for further info.
 	* options - _`<Object>`_ Containing options:
-		* tags - _`<String or Array of Strings>`_ - The api instance is added to correspondant groups using these tags. Afterwards, configuration, headers, etc. can be changed for certain groups using the [`sources` object methods described in the mercury docs][mercury-sources-docs-url], or the `api` object methods described below. The "api" tag will is added automatically to all Api instances.
+		* tags - _`<String or Array of Strings>`_ - The api instance is added to correspondant groups using these tags. Afterwards, configuration, headers, etc. can be changed for certain groups using the [`sources` object methods described in the mercury docs][mercury-sources-docs-url], or the `api` object methods described below. The "api" tag is added automatically to all Api instances.
 		* baseUrl - _`<String>`_ - Added as prefix to all requests.
 		* createMethod - _`<String>`_ - HTTP method to be used in axios requests for `create` method.
 		* readMethod - _`<String>`_ - HTTP method to be used in axios requests for `read` method.
