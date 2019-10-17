@@ -31,6 +31,10 @@ describe("retry config", () => {
     await apiStatsReset.create();
   });
 
+  afterAll(() => {
+    sources.clear();
+  });
+
   describe("when api GET fails with a 500 error", () => {
     it("should retry 3 times by default", async () => {
       expect.assertions(1);

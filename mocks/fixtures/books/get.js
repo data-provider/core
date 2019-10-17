@@ -1,16 +1,21 @@
-const { addBooksServerError, addBooksNotFoundError } = require("../stats/storage");
+const {
+  addBooksServerError,
+  addBooksNotFoundError,
+  addBooksSuccess
+} = require("../stats/storage");
 
 const getBooksSuccess = {
   url: "/api/books/success",
   method: "GET",
-  response: {
-    status: 200,
-    body: [
+  response: (req, res) => {
+    addBooksSuccess();
+    res.status(200);
+    res.send([
       {
         author: "Ray Bradbury",
         title: "Fahrenheit 451"
       }
-    ]
+    ]);
   }
 };
 
