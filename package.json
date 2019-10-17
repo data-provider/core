@@ -24,6 +24,7 @@
   "scripts": {
     "lint": "eslint src test",
     "lint-staged": "lint-staged",
+    "mocks:ci": "mocks-server --features=./mocks --port=3100 --cli false",
     "build": "rollup --config",
     "test": "jest",
     "test-ci": "npm run test -- --coverage --ci --verbose=false --coverageReporters=lcov --coverageReporters=text-summary",
@@ -62,7 +63,9 @@
     "rollup-plugin-node-globals": "^1.4.0",
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-uglify": "^6.0.3",
-    "sinon": "7.5.0"
+    "sinon": "7.5.0",
+    "start-server-and-test": "^1.10.6",
+    "wait-on": "^3.3.0"
   },
   "lint-staged": {
     "src/**/*.js": "eslint",
