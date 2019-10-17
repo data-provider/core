@@ -24,7 +24,7 @@
   "scripts": {
     "lint": "eslint src test",
     "lint-staged": "lint-staged",
-    "mocks:ci": "mocks-server --features=./mocks --port=3100 --cli false",
+    "mocks": "mocks-server --features=./mocks --port=3100 --cli false",
     "build": "rollup --config",
     "test": "jest",
     "test-ci": "npm run test -- --coverage --ci --verbose=false --coverageReporters=lcov --coverageReporters=text-summary",
