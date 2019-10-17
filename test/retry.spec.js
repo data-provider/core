@@ -34,7 +34,7 @@ describe("retry config", () => {
   });
 
   describe("when api GET fails with a 500 error", () => {
-    it("should retry 5 times by default", async () => {
+    it("should retry 4 times by default", async () => {
       expect.assertions(1);
       try {
         await booksError.read();
