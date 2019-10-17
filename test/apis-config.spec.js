@@ -109,6 +109,7 @@ describe("apis config method", () => {
 
       describe("when provided tag is an array", () => {
         it("should inherit common config previously defined, and config previously defined for the tag if one of them match", () => {
+          expect.assertions(2);
           apis.config(
             {
               expirationTime: 10
@@ -124,6 +125,7 @@ describe("apis config method", () => {
         });
 
         it("should inherit common config, and do not inherit config previously defined for the tag if it does not match", () => {
+          expect.assertions(2);
           const api = new Api("/foo-7", {
             tags: ["foo-tag-2", "foo-tag-3"]
           });
