@@ -27,7 +27,7 @@
     "mocks": "mocks-server --features=./mocks --port=3100 --cli false",
     "build": "rollup --config",
     "test": "jest",
-    "test-ci": "npm run test -- --coverage --ci --verbose=false --coverageReporters=lcov --coverageReporters=text-summary",
+    "mocks:test": "start-server-and-test mocks http-get://localhost:3100/mocks/features jest",
     "coveralls": "cat ./coverage/lcov.info | coveralls"
   },
   "peerDependencies": {
@@ -64,8 +64,7 @@
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-uglify": "^6.0.3",
     "sinon": "7.5.0",
-    "start-server-and-test": "^1.10.6",
-    "wait-on": "^3.3.0"
+    "start-server-and-test": "^1.10.6"
   },
   "lint-staged": {
     "src/**/*.js": "eslint",
