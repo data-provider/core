@@ -125,7 +125,7 @@ If no tags are provided when invoking methods, they will be applied to all api i
 
 ### clean cache
 
-Use the ["mercury" `sources` object][mercury-sources-docs-url] for cleaning many instances at a time. Use the "api" tag to clean all "mercury-api" instances:
+Use the ["mercury" `sources` method][mercury-sources-docs-url] for cleaning many instances at a time. Use the "api" tag to clean all "mercury-api" instances:
 
 ```js
 import { sources } from "@xbyorange/mercury";
@@ -161,7 +161,7 @@ apis.addHeaders({ Authorization: `Bearer ${token}` }, ["need-auth"]);
 
 ### config
 
-Use the ["mercury" `sources` object][mercury-sources-docs-url] for configuring many instances at a time. Use the "api" tag to configure all "mercury-api" instances:
+Use the ["mercury" `sources` method][mercury-sources-docs-url] for configuring many instances at a time. Use the "api" tag to configure all "mercury-api" instances:
 
 ```js
 import { sources } from "@xbyorange/mercury";
