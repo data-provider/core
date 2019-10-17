@@ -22,7 +22,7 @@ This package provides a Mercury Api origin.
 * Arguments
 	* url - _`<String>`_. Api url. Parameters can be defined using ":parameterName". Please refer to the [path-to-regexp][path-to-regex-url] package for further info.
 	* options - _`<Object>`_ Containing options:
-		* tags - _`<String or Array of Strings>`_ - The api instance is added to correspondant groups using these tags. Afterwards, configuration, headers, etc. can be changed for certain groups using the `apis` object methods described bellow.
+		* tags - _`<String or Array of Strings>`_ - The api instance is added to correspondant groups using these tags. Afterwards, configuration, headers, etc. can be changed for certain groups using the [`sources` object methods described in the mercury docs][mercury-sources-docs-url], or the `api` object methods described below. The "api" tag will is added automatically to all Api instances.
 		* baseUrl - _`<String>`_ - Added as prefix to all requests.
 		* createMethod - _`<String>`_ - HTTP method to be used in axios requests for `create` method.
 		* readMethod - _`<String>`_ - HTTP method to be used in axios requests for `read` method.
@@ -115,7 +115,7 @@ Config method can be invoked at any time to change the configuration. The result
 
 ## Handling many api instances at a time.
 
-`apis` object methods allow to configure, set headers or clean many instances at a time. Apis can be grouped and categorized using tags (through the `tags` option), and this methods will be applied only to apis matching provided tags.
+`apis` object methods allow to set headers of many instances at a time. Apis can be grouped and categorized using tags (through the `tags` option), and this methods will be applied only to apis matching provided tags.
 
 If no tags are provided when invoking methods, they will be applied to all api instances.
 
@@ -125,9 +125,13 @@ If no tags are provided when invoking methods, they will be applied to all api i
 
 ### clean cache
 
-`apis.clean([tags])`
-* Arguments
-	* tags - _`<String or Array of Strings>`_ Tag/s of those apis in which the `clean` method should be executed (Note that all queried child objects will be cleaned too when this method is called over an instance). If no tags are defined, `clean` method of all api instances will be called. 
+Use the ["mercury" `sources` object][mercury-sources-docs-url] for cleaning many instances at a time. Use the "api" tag to clean all "mercury-api" instances:
+
+```js
+import { sources } from "@xbyorange/mercury";
+
+sources.getByTag("api").clean();
+```
 
 ### setHeaders
 
@@ -157,15 +161,14 @@ apis.addHeaders({ Authorization: `Bearer ${token}` }, ["need-auth"]);
 
 ### config
 
-It calls to config method of all api instances matching provided tags. The resultant configuration will be the extension of the current options with the provided ones.
-
-`apis.config(options [,tags])`
-* Arguments
-	* options - _`<Object>`_ Options object as described above.
-	* tags - _`<String or Array of Strings>`_ Tag/s of those apis in which the `config` method should be executed. If no defined, `config` method of all api instances will be called.
+Use the ["mercury" `sources` object][mercury-sources-docs-url] for configuring many instances at a time. Use the "api" tag to configure all "mercury-api" instances:
 
 ```js
-apis.config({ retries: 10 }, ["custom-retries"]);
+import { sources } from "@xbyorange/mercury";
+
+sources.getByTag("api").config({
+  retries: 0
+});
 ```
 
 ## Examples
@@ -230,12 +233,22 @@ Specific api origin examples:
 * [configuring multiple instance at a time](docs/apis-config.md)
 * [authentication](docs/authentication.md)
 
+## Usage with frameworks
+
+### React
+
+Please refer to the [react-mercury][react-mercury-url] documentation to see how simple is the data-binding between React Components and mercury-api.
+
+Connect a source to all components that need it. Mercury will fetch data only when needed, and will avoid making it more than once, no matter how many components need the data.
+
 ## Contributing
 
 Contributors are welcome.
 Please read the [contributing guidelines](.github/CONTRIBUTING.md) and [code of conduct](.github/CODE_OF_CONDUCT.md).
 
 [mercury-url]: https://github.com/xbyorange/mercury
+[react-mercury-url]: https://github.com/xbyorange/react-mercury
+[mercury-sources-docs-url]: https://github.com/XbyOrange/mercury/blob/master/docs/sources/api.md
 [path-to-regex-url]: https://www.npmjs.com/package/path-to-regexp
 
 [coveralls-image]: https://coveralls.io/repos/github/XbyOrange/mercury-api/badge.svg
