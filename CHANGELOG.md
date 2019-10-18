@@ -11,6 +11,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Removed
 ### BREAKING CHANGES
 
+## [TO BE DEPRECATED]
+- apis "config" and "clean" methods. Mercury "sources" methods should be used instead.
+ 
+## [1.3.0] - 2019-10-18
+### Changed
+- Upgrade mercury version. Use mercury "sources" methods from "apis" methods. Keep "apis" methods due to retrocompatibility.
+- Downgrade axios minor version to 0.18.0 until axios-retry fix issue https://github.com/softonic/axios-retry/issues/59
+
 ## [1.2.0] - 2019-06-28
 ### Changed
 - Upgrade mercury version

@@ -6,31 +6,32 @@ import axios from "axios";
 import axiosRetry from "axios-retry";
 import { Origin } from "@xbyorange/mercury";
 
-import { ApisHandler } from "./ApisHandler";
+import { ApisHandler, TAG } from "./ApisHandler";
+import { defaultConfig } from "./defaultConfig";
 
 const PATH_SEP = "/";
 
 export const apis = new ApisHandler();
 
 export class Api extends Origin {
-  constructor(url, config = {}) {
-    super(`api-${url}`, config && config.defaultValue);
-    this._url = url;
-
-    apis.register(this, config.tags);
-    const configuration = apis.getConfig(config);
-    this._config(configuration);
-    this._addOnBeforeRequest(configuration.onceBeforeRequest);
-    this._headers = apis.getHeaders(config.tags);
+  constructor(url, options = {}) {
+    const tags = Array.isArray(options.tags) ? options.tags : [options.tags];
+    tags.unshift(TAG);
+    options.tags = tags;
+    options.url = url;
+    super(`api-${url}`, options.defaultValue, { ...defaultConfig, ...options });
+    this.setHeaders(apis._getHeaders(this._tags));
   }
 
   _addOnBeforeRequest(onceBeforeRequest) {
+    this._originalOnceBeforeRequest = onceBeforeRequest;
     this._onceBeforeRequest = onceBeforeRequest ? once(onceBeforeRequest) : null;
   }
 
   _config(configuration) {
-    this._configuration = { ...configuration };
-
+    if (configuration.onceBeforeRequest !== this._originalOnceBeforeRequest) {
+      this._addOnBeforeRequest(configuration.onceBeforeRequest);
+    }
     this._readMethod = configuration.readMethod;
     this._updateMethod = configuration.updateMethod;
     this._createMethod = configuration.createMethod;
@@ -44,27 +45,28 @@ export class Api extends Origin {
     this._errorHandler = configuration.errorHandler;
     this._baseUrl = configuration.baseUrl;
     this._onBeforeRequest = configuration.onBeforeRequest;
+    this._url = configuration.url;
 
-    this.client = axios.create();
+    if (configuration.retries !== this._retries) {
+      this._retries = configuration.retries;
+      this.client = axios.create();
 
-    axiosRetry(this.client, {
-      retries: configuration.retries
-    });
-
-    if (this.cleanInterval) {
-      clearInterval(this.cleanInterval);
+      axiosRetry(this.client, {
+        retries: configuration.retries
+      });
     }
 
-    if (configuration.expirationTime > 0) {
-      this.cleanInterval = setInterval(() => this.clean(), configuration.expirationTime);
+    if (configuration.expirationTime !== this._expirationTime) {
+      this._expirationTime = configuration.expirationTime;
+      if (this.cleanInterval) {
+        clearInterval(this.cleanInterval);
+      }
+      if (configuration.expirationTime > 0) {
+        this.cleanInterval = setInterval(() => this.clean(), configuration.expirationTime);
+      }
     }
 
     this._setUrl(this._baseUrl + this._url);
-  }
-
-  config(configuration) {
-    this._config({ ...this._configuration, ...configuration });
-    this._addOnBeforeRequest(configuration.onceBeforeRequest);
   }
 
   _getQueryString(queryString) {

@@ -1,26 +1,21 @@
-const { sources } = require("@xbyorange/mercury");
-const { Api } = require("../src/index");
+const { Api, apis } = require("../src/index");
 
-const TAG = "api";
-
-describe("sources config method", () => {
+describe("apis config method", () => {
   let testsApis = [];
-  let allApiSources;
 
   beforeAll(() => {
-    allApiSources = sources.getByTag(TAG);
-    allApiSources.clear();
+    apis.reset();
   });
 
   afterAll(() => {
-    allApiSources.config({
+    apis.config({
       expirationTime: 0
     });
-    allApiSources.clear();
+    apis.reset();
   });
 
   describe("when configuring each api", () => {
-    describe("if no sources.config method was called", () => {
+    describe("if no apis.config method was called", () => {
       it("should set received api configuration", () => {
         const api = new Api("/foo-1", {
           retries: 5
@@ -30,9 +25,9 @@ describe("sources config method", () => {
       });
     });
 
-    describe("if sources.config method was called previously", () => {
+    describe("if apis.config method was called previously", () => {
       it("should inherit common config previously defined", () => {
-        allApiSources.config({
+        apis.config({
           retries: 5
         });
         const api = new Api("/foo-2");
@@ -49,12 +44,15 @@ describe("sources config method", () => {
       });
     });
 
-    describe("if sources.config method was called previously for an specific tag", () => {
+    describe("if apis.config method was called previously for an specific tag", () => {
       describe("when provided tag is an string", () => {
         it("should inherit common config previously defined, and config previously defined for the tag", () => {
-          sources.getByTag("foo-tag-1").config({
-            expirationTime: 10
-          });
+          apis.config(
+            {
+              expirationTime: 10
+            },
+            "foo-tag-1"
+          );
           const api = new Api("/foo-4", {
             tags: "foo-tag-1"
           });
@@ -75,12 +73,18 @@ describe("sources config method", () => {
 
       describe("when different values are provided for same option in different tags", () => {
         beforeEach(() => {
-          sources.getByTag("foo-retries-1").config({
-            retries: 10
-          });
-          sources.getByTag("foo-retries-2").config({
-            retries: 20
-          });
+          apis.config(
+            {
+              retries: 10
+            },
+            ["foo-retries-1"]
+          );
+          apis.config(
+            {
+              retries: 20
+            },
+            ["foo-retries-2"]
+          );
         });
 
         it("should get the value of defined tag if there is no tags conflict", () => {
@@ -106,9 +110,12 @@ describe("sources config method", () => {
       describe("when provided tag is an array", () => {
         it("should inherit common config previously defined, and config previously defined for the tag if one of them match", () => {
           expect.assertions(2);
-          sources.getByTag("foo-tag-1").config({
-            expirationTime: 10
-          });
+          apis.config(
+            {
+              expirationTime: 10
+            },
+            "foo-tag-1"
+          );
           const api = new Api("/foo-6", {
             tags: ["foo-tag-1", "foo-tag-3"]
           });
@@ -133,7 +140,7 @@ describe("sources config method", () => {
   describe("when calling config after apis have been created", () => {
     describe("if no tags are defined", () => {
       it("should set configuration for all existant apis", () => {
-        allApiSources.config({
+        apis.config({
           retries: 7
         });
         testsApis.forEach(testApi => {
@@ -144,9 +151,12 @@ describe("sources config method", () => {
 
     describe("if tag is defined as string", () => {
       it("should set configuration for all existant apis having a tag matching with it", () => {
-        sources.getByTag("foo-tag-3").config({
-          retries: 8
-        });
+        apis.config(
+          {
+            retries: 8
+          },
+          "foo-tag-3"
+        );
         testsApis.forEach(testApi => {
           if (testApi._url === "/foo-6" || testApi._url === "/foo-7") {
             expect(testApi._configuration.retries).toEqual(8);
@@ -157,9 +167,12 @@ describe("sources config method", () => {
       });
 
       it("should not set configuration for any api if any have a matching tag", () => {
-        sources.getByTag("foo-tag-unexistant").config({
-          retries: 12
-        });
+        apis.config(
+          {
+            retries: 12
+          },
+          "foo-tag-unexistant"
+        );
         testsApis.forEach(testApi => {
           if (testApi._url === "/foo-6" || testApi._url === "/foo-7") {
             expect(testApi._configuration.retries).toEqual(8);
@@ -172,9 +185,12 @@ describe("sources config method", () => {
 
     describe("if tag is an array", () => {
       it("should set configuration for all existant apis having a tag matching with it", () => {
-        sources.getByTag("foo-tag-3").config({
-          retries: 9
-        });
+        apis.config(
+          {
+            retries: 9
+          },
+          ["foo-tag-3"]
+        );
         testsApis.forEach(testApi => {
           if (testApi._url === "/foo-6" || testApi._url === "/foo-7") {
             expect(testApi._configuration.retries).toEqual(9);
@@ -185,9 +201,12 @@ describe("sources config method", () => {
       });
 
       it("should not set configuration for any existant apis if any has a tag matching with it", () => {
-        sources.getByTag("foo-unexistant").config({
-          retries: 15
-        });
+        apis.config(
+          {
+            retries: 15
+          },
+          ["foo-unexistant"]
+        );
         testsApis.forEach(testApi => {
           if (testApi._url === "/foo-6" || testApi._url === "/foo-7") {
             expect(testApi._configuration.retries).toEqual(9);

@@ -18,21 +18,29 @@ const usersCollection = new Api("/users", {
 });
 ```
 
-Now, you can use the `apis` method to configure and set headers of your api instances depending of their tags:
+Now, you can use the [`sources` method of the "mercury" library][mercury-sources-docs-url] to configure your api instances depending of their tags:
 
 ```js
-import { apis } from "@xbyorange/mercury-api";
+import { sources } from "@xbyorange/mercury";
 
-apis.config({ retries: 5 }); // will apply this config to all apis
+sources.getByTag("api").config({ retries: 5 }); // will apply this config to all apis
 
-apis.config({ baseUrl: "https://foo-library.com/api" }, ["library"]);
+sources.getByTag("library").config({ baseUrl: "https://foo-library.com/api" });
 
-apis.config({ baseUrl: "https://www.goodreads.com" }, ["goodReads"]);
+sources.getByTag("goodReads").config({ baseUrl: "https://www.goodreads.com" });
 ```
+
+You can use the `apis` method of this library to add or set headers to your api instances depending of their tags:
 
 > Use the `setHeaders` method to define headers only for certain tagged apis:
 
 ```js
+import { apis } from "@xbyorange/mercury-api";
+
+// Redefine all headers
+apis.setHeaders({ "x-application": "foo" });
+
+// Add headers only for apis tagged as "library-auth"
 apis.addHeaders({ Authentication: "Bearer foo-token" }, ["library-auth"]);
 ```
 
@@ -41,10 +49,11 @@ apis.addHeaders({ Authentication: "Bearer foo-token" }, ["library-auth"]);
 Take into account that, when invoking to the `config` method, the api instance configuration is extended with the provided one. The same principle is applied when configuring apis based on their tags. As many tags can be defined for a single api, the order of that tags is relevant when there are different values for the same option in different tags. The last provided tag has priority in case of conflict:
 
 ```js
-import { apis, Api } from "@xbyorange/mercury-api";
+import { sources } from "@xbyorange/mercury";
+import { Api } from "@xbyorange/mercury-api";
 
-apis.config({ retries: 5 }, ["foo-tag-1"]);
-apis.config({ retries: 4 }, ["foo-tag-2"]);
+sources.getByTag("foo-tag-1").config({ retries: 5 });
+sources.getByTag("foo-tag-2").config({ retries: 4 });
 
 const fooApi1 = new Api("/foo-url-1", {
   tags: ["foo-tag-1", "foo-tag-2"] // This api wil retry 4 times
@@ -54,4 +63,6 @@ const fooApi2 = new Api("/foo-url-2", {
   tags: ["foo-tag-2", "foo-tag-1"] // This api wil retry 5 times
 });
 ```
+
+[mercury-sources-docs-url]: https://github.com/XbyOrange/mercury/blob/master/docs/sources/api.md
 

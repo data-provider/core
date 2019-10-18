@@ -242,19 +242,29 @@ describe("Api configuration", () => {
     it("should be executed before first requests is made each time it is redefined", async () => {
       expect.assertions(5);
       let dataSource;
-      const stub = sinon.stub().callsFake(source => {
-        source.config({
-          baseUrl: "/foo-base-url",
-          onceBeforeRequest: stub
-        });
-        dataSource = source;
-      });
+      const stub = sinon.stub();
 
       const books = new Api("/books", {
-        onceBeforeRequest: stub
+        baseUrl: "/foo-base-url",
+        onceBeforeRequest: source => {
+          dataSource = source;
+          stub();
+        }
       });
       await books.read();
+      books.config({
+        onceBeforeRequest: source => {
+          dataSource = source;
+          stub();
+        }
+      });
       await books.create();
+      books.config({
+        onceBeforeRequest: source => {
+          dataSource = source;
+          stub();
+        }
+      });
       await books.read();
       expect(dataSource).toEqual(books);
       expect(axios.stubs.instance.getCall(0).args[0].url).toEqual("/foo-base-url/books");
@@ -270,6 +280,12 @@ describe("Api configuration", () => {
     beforeAll(() => {
       books = new Api("/books", {
         expirationTime: 100
+      });
+    });
+
+    afterAll(() => {
+      books.config({
+        expirationTime: 0
       });
     });
 
