@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [1.3.0] - 2019-10-17
 ### Changed
 - Upgrade mercury version. Use mercury "sources" in "apis".
+- Downgrade axios minor version to 0.18.0 until axios-retry fix issue https://github.com/softonic/axios-retry/issues/59
 
 ## [1.2.0] - 2019-06-28
 ### Changed
