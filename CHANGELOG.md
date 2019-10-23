@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Removed
 ### BREAKING CHANGES
 
+## [1.3.0] - 2019-10-23
+### Added
+- Change url configuration in runtime. Clean cache when url changes.
+
 ## [1.2.0] - 2019-10-15
 ### Added
 - Add `url` property to config options.

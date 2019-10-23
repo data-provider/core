@@ -1,6 +1,6 @@
 {
   "name": "@xbyorange/mercury-prismic",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "description": "Mercury origin for reading data from Prismic CMS API",
   "keywords": [
     "mercury",
