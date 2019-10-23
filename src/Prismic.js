@@ -21,7 +21,11 @@ export class Prismic extends Origin {
   }
 
   _config(configuration) {
-    this._url = configuration.url;
+    if (this._url !== configuration.url) {
+      this._prismicApi = null;
+      this._url = configuration.url;
+      this.clean();
+    }
     this._fullResponse = configuration.fullResponse;
     this._release = configuration.release;
   }
