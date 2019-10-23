@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Removed
 ### BREAKING CHANGES
 
+## [1.3.0] - 2019-10-23
+
 ## [1.2.0] - 2019-10-15
 ### Added
 - Add `url` property to config options.
