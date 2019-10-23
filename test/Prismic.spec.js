@@ -1,5 +1,6 @@
 /* global describe, beforeEach, afterEach, it, expect  */
 
+const sinon = require("sinon");
 const { sources } = require("@xbyorange/mercury");
 
 const PrismicMock = require("./PrismicJs.mock");
@@ -10,14 +11,19 @@ describe("Prismic", () => {
   const fooPrismicUrl = "foo-url";
   let mock;
   let prismic;
+  let sandbox;
 
   beforeEach(() => {
+    sandbox = sinon.createSandbox();
     mock = new PrismicMock();
     prismic = new Prismic(fooPrismicUrl);
+    sandbox.spy(prismic, "clean");
   });
 
   afterEach(() => {
+    sources.clear();
     mock.restore();
+    sandbox.restore();
   });
 
   describe("prismic client instance", () => {
@@ -232,6 +238,25 @@ describe("Prismic", () => {
       });
       await prismic.read();
       expect(mock.stubs.api.getCall(0).args[0]).toEqual(FOO_NEW_URL);
+    });
+  });
+
+  describe("when changing url configuration in runtime", () => {
+    it("should override previously defined url and clean cache", async () => {
+      expect.assertions(3);
+      const FOO_URL = "foo-prismic-url-2";
+      const FOO_NEW_URL = "foo-prismic-url-3";
+      sources.getByTag("prismic").config({
+        url: FOO_URL
+      });
+      await prismic.read();
+      expect(mock.stubs.api.getCall(0).args[0]).toEqual(FOO_URL);
+      sources.getByTag("prismic").config({
+        url: FOO_NEW_URL
+      });
+      await prismic.read();
+      expect(mock.stubs.api.getCall(1).args[0]).toEqual(FOO_NEW_URL);
+      expect(sources.getByTag("prismic").elements[0].clean.callCount).toEqual(2);
     });
   });
 });
