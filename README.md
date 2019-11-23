@@ -4,15 +4,13 @@
 
 [![NPM downloads][npm-downloads-image]][npm-downloads-url] [![License][license-image]][license-url]
 
-# ![Mercury Logo](assets/logos/mercury_wings_orange_100.png) Mercury Prismic
-
 ## Overview
 
-This package provides a [Mercury][mercury-url] origin for reading data from Prismic CMS API. As underlay, it uses the [prismic-javascript][prismic-javascript-url] client to provide the Prismic data.
+This package provides a [Data Provider][data-provider-url] origin for reading data from Prismic CMS API. As underlay, it uses the [prismic-javascript][prismic-javascript-url] client to provide the Prismic data.
 
 ## Api
 
-`import { Prismic } from "@xbyorange/mercury-prismic"`
+`import { Prismic } from "@data-provider/prismic"`
 
 `new Prismic(url, options)`
 * Arguments
@@ -21,8 +19,8 @@ This package provides a [Mercury][mercury-url] origin for reading data from Pris
 		* defaultValue - _`<Any>`_ Default value of origin until real data is returned.
 		* fullResponse - _`<Boolean>`_ If `true`, the full response of the Prismic api will be used as value. If `false`, only the `response.results` property will be returned, which is the default behavior.
 		* release - _`<String>`_ Prismic release to be read. This parameter will be passed as `ref` to the [prismic-javascript][prismic-javascript-url] query.
-		* uuid - _`<String>`_ Unique id to assign to the instance. Useful when using [mercury `sources` handler][mercury-sources-docs-url].
-		* tags - _`<String> or <Array of Strings>`_ Tags to assign to the instance. Useful when using [mercury `sources` handler][mercury-sources-docs-url]. A "prismic" tag will be always added to provided tags by default.
+		* uuid - _`<String>`_ Unique id to assign to the instance. Useful when using [Data Provider `sources` handler][data-provider-sources-docs-url].
+		* tags - _`<String> or <Array of Strings>`_ Tags to assign to the instance. Useful when using [Data Provider `sources` handler][data-provider-sources-docs-url]. A "prismic" tag will be always added to provided tags by default.
 
 ## Methods
 
@@ -32,7 +30,7 @@ This package provides a [Mercury][mercury-url] origin for reading data from Pris
 * Arguments
 	* queryObject - `<Object>` containing properties:
 		* documentType - `<String>` Prismic document type to filter by. (It will be used to build a [prismic-javascript][prismic-javascript-url] query as in `PrismicJs.Predicates.at("document.type", documentType)`)
-* Returns - New queried instance having all common [Mercury][mercury-url] methods.
+* Returns - New queried instance having all common [Data Provider][data-provider-url] methods.
 
 ### config
 
@@ -45,26 +43,26 @@ Configure instance for all next `read` executions.
 		* fullResponse - _`<Boolean>`_ If `true`, the full response of the Prismic api will be used as value. If `false`, only the `response.results` property will be returned, which is the default behavior.
 		* release - _`<String>`_ Prismic release to be read. This parameter will be passed as `ref` to the [prismic-javascript][prismic-javascript-url] query.
 
-Read about how to configure all mercury-prismic instances at a time using the [mercury `sources` handler][mercury-sources-docs-url].
+Read about how to configure all @data-provider/prismic instances at a time using the [Data Provider `sources` handler][data-provider-sources-docs-url].
 
-Example of how to change all `mercury-api` requests urls at a time:
+Example of how to change all `@data-provider/prismic` requests urls at a time:
 
 ```js
-import { sources } from "@xbyorange/mercury";
+import { sources } from "@data-provider/core";
 
 sources.getByTag("prismic").config({
   url: "https://foo-prismic-repository.cdn.prismic.io/api/v2"
 });
 
-// All mercury-prismic instances will now be configured to request to provided url.
+// All @data-provider/prismic instances will now be configured to request to provided url.
 ```
 
 ## Example
 
-Next example will be easier to understand if you are already familiarized with the [mercury][mercury-url] syntax.
+Next example will be easier to understand if you are already familiarized with the [Data Provider][data-provider-url] syntax.
 
 ```js
-import { Prismic } from "@xbyorange/mercury-prismic";
+import { Prismic } from "@data-provider/prismic";
 
 const prismic = new Prismic("https://foo-prismic-repository.cdn.prismic.io/api/v2", {
   release: "foo-release"
@@ -82,30 +80,30 @@ prismic
 
 ### React
 
-Please refer to the [react-mercury][react-mercury-url] documentation to see how simple is the data-binding between React Components and Mercury Prismic.
+Please refer to the [@data-provider/connector-react][data-provider-connector-react-url] documentation to see how simple is the data-binding between React Components and @data-provider/prismic.
 
-Connect a source to all components that need it. Mercury will fetch data only when needed, and will avoid making it more than once, no matter how many components need the data.
+Connect a source to all components that need it. Data Provider will fetch data only when needed, and will avoid making it more than once, no matter how many components need the data.
 
-[mercury-url]: https://github.com/xbyorange/mercury
-[mercury-sources-docs-url]: https://github.com/XbyOrange/mercury/blob/master/docs/sources/api.md
+[data-provider-url]: https://github.com/data-provider/core
+[data-provider-sources-docs-url]: https://github.com/data-provider/core/blob/master/docs/sources/api.md
 [prismic-javascript-url]: https://www.npmjs.com/package/prismic-javascript
-[react-mercury-url]: https://github.com/xbyorange/react-mercury
+[data-provider-connector-react-url]: https://github.com/data-provider/connector-react
 
-[coveralls-image]: https://coveralls.io/repos/github/XbyOrange/mercury-prismic/badge.svg
-[coveralls-url]: https://coveralls.io/github/XbyOrange/mercury-prismic
-[travisci-image]: https://travis-ci.com/xbyorange/mercury-prismic.svg?branch=master
-[travisci-url]: https://travis-ci.com/xbyorange/mercury-prismic
-[last-commit-image]: https://img.shields.io/github/last-commit/xbyorange/mercury-prismic.svg
-[last-commit-url]: https://github.com/xbyorange/mercury-prismic/commits
-[license-image]: https://img.shields.io/npm/l/@xbyorange/mercury-prismic.svg
-[license-url]: https://github.com/xbyorange/mercury-prismic/blob/master/LICENSE
-[npm-downloads-image]: https://img.shields.io/npm/dm/@xbyorange/mercury-prismic.svg
-[npm-downloads-url]: https://www.npmjs.com/package/@xbyorange/mercury-prismic
-[npm-dependencies-image]: https://img.shields.io/david/xbyorange/mercury-prismic.svg
-[npm-dependencies-url]: https://david-dm.org/xbyorange/mercury-prismic
-[quality-gate-image]: https://sonarcloud.io/api/project_badges/measure?project=xbyorange-mercury-prismic&metric=alert_status
-[quality-gate-url]: https://sonarcloud.io/dashboard?id=xbyorange-mercury-prismic
-[release-image]: https://img.shields.io/github/release-date/xbyorange/mercury-prismic.svg
-[release-url]: https://github.com/xbyorange/mercury-prismic/releases
+[coveralls-image]: https://coveralls.io/repos/github/data-provider/prismic/badge.svg
+[coveralls-url]: https://coveralls.io/github/data-provider/prismic
+[travisci-image]: https://travis-ci.com/data-provider/prismic.svg?branch=master
+[travisci-url]: https://travis-ci.com/data-provider/prismic
+[last-commit-image]: https://img.shields.io/github/last-commit/data-provider/prismic.svg
+[last-commit-url]: https://github.com/data-provider/prismic/commits
+[license-image]: https://img.shields.io/npm/l/@data-provider/prismic.svg
+[license-url]: https://github.com/data-provider/prismic/blob/master/LICENSE
+[npm-downloads-image]: https://img.shields.io/npm/dm/@data-provider/prismic.svg
+[npm-downloads-url]: https://www.npmjs.com/package/@data-provider/prismic
+[npm-dependencies-image]: https://img.shields.io/david/data-provider/prismic.svg
+[npm-dependencies-url]: https://david-dm.org/data-provider/prismic
+[quality-gate-image]: https://sonarcloud.io/api/project_badges/measure?project=data-provider-prismic&metric=alert_status
+[quality-gate-url]: https://sonarcloud.io/dashboard?id=data-provider-prismic
+[release-image]: https://img.shields.io/github/release-date/data-provider/prismic.svg
+[release-url]: https://github.com/data-provider/prismic/releases
 
 
