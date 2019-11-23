@@ -1,7 +1,7 @@
 {
   "name": "@data-provider/core",
   "version": "1.6.0",
-  "description": "Extensible Data Provider. Data Selectors",
+  "description": "Extensible Data Provider and Data Selectors",
   "keywords": [
     "data",
     "provider",
