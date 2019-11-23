@@ -1,4 +1,4 @@
-import { Origin } from "@xbyorange/mercury";
+import { Origin } from "@data-provider/core";
 import { cloneDeep } from "lodash";
 
 const TAG = "memory";
@@ -6,7 +6,7 @@ const TAG = "memory";
 const ensureId = id => id || TAG;
 const traceLegacyOptions = () => {
   console.warn(
-    'Defining "id" as second argument will be deprecated in next major versions of "mercury-memory". Please define an options object with "uuid" property'
+    'Defining "id" as second argument will be deprecated in next major versions of "@data-provider/memory". Please define an options object with "uuid" property'
   );
 };
 
@@ -42,7 +42,7 @@ export class Memory extends Origin {
     };
     if (!options.queriesDefaultValue) {
       console.warn(
-        'Usage of "queriesDefaultValue" option is recommended to prepare your code for next major version of "mercury-memory"'
+        'Usage of "queriesDefaultValue" option is recommended to prepare your code for next major version of "@data-provider/memory"'
       );
     }
     const getDefaultValue = function(query) {

@@ -1,4 +1,4 @@
-const { sources } = require("@xbyorange/mercury");
+const { sources } = require("@data-provider/core");
 const { Memory } = require("../src/index");
 
 describe("Memory origin", () => {

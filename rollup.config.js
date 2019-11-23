@@ -25,12 +25,12 @@ const BASE_PLUGINS = [
 
 const BASE_CONFIG = {
   input: "src/index.js",
-  external: ["@xbyorange/mercury", "lodash"],
+  external: ["@data-provider/core", "lodash"],
   plugins: [...BASE_PLUGINS, uglifier.uglify()]
 };
 
 const GLOBALS = {
-  "@xbyorange/mercury": "mercury",
+  "@data-provider/core": "dataProvider",
   lodash: "lodash"
 };
 
@@ -38,16 +38,16 @@ module.exports = [
   {
     ...BASE_CONFIG,
     output: {
-      file: "dist/mercury-memory.umd.js",
+      file: "dist/memory.umd.js",
       format: "umd",
-      name: "mercury-memory",
+      name: "memoryDataProvider",
       globals: GLOBALS
     }
   },
   {
     ...BASE_CONFIG,
     output: {
-      file: "dist/mercury-memory.esm.js",
+      file: "dist/memory.esm.js",
       format: "esm",
       globals: GLOBALS
     },
