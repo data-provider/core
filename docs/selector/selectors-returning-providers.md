@@ -1,8 +1,8 @@
-## Selectors returning another source
+## Selectors returning another provider
 
-Selectors can return another source or array of sources. Then, the returned sources will be called with same method and parameters than the Selector was.
+Selectors can return another provider or array of providers. Then, the returned providers will be called with same method and parameters than the Selector was.
 
-Cache listeners will be added too to this returned Selector, so, if any of the returned sources cache is cleaned, the Selector cache will be cleaned too.
+Cache listeners will be added too to this returned Selector, so, if any of the returned providers cache is cleaned, the Selector cache will be cleaned too.
 
 ```js
 
@@ -15,7 +15,7 @@ const privateBookModel = new Api("http://private-api/books/:id");
 
 const bookDetails = new Selector(
   {
-    source: commonBookModel,
+    provider: commonBookModel,
     query: queriedId => ({
       urlParams: {
         id: queriedId
@@ -38,7 +38,7 @@ const bookModel = await bookDetails.query("foo-id").read();
 
 ```
 
-Selectors returning another selector have available all CRUD methods. The methos applied to the selector will be the same method applied to the returned source, original parameters will be passed too:
+Selectors returning another selector have available all CRUD methods. The methos applied to the selector will be the same method applied to the returned provider, original parameters will be passed too:
 
 ```js
 
@@ -50,18 +50,18 @@ await bookDetails.query("foo-id").update({
 
 ```
 
-Selectors can return an array of sources:
+Selectors can return an array of providers:
 
 ```js
 
 import { Api } from "@data-provider/axios";
 
-import { authorsOrigin } from "./authors";
-import { booksOrigin } from "./books";
+import { authorsProvider } from "./authors";
+import { booksProvider } from "./books";
 
 const authorBooksData = new Selector(
   {
-    source: authorsOrigin,
+    provider: authorsProvider,
     query: queriedId => ({
       urlParams: {
         id: queriedId
@@ -69,7 +69,7 @@ const authorBooksData = new Selector(
     })
   },
   authorDetails => {
-    return authorDetails.booksIds.map(bookId => booksOrigin.query({
+    return authorDetails.booksIds.map(bookId => booksProvider.query({
       urlParams: {
         id: bookId
       }
@@ -82,18 +82,18 @@ const authorBooksData = await authorBooksData.query("foo-id").read();
 
 ```
 
-Returned sources can be defined as objects containing query callback or catch functions as well:
+Returned providers can be defined as objects containing query callback or catch functions as well:
 
 ```js
 
 import { Api } from "@data-provider/axios";
 
-import { authorsOrigin } from "./authors";
-import { booksOrigin } from "./books";
+import { authorsProvider } from "./authors";
+import { booksProvider } from "./books";
 
 const authorBooksData = new Selector(
   {
-    source: authorsOrigin,
+    provider: authorsProvider,
     query: queriedId => ({
       urlParams: {
         id: queriedId
@@ -102,7 +102,7 @@ const authorBooksData = new Selector(
   },
   authorDetails => {
     return authorDetails.booksIds.map(bookId => ({
-      source: booksOrigin,
+      provider: booksProvider,
       query: () => ({
         urlParams: {
           id: bookId

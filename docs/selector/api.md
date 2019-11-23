@@ -2,39 +2,39 @@
 
 #### Constructor
 
-* `const selector = new Selector(source, source, parserCallback(sourcesResults[, currentQuery]), [options])`
+* `const selector = new Selector(provider, provider, parserCallback(providersResults[, currentQuery]), [options])`
 	* Arguments
-		* sources - `<source object or Array of sources objects>` 
-			* source object - `<source instance, or customSourceReader object>`
-				* source instance - `<instance of an Origin or Selector>` Origin or Selector to read.
-				* customSourceReader - `<Object>` with next properties:
-					* `source`: `<instance of an Origin or Selector>` Origin or Selector to read.
-					* `query`: `<Function>` `query: (currentQuery[, previousSourcesResults])`. Query callback.
+		* providers - `<provider object or Array of providers objects>` 
+			* provider object - `<provider instance, or customProviderReader object>`
+				* provider instance - `<instance of a Provider or Selector>` Provider or Selector to read.
+				* customProviderReader - `<Object>` with next properties:
+					* `provider`: `<instance of a Provider or Selector>` Provider or Selector to read.
+					* `query`: `<Function>` `query: (currentQuery[, previousProvidersResults])`. Query callback.
 						* Arguments:
 							* currentQuery - `<Any>` Selector current query.
-							* previousSourcesResults - `<Array of Any>` Array containing results of all previously fetched sources in series.
+							* previousProvidersResults - `<Array of Any>` Array containing results of all previously fetched providers in series.
 						* Returns:
-							* `<Any>` Result of this callback will be passed as `query` to the source.
+							* `<Any>` Result of this callback will be passed as `query` to the provider.
 					* `catch`: `<Function>` `catch: (error[, currentQuery])`.
 						* Arguments:
-							* error - `<Error>` Error thrown by the read method of the source.
+							* error - `<Error>` Error thrown by the read method of the provider.
 							* currentQuery  - `<Any>` Selector current query.
 						* Returns:
-							* `<Error>` - Source will throw this error.
-							* `<Any>` - Source will return this value instead of error.
-							* `<source instance>` - The `read` method of the returned source instance will be called, and returned result will be assigned as value of the current source (Allows to switch to another source if first returns an error)
-			* Array of source objects - `<Array of <source object>>` Provided sources will be fetched in parallel.
+							* `<Error>` - Selector will throw this error.
+							* `<Any>` - Provider will return this value instead of error.
+							* `<provider instance>` - The `read` method of the returned provider instance will be called, and returned result will be assigned as value of the current provider (Allows to switch to another provider if first returns an error)
+			* Array of provider objects - `<Array of <provider object>>` Provided providers will be fetched in parallel.
 		* parserCallback - `<Function>`
 			* Arguments:
-				* sourcesResults - `<Any>` - Results returned by the `read` method of the sources.
+				* providersResults - `<Any>` - Results returned by the `read` method of the providers.
 				* currentQuery - `<Any>` Selector current query.
 			* Returns:
 				* Result data - `<Any>`
 				* `<Promise>` - The result of the returned Promise will be returned as result data.
-				* `<source instance>` - If another source instance is returned, it will be called with same method and data than Selector was.
+				* `<provider instance>` - If another provider instance is returned, it will be called with same method and data than Selector was.
 		* options - `<Object>`
 			* defaultValue - `<Any>` Default value to return until real data is returned.
-			* uuid - `<String>` Custom uuid to be defined as selector "_id"
+			* uuid - `<String>` Custom uuid to be defined as selector "\_id"
 
 #### Instance
 
@@ -49,7 +49,7 @@
 			* error - `<Number>` Counter of times that read method has been rejected. No matter if result came from cache or not. 
 	* Returns
 		* `<Any>` - Result of the parser function.
-* create, update, delete `selector.create(data)` These methods can be used only when Selector returns another source.
+* create, update, delete `selector.create(data)` These methods can be used only when Selector returns another provider.
 	* Statics:
 		* error - `<Error>` If read method returns an error, it will be accessible at this property.
 		* loading - `<Boolean>` Will be true while Selector read is in progress.
@@ -59,17 +59,17 @@
 			* success - `<Number>` Counter of times that read method has been resolved. No matter if result came from cache or not.
 			* error - `<Number>` Counter of times that read method has been rejected. No matter if result came from cache or not.
 	* Arguments
-		* data - `<Any>` Data that will be passed to the correspondant create, update or delete method of the returned source.
+		* data - `<Any>` Data that will be passed to the correspondant create, update or delete method of the returned provider.
 	* Returns
-		* `<Any>` - Result of the correspondant method of returned source.
+		* `<Any>` - Result of the correspondant method of returned provider.
 * clean `selector.clean([query])`
 	* Arguments
-		* query - `<Any>` Any object, string, array etc. for quering the source.
+		* query - `<Any>` Any object, string, array etc. for quering the provider.
 	* Returns
 		* `<undefined>` - Selector instance cache corresponding to the provided query will be cleaned.
 * query `selector.query([query])`
 	* Arguments
-		* query - `<Any>` Any object, string, array etc. for quering the source.
+		* query - `<Any>` Any object, string, array etc. for quering the provider.
 	* Returns
 		* `<selector instance>` - Will return a selector instance unique for the query provided. Returned instances will be the same if query is the same.
 * addCustomQueries `selector.addCustomQueries(customQueryObject)`

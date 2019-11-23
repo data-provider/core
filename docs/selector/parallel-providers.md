@@ -1,6 +1,6 @@
-## Parallel sources
+## Parallel providers
 
-You can read source results in parallel simply defining sources in an array:
+You can read provider results in parallel simply defining providers as an array:
 
 ```js
 
