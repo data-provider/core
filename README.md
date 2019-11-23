@@ -171,8 +171,8 @@ Please read the [contributing guidelines](.github/CONTRIBUTING.md) and [code of 
 [license-url]: https://github.com/data-provider/core/blob/master/LICENSE
 [npm-downloads-image]: https://img.shields.io/npm/dm/@data-provider/core.svg
 [npm-downloads-url]: https://www.npmjs.com/package/@data-provider/core
-[npm-dependencies-image]: https://img.shields.io/david/@data-provider/core.svg
-[npm-dependencies-url]: https://david-dm.org/@data-provider/core
+[npm-dependencies-image]: https://img.shields.io/david/data-provider/core.svg
+[npm-dependencies-url]: https://david-dm.org/data-provider/core
 [quality-gate-image]: https://sonarcloud.io/api/project_badges/measure?project=data-provider-core&metric=alert_status
 [quality-gate-url]: https://sonarcloud.io/dashboard?id=data-provider-core
 [release-image]: https://img.shields.io/github/release-date/data-provider/core.svg
