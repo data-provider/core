@@ -3,7 +3,7 @@
 Use the `tags` option to categorize your api instances:
 
 ```js
-import { Api } from "@xbyorange/mercury-api";
+import { Api } from "@data-provider/axios";
 
 const booksCollection = new Api("/books", {
   tags: ["library"]
@@ -18,10 +18,10 @@ const usersCollection = new Api("/users", {
 });
 ```
 
-Now, you can use the [`sources` method of the "mercury" library][mercury-sources-docs-url] to configure your api instances depending of their tags:
+Now, you can use the [`sources` method of the "Data Provider" library][data-provider-sources-docs-url] to configure your api instances depending of their tags:
 
 ```js
-import { sources } from "@xbyorange/mercury";
+import { sources } from "@data-provider/core";
 
 sources.getByTag("api").config({ retries: 5 }); // will apply this config to all apis
 
@@ -35,7 +35,7 @@ You can use the `apis` method of this library to add or set headers to your api 
 > Use the `setHeaders` method to define headers only for certain tagged apis:
 
 ```js
-import { apis } from "@xbyorange/mercury-api";
+import { apis } from "@data-provider/axios";
 
 // Redefine all headers
 apis.setHeaders({ "x-application": "foo" });
@@ -49,8 +49,8 @@ apis.addHeaders({ Authentication: "Bearer foo-token" }, ["library-auth"]);
 Take into account that, when invoking to the `config` method, the api instance configuration is extended with the provided one. The same principle is applied when configuring apis based on their tags. As many tags can be defined for a single api, the order of that tags is relevant when there are different values for the same option in different tags. The last provided tag has priority in case of conflict:
 
 ```js
-import { sources } from "@xbyorange/mercury";
-import { Api } from "@xbyorange/mercury-api";
+import { sources } from "@data-provider/core";
+import { Api } from "@data-provider/axios";
 
 sources.getByTag("foo-tag-1").config({ retries: 5 });
 sources.getByTag("foo-tag-2").config({ retries: 4 });
@@ -64,5 +64,5 @@ const fooApi2 = new Api("/foo-url-2", {
 });
 ```
 
-[mercury-sources-docs-url]: https://github.com/XbyOrange/mercury/blob/master/docs/sources/api.md
+[data-provider-sources-docs-url]: https://github.com/data-provider/core/blob/master/docs/sources/api.md
 
