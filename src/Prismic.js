@@ -1,5 +1,5 @@
 import PrismicClient from "prismic-javascript";
-import { Origin } from "@xbyorange/mercury";
+import { Origin } from "@data-provider/core";
 
 const PRISMIC_TAG = "prismic";
 const defaultConfig = {

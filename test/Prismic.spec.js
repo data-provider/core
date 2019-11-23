@@ -1,7 +1,7 @@
 /* global describe, beforeEach, afterEach, it, expect  */
 
 const sinon = require("sinon");
-const { sources } = require("@xbyorange/mercury");
+const { sources } = require("@data-provider/core");
 
 const PrismicMock = require("./PrismicJs.mock");
 

@@ -25,12 +25,12 @@ const BASE_PLUGINS = [
 
 const BASE_CONFIG = {
   input: "src/index.js",
-  external: ["@xbyorange/mercury", "prismic-javascript"],
+  external: ["@data-provider/core", "prismic-javascript"],
   plugins: [...BASE_PLUGINS, uglifier.uglify()]
 };
 
 const GLOBALS = {
-  "@xbyorange/mercury": "mercury",
+  "@data-provider/core": "dataProvider",
   "prismic-javascript": "PrismicJS"
 };
 
@@ -38,16 +38,16 @@ module.exports = [
   {
     ...BASE_CONFIG,
     output: {
-      file: "dist/mercury-prismic.umd.js",
+      file: "dist/data-provider-prismic.umd.js",
       format: "umd",
-      name: "mercury-prismic",
+      name: "dataProviderPrismic",
       globals: GLOBALS
     }
   },
   {
     ...BASE_CONFIG,
     output: {
-      file: "dist/mercury-prismic.esm.js",
+      file: "dist/data-provider-prismic.esm.js",
       format: "esm",
       globals: GLOBALS
     },

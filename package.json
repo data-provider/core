@@ -1,9 +1,9 @@
 {
-  "name": "@xbyorange/mercury-prismic",
-  "version": "1.3.0",
-  "description": "Mercury origin for reading data from Prismic CMS API",
+  "name": "@data-provider/prismic",
+  "version": "1.4.0",
+  "description": "Data Provider for reading data from Prismic CMS API",
   "keywords": [
-    "mercury",
+    "data-provider",
     "origin",
     "cms",
     "prismic",
@@ -11,17 +11,17 @@
     "api-client",
     "reactive"
   ],
-  "author": "XbyOrange",
+  "author": "Javier Brea",
   "license": "Apache-2.0",
-  "repository": "https://github.com/xbyorange/mercury-prismic",
+  "repository": "https://github.com/data-provider/prismic",
   "publishConfig": {
     "access": "public"
   },
   "files": [
     "dist"
   ],
-  "main": "dist/mercury-prismic.umd.js",
-  "module": "dist/mercury-prismic.esm.js",
+  "main": "dist/data-provider-prismic.umd.js",
+  "module": "dist/data-provider-prismic.esm.js",
   "scripts": {
     "lint": "eslint src test",
     "lint-staged": "lint-staged",
@@ -31,7 +31,7 @@
     "coveralls": "cat ./coverage/lcov.info | coveralls"
   },
   "peerDependencies": {
-    "@xbyorange/mercury": "1.5.0"
+    "@data-provider/core": "1.6.0"
   },
   "dependencies": {
     "prismic-javascript": "^2.0.3"
@@ -40,7 +40,7 @@
     "@babel/core": "^7.6.4",
     "@babel/preset-env": "^7.6.3",
     "@babel/preset-react": "^7.6.3",
-    "@xbyorange/mercury": "1.5.0",
+    "@data-provider/core": "1.6.0",
     "babel-core": "^7.0.0-bridge.0",
     "babel-jest": "^24.9.0",
     "babel-polyfill": "^6.26.0",
