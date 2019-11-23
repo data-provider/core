@@ -15,6 +15,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - "queriesDefaultValue" option has to be removed.
 - Options should be accepted only as second argument. "uuid" should be defined only using the "uuid" option, not as second argument.
 
+## [1.3.0] - 2019-11-23
+### Changed
+- Project migration. Read NOTICE for further info. All previous releases in this CHANGELOG file correspond to @xbyorange/mercury-memory package distribution.
+
 ## [1.2.0] - 2019-10-16
 ### Added
 - Add "queriesDefaultValue" option. If defined, queried instances will have default value corresponding to the value of query "key" in the default value object. If not, the behavior of "default value" will be the same than in previous versions, and will return the full object even for queried instances)
