@@ -1,6 +1,6 @@
 /* global window */
 
-import { Origin } from "@xbyorange/mercury";
+import { Origin } from "@data-provider/core";
 
 const TAG = "browser-storage";
 const storageKeysTags = {
@@ -29,7 +29,7 @@ export class Storage extends Origin {
     tags.push(storageKeysTags[storageKey]);
     if (!options.queriesDefaultValue) {
       console.warn(
-        'Usage of "queriesDefaultValue" option is recommended to prepare your code for next major version of "mercury-browser-storage"'
+        'Usage of "queriesDefaultValue" option is recommended to prepare your code for next major version of "@data-provider/browser-storage"'
       );
     }
     const getDefaultValue = function(query) {

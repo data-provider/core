@@ -25,28 +25,28 @@ const BASE_PLUGINS = [
 
 const BASE_CONFIG = {
   input: "src/index.js",
-  external: ["@xbyorange/mercury"],
+  external: ["@data-provider/core"],
   plugins: [...BASE_PLUGINS, uglifier.uglify()]
 };
 
 const GLOBALS = {
-  "@xbyorange/mercury": "mercury"
+  "@data-provider/core": "dataProvider"
 };
 
 module.exports = [
   {
     ...BASE_CONFIG,
     output: {
-      file: "dist/mercury-browser-storage.umd.js",
+      file: "dist/data-provider-browser-storage.umd.js",
       format: "umd",
-      name: "mercury-browser-storage",
+      name: "dataProviderBrowserStorage",
       globals: GLOBALS
     }
   },
   {
     ...BASE_CONFIG,
     output: {
-      file: "dist/mercury-browser-storage.esm.js",
+      file: "dist/data-provider-browser-storage.esm.js",
       format: "esm",
       globals: GLOBALS
     },

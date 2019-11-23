@@ -1,4 +1,4 @@
-const { sources } = require("@xbyorange/mercury");
+const { sources } = require("@data-provider/core");
 const Storage = require("./Storage.mock");
 
 const { SessionStorage } = require("../src/SessionStorage");
