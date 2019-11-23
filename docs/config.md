@@ -3,7 +3,7 @@
 As first argument, the api url should be provided. Base url can be defined afterwards using config method.
 
 ```js
-import { Api } from "@xbyorange/mercury-api";
+import { Api } from "@data-provider/axios";
 
 const booksCollection = new Api("/books");
 ```

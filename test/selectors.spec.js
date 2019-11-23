@@ -1,4 +1,4 @@
-const { Selector } = require("@xbyorange/mercury");
+const { Selector } = require("@data-provider/core");
 
 const AxiosMock = require("./Axios.mock.js");
 const { Api, apis } = require("../src/index");

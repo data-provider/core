@@ -1,4 +1,4 @@
-const { sources } = require("@xbyorange/mercury");
+const { sources } = require("@data-provider/core");
 const { Api } = require("../src/index");
 
 describe("axios requests", () => {

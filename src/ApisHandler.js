@@ -1,6 +1,6 @@
 "use strict";
 
-import { sources } from "@xbyorange/mercury";
+import { sources } from "@data-provider/core";
 
 export const TAG = "api";
 

@@ -1,5 +1,5 @@
 const sinon = require("sinon");
-const { sources } = require("@xbyorange/mercury");
+const { sources } = require("@data-provider/core");
 
 const { Api, apis } = require("../src/index");
 

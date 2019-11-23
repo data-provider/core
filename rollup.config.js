@@ -25,12 +25,12 @@ const BASE_PLUGINS = [
 
 const BASE_CONFIG = {
   input: "src/index.js",
-  external: ["@xbyorange/mercury", "axios", "axios-retry", "lodash", "path-to-regexp"],
+  external: ["@data-provider/core", "axios", "axios-retry", "lodash", "path-to-regexp"],
   plugins: [...BASE_PLUGINS, uglifier.uglify()]
 };
 
 const GLOBALS = {
-  "@xbyorange/mercury": "mercury",
+  "@data-provider/core": "dataProvider",
   axios: "axios",
   "axios-retry": "axiosRetry",
   lodash: "lodash",
@@ -41,16 +41,16 @@ module.exports = [
   {
     ...BASE_CONFIG,
     output: {
-      file: "dist/mercury-api.umd.js",
+      file: "dist/data-provider-axios.umd.js",
       format: "umd",
-      name: "mercury-api",
+      name: "dataProviderAxios",
       globals: GLOBALS
     }
   },
   {
     ...BASE_CONFIG,
     output: {
-      file: "dist/mercury-api.esm.js",
+      file: "dist/data-provider-axios.esm.js",
       format: "esm",
       globals: GLOBALS
     },

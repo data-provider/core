@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [TO BE DEPRECATED]
 - apis "config" and "clean" methods. Mercury "sources" methods should be used instead.
+
+## [1.4.0] - 2019-11-23
+### Changed
+- Project migration. Read NOTICE for further info. All previous releases in this CHANGELOG file correspond to @xbyorange/mercury-api package distribution.
  
 ## [1.3.0] - 2019-10-18
 ### Changed

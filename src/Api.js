@@ -4,7 +4,7 @@ import { once } from "lodash";
 import pathToRegexp from "path-to-regexp";
 import axios from "axios";
 import axiosRetry from "axios-retry";
-import { Origin } from "@xbyorange/mercury";
+import { Origin } from "@data-provider/core";
 
 import { ApisHandler, TAG } from "./ApisHandler";
 import { defaultConfig } from "./defaultConfig";

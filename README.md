@@ -4,25 +4,23 @@
 
 [![NPM downloads][npm-downloads-image]][npm-downloads-url] [![License][license-image]][license-url]
 
-# ![Mercury Logo](assets/logos/mercury_wings_orange_100.png) Mercury Api
-
 ## Overview
 
-This package provides a Mercury Api origin.
+This package provides an Api [Data Provider][data-provider-url] using Axios.
 
-* __Mercury queries__ based on query strings and url parameters.
+* __Data Provider queries__ based on query strings and url parameters.
 * __Built-in cache__. Different caches are provided for different queryStrings and url parameters.
 * __Reactivity__ to CRUD actions. When a "create", "update" or "delete" method is called over an instance, the instance cache is cleaned.
 
 ## Api
 
-`import { Api } from "@xbyorange/mercury-api"`
+`import { Api } from "@data-provider/axios"`
 
 `new Api(url, options)`
 * Arguments
 	* url - _`<String>`_. Api url. Parameters can be defined using ":parameterName". Please refer to the [path-to-regexp][path-to-regex-url] package for further info.
 	* options - _`<Object>`_ Containing options:
-		* tags - _`<String or Array of Strings>`_ - The api instance is added to correspondant groups using these tags. Afterwards, configuration, headers, etc. can be changed for certain groups using the [`sources` object methods described in the mercury docs][mercury-sources-docs-url], or the `api` object methods described below. The "api" tag is added automatically to all Api instances.
+		* tags - _`<String or Array of Strings>`_ - The api instance is added to correspondant groups using these tags. Afterwards, configuration, headers, etc. can be changed for certain groups using the [`sources` object methods described in the Data Provider docs][data-provider-sources-docs-url], or the `api` object methods described below. The "api" tag is added automatically to all Api instances.
 		* baseUrl - _`<String>`_ - Added as prefix to all requests.
 		* createMethod - _`<String>`_ - HTTP method to be used in axios requests for `create` method.
 		* readMethod - _`<String>`_ - HTTP method to be used in axios requests for `read` method.
@@ -121,14 +119,14 @@ If no tags are provided when invoking methods, they will be applied to all api i
 
 > An [example of multiple configuration](docs/apis-config.md) is available in the docs.
 
-`import { apis } from "@xbyorange/mercury-api"`
+`import { apis } from "@data-provider/axios"`
 
 ### clean cache
 
-Use the ["mercury" `sources` method][mercury-sources-docs-url] for cleaning many instances at a time. Use the "api" tag to clean all "mercury-api" instances:
+Use the ["Data Provider" `sources` method][data-provider-sources-docs-url] for cleaning many instances at a time. Use the "api" tag to clean all "@data-provider/axios" instances:
 
 ```js
-import { sources } from "@xbyorange/mercury";
+import { sources } from "@data-provider/core";
 
 sources.getByTag("api").clean();
 ```
@@ -161,10 +159,10 @@ apis.addHeaders({ Authorization: `Bearer ${token}` }, ["need-auth"]);
 
 ### config
 
-Use the ["mercury" `sources` method][mercury-sources-docs-url] for configuring many instances at a time. Use the "api" tag to configure all "mercury-api" instances:
+Use the ["Data Provider" `sources` method][data-provider-sources-docs-url] for configuring many instances at a time. Use the "api" tag to configure all "@data-provider/axios" instances:
 
 ```js
-import { sources } from "@xbyorange/mercury";
+import { sources } from "@data-provider/core";
 
 sources.getByTag("api").config({
   retries: 0
@@ -173,11 +171,11 @@ sources.getByTag("api").config({
 
 ## Examples
 
-Next example will be easier to understand if you are already familiarized with the [mercury][mercury-url] syntax.
+Next example will be easier to understand if you are already familiarized with the [Data Provider][data-provider-url] syntax.
 
 ```js
-import { Selector } from "@xbyorange/mercury";
-import { Api } from "@xbyorange/mercury-api";
+import { Selector } from "@data-provider/core";
+import { Api } from "@data-provider/axios";
 
 const booksCollection = new Api("http://api.library.com/books");
 const authorsCollection = new Api("http://api.library.com/authors");
@@ -225,7 +223,7 @@ await booksWithAuthors.query("George Orwell");
 
 ### More examples
 
-The [mercury][mercury-url] library uses this origin in his examples, so you can refer to the [library documentation][mercury-url] to found more examples.
+The [Data Provider][data-provider-url] library uses this origin in his examples, so you can refer to the [library documentation][data-provider-url] to found more examples.
 
 Specific api origin examples:
 
@@ -237,34 +235,34 @@ Specific api origin examples:
 
 ### React
 
-Please refer to the [react-mercury][react-mercury-url] documentation to see how simple is the data-binding between React Components and mercury-api.
+Please refer to the [@data-provider/connector-react][data-provider-connector-react-url] documentation to see how simple is the data-binding between React Components and @data-provider/axios.
 
-Connect a source to all components that need it. Mercury will fetch data only when needed, and will avoid making it more than once, no matter how many components need the data.
+Connect a source to all components that need it. Data Provider will fetch data only when needed, and will avoid making it more than once, no matter how many components need the data.
 
 ## Contributing
 
 Contributors are welcome.
 Please read the [contributing guidelines](.github/CONTRIBUTING.md) and [code of conduct](.github/CODE_OF_CONDUCT.md).
 
-[mercury-url]: https://github.com/xbyorange/mercury
-[react-mercury-url]: https://github.com/xbyorange/react-mercury
-[mercury-sources-docs-url]: https://github.com/XbyOrange/mercury/blob/master/docs/sources/api.md
+[data-provider-url]: https://github.com/data-provider/core
+[data-provider-connector-react-url]: https://github.com/data-provider/connector-react
+[data-provider-sources-docs-url]: https://github.com/data-provider/core/blob/master/docs/sources/api.md
 [path-to-regex-url]: https://www.npmjs.com/package/path-to-regexp
 
-[coveralls-image]: https://coveralls.io/repos/github/XbyOrange/mercury-api/badge.svg
-[coveralls-url]: https://coveralls.io/github/XbyOrange/mercury-api
-[travisci-image]: https://travis-ci.com/xbyorange/mercury-api.svg?branch=master
-[travisci-url]: https://travis-ci.com/xbyorange/mercury-api
-[last-commit-image]: https://img.shields.io/github/last-commit/xbyorange/mercury-api.svg
-[last-commit-url]: https://github.com/xbyorange/mercury-api/commits
-[license-image]: https://img.shields.io/npm/l/@xbyorange/mercury-api.svg
-[license-url]: https://github.com/xbyorange/mercury-api/blob/master/LICENSE
-[npm-downloads-image]: https://img.shields.io/npm/dm/@xbyorange/mercury-api.svg
-[npm-downloads-url]: https://www.npmjs.com/package/@xbyorange/mercury-api
-[npm-dependencies-image]: https://img.shields.io/david/xbyorange/mercury-api.svg
-[npm-dependencies-url]: https://david-dm.org/xbyorange/mercury-api
-[quality-gate-image]: https://sonarcloud.io/api/project_badges/measure?project=xbyorange-mercury-api&metric=alert_status
-[quality-gate-url]: https://sonarcloud.io/dashboard?id=xbyorange-mercury-api
-[release-image]: https://img.shields.io/github/release-date/xbyorange/mercury-api.svg
-[release-url]: https://github.com/xbyorange/mercury-api/releases
+[coveralls-image]: https://coveralls.io/repos/github/data-provider/axios/badge.svg
+[coveralls-url]: https://coveralls.io/github/data-provider/axios
+[travisci-image]: https://travis-ci.com/data-provider/axios.svg?branch=master
+[travisci-url]: https://travis-ci.com/data-provider/axios
+[last-commit-image]: https://img.shields.io/github/last-commit/data-provider/axios.svg
+[last-commit-url]: https://github.com/data-provider/axios/commits
+[license-image]: https://img.shields.io/npm/l/@data-provider/axios.svg
+[license-url]: https://github.com/data-provider/axios/blob/master/LICENSE
+[npm-downloads-image]: https://img.shields.io/npm/dm/@data-provider/axios.svg
+[npm-downloads-url]: https://www.npmjs.com/package/@data-provider/axios
+[npm-dependencies-image]: https://img.shields.io/david/data-provider/axios.svg
+[npm-dependencies-url]: https://david-dm.org/data-provider/axios
+[quality-gate-image]: https://sonarcloud.io/api/project_badges/measure?project=data-provider-axios&metric=alert_status
+[quality-gate-url]: https://sonarcloud.io/dashboard?id=data-provider-axios
+[release-image]: https://img.shields.io/github/release-date/data-provider/axios.svg
+[release-url]: https://github.com/data-provider/axios/releases
 
