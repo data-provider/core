@@ -46,7 +46,7 @@ As described in the API, all methods (except call) returns again the main object
 #### Examples
 
 ```js
-import { sources } from "@data-provider/axios";
+import { sources } from "@data-provider/core";
 
 console.log(sources.size);
 
@@ -55,7 +55,7 @@ sources.getById("foo").clean();
 // Call "addHeaders" in sources containing "need-auth" tag.
 sources.getByTag("need-auth").call("addHeaders", {
   authentication: "foo-header"
-}); 
+});
 
 // Trace all sources ids.
 sources.elements.forEach(source => {
