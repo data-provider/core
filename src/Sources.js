@@ -84,7 +84,7 @@ export class Sources {
     const idGroup = this._allSourcesById.get(source._id);
     if (idGroup) {
       if (idGroup.size > 0) {
-        console.warn(`Duplicated Mercury source id "${source._id}"`);
+        console.warn(`Duplicated data-provider source id "${source._id}"`);
         this._createIdEmptyGroup(source._id)._add(source);
       } else {
         idGroup._add(source);

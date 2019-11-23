@@ -2,7 +2,7 @@
 
 ### Creating a new Origin connector.
 
-To create a new `Origin`, you should extend from the Mercury `Origin` Class, defining the behavior of the methods `_create`, `_read`, `_update` and `_delete`.
+To create a new `Origin`, you should extend from the data-provider `Origin` Class, defining the behavior of the methods `_create`, `_read`, `_update` and `_delete`.
 
 If you don't define one of this methods, the correspondant CRUD method will not be available in the resultant Origin.
 
@@ -33,7 +33,7 @@ Available methods for internal usage:
 #### Example
 
 ```js
-import { Origin } from "@xbyorange/mercury";
+import { Origin } from "@data-provider/core";
 import requestPromise from "request-promise";
 
 export class Request extends Origin {
