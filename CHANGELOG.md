@@ -18,6 +18,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [1.7.0] - 2019-11-23
 ### Changed
 - Rename Origin into Provider. Maintain Origin due to backward compatibility.
+- Rename sources into instances. Maitain sources due to backward compatibility.
+- Change selectors "source" property to "provider". Maintain also old property due to backward compatibility.
 - Export library in CJS format.
 
 ## [1.6.0] - 2019-11-23

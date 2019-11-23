@@ -1,4 +1,5 @@
 /*
+Copyright 2019 Javier Brea
 Copyright 2019 XbyOrange
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
@@ -13,7 +14,7 @@ const test = require("mocha-sinon-chai");
 const { Origin, sources } = require("../src/Origin");
 const { Selector } = require("../src/Selector");
 
-const CUD_ERROR = "CUD methods can be used only when returning sources";
+const CUD_ERROR = "CUD methods can be used only when returning @data-provider instances";
 
 test.describe("Selector cud methods", () => {
   let sandbox;
