@@ -23,7 +23,7 @@ export class ApisHandler {
 
   config(configuration, tags) {
     console.warn(
-      'mercury-api apis.config method will be deprecated. Use mercury sources.getByTag("api").config instead'
+      '@data-provider/axios apis.config method will be deprecated. Use @data-provider/core sources.getByTag("api").config instead'
     );
     if (!tags) {
       sources.getByTag(TAG).config(configuration);
@@ -73,7 +73,7 @@ export class ApisHandler {
 
   clean(tags) {
     console.warn(
-      `mercury-api apis.clean method will be deprecated. Use mercury sources.getByTag("api").clean instead`
+      `@data-provider/axios apis.clean method will be deprecated. Use @data-provider/core sources.getByTag("api").clean instead`
     );
     if (!tags) {
       sources.getByTag(TAG).clean();
@@ -86,7 +86,7 @@ export class ApisHandler {
 
   reset() {
     console.warn(
-      'mercury-api apis.reset method will be deprecated. Use mercury sources.getByTag("api").clean instead'
+      '@data-provider/axios apis.reset method will be deprecated. Use @data-provider/core sources.getByTag("api").clean instead'
     );
     sources.getByTag(TAG).clear();
   }

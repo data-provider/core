@@ -18,7 +18,7 @@ const usersCollection = new Api("/users", {
 });
 ```
 
-Now, you can use the [`sources` method of the "mercury" library][data-provider-sources-docs-url] to configure your api instances depending of their tags:
+Now, you can use the [`sources` method of the "Data Provider" library][data-provider-sources-docs-url] to configure your api instances depending of their tags:
 
 ```js
 import { sources } from "@data-provider/core";
