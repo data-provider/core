@@ -1,5 +1,4 @@
 /*
-Copyright 2019 Javier Brea
 Copyright 2019 XbyOrange
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
@@ -11,18 +10,16 @@ Unless required by applicable law or agreed to in writing, software distributed 
 
 const test = require("mocha-sinon-chai");
 
-const { Provider, instances } = require("../src/Provider");
-const { Selector } = require("../src/Selector");
+const { Origin, sources } = require("../src/Origin");
 
-test.describe("Selector events", () => {
+test.describe("Origin events", () => {
   let sandbox;
-  let TestProvider;
-  let testProvider;
-  let testSelector;
+  let TestOrigin;
+  let testOrigin;
 
   test.beforeEach(() => {
     sandbox = test.sinon.createSandbox();
-    TestProvider = class extends Provider {
+    TestOrigin = class extends Origin {
       _create() {
         return Promise.resolve("foo-create-result");
       }
@@ -36,115 +33,114 @@ test.describe("Selector events", () => {
         return Promise.resolve("foo-delete-result");
       }
     };
-    testProvider = new TestProvider();
-    testSelector = new Selector(testProvider, result => result);
+    testOrigin = new TestOrigin();
   });
 
   test.afterEach(() => {
     sandbox.restore();
-    instances.clear();
+    sources.clear();
   });
 
   test.describe("Without query", () => {
-    test.it("should emit a change event when Selector change any property", () => {
+    test.it("should emit a change event when Origin change any property", () => {
       let spy = sandbox.spy();
-      testSelector.onChange(spy);
-      return testSelector.read().then(() => {
+      testOrigin.onChange(spy);
+      return testOrigin.read().then(() => {
         return test.expect(spy).to.have.been.called();
       });
     });
 
     test.it("should remove change listener with removeChangeListener method", () => {
       let spy = sandbox.spy();
-      testSelector.onChange(spy);
-      testSelector.removeChangeListener(spy);
-      return testSelector.read().then(() => {
+      testOrigin.onChange(spy);
+      testOrigin.removeChangeListener(spy);
+      return testOrigin.read().then(() => {
         return test.expect(spy).to.not.have.been.called();
       });
     });
 
-    test.it("should emit a changeAny event when Provider method is dispatched", () => {
+    test.it("should emit a changeAny event when Origin method is dispatched", () => {
       let spy = sandbox.spy();
-      testSelector.onChangeAny(spy);
-      return testSelector.read().then(() => {
+      testOrigin.onChangeAny(spy);
+      return testOrigin.read().then(() => {
         return test.expect(spy.getCall(0).args[0].action).to.equal("readDispatch");
       });
     });
 
-    test.it("should emit a changeAny event when Provider method finish loading", () => {
+    test.it("should emit a changeAny event when Origin method finish loading", () => {
       let spy = sandbox.spy();
-      testSelector.onChangeAny(spy);
-      return testSelector.read().then(() => {
+      testOrigin.onChangeAny(spy);
+      return testOrigin.read().then(() => {
         return test.expect(spy.getCall(1).args[0].action).to.equal("readSuccess");
       });
     });
 
     test.it("should remove changeAny event with removeChangeAnyListener method", () => {
       let spy = sandbox.spy();
-      testSelector.onChangeAny(spy);
-      testSelector.removeChangeAnyListener(spy);
-      return testSelector.read().then(() => {
+      testOrigin.onChangeAny(spy);
+      testOrigin.removeChangeAnyListener(spy);
+      return testOrigin.read().then(() => {
         return test.expect(spy).to.not.have.been.called();
       });
     });
 
-    test.it("should emit a clean event when Provider cache is cleaned", () => {
+    test.it("should emit a clean event when Origin cache is cleaned", () => {
       let spy = sandbox.spy();
-      testSelector.onClean(spy);
-      return testSelector.read().then(() => {
-        testSelector.clean();
+      testOrigin.onClean(spy);
+      return testOrigin.read().then(() => {
+        testOrigin.clean();
         return test.expect(spy).to.have.been.called();
       });
     });
 
     test.it("should execute clean event only once when it is added using onceClean method", () => {
       let spy = sandbox.spy();
-      testSelector.onceClean(spy);
-      return testSelector.read().then(() => {
-        testSelector.clean();
-        testSelector.clean();
+      testOrigin.onceClean(spy);
+      return testOrigin.read().then(() => {
+        testOrigin.clean();
+        testOrigin.clean();
         return test.expect(spy.callCount).to.equal(1);
       });
     });
 
     test.it("should remove clean event with removeCleanListener method", () => {
       let spy = sandbox.spy();
-      testSelector.onClean(spy);
-      testSelector.removeCleanListener(spy);
-      return testSelector.read().then(() => {
+      testOrigin.onClean(spy);
+      testOrigin.removeCleanListener(spy);
+      return testOrigin.read().then(() => {
         return test.expect(spy).to.not.have.been.called();
       });
     });
 
-    test.it("should emit a cleanAny event when Provider cache is cleaned", () => {
+    test.it("should emit a cleanAny event when Origin cache is cleaned", () => {
       let spy = sandbox.spy();
-      testSelector.onCleanAny(spy);
-      return testSelector.read().then(() => {
-        testSelector.clean();
+      testOrigin.onCleanAny(spy);
+      return testOrigin.read().then(() => {
+        testOrigin.clean();
         return test.expect(spy).to.have.been.called();
       });
     });
 
-    test.it("should emit a cleanAny event containing data about the cleaned instance", () => {
+    test.it("should emit a cleanAny event containing data about the cleaned source", () => {
       let spy = sandbox.spy();
-      testSelector.onCleanAny(spy);
-      return testSelector.read().then(() => {
-        testSelector.clean();
+      testOrigin.onCleanAny(spy);
+      return testOrigin.read().then(() => {
+        testOrigin.clean();
         const eventData = spy.getCall(0).args[0];
         return Promise.all([
           test.expect(eventData.action).to.equal("clean"),
-          test.expect(eventData.instance._id).to.equal(testSelector._id),
-          test.expect(eventData.instance._queryId).to.equal(undefined),
-          test.expect(eventData.instance._root).to.equal(testSelector)
+          test.expect(eventData.source._id).to.equal(testOrigin._id),
+          test.expect(eventData.source._queryId).to.equal(undefined),
+          test.expect(eventData.source._root).to.equal(testOrigin)
         ]);
       });
     });
 
     test.it("should remove cleanAny event with removeCleanAnyListener method", () => {
       let spy = sandbox.spy();
-      testSelector.onCleanAny(spy);
-      testSelector.removeCleanAnyListener(spy);
-      return testSelector.read().then(() => {
+      testOrigin.onCleanAny(spy);
+      testOrigin.removeCleanAnyListener(spy);
+      return testOrigin.read().then(() => {
         return test.expect(spy).to.not.have.been.called();
       });
     });
@@ -154,111 +150,111 @@ test.describe("Selector events", () => {
     const FOO_QUERY = {
       foo: "foo"
     };
-    let queriedSelector;
+    let queriedOrigin;
 
     test.beforeEach(() => {
-      queriedSelector = testSelector.query(FOO_QUERY);
+      queriedOrigin = testOrigin.query(FOO_QUERY);
     });
 
-    test.it("should emit a change event when Selector change any property", () => {
+    test.it("should emit a change event when Origin change any property", () => {
       let spy = sandbox.spy();
-      queriedSelector.onChange(spy);
-      return queriedSelector.read().then(() => {
+      queriedOrigin.onChange(spy);
+      return queriedOrigin.read().then(() => {
         return test.expect(spy).to.have.been.called();
       });
     });
 
     test.it("should remove change listener with removeChangeListener method", () => {
       let spy = sandbox.spy();
-      queriedSelector.onChange(spy);
-      queriedSelector.removeChangeListener(spy);
-      return queriedSelector.read().then(() => {
+      queriedOrigin.onChange(spy);
+      queriedOrigin.removeChangeListener(spy);
+      return queriedOrigin.read().then(() => {
         return test.expect(spy).to.not.have.been.called();
       });
     });
 
-    test.it("should emit a changeAny event when Selector method is dispatched", () => {
+    test.it("should emit a changeAny event when Origin method is dispatched", () => {
       let spy = sandbox.spy();
-      testSelector.onChangeAny(spy);
-      return queriedSelector.read().then(() => {
+      testOrigin.onChangeAny(spy);
+      return queriedOrigin.read().then(() => {
         return test.expect(spy.getCall(0).args[0].action).to.equal("readDispatch");
       });
     });
 
-    test.it("should emit a changeAny event when Provider method finish loading", () => {
+    test.it("should emit a changeAny event when Origin method finish loading", () => {
       let spy = sandbox.spy();
-      testSelector.onChangeAny(spy);
-      return queriedSelector.read().then(() => {
+      testOrigin.onChangeAny(spy);
+      return queriedOrigin.read().then(() => {
         return test.expect(spy.getCall(1).args[0].action).to.equal("readSuccess");
       });
     });
 
     test.it("should remove changeAny event with removeChangeAnyListener method", () => {
       let spy = sandbox.spy();
-      testSelector.onChangeAny(spy);
-      testSelector.removeChangeAnyListener(spy);
-      return queriedSelector.read().then(() => {
+      testOrigin.onChangeAny(spy);
+      testOrigin.removeChangeAnyListener(spy);
+      return queriedOrigin.read().then(() => {
         return test.expect(spy).to.not.have.been.called();
       });
     });
 
-    test.it("should emit a clean event when Provider cache is cleaned", () => {
+    test.it("should emit a clean event when Origin cache is cleaned", () => {
       let spy = sandbox.spy();
-      queriedSelector.onClean(spy);
-      return queriedSelector.read().then(() => {
-        queriedSelector.clean();
+      queriedOrigin.onClean(spy);
+      return queriedOrigin.read().then(() => {
+        queriedOrigin.clean();
         return test.expect(spy).to.have.been.called();
       });
     });
 
     test.it("should execute clean event only once when it is added using onceClean method", () => {
       let spy = sandbox.spy();
-      queriedSelector.onceClean(spy);
-      return queriedSelector.read().then(() => {
-        queriedSelector.clean();
-        queriedSelector.clean();
+      queriedOrigin.onceClean(spy);
+      return queriedOrigin.read().then(() => {
+        queriedOrigin.clean();
+        queriedOrigin.clean();
         return test.expect(spy.callCount).to.equal(1);
       });
     });
 
     test.it("should remove clean event with removeCleanListener method", () => {
       let spy = sandbox.spy();
-      queriedSelector.onClean(spy);
-      queriedSelector.removeCleanListener(spy);
-      return queriedSelector.read().then(() => {
+      queriedOrigin.onClean(spy);
+      queriedOrigin.removeCleanListener(spy);
+      return queriedOrigin.read().then(() => {
         return test.expect(spy).to.not.have.been.called();
       });
     });
 
-    test.it("should emit a cleanAny event when Provider cache is cleaned", () => {
+    test.it("should emit a cleanAny event when Origin cache is cleaned", () => {
       let spy = sandbox.spy();
-      testSelector.onCleanAny(spy);
-      return queriedSelector.read().then(() => {
-        queriedSelector.clean();
+      testOrigin.onCleanAny(spy);
+      return queriedOrigin.read().then(() => {
+        queriedOrigin.clean();
         return test.expect(spy).to.have.been.called();
       });
     });
 
-    test.it("should emit a cleanAny event containing data about the cleaned instance", () => {
+    test.it("should emit a cleanAny event containing data about the cleaned source", () => {
       let spy = sandbox.spy();
-      testSelector.onCleanAny(spy);
-      return queriedSelector.read().then(() => {
-        queriedSelector.clean();
+      testOrigin.onCleanAny(spy);
+      return queriedOrigin.read().then(() => {
+        queriedOrigin.clean();
         const eventData = spy.getCall(0).args[0];
         return Promise.all([
           test.expect(eventData.action).to.equal("clean"),
-          test.expect(eventData.instance._id).to.equal(queriedSelector._id),
-          test.expect(eventData.instance._queryId).to.equal(`(${JSON.stringify(FOO_QUERY)})`),
-          test.expect(eventData.instance._root).to.equal(testSelector)
+          test.expect(eventData.source._id).to.equal(queriedOrigin._id),
+          test.expect(eventData.source._queryId).to.equal(`(${JSON.stringify(FOO_QUERY)})`),
+          test.expect(eventData.source._root).to.equal(testOrigin)
         ]);
       });
     });
 
     test.it("should remove cleanAny event with removeCleanAnyListener method", () => {
       let spy = sandbox.spy();
-      testSelector.onCleanAny(spy);
-      testSelector.removeCleanAnyListener(spy);
-      return queriedSelector.read().then(() => {
+      testOrigin.onCleanAny(spy);
+      testOrigin.removeCleanAnyListener(spy);
+      return queriedOrigin.read().then(() => {
         return test.expect(spy).to.not.have.been.called();
       });
     });

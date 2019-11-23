@@ -1,5 +1,4 @@
 /*
-Copyright 2019 Javier Brea
 Copyright 2019 XbyOrange
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
@@ -11,10 +10,10 @@ Unless required by applicable law or agreed to in writing, software distributed 
 
 const test = require("mocha-sinon-chai");
 
-const { Provider, instances } = require("../src/Provider");
+const { Origin, sources } = require("../src/Origin");
 const { Selector } = require("../src/Selector");
 
-test.describe("Selector using parallel providers", () => {
+test.describe("Selector using parallel sources", () => {
   const FORCE_ERROR = "force-error";
   const FOO_ORIGIN_VALUE = {
     foo: "foo"
@@ -30,15 +29,15 @@ test.describe("Selector using parallel providers", () => {
   };
   const DEFAULT_VALUE = { foo: "default" };
   let sandbox;
-  let TestProvider;
-  let testProvider;
-  let TestProvider2;
-  let testProvider2;
-  let TestProvider3;
-  let testProvider3;
-  let TestProvider4;
-  let testProvider4;
-  let testProviderSelector;
+  let TestOrigin;
+  let testOrigin;
+  let TestOrigin2;
+  let testOrigin2;
+  let TestOrigin3;
+  let testOrigin3;
+  let TestOrigin4;
+  let testOrigin4;
+  let testOriginSelector;
   let testSelector;
   let spies;
   const testSelectorCalledOnce = () => {
@@ -73,7 +72,7 @@ test.describe("Selector using parallel providers", () => {
       .query(QUERY)
       .read()
       .then(() => {
-        testProvider.query(QUERY).clean();
+        testOrigin.query(QUERY).clean();
         return testSelector
           .query(QUERY)
           .read()
@@ -86,16 +85,16 @@ test.describe("Selector using parallel providers", () => {
   test.beforeEach(() => {
     sandbox = test.sinon.createSandbox();
     spies = {
-      testProviderRead: sandbox.spy(),
-      testProvider2Read: sandbox.spy(),
-      testProvider3Read: sandbox.spy(),
-      testProvider4Read: sandbox.spy(),
-      testProviderSelectorRead: sandbox.spy(),
+      testOriginRead: sandbox.spy(),
+      testOrigin2Read: sandbox.spy(),
+      testOrigin3Read: sandbox.spy(),
+      testOrigin4Read: sandbox.spy(),
+      testOriginSelectorRead: sandbox.spy(),
       testSelectorRead: sandbox.spy()
     };
-    TestProvider = class extends Provider {
+    TestOrigin = class extends Origin {
       _read(query) {
-        spies.testProviderRead(query);
+        spies.testOriginRead(query);
         if (query === FORCE_ERROR) {
           return Promise.reject(new Error(FORCE_ERROR));
         }
@@ -106,10 +105,10 @@ test.describe("Selector using parallel providers", () => {
         });
       }
     };
-    testProvider = new TestProvider();
-    TestProvider2 = class extends Provider {
+    testOrigin = new TestOrigin();
+    TestOrigin2 = class extends Origin {
       _read(query) {
-        spies.testProvider2Read(query);
+        spies.testOrigin2Read(query);
         if (query === FORCE_ERROR) {
           return Promise.reject(new Error(FORCE_ERROR));
         }
@@ -120,10 +119,10 @@ test.describe("Selector using parallel providers", () => {
         });
       }
     };
-    testProvider2 = new TestProvider2();
-    TestProvider3 = class extends Provider {
+    testOrigin2 = new TestOrigin2();
+    TestOrigin3 = class extends Origin {
       _read(query) {
-        spies.testProvider3Read(query);
+        spies.testOrigin3Read(query);
         if (query === FORCE_ERROR) {
           return Promise.reject(new Error(FORCE_ERROR));
         }
@@ -134,10 +133,10 @@ test.describe("Selector using parallel providers", () => {
         });
       }
     };
-    testProvider3 = new TestProvider3();
-    TestProvider4 = class extends Provider {
+    testOrigin3 = new TestOrigin3();
+    TestOrigin4 = class extends Origin {
       _read(query) {
-        spies.testProvider4Read(query);
+        spies.testOrigin4Read(query);
         if (query === FORCE_ERROR) {
           return Promise.reject(new Error(FORCE_ERROR));
         }
@@ -148,31 +147,31 @@ test.describe("Selector using parallel providers", () => {
         });
       }
     };
-    testProvider4 = new TestProvider4();
-    testProviderSelector = new Selector(
+    testOrigin4 = new TestOrigin4();
+    testOriginSelector = new Selector(
       {
-        provider: testProvider3,
+        source: testOrigin3,
         query: query => query
       },
-      (testProviderResult, query) => {
-        spies.testProviderSelectorRead(query);
+      (testOriginResult, query) => {
+        spies.testOriginSelectorRead(query);
         if (query === FORCE_ERROR) {
           return Promise.reject(new Error(FORCE_ERROR));
         }
-        return testProvider4.query(query);
+        return testOrigin4.query(query);
       }
     );
   });
 
   test.afterEach(() => {
     sandbox.restore();
-    instances.clear();
+    sources.clear();
   });
 
-  test.describe("with parallel providers", () => {
+  test.describe("with parallel sources", () => {
     test.beforeEach(() => {
       testSelector = new Selector(
-        [testProvider, testProvider2],
+        [testOrigin, testOrigin2],
         originResults => {
           spies.testSelectorRead();
           return originResults;
@@ -192,20 +191,20 @@ test.describe("Selector using parallel providers", () => {
     });
 
     test.describe("execution order", () => {
-      test.it("should call to both providers in parallel", () => {
+      test.it("should call to both sources in parallel", () => {
         const read = testSelector.read();
         return Promise.all([
-          test.expect(spies.testProviderRead).to.have.been.called(),
-          test.expect(spies.testProvider2Read).to.have.been.called(),
+          test.expect(spies.testOriginRead).to.have.been.called(),
+          test.expect(spies.testOrigin2Read).to.have.been.called(),
           read
         ]);
       });
     });
 
-    test.describe("when provider cache is cleaned", () => {
+    test.describe("when source cache is cleaned", () => {
       test.it("should clean cache", () => {
         return testSelector.read().then(() => {
-          testProvider2.clean();
+          testOrigin2.clean();
           return testSelector.read().then(() => {
             return test.expect(spies.testSelectorRead).to.have.been.calledTwice();
           });
@@ -214,18 +213,18 @@ test.describe("Selector using parallel providers", () => {
     });
   });
 
-  test.describe("with parallel providers catching error", () => {
+  test.describe("with parallel sources catching error", () => {
     test.beforeEach(() => {
       testSelector = new Selector(
         [
           {
-            provider: testProvider,
+            source: testOrigin,
             catch: () => {
               return Promise.resolve("error");
             },
             query: () => FORCE_ERROR
           },
-          testProvider2
+          testOrigin2
         ],
         originResults => {
           spies.testSelectorRead();
@@ -244,21 +243,21 @@ test.describe("Selector using parallel providers", () => {
     });
   });
 
-  test.describe("with parallel providers catching error and returning another provider", () => {
+  test.describe("with parallel sources catching error and returning another source", () => {
     test.beforeEach(() => {
       testSelector = new Selector(
         [
           {
-            provider: testProvider,
+            source: testOrigin,
             catch: (error, query) => {
               const queryObject = query && {
                 receivedQuery: query
               };
-              return testProvider3.query(queryObject);
+              return testOrigin3.query(queryObject);
             },
             query: query => query || FORCE_ERROR
           },
-          testProvider2
+          testOrigin2
         ],
         originResults => {
           spies.testSelectorRead();
@@ -270,19 +269,19 @@ test.describe("Selector using parallel providers", () => {
       );
     });
 
-    test.it("should return value returned by the provider returned in the catch", () => {
+    test.it("should return value returned by the source returned in the catch", () => {
       return testSelector.read().then(value => {
         return test.expect(value).to.deep.equal([FOO_ORIGIN_3_VALUE, FOO_ORIGIN_2_VALUE]);
       });
     });
 
-    test.it("should not clean cache in any provider cache is cleaned", () => {
+    test.it("should not clean cache in any source cache is cleaned", () => {
       return testSelector.read().then(testSelectorCalledOnce);
     });
 
-    test.it("should clean cache when provider returned in catch is cleaned", () => {
+    test.it("should clean cache when source returned in catch is cleaned", () => {
       return testSelector.read().then(() => {
-        testProvider3.clean();
+        testOrigin3.clean();
         return testSelector.read().then(() => {
           return test.expect(spies.testSelectorRead).to.have.been.calledTwice();
         });
@@ -294,7 +293,7 @@ test.describe("Selector using parallel providers", () => {
         .query(FORCE_ERROR)
         .read()
         .then(() => {
-          return test.expect(spies.testProvider3Read).to.have.been.calledWith({
+          return test.expect(spies.testOrigin3Read).to.have.been.calledWith({
             receivedQuery: FORCE_ERROR
           });
         });
@@ -306,16 +305,16 @@ test.describe("Selector using parallel providers", () => {
       testSelector = new Selector(
         [
           {
-            provider: testProvider,
+            source: testOrigin,
             query: query => query
           },
           {
-            provider: testProvider2,
+            source: testOrigin2,
             query: query => query
           }
         ],
         {
-          provider: testProvider3,
+          source: testOrigin3,
           query: (query, previousResults) => {
             return previousResults;
           }
@@ -332,7 +331,7 @@ test.describe("Selector using parallel providers", () => {
 
     test.describe("execution order", () => {
       test.it(
-        "should call to both providers in parallel, passing the query values, and the previousResults values",
+        "should call to both sources in parallel, passing the query values, and the previousResults values",
         () => {
           const QUERY = "foo-query";
           return testSelector
@@ -340,10 +339,10 @@ test.describe("Selector using parallel providers", () => {
             .read()
             .then(() => {
               return Promise.all([
-                test.expect(spies.testProviderRead).to.have.been.calledWith(QUERY),
-                test.expect(spies.testProvider2Read).to.have.been.calledWith(QUERY),
+                test.expect(spies.testOriginRead).to.have.been.calledWith(QUERY),
+                test.expect(spies.testOrigin2Read).to.have.been.calledWith(QUERY),
                 test
-                  .expect(spies.testProvider3Read)
+                  .expect(spies.testOrigin3Read)
                   .to.have.been.calledWith([[FOO_ORIGIN_VALUE, FOO_ORIGIN_2_VALUE]])
               ]);
             });
@@ -352,11 +351,11 @@ test.describe("Selector using parallel providers", () => {
     });
 
     test.describe("cache", () => {
-      test.describe("when one provider cache is cleaned", () => {
+      test.describe("when one source cache is cleaned", () => {
         test.it("should clean cache", queryAndCleanAndCheckCalledTwice);
       });
 
-      test.describe("when no provider cache is cleaned", () => {
+      test.describe("when no source cache is cleaned", () => {
         test.it("should not execute method twice", queryAndReadTwiceAndCheckCalledOnce);
       });
     });
@@ -365,8 +364,8 @@ test.describe("Selector using parallel providers", () => {
   test.describe("with parallel requests combined with single request", () => {
     test.beforeEach(() => {
       testSelector = new Selector(
-        [testProvider, testProvider2],
-        testProvider3,
+        [testOrigin, testOrigin2],
+        testOrigin3,
         (parallelResults, origin3Results) => ({
           parallel: parallelResults,
           single: origin3Results
@@ -387,24 +386,24 @@ test.describe("Selector using parallel providers", () => {
     });
 
     test.it(
-      "should call to first two providers in parallel, next one when first are resolved",
+      "should call to first two sources in parallel, next one when first are resolved",
       () => {
         const read = testSelector.read();
         return Promise.all([
-          test.expect(spies.testProviderRead).to.have.been.called(),
-          test.expect(spies.testProvider2Read).to.have.been.called(),
-          test.expect(spies.testProvider3Read).to.not.have.been.called(),
+          test.expect(spies.testOriginRead).to.have.been.called(),
+          test.expect(spies.testOrigin2Read).to.have.been.called(),
+          test.expect(spies.testOrigin3Read).to.not.have.been.called(),
           read
         ]);
       }
     );
 
-    test.it("should have called to all providers when read has finished", () => {
+    test.it("should have called to all sources when read has finished", () => {
       return testSelector.read().then(() => {
         return Promise.all([
-          test.expect(spies.testProviderRead).to.have.been.called(),
-          test.expect(spies.testProvider2Read).to.have.been.called(),
-          test.expect(spies.testProvider3Read).to.have.been.called()
+          test.expect(spies.testOriginRead).to.have.been.called(),
+          test.expect(spies.testOrigin2Read).to.have.been.called(),
+          test.expect(spies.testOrigin3Read).to.have.been.called()
         ]);
       });
     });
@@ -414,13 +413,13 @@ test.describe("Selector using parallel providers", () => {
     test.beforeEach(() => {
       testSelector = new Selector(
         [
-          testProvider,
+          testOrigin,
           {
-            provider: testProvider2,
+            source: testOrigin2,
             query: () => FORCE_ERROR
           }
         ],
-        testProvider3,
+        testOrigin3,
         (parallelResults, origin3Results) => ({
           parallel: parallelResults,
           single: origin3Results
@@ -445,13 +444,9 @@ test.describe("Selector using parallel providers", () => {
 
   test.describe("with chained parallel requests", () => {
     test.beforeEach(() => {
-      testSelector = new Selector(
-        [testProvider, [testProvider2, testProvider3]],
-        results => results,
-        {
-          defaultValue: DEFAULT_VALUE
-        }
-      );
+      testSelector = new Selector([testOrigin, [testOrigin2, testOrigin3]], results => results, {
+        defaultValue: DEFAULT_VALUE
+      });
     });
 
     test.it("should return value returned by parser function", () => {
@@ -462,12 +457,12 @@ test.describe("Selector using parallel providers", () => {
       });
     });
 
-    test.it("should call to all providers in parallel", () => {
+    test.it("should call to all sources in parallel", () => {
       const read = testSelector.read();
       return Promise.all([
-        test.expect(spies.testProviderRead).to.have.been.called(),
-        test.expect(spies.testProvider2Read).to.have.been.called(),
-        test.expect(spies.testProvider3Read).to.have.been.called(),
+        test.expect(spies.testOriginRead).to.have.been.called(),
+        test.expect(spies.testOrigin2Read).to.have.been.called(),
+        test.expect(spies.testOrigin3Read).to.have.been.called(),
         read
       ]);
     });
@@ -478,8 +473,8 @@ test.describe("Selector using parallel providers", () => {
     () => {
       test.beforeEach(() => {
         testSelector = new Selector(
-          [testProvider, testProviderSelector],
-          testProvider3,
+          [testOrigin, testOriginSelector],
+          testOrigin3,
           selectorMethod,
           {
             defaultValue: DEFAULT_VALUE
@@ -500,32 +495,32 @@ test.describe("Selector using parallel providers", () => {
 
       test.describe("execution order", () => {
         test.it(
-          "should call to first two providers in parallel, next one when first are resolved",
+          "should call to first two sources in parallel, next one when first are resolved",
           () => {
             const selector = testSelector.read();
             return Promise.all([
-              test.expect(spies.testProviderRead).to.have.been.called(),
-              test.expect(spies.testProvider4Read).to.not.have.been.called(), // because 4 depends of 3, and has a timeout
-              test.expect(spies.testProvider3Read).to.have.been.called(), // because 4 depends of 3, and has a timeout
+              test.expect(spies.testOriginRead).to.have.been.called(),
+              test.expect(spies.testOrigin4Read).to.not.have.been.called(), // because 4 depends of 3, and has a timeout
+              test.expect(spies.testOrigin3Read).to.have.been.called(), // because 4 depends of 3, and has a timeout
               selector
             ]);
           }
         );
 
-        test.it("should have called to all providers when read has finished", () => {
+        test.it("should have called to all sources when read has finished", () => {
           return testSelector.read().then(() => {
             return Promise.all([
-              test.expect(spies.testProviderRead).to.have.been.calledOnce(),
-              test.expect(spies.testProvider4Read).to.have.been.calledOnce(),
-              test.expect(spies.testProvider3Read).to.have.been.calledTwice(),
-              test.expect(spies.testProviderSelectorRead).to.have.been.calledOnce()
+              test.expect(spies.testOriginRead).to.have.been.calledOnce(),
+              test.expect(spies.testOrigin4Read).to.have.been.calledOnce(),
+              test.expect(spies.testOrigin3Read).to.have.been.calledTwice(),
+              test.expect(spies.testOriginSelectorRead).to.have.been.calledOnce()
             ]);
           });
         });
       });
 
       test.describe("cache", () => {
-        test.describe("when provider caches are not cleaned", () => {
+        test.describe("when source caches are not cleaned", () => {
           test.it("should execute read method once", () => {
             return testSelector.read().then(testSelectorCalledOnce);
           });
@@ -551,16 +546,16 @@ test.describe("Selector using parallel providers", () => {
         testSelector = new Selector(
           [
             {
-              provider: testProvider,
+              source: testOrigin,
               query: query => query
             },
             {
-              provider: testProviderSelector,
+              source: testOriginSelector,
               query: query => query
             }
           ],
           {
-            provider: testProvider3,
+            source: testOrigin3,
             query: query => query
           },
           selectorMethod,
@@ -571,16 +566,16 @@ test.describe("Selector using parallel providers", () => {
       });
 
       test.describe("execution order", () => {
-        test.it("should have called to all providers passing query", () => {
+        test.it("should have called to all sources passing query", () => {
           return testSelector
             .query(QUERY)
             .read()
             .then(() => {
               return Promise.all([
-                test.expect(spies.testProviderRead).to.have.been.calledWith(QUERY),
-                test.expect(spies.testProvider4Read).to.have.been.calledWith(QUERY),
-                test.expect(spies.testProvider3Read).to.have.been.calledWith(QUERY),
-                test.expect(spies.testProviderSelectorRead).to.have.been.calledWith(QUERY)
+                test.expect(spies.testOriginRead).to.have.been.calledWith(QUERY),
+                test.expect(spies.testOrigin4Read).to.have.been.calledWith(QUERY),
+                test.expect(spies.testOrigin3Read).to.have.been.calledWith(QUERY),
+                test.expect(spies.testOriginSelectorRead).to.have.been.calledWith(QUERY)
               ]);
             });
         });
@@ -591,17 +586,17 @@ test.describe("Selector using parallel providers", () => {
           test.it("should execute read method once", queryAndReadTwiceAndCheckCalledOnce);
         });
 
-        test.describe("when a provider cache is cleaned", () => {
+        test.describe("when a source cache is cleaned", () => {
           test.it("should clean cache", queryAndCleanAndCheckCalledTwice);
         });
 
-        test.describe("when returned provider cache is cleaned", () => {
+        test.describe("when returned source cache is cleaned", () => {
           test.it("should clean cache", () => {
             return testSelector
               .query(QUERY)
               .read()
               .then(() => {
-                testProvider4.query(QUERY).clean();
+                testOrigin4.query(QUERY).clean();
                 return testSelector
                   .query(QUERY)
                   .read()

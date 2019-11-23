@@ -1,5 +1,4 @@
 /*
-Copyright 2019 Javier Brea
 Copyright 2019 XbyOrange
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
@@ -11,14 +10,14 @@ Unless required by applicable law or agreed to in writing, software distributed 
 
 const test = require("mocha-sinon-chai");
 
-const { Provider, instances } = require("../src/Provider");
+const { Origin, sources } = require("../src/Origin");
 const { Selector } = require("../src/Selector");
 
 test.describe("Selector test methods", () => {
   const RESULT = "result";
   let sandbox;
-  let TestProvider;
-  let testProvider;
+  let TestOrigin;
+  let testOrigin;
   let testSelector;
   let spies;
 
@@ -29,15 +28,15 @@ test.describe("Selector test methods", () => {
       catch: sandbox.spy(),
       selector: sandbox.stub().callsFake(result => result)
     };
-    TestProvider = class extends Provider {
+    TestOrigin = class extends Origin {
       _read() {
         return Promise.resolve(RESULT);
       }
     };
-    testProvider = new TestProvider();
+    testOrigin = new TestOrigin();
     testSelector = new Selector(
       {
-        provider: testProvider,
+        source: testOrigin,
         query: query => {
           spies.query();
           return query;
@@ -53,10 +52,10 @@ test.describe("Selector test methods", () => {
 
   test.afterEach(() => {
     sandbox.restore();
-    instances.clear();
+    sources.clear();
   });
 
-  test.describe("providers query functions", () => {
+  test.describe("sources query functions", () => {
     test.describe("when there are no concurrent queries", () => {
       test.it("should be avaible for testing at the test.queries property", () => {
         test.expect(testSelector.test.queries[0]("foo")).to.equal("foo");
@@ -64,20 +63,20 @@ test.describe("Selector test methods", () => {
       });
     });
 
-    test.describe("when there are concurrent providers", () => {
+    test.describe("when there are concurrent sources", () => {
       test.it("should be avaible for testing at the test.queries property as an array", () => {
-        const testProvider2 = new TestProvider();
+        const testOrigin2 = new TestOrigin();
         testSelector = new Selector(
           [
             {
-              provider: testProvider,
+              source: testOrigin,
               query: query => {
                 spies.query();
                 return `${query}-1`;
               }
             },
             {
-              provider: testProvider2,
+              source: testOrigin2,
               query: query => {
                 spies.query();
                 return `${query}-2`;
@@ -92,12 +91,12 @@ test.describe("Selector test methods", () => {
       });
 
       test.it("should have all concurrent queries available recursively", () => {
-        const testProvider2 = new TestProvider();
-        const testProvider3 = new TestProvider();
+        const testOrigin2 = new TestOrigin();
+        const testOrigin3 = new TestOrigin();
         testSelector = new Selector(
           [
             {
-              provider: testProvider,
+              source: testOrigin,
               query: query => {
                 spies.query();
                 return `${query}-1`;
@@ -105,14 +104,14 @@ test.describe("Selector test methods", () => {
             },
             [
               {
-                provider: testProvider2,
+                source: testOrigin2,
                 query: query => {
                   spies.query();
                   return `${query}-2`;
                 }
               },
               {
-                provider: testProvider3,
+                source: testOrigin3,
                 query: query => {
                   spies.query();
                   return `${query}-3`;
@@ -130,28 +129,28 @@ test.describe("Selector test methods", () => {
     });
   });
 
-  test.describe("providers catch functions", () => {
-    test.describe("when there are no concurrent providers", () => {
+  test.describe("sources catch functions", () => {
+    test.describe("when there are no concurrent sources", () => {
       test.it("should be avaible for testing at the test.catches property", () => {
         test.expect(testSelector.test.catches[0]("foo")).to.equal("foo");
         test.expect(spies.catch).to.have.been.called();
       });
     });
 
-    test.describe("when there are concurrent providers", () => {
+    test.describe("when there are concurrent sources", () => {
       test.it("should be avaible for testing at the test.catches property as an array", () => {
-        const testProvider2 = new TestProvider();
+        const testOrigin2 = new TestOrigin();
         testSelector = new Selector(
           [
             {
-              provider: testProvider,
+              source: testOrigin,
               catch: err => {
                 spies.catch();
                 return `${err}-a`;
               }
             },
             {
-              provider: testProvider2,
+              source: testOrigin2,
               catch: err => {
                 spies.catch();
                 return `${err}-b`;
@@ -166,12 +165,12 @@ test.describe("Selector test methods", () => {
       });
 
       test.it("should have all concurrent catches available recursively", () => {
-        const testProvider2 = new TestProvider();
-        const testProvider3 = new TestProvider();
+        const testOrigin2 = new TestOrigin();
+        const testOrigin3 = new TestOrigin();
         testSelector = new Selector(
           [
             {
-              provider: testProvider,
+              source: testOrigin,
               catch: err => {
                 spies.catch();
                 return `${err}-a`;
@@ -179,14 +178,14 @@ test.describe("Selector test methods", () => {
             },
             [
               {
-                provider: testProvider2,
+                source: testOrigin2,
                 catch: err => {
                   spies.catch();
                   return `${err}-b`;
                 }
               },
               {
-                provider: testProvider3,
+                source: testOrigin3,
                 catch: err => {
                   spies.catch();
                   return `${err}-c`;

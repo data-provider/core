@@ -1,5 +1,4 @@
 /*
-Copyright 2019 Javier Brea
 Copyright 2019 XbyOrange
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
@@ -11,19 +10,19 @@ Unless required by applicable law or agreed to in writing, software distributed 
 
 const test = require("mocha-sinon-chai");
 
-const { Provider, instances } = require("../src/Provider");
+const { Origin, sources } = require("../src/Origin");
 const { Selector } = require("../src/Selector");
 
 test.describe("Selector error", () => {
   const fooError = new Error("foo-error");
   let sandbox;
-  let TestProvider;
-  let testProvider;
+  let TestOrigin;
+  let testOrigin;
   let testSelector;
 
   test.beforeEach(() => {
     sandbox = test.sinon.createSandbox();
-    TestProvider = class extends Provider {
+    TestOrigin = class extends Origin {
       _read() {
         return new Promise((resolve, reject) => {
           setTimeout(() => {
@@ -32,10 +31,10 @@ test.describe("Selector error", () => {
         });
       }
     };
-    testProvider = new TestProvider("foo-id");
+    testOrigin = new TestOrigin("foo-id");
     testSelector = new Selector(
       {
-        provider: testProvider,
+        source: testOrigin,
         query: query => query
       },
       result => result
@@ -44,7 +43,7 @@ test.describe("Selector error", () => {
 
   test.afterEach(() => {
     sandbox.restore();
-    instances.clear();
+    sources.clear();
   });
 
   test.describe("using getter", () => {
@@ -97,7 +96,7 @@ test.describe("Selector error", () => {
     test.beforeEach(() => {
       testSelector = new Selector(
         {
-          provider: testProvider,
+          source: testOrigin,
           catch: () => {
             return Promise.resolve(CATCH_RETURNS);
           }
@@ -117,23 +116,23 @@ test.describe("Selector error", () => {
     });
   });
 
-  test.describe("when catch property is defined, and returns another provider", () => {
+  test.describe("when catch property is defined, and returns another source", () => {
     const ORIGIN_2_RETURNS = "foo-2";
-    let TestProvider2;
-    let testProvider2;
+    let TestOrigin2;
+    let testOrigin2;
 
     test.beforeEach(() => {
-      TestProvider2 = class extends Provider {
+      TestOrigin2 = class extends Origin {
         _read() {
           return Promise.resolve(ORIGIN_2_RETURNS);
         }
       };
-      testProvider2 = new TestProvider2();
+      testOrigin2 = new TestOrigin2();
       testSelector = new Selector(
         {
-          provider: testProvider,
+          source: testOrigin,
           catch: () => {
-            return testProvider2;
+            return testOrigin2;
           }
         },
         result => result
@@ -145,7 +144,7 @@ test.describe("Selector error", () => {
     });
 
     test.it(
-      "should return the value returned by the provider returned by catch function when read finish",
+      "should return the value returned by the source returned by catch function when read finish",
       () => {
         return testSelector.read().then(result => {
           return test.expect(result).to.equal(ORIGIN_2_RETURNS);

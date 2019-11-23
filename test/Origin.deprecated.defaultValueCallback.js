@@ -1,5 +1,4 @@
 /*
-Copyright 2019 Javier Brea
 Copyright 2019 XbyOrange
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
@@ -11,9 +10,9 @@ Unless required by applicable law or agreed to in writing, software distributed 
 
 const test = require("mocha-sinon-chai");
 
-const { Provider, instances } = require("../src/Provider");
+const { Origin, sources } = require("../src/Origin");
 
-test.describe("Provider defaultValue as callback", () => {
+test.describe("Origin defaultValue as callback", () => {
   let sandbox;
 
   test.beforeEach(() => {
@@ -22,16 +21,16 @@ test.describe("Provider defaultValue as callback", () => {
 
   test.afterEach(() => {
     sandbox.restore();
-    instances.clear();
+    sources.clear();
   });
 
-  test.describe("when Provider has defaultValue callback defined", () => {
+  test.describe("when Origin has defaultValue callback defined", () => {
     test.describe("read method", () => {
       test.describe("without query", () => {
         test.it(
           "should return the result of defaultValue callback until real value is returned",
           () => {
-            const TestProvider = class extends Provider {
+            const TestOrigin = class extends Origin {
               constructor(id, defaultValue, options) {
                 const getDefaultValue = () => {
                   return defaultValue + 2;
@@ -43,10 +42,10 @@ test.describe("Provider defaultValue as callback", () => {
                 return Promise.resolve(5);
               }
             };
-            const testProvider = new TestProvider("", 4);
-            test.expect(testProvider.read.value).to.equal(6);
-            return testProvider.read().then(() => {
-              return test.expect(testProvider.read.value).to.equal(5);
+            const testOrigin = new TestOrigin("", 4);
+            test.expect(testOrigin.read.value).to.equal(6);
+            return testOrigin.read().then(() => {
+              return test.expect(testOrigin.read.value).to.equal(5);
             });
           }
         );
@@ -54,7 +53,7 @@ test.describe("Provider defaultValue as callback", () => {
 
       test.describe("with query", () => {
         const QUERY = "foo-query";
-        const TestProvider = class extends Provider {
+        const TestOrigin = class extends Origin {
           constructor(id, defaultValue, options) {
             const getDefaultValue = query => {
               return query;
@@ -71,10 +70,10 @@ test.describe("Provider defaultValue as callback", () => {
           test.it(
             "should pass query to defaultValue callback, and return the result until real value is returned",
             () => {
-              const testProvider = new TestProvider("", 4).query(QUERY);
-              test.expect(testProvider.read.value).to.equal("foo-query");
-              return testProvider.read().then(() => {
-                return test.expect(testProvider.read.value).to.equal("foo-result");
+              const testOrigin = new TestOrigin("", 4).query(QUERY);
+              test.expect(testOrigin.read.value).to.equal("foo-query");
+              return testOrigin.read().then(() => {
+                return test.expect(testOrigin.read.value).to.equal("foo-result");
               });
             }
           );
@@ -84,19 +83,19 @@ test.describe("Provider defaultValue as callback", () => {
           test.it(
             "should pass chained query to defaultValue callback, and return the result until real value is returned",
             () => {
-              const testProvider = new TestProvider("", 4)
+              const testOrigin = new TestOrigin("", 4)
                 .query({
                   foo: "foo"
                 })
                 .query({
                   foo2: "foo2"
                 });
-              test.expect(testProvider.read.value).to.deep.equal({
+              test.expect(testOrigin.read.value).to.deep.equal({
                 foo: "foo",
                 foo2: "foo2"
               });
-              return testProvider.read().then(() => {
-                return test.expect(testProvider.read.value).to.equal("foo-result");
+              return testOrigin.read().then(() => {
+                return test.expect(testOrigin.read.value).to.equal("foo-result");
               });
             }
           );

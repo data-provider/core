@@ -1,5 +1,4 @@
 /*
-Copyright 2019 Javier Brea
 Copyright 2019 XbyOrange
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
@@ -11,16 +10,16 @@ Unless required by applicable law or agreed to in writing, software distributed 
 
 const test = require("mocha-sinon-chai");
 
-const { Provider, instances } = require("../src/Provider");
+const { Origin, sources } = require("../src/Origin");
 
-test.describe("Provider loading", () => {
+test.describe("Origin loading", () => {
   let sandbox;
-  let TestProvider;
-  let testProvider;
+  let TestOrigin;
+  let testOrigin;
 
   test.beforeEach(() => {
     sandbox = test.sinon.createSandbox();
-    TestProvider = class extends Provider {
+    TestOrigin = class extends Origin {
       _read() {
         return new Promise(resolve => {
           setTimeout(() => {
@@ -29,44 +28,44 @@ test.describe("Provider loading", () => {
         });
       }
     };
-    testProvider = new TestProvider("foo-id");
+    testOrigin = new TestOrigin("foo-id");
   });
 
   test.afterEach(() => {
     sandbox.restore();
-    instances.clear();
+    sources.clear();
   });
 
   test.describe("using getter", () => {
     test.it("should return false until read is dispatched", () => {
-      test.expect(testProvider.read.getters.loading()).to.be.false();
+      test.expect(testOrigin.read.getters.loading()).to.be.false();
     });
 
     test.it("should return true while read is loading", () => {
-      testProvider.read();
-      test.expect(testProvider.read.getters.loading()).to.be.true();
+      testOrigin.read();
+      test.expect(testOrigin.read.getters.loading()).to.be.true();
     });
 
     test.it("should return false when read finish", () => {
-      return testProvider.read().then(() => {
-        return test.expect(testProvider.read.getters.loading()).to.be.false();
+      return testOrigin.read().then(() => {
+        return test.expect(testOrigin.read.getters.loading()).to.be.false();
       });
     });
   });
 
   test.describe("without query", () => {
     test.it("should return false until read is dispatched", () => {
-      test.expect(testProvider.read.loading).to.be.false();
+      test.expect(testOrigin.read.loading).to.be.false();
     });
 
     test.it("should return true while read is loading", () => {
-      testProvider.read();
-      test.expect(testProvider.read.loading).to.be.true();
+      testOrigin.read();
+      test.expect(testOrigin.read.loading).to.be.true();
     });
 
     test.it("should return false when read finish", () => {
-      return testProvider.read().then(() => {
-        return test.expect(testProvider.read.loading).to.be.false();
+      return testOrigin.read().then(() => {
+        return test.expect(testOrigin.read.loading).to.be.false();
       });
     });
   });
@@ -74,20 +73,20 @@ test.describe("Provider loading", () => {
   test.describe("with query", () => {
     const QUERY = "foo";
     test.it("should return false until read is dispatched", () => {
-      test.expect(testProvider.query(QUERY).read.loading).to.be.false();
+      test.expect(testOrigin.query(QUERY).read.loading).to.be.false();
     });
 
     test.it("should return true while read is loading", () => {
-      testProvider.query(QUERY).read();
-      test.expect(testProvider.query(QUERY).read.loading).to.be.true();
+      testOrigin.query(QUERY).read();
+      test.expect(testOrigin.query(QUERY).read.loading).to.be.true();
     });
 
     test.it("should return false when read finish", () => {
-      return testProvider
+      return testOrigin
         .query(QUERY)
         .read()
         .then(() => {
-          return test.expect(testProvider.query(QUERY).read.loading).to.be.false();
+          return test.expect(testOrigin.query(QUERY).read.loading).to.be.false();
         });
     });
   });

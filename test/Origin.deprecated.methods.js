@@ -1,5 +1,4 @@
 /*
-Copyright 2019 Javier Brea
 Copyright 2019 XbyOrange
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
@@ -11,9 +10,9 @@ Unless required by applicable law or agreed to in writing, software distributed 
 
 const test = require("mocha-sinon-chai");
 
-const { Provider, instances } = require("../src/Provider");
+const { Origin, sources } = require("../src/Origin");
 
-test.describe("Provider methods", () => {
+test.describe("Origin methods", () => {
   let sandbox;
 
   test.beforeEach(() => {
@@ -22,13 +21,13 @@ test.describe("Provider methods", () => {
 
   test.afterEach(() => {
     sandbox.restore();
-    instances.clear();
+    sources.clear();
   });
 
   const testMethod = methodName => {
-    test.describe(`when Provider has _${methodName} method defined`, () => {
-      let TestProvider;
-      let testProvider;
+    test.describe(`when Origin has _${methodName} method defined`, () => {
+      let TestOrigin;
+      let testOrigin;
       let spys;
       test.beforeEach(() => {
         spys = {
@@ -38,7 +37,7 @@ test.describe("Provider methods", () => {
           delete: sandbox.spy()
         };
 
-        TestProvider = class extends Provider {
+        TestOrigin = class extends Origin {
           _create() {
             spys.create();
             return Promise.resolve();
@@ -57,40 +56,40 @@ test.describe("Provider methods", () => {
           }
         };
 
-        testProvider = new TestProvider();
+        testOrigin = new TestOrigin();
       });
 
       test.describe("Without query", () => {
         test.it(`should return an instance with ${methodName} method`, () => {
-          test.expect(testProvider[methodName]).to.not.be.undefined();
+          test.expect(testOrigin[methodName]).to.not.be.undefined();
         });
 
         test.it(`should be called when ${methodName} method is called`, () => {
-          return testProvider[methodName]().then(() => {
+          return testOrigin[methodName]().then(() => {
             return test.expect(spys[methodName]).to.have.been.called();
           });
         });
 
         test.it(`should be called when ${methodName} method dispatch is called`, () => {
-          return testProvider[methodName].dispatch().then(() => {
+          return testOrigin[methodName].dispatch().then(() => {
             return test.expect(spys[methodName]).to.have.been.called();
           });
         });
 
         test.it(`should be available through loading getter`, () => {
-          return testProvider[methodName].getters.loading._method().then(() => {
+          return testOrigin[methodName].getters.loading._method().then(() => {
             return test.expect(spys[methodName]).to.have.been.called();
           });
         });
 
         test.it(`should be available through value getter`, () => {
-          return testProvider[methodName].getters.value._method().then(() => {
+          return testOrigin[methodName].getters.value._method().then(() => {
             return test.expect(spys[methodName]).to.have.been.called();
           });
         });
 
         test.it(`should be available through error getter`, () => {
-          return testProvider[methodName].getters.error._method().then(() => {
+          return testOrigin[methodName].getters.error._method().then(() => {
             return test.expect(spys[methodName]).to.have.been.called();
           });
         });
@@ -99,7 +98,7 @@ test.describe("Provider methods", () => {
       test.describe("With query", () => {
         let queried;
         test.beforeEach(() => {
-          queried = testProvider.query({
+          queried = testOrigin.query({
             foo: "foo"
           });
         });
@@ -147,11 +146,11 @@ test.describe("Provider methods", () => {
   testMethod("delete");
 
   const testEmptyMethod = methodName => {
-    test.describe(`when Provider has not _${methodName} method defined`, () => {
+    test.describe(`when Origin has not _${methodName} method defined`, () => {
       test.it(`should return an instance without ${methodName} method`, () => {
-        const TestProvider = class extends Provider {};
-        const testProvider = new TestProvider();
-        test.expect(testProvider[methodName]).to.be.undefined();
+        const TestOrigin = class extends Origin {};
+        const testOrigin = new TestOrigin();
+        test.expect(testOrigin[methodName]).to.be.undefined();
       });
     });
   };

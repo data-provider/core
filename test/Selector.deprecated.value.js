@@ -1,5 +1,4 @@
 /*
-Copyright 2019 Javier Brea
 Copyright 2019 XbyOrange
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
@@ -11,7 +10,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 
 const test = require("mocha-sinon-chai");
 
-const { Provider, instances } = require("../src/Provider");
+const { Origin, sources } = require("../src/Origin");
 const { Selector } = require("../src/Selector");
 
 test.describe("Selector value", () => {
@@ -26,13 +25,13 @@ test.describe("Selector value", () => {
   };
   const DEFAULT_VALUE = { foo: "default" };
   let sandbox;
-  let TestProvider;
-  let testProvider;
-  let TestProvider2;
-  let testProvider2;
-  let TestProvider3;
-  let testProvider3;
-  let testProviderSelector;
+  let TestOrigin;
+  let testOrigin;
+  let TestOrigin2;
+  let testOrigin2;
+  let TestOrigin3;
+  let testOrigin3;
+  let testOriginSelector;
   let testSelector;
   let spies;
 
@@ -45,7 +44,7 @@ test.describe("Selector value", () => {
     });
   };
 
-  const checkSelectorHasProvider3Value = () => {
+  const checkSelectorHasOrigin3Value = () => {
     return testSelector.read().then(result => {
       return test.expect(result).to.deep.equal(FOO_ORIGIN_3_VALUE);
     });
@@ -54,41 +53,41 @@ test.describe("Selector value", () => {
   test.beforeEach(() => {
     sandbox = test.sinon.createSandbox();
     spies = {
-      testProviderRead: sandbox.spy(),
-      testProvider2Read: sandbox.spy(),
-      testProvider3Read: sandbox.spy()
+      testOriginRead: sandbox.spy(),
+      testOrigin2Read: sandbox.spy(),
+      testOrigin3Read: sandbox.spy()
     };
-    TestProvider = class extends Provider {
+    TestOrigin = class extends Origin {
       _read(query) {
-        spies.testProviderRead(query);
+        spies.testOriginRead(query);
         return Promise.resolve(FOO_ORIGIN_VALUE);
       }
     };
-    testProvider = new TestProvider();
-    TestProvider2 = class extends Provider {
+    testOrigin = new TestOrigin();
+    TestOrigin2 = class extends Origin {
       _read(query) {
-        spies.testProvider2Read(query);
+        spies.testOrigin2Read(query);
         return Promise.resolve(FOO_ORIGIN_2_VALUE);
       }
     };
-    testProvider2 = new TestProvider2();
-    TestProvider3 = class extends Provider {
+    testOrigin2 = new TestOrigin2();
+    TestOrigin3 = class extends Origin {
       _read(query) {
-        spies.testProvider3Read(query);
+        spies.testOrigin3Read(query);
         return Promise.resolve(FOO_ORIGIN_3_VALUE);
       }
     };
-    testProvider3 = new TestProvider3();
-    testProviderSelector = new Selector(
+    testOrigin3 = new TestOrigin3();
+    testOriginSelector = new Selector(
       {
-        provider: testProvider3,
+        source: testOrigin3,
         query: query => query
       },
       results => results
     );
     testSelector = new Selector(
-      testProvider,
-      testProvider2,
+      testOrigin,
+      testOrigin2,
       (originResult, origin2Result) => ({
         ...originResult,
         ...origin2Result
@@ -101,7 +100,7 @@ test.describe("Selector value", () => {
 
   test.afterEach(() => {
     sandbox.restore();
-    instances.clear();
+    sources.clear();
   });
 
   test.describe("using getter", () => {
@@ -124,15 +123,15 @@ test.describe("Selector value", () => {
     test.it("should return value returned by parser function", checkSelectorValue);
   });
 
-  test.describe("with queried providers", () => {
+  test.describe("with queried sources", () => {
     test.beforeEach(() => {
       testSelector = new Selector(
         {
-          provider: testProvider,
+          source: testOrigin,
           query: query => query
         },
         {
-          provider: testProvider2,
+          source: testOrigin2,
           query: query => query
         },
         (originResult, origin2Result) => ({
@@ -148,26 +147,26 @@ test.describe("Selector value", () => {
     test.it("should return value returned by parser function", checkSelectorValue);
 
     test.describe("when no query is passed", () => {
-      test.it("should dispatch read methods of providers applying the resultant queries", () => {
+      test.it("should dispatch read methods of sources applying the resultant queries", () => {
         return testSelector.read().then(() => {
           return Promise.all([
-            test.expect(spies.testProviderRead).to.have.been.called(),
-            test.expect(spies.testProvider2Read).to.have.been.called()
+            test.expect(spies.testOriginRead).to.have.been.called(),
+            test.expect(spies.testOrigin2Read).to.have.been.called()
           ]);
         });
       });
     });
 
     test.describe("when query is passed", () => {
-      test.it("should dispatch read methods of providers applying the resultant queries", () => {
+      test.it("should dispatch read methods of sources applying the resultant queries", () => {
         const QUERY = "foo";
         return testSelector
           .query(QUERY)
           .read()
           .then(() => {
             return Promise.all([
-              test.expect(spies.testProviderRead).to.have.been.calledWith(QUERY),
-              test.expect(spies.testProvider2Read).to.have.been.calledWith(QUERY)
+              test.expect(spies.testOriginRead).to.have.been.calledWith(QUERY),
+              test.expect(spies.testOrigin2Read).to.have.been.calledWith(QUERY)
             ]);
           });
       });
@@ -178,15 +177,15 @@ test.describe("Selector value", () => {
     test.beforeEach(() => {
       testSelector = new Selector(
         {
-          provider: testProvider,
+          source: testOrigin,
           query: query => query
         },
         {
-          provider: testProvider2,
+          source: testOrigin2,
           query: query => query
         },
         {
-          provider: testProviderSelector,
+          source: testOriginSelector,
           query: query => query
         },
         (originResult, origin2Result, selectorResult) => ({
@@ -211,43 +210,43 @@ test.describe("Selector value", () => {
     });
 
     test.describe("when no query is passed", () => {
-      test.it("should dispatch read methods of providers applying the resultant queries", () => {
+      test.it("should dispatch read methods of sources applying the resultant queries", () => {
         return testSelector.read().then(() => {
           return Promise.all([
-            test.expect(spies.testProviderRead).to.have.been.called(),
-            test.expect(spies.testProvider2Read).to.have.been.called(),
-            test.expect(spies.testProvider3Read).to.have.been.called()
+            test.expect(spies.testOriginRead).to.have.been.called(),
+            test.expect(spies.testOrigin2Read).to.have.been.called(),
+            test.expect(spies.testOrigin3Read).to.have.been.called()
           ]);
         });
       });
     });
 
     test.describe("when query is passed", () => {
-      test.it("should dispatch read methods of providers applying the resultant queries", () => {
+      test.it("should dispatch read methods of sources applying the resultant queries", () => {
         const QUERY = "foo";
         return testSelector
           .query(QUERY)
           .read()
           .then(() => {
             return Promise.all([
-              test.expect(spies.testProviderRead).to.have.been.calledWith(QUERY),
-              test.expect(spies.testProvider2Read).to.have.been.calledWith(QUERY),
-              test.expect(spies.testProvider3Read).to.have.been.calledWith(QUERY)
+              test.expect(spies.testOriginRead).to.have.been.calledWith(QUERY),
+              test.expect(spies.testOrigin2Read).to.have.been.calledWith(QUERY),
+              test.expect(spies.testOrigin3Read).to.have.been.calledWith(QUERY)
             ]);
           });
       });
     });
   });
 
-  test.describe("with queried providers applying previousResults", () => {
+  test.describe("with queried sources applying previousResults", () => {
     test.beforeEach(() => {
       testSelector = new Selector(
         {
-          provider: testProvider,
+          source: testOrigin,
           query: query => query
         },
         {
-          provider: testProvider2,
+          source: testOrigin2,
           query: (query, previousResults) => ({
             query,
             prev: previousResults
@@ -264,15 +263,15 @@ test.describe("Selector value", () => {
     });
 
     test.describe("when query is passed", () => {
-      test.it("should dispatch read methods of providers applying the resultant queries", () => {
+      test.it("should dispatch read methods of sources applying the resultant queries", () => {
         const QUERY = "foo";
         return testSelector
           .query(QUERY)
           .read()
           .then(() => {
             return Promise.all([
-              test.expect(spies.testProviderRead).to.have.been.calledWith(QUERY),
-              test.expect(spies.testProvider2Read).to.have.been.calledWith({
+              test.expect(spies.testOriginRead).to.have.been.calledWith(QUERY),
+              test.expect(spies.testOrigin2Read).to.have.been.calledWith({
                 query: QUERY,
                 prev: [FOO_ORIGIN_VALUE]
               })
@@ -285,8 +284,8 @@ test.describe("Selector value", () => {
   test.describe("with query applied on selector function", () => {
     test.beforeEach(() => {
       testSelector = new Selector(
-        testProvider,
-        testProvider2,
+        testOrigin,
+        testOrigin2,
         (originResult, origin2Result, query) => ({
           query,
           ...originResult,
@@ -318,8 +317,8 @@ test.describe("Selector value", () => {
   test.describe("when selector function returns a promise", () => {
     test.beforeEach(() => {
       testSelector = new Selector(
-        testProvider,
-        testProvider2,
+        testOrigin,
+        testOrigin2,
         (originResult, origin2Result) => {
           return new Promise(resolve => {
             setTimeout(() => {
@@ -349,10 +348,10 @@ test.describe("Selector value", () => {
   test.describe("when selector function returns another origin", () => {
     test.beforeEach(() => {
       testSelector = new Selector(
-        testProvider,
-        testProvider2,
+        testOrigin,
+        testOrigin2,
         (originResult, origin2Result, query) => {
-          return testProvider3.query(query);
+          return testOrigin3.query(query);
         },
         {
           defaultValue: DEFAULT_VALUE
@@ -362,8 +361,8 @@ test.describe("Selector value", () => {
 
     test.describe("when no query is applied", () => {
       test.it(
-        "it should return the result returned by read method of the returned provider",
-        checkSelectorHasProvider3Value
+        "it should return the result returned by read method of the returned source",
+        checkSelectorHasOrigin3Value
       );
     });
   });
@@ -371,10 +370,10 @@ test.describe("Selector value", () => {
   test.describe("when selector function returns another selector", () => {
     test.beforeEach(() => {
       testSelector = new Selector(
-        testProvider,
-        testProvider2,
+        testOrigin,
+        testOrigin2,
         () => {
-          return testProviderSelector;
+          return testOriginSelector;
         },
         {
           defaultValue: DEFAULT_VALUE
@@ -385,7 +384,7 @@ test.describe("Selector value", () => {
     test.describe("when no query is applied", () => {
       test.it(
         "it should return the result returned by read method of the returned selector",
-        checkSelectorHasProvider3Value
+        checkSelectorHasOrigin3Value
       );
     });
   });

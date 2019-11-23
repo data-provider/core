@@ -1,4 +1,5 @@
 /*
+Copyright 2019 Javier Brea
 Copyright 2019 XbyOrange
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
@@ -10,18 +11,18 @@ Unless required by applicable law or agreed to in writing, software distributed 
 
 const test = require("mocha-sinon-chai");
 
-const { Origin, sources } = require("../src/Origin");
+const { Provider, instances } = require("../src/Provider");
 const { Selector } = require("../src/Selector");
 
 test.describe("Selector loading", () => {
   let sandbox;
-  let TestOrigin;
-  let testOrigin;
+  let TestProvider;
+  let testProvider;
   let testSelector;
 
   test.beforeEach(() => {
     sandbox = test.sinon.createSandbox();
-    TestOrigin = class extends Origin {
+    TestProvider = class extends Provider {
       _read() {
         return new Promise(resolve => {
           setTimeout(() => {
@@ -30,13 +31,13 @@ test.describe("Selector loading", () => {
         });
       }
     };
-    testOrigin = new TestOrigin("foo-id");
-    testSelector = new Selector(testOrigin, originResult => originResult);
+    testProvider = new TestProvider("foo-id");
+    testSelector = new Selector(testProvider, originResult => originResult);
   });
 
   test.afterEach(() => {
     sandbox.restore();
-    sources.clear();
+    instances.clear();
   });
 
   test.describe("using getter", () => {

@@ -1,5 +1,4 @@
 /*
-Copyright 2019 Javier Brea
 Copyright 2019 XbyOrange
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
@@ -11,9 +10,9 @@ Unless required by applicable law or agreed to in writing, software distributed 
 
 const test = require("mocha-sinon-chai");
 
-const { Provider, instances } = require("../src/Provider");
+const { Origin, sources } = require("../src/Origin");
 
-test.describe("Provider defaultValue", () => {
+test.describe("Origin defaultValue", () => {
   let sandbox;
 
   test.beforeEach(() => {
@@ -22,22 +21,22 @@ test.describe("Provider defaultValue", () => {
 
   test.afterEach(() => {
     sandbox.restore();
-    instances.clear();
+    sources.clear();
   });
 
-  test.describe("when Provider has defaultValue defined", () => {
+  test.describe("when Origin has defaultValue defined", () => {
     test.describe("read method", () => {
       test.describe("without query", () => {
         test.it("should return defaultValue until real value is returned", () => {
-          const TestProvider = class extends Provider {
+          const TestOrigin = class extends Origin {
             _read() {
               return Promise.resolve(5);
             }
           };
-          const testProvider = new TestProvider("", 4);
-          test.expect(testProvider.read.value).to.equal(4);
-          return testProvider.read().then(() => {
-            return test.expect(testProvider.read.value).to.equal(5);
+          const testOrigin = new TestOrigin("", 4);
+          test.expect(testOrigin.read.value).to.equal(4);
+          return testOrigin.read().then(() => {
+            return test.expect(testOrigin.read.value).to.equal(5);
           });
         });
 
@@ -47,29 +46,29 @@ test.describe("Provider defaultValue", () => {
               foo2: "foo"
             }
           };
-          const TestProvider = class extends Provider {
+          const TestOrigin = class extends Origin {
             _read() {
               return Promise.resolve(5);
             }
           };
-          const testProvider = new TestProvider("", defaultValue);
-          test.expect(testProvider.read.value).to.not.equal(defaultValue);
-          test.expect(testProvider.read.value).to.deep.equal(defaultValue);
+          const testOrigin = new TestOrigin("", defaultValue);
+          test.expect(testOrigin.read.value).to.not.equal(defaultValue);
+          test.expect(testOrigin.read.value).to.deep.equal(defaultValue);
         });
       });
 
       test.describe("with query", () => {
         test.it("should return defaultValue until real value is returned", () => {
           const QUERY = "foo";
-          const TestProvider = class extends Provider {
+          const TestOrigin = class extends Origin {
             _read() {
               return Promise.resolve(5);
             }
           };
-          const testProvider = new TestProvider("", 4).query(QUERY);
-          test.expect(testProvider.read.value).to.equal(4);
-          return testProvider.read().then(() => {
-            return test.expect(testProvider.read.value).to.equal(5);
+          const testOrigin = new TestOrigin("", 4).query(QUERY);
+          test.expect(testOrigin.read.value).to.equal(4);
+          return testOrigin.read().then(() => {
+            return test.expect(testOrigin.read.value).to.equal(5);
           });
         });
       });
@@ -77,15 +76,15 @@ test.describe("Provider defaultValue", () => {
       test.describe("with chained query", () => {
         test.it("should return defaultValue until real value is returned", () => {
           const QUERY = "foo";
-          const TestProvider = class extends Provider {
+          const TestOrigin = class extends Origin {
             _read() {
               return Promise.resolve(5);
             }
           };
-          const testProvider = new TestProvider("", 4).query(QUERY).query("foo2");
-          test.expect(testProvider.read.value).to.equal(4);
-          return testProvider.read().then(() => {
-            return test.expect(testProvider.read.value).to.equal(5);
+          const testOrigin = new TestOrigin("", 4).query(QUERY).query("foo2");
+          test.expect(testOrigin.read.value).to.equal(4);
+          return testOrigin.read().then(() => {
+            return test.expect(testOrigin.read.value).to.equal(5);
           });
         });
       });
@@ -98,7 +97,7 @@ test.describe("Provider defaultValue", () => {
         delete: "foo-delete-value"
       };
 
-      const TestProvider = class extends Provider {
+      const TestOrigin = class extends Origin {
         _create() {
           return Promise.resolve(values.create);
         }
@@ -113,10 +112,10 @@ test.describe("Provider defaultValue", () => {
       test.describe(`${methodName} method`, () => {
         test.describe("without query", () => {
           test.it("should return undefined until real value is returned", () => {
-            const testProvider = new TestProvider("", 4);
-            test.expect(testProvider[methodName].value).to.be.undefined();
-            return testProvider[methodName]().then(() => {
-              return test.expect(testProvider[methodName].value).to.equal(values[methodName]);
+            const testOrigin = new TestOrigin("", 4);
+            test.expect(testOrigin[methodName].value).to.be.undefined();
+            return testOrigin[methodName]().then(() => {
+              return test.expect(testOrigin[methodName].value).to.equal(values[methodName]);
             });
           });
         });
@@ -124,10 +123,10 @@ test.describe("Provider defaultValue", () => {
         test.describe("with query", () => {
           test.it("should return undefined until real value is returned", () => {
             const QUERY = "foo";
-            const testProvider = new TestProvider("", 4).query(QUERY);
-            test.expect(testProvider[methodName].value).to.be.undefined();
-            return testProvider[methodName]().then(() => {
-              return test.expect(testProvider[methodName].value).to.equal(values[methodName]);
+            const testOrigin = new TestOrigin("", 4).query(QUERY);
+            test.expect(testOrigin[methodName].value).to.be.undefined();
+            return testOrigin[methodName]().then(() => {
+              return test.expect(testOrigin[methodName].value).to.equal(values[methodName]);
             });
           });
         });

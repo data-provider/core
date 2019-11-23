@@ -1,5 +1,4 @@
 /*
-Copyright 2019 Javier Brea
 Copyright 2019 XbyOrange
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
@@ -11,7 +10,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 
 const test = require("mocha-sinon-chai");
 
-const { Provider, instances } = require("../src/Provider");
+const { Origin, sources } = require("../src/Origin");
 const { Selector } = require("../src/Selector");
 
 test.describe("Selector cache", () => {
@@ -25,13 +24,13 @@ test.describe("Selector cache", () => {
     foo3: "foo3"
   };
   let sandbox;
-  let TestProvider;
-  let testProvider;
-  let TestProvider2;
-  let testProvider2;
-  let TestProvider3;
-  let testProvider3;
-  let testProviderSelector;
+  let TestOrigin;
+  let testOrigin;
+  let TestOrigin2;
+  let testOrigin2;
+  let TestOrigin3;
+  let testOrigin3;
+  let testOriginSelector;
   let testSelector;
   let spies;
   const selectorResult = (originResult, origin2Result, query) => {
@@ -70,55 +69,55 @@ test.describe("Selector cache", () => {
   test.beforeEach(() => {
     sandbox = test.sinon.createSandbox();
     spies = {
-      testProviderRead: sandbox.spy(),
-      testProvider2Read: sandbox.spy(),
-      testProvider3Read: sandbox.spy(),
-      testProvider3Create: sandbox.spy(),
-      testProvider3Update: sandbox.spy(),
-      testProvider3Delete: sandbox.spy(),
-      testProviderSelector: sandbox.spy(),
+      testOriginRead: sandbox.spy(),
+      testOrigin2Read: sandbox.spy(),
+      testOrigin3Read: sandbox.spy(),
+      testOrigin3Create: sandbox.spy(),
+      testOrigin3Update: sandbox.spy(),
+      testOrigin3Delete: sandbox.spy(),
+      testOriginSelector: sandbox.spy(),
       testSelector: sandbox.spy()
     };
-    TestProvider = class extends Provider {
+    TestOrigin = class extends Origin {
       _read(query) {
-        spies.testProviderRead(query);
+        spies.testOriginRead(query);
         return Promise.resolve(FOO_ORIGIN_VALUE);
       }
     };
-    testProvider = new TestProvider();
-    TestProvider2 = class extends Provider {
+    testOrigin = new TestOrigin();
+    TestOrigin2 = class extends Origin {
       _read(query) {
-        spies.testProvider2Read(query);
+        spies.testOrigin2Read(query);
         return Promise.resolve(FOO_ORIGIN_2_VALUE);
       }
     };
-    testProvider2 = new TestProvider2();
-    TestProvider3 = class extends Provider {
+    testOrigin2 = new TestOrigin2();
+    TestOrigin3 = class extends Origin {
       _read(query) {
-        spies.testProvider3Read(query);
+        spies.testOrigin3Read(query);
         return Promise.resolve(FOO_ORIGIN_3_VALUE);
       }
       _create(query, params) {
-        spies.testProvider3Create(query, params);
+        spies.testOrigin3Create(query, params);
         return Promise.resolve(FOO_ORIGIN_3_VALUE);
       }
       _update(query, params) {
-        spies.testProvider3Update(query, params);
+        spies.testOrigin3Update(query, params);
         return Promise.resolve(FOO_ORIGIN_3_VALUE);
       }
       _delete(query, params) {
-        spies.testProvider3Delete(query, params);
+        spies.testOrigin3Delete(query, params);
         return Promise.resolve(FOO_ORIGIN_3_VALUE);
       }
     };
-    testProvider3 = new TestProvider3();
-    testProviderSelector = new Selector(
+    testOrigin3 = new TestOrigin3();
+    testOriginSelector = new Selector(
       {
-        provider: testProvider3,
+        source: testOrigin3,
         query: query => query
       },
       (results, query) => {
-        spies.testProviderSelector(query);
+        spies.testOriginSelector(query);
         return results;
       }
     );
@@ -126,12 +125,12 @@ test.describe("Selector cache", () => {
 
   test.afterEach(() => {
     sandbox.restore();
-    instances.clear();
+    sources.clear();
   });
 
   test.describe("when returns value", () => {
     test.beforeEach(() => {
-      testSelector = new Selector(testProvider, testProvider2, selectorResult);
+      testSelector = new Selector(testOrigin, testOrigin2, selectorResult);
     });
 
     test.it(
@@ -153,18 +152,18 @@ test.describe("Selector cache", () => {
       }
     );
 
-    test.it("should clean cache when one of the providers is cleaned", () => {
+    test.it("should clean cache when one of the sources is cleaned", () => {
       return testSelector.read().then(() => {
-        testProvider.clean();
+        testOrigin.clean();
         return testSelector.read().then(() => {
           return test.expect(spies.testSelector.callCount).to.equal(2);
         });
       });
     });
 
-    test.it("should clean cache when the another provider is cleaned", () => {
+    test.it("should clean cache when the another source is cleaned", () => {
       return testSelector.read().then(() => {
-        testProvider2.clean();
+        testOrigin2.clean();
         return testSelector.read().then(() => {
           return test.expect(spies.testSelector.callCount).to.equal(2);
         });
@@ -173,8 +172,8 @@ test.describe("Selector cache", () => {
 
     test.it("should not cache result when returns an error", () => {
       testSelector = new Selector(
-        testProvider,
-        testProvider2,
+        testOrigin,
+        testOrigin2,
         (originResult, origin2Result, query) => {
           spies.testSelector(query);
           return Promise.reject(new Error());
@@ -184,18 +183,18 @@ test.describe("Selector cache", () => {
     });
   });
 
-  test.describe("when providers are queried", () => {
+  test.describe("when sources are queried", () => {
     const QUERY_1 = "foo-query-1";
     const QUERY_2 = "foo-query-2";
 
     test.beforeEach(() => {
       testSelector = new Selector(
         {
-          provider: testProvider,
+          source: testOrigin,
           query: () => QUERY_1
         },
         {
-          provider: testProvider2,
+          source: testOrigin2,
           query: () => QUERY_2
         },
         selectorResult
@@ -218,52 +217,46 @@ test.describe("Selector cache", () => {
       }
     );
 
-    test.it("should clean cache when one of the queried providers is cleaned", () => {
+    test.it("should clean cache when one of the queried sources is cleaned", () => {
       return testSelector.read().then(() => {
-        testProvider.query(QUERY_1).clean();
+        testOrigin.query(QUERY_1).clean();
         return testSelector.read().then(() => {
           return test.expect(spies.testSelector.callCount).to.equal(2);
         });
       });
     });
 
-    test.it(
-      "should not clean cache when one of the providers is cleaned with another query",
-      () => {
-        return testSelector.read().then(() => {
-          testProvider.query("foo-query-3").clean();
-          return dispatchReadAndCheckHasBeenCalledOnce();
-        });
-      }
-    );
-
-    test.it("should clean cache when the another provider is cleaned", () => {
+    test.it("should not clean cache when one of the sources is cleaned with another query", () => {
       return testSelector.read().then(() => {
-        testProvider2.query(QUERY_2).clean();
+        testOrigin.query("foo-query-3").clean();
+        return dispatchReadAndCheckHasBeenCalledOnce();
+      });
+    });
+
+    test.it("should clean cache when the another source is cleaned", () => {
+      return testSelector.read().then(() => {
+        testOrigin2.query(QUERY_2).clean();
         return testSelector.read().then(() => {
           return test.expect(spies.testSelector.callCount).to.equal(2);
         });
       });
     });
 
-    test.it(
-      "should not clean cache when the another provider is cleaned with another query",
-      () => {
-        return testSelector.read().then(() => {
-          testProvider2.query("foo-query-3").clean();
-          return dispatchReadAndCheckHasBeenCalledOnce();
-        });
-      }
-    );
+    test.it("should not clean cache when the another source is cleaned with another query", () => {
+      return testSelector.read().then(() => {
+        testOrigin2.query("foo-query-3").clean();
+        return dispatchReadAndCheckHasBeenCalledOnce();
+      });
+    });
 
     test.it("should not cache result when returns an error", () => {
       testSelector = new Selector(
         {
-          provider: testProvider,
+          source: testOrigin,
           query: () => QUERY_1
         },
         {
-          provider: testProvider2,
+          source: testOrigin2,
           query: () => QUERY_2
         },
         (originResult, origin2Result, query) => {
@@ -278,13 +271,13 @@ test.describe("Selector cache", () => {
   const testDynamicSelectors = (description, selectorCallback) => {
     test.describe(description, () => {
       test.beforeEach(() => {
-        testSelector = new Selector(testProvider, testProvider2, selectorCallback);
+        testSelector = new Selector(testOrigin, testOrigin2, selectorCallback);
       });
 
       test.describe("when no query is passed", () => {
-        test.it("should clean cache when provider cache is cleaned", () => {
+        test.it("should clean cache when source cache is cleaned", () => {
           return testSelector.read().then(() => {
-            testProviderSelector.clean();
+            testOriginSelector.clean();
             return testSelector.read().then(() => {
               return test.expect(spies.testSelector.callCount).to.equal(2);
             });
@@ -293,13 +286,13 @@ test.describe("Selector cache", () => {
       });
 
       test.describe("when query is passed", () => {
-        test.it("should clean cache when provider cache is cleaned with same query", () => {
+        test.it("should clean cache when source cache is cleaned with same query", () => {
           const FOO_QUERY = "foo-query";
           return testSelector
             .query(FOO_QUERY)
             .read()
             .then(() => {
-              testProviderSelector.query(FOO_QUERY).clean();
+              testOriginSelector.query(FOO_QUERY).clean();
               return testSelector
                 .query(FOO_QUERY)
                 .read()
@@ -309,13 +302,13 @@ test.describe("Selector cache", () => {
             });
         });
 
-        test.it("should not clean cache when provider cache is cleaned with another query", () => {
+        test.it("should not clean cache when source cache is cleaned with another query", () => {
           const FOO_QUERY = "foo-query";
           return testSelector
             .query(FOO_QUERY)
             .read()
             .then(() => {
-              testProviderSelector.query("foo").clean();
+              testOriginSelector.query("foo").clean();
               return testSelector
                 .query(FOO_QUERY)
                 .read()
@@ -326,25 +319,25 @@ test.describe("Selector cache", () => {
     });
   };
 
-  testDynamicSelectors("when returns another provider", (originResult, origin2Result, query) => {
+  testDynamicSelectors("when returns another source", (originResult, origin2Result, query) => {
     spies.testSelector(query);
-    return testProviderSelector.query(query);
+    return testOriginSelector.query(query);
   });
 
-  testDynamicSelectors("when returns multiple providers", (originResult, origin2Result, query) => {
+  testDynamicSelectors("when returns multiple sources", (originResult, origin2Result, query) => {
     spies.testSelector(query);
-    return [testProviderSelector.query(query), testProviderSelector];
+    return [testOriginSelector.query(query), testOriginSelector];
   });
 
   test.describe("cud methods", () => {
     const FOO_QUERY = "foo-query";
     test.beforeEach(() => {
       testSelector = new Selector(
-        testProvider,
-        testProvider2,
+        testOrigin,
+        testOrigin2,
         (originResult, origin2Result, query) => {
           spies.testSelector(query);
-          return testProvider3.query(query);
+          return testOrigin3.query(query);
         }
       );
     });

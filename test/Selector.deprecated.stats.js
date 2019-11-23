@@ -1,5 +1,4 @@
 /*
-Copyright 2019 Javier Brea
 Copyright 2019 XbyOrange
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
@@ -11,19 +10,21 @@ Unless required by applicable law or agreed to in writing, software distributed 
 
 const test = require("mocha-sinon-chai");
 
-const { Provider, instances } = require("../src/Provider");
+const { Origin, sources } = require("../src/Origin");
+const { Selector } = require("../src/Selector");
 
-test.describe("Provider stats getters", () => {
+test.describe("Selector stats", () => {
   let sandbox;
-  let TestProvider;
-  let testProvider;
-  let queriedProvider;
+  let TestOrigin;
+  let testOrigin;
+  let testSelector;
+  let queriedSelector;
   let hasToReject;
 
   test.beforeEach(() => {
     hasToReject = false;
     sandbox = test.sinon.createSandbox();
-    TestProvider = class extends Provider {
+    TestOrigin = class extends Origin {
       _read(query) {
         const cached = this._cache.get(query);
         if (cached) {
@@ -38,86 +39,87 @@ test.describe("Provider stats getters", () => {
         return resultPromise;
       }
     };
-    testProvider = new TestProvider("foo-id");
-    queriedProvider = testProvider.query("foo");
+    testOrigin = new TestOrigin("foo-id");
+    testSelector = new Selector(testOrigin, result => result);
+    queriedSelector = testSelector.query("foo");
   });
 
   test.afterEach(() => {
     sandbox.restore();
-    instances.clear();
+    sources.clear();
   });
 
   test.describe("without query", () => {
     test.describe("dispatch property", () => {
       test.it("should return 0 until read is dispatched", () => {
-        test.expect(testProvider.read.getters.stats().dispatch).to.equal(0);
+        test.expect(testSelector.read.stats.dispatch).to.equal(0);
       });
 
       test.it("should return 1 when read is dispatched", () => {
-        testProvider.read();
-        test.expect(testProvider.read.getters.stats().dispatch).to.equal(1);
+        testSelector.read();
+        test.expect(testSelector.read.stats.dispatch).to.equal(1);
       });
 
       test.it(
         "should return 1 when read is dispatched many times and cache is not cleaned",
         () => {
-          testProvider.read();
-          testProvider.read();
-          testProvider.read();
-          testProvider.read();
-          test.expect(testProvider.read.getters.stats().dispatch).to.equal(1);
+          testSelector.read();
+          testSelector.read();
+          testSelector.read();
+          testSelector.read();
+          test.expect(testSelector.read.stats.dispatch).to.equal(1);
         }
       );
 
       test.it(
         "should return 2 when read is dispatched many times and cache is cleaned once",
         () => {
-          testProvider.read();
-          testProvider.clean();
-          testProvider.read();
-          testProvider.read();
-          testProvider.read();
-          test.expect(testProvider.read.getters.stats().dispatch).to.equal(2);
+          testSelector.read();
+          testSelector.clean();
+          testSelector.read();
+          testSelector.read();
+          testSelector.read();
+          test.expect(testSelector.read.stats.dispatch).to.equal(2);
         }
       );
     });
 
     test.describe("success property", () => {
       test.it("should return 0 until read method has finished", () => {
-        test.expect(testProvider.read.getters.stats().success).to.equal(0);
+        test.expect(testSelector.read.stats.success).to.equal(0);
       });
 
       test.it("should return 1 when read has finished", () => {
-        return testProvider.read().then(() => {
-          return test.expect(testProvider.read.getters.stats().success).to.equal(1);
+        return testSelector.read().then(() => {
+          return test.expect(testSelector.read.stats.success).to.equal(1);
         });
       });
 
       test.it("should return 4 when read has finished and it has been called 4 times", () => {
         return Promise.all([
-          testProvider.read(),
-          testProvider.read(),
-          testProvider.read(),
-          testProvider.read()
+          testSelector.read(),
+          testSelector.read(),
+          testSelector.read(),
+          testSelector.read()
         ]).then(() => {
-          return test.expect(testProvider.read.getters.stats().success).to.equal(4);
+          return test.expect(testSelector.read.stats.success).to.equal(4);
         });
       });
     });
 
     test.describe("error property", () => {
       test.it("should return 0 until read method has finished", () => {
-        test.expect(testProvider.read.getters.stats().error).to.equal(0);
+        test.expect(testSelector.read.stats.error).to.equal(0);
       });
 
       test.it("should return 1 when read has finished with an error", () => {
         hasToReject = true;
-        return testProvider.read().then(
+        return testSelector.read().then(
           () => {
             return test.assert.fail();
           },
           () => {
-            return test.expect(testProvider.read.getters.stats().error).to.equal(1);
+            return test.expect(testSelector.read.stats.error).to.equal(1);
           }
         );
       });
@@ -127,16 +129,16 @@ test.describe("Provider stats getters", () => {
         () => {
           hasToReject = true;
           return Promise.all([
-            testProvider.read(),
-            testProvider.read(),
-            testProvider.read(),
-            testProvider.read()
+            testSelector.read(),
+            testSelector.read(),
+            testSelector.read(),
+            testSelector.read()
           ]).then(
             () => {
               return test.assert.fail();
             },
             () => {
-              return test.expect(testProvider.read.getters.stats().error).to.equal(4);
+              return test.expect(testSelector.read.stats.error).to.equal(4);
             }
           );
         }
@@ -147,74 +149,74 @@ test.describe("Provider stats getters", () => {
   test.describe("with query", () => {
     test.describe("dispatch property", () => {
       test.it("should return 0 until read is dispatched", () => {
-        test.expect(queriedProvider.read.getters.stats().dispatch).to.equal(0);
+        test.expect(queriedSelector.read.stats.dispatch).to.equal(0);
       });
 
       test.it("should return 1 when read is dispatched", () => {
-        queriedProvider.read();
-        test.expect(queriedProvider.read.getters.stats().dispatch).to.equal(1);
+        queriedSelector.read();
+        test.expect(queriedSelector.read.stats.dispatch).to.equal(1);
       });
 
       test.it(
         "should return 1 when read is dispatched many times and cache is not cleaned",
         () => {
-          queriedProvider.read();
-          queriedProvider.read();
-          queriedProvider.read();
-          queriedProvider.read();
-          test.expect(queriedProvider.read.getters.stats().dispatch).to.equal(1);
+          queriedSelector.read();
+          queriedSelector.read();
+          queriedSelector.read();
+          queriedSelector.read();
+          test.expect(queriedSelector.read.stats.dispatch).to.equal(1);
         }
       );
 
       test.it(
         "should return 2 when read is dispatched many times and cache is cleaned once",
         () => {
-          queriedProvider.read();
-          queriedProvider.clean();
-          queriedProvider.read();
-          queriedProvider.read();
-          queriedProvider.read();
-          test.expect(queriedProvider.read.getters.stats().dispatch).to.equal(2);
+          queriedSelector.read();
+          queriedSelector.clean();
+          queriedSelector.read();
+          queriedSelector.read();
+          queriedSelector.read();
+          test.expect(queriedSelector.read.stats.dispatch).to.equal(2);
         }
       );
     });
 
     test.describe("success property", () => {
       test.it("should return 0 until read method has finished", () => {
-        test.expect(queriedProvider.read.getters.stats().success).to.equal(0);
+        test.expect(queriedSelector.read.stats.success).to.equal(0);
       });
 
       test.it("should return 1 when read has finished", () => {
-        return queriedProvider.read().then(() => {
-          return test.expect(queriedProvider.read.getters.stats().success).to.equal(1);
+        return queriedSelector.read().then(() => {
+          return test.expect(queriedSelector.read.stats.success).to.equal(1);
         });
       });
 
       test.it("should return 4 when read has finished and it has been called 4 times", () => {
         return Promise.all([
-          queriedProvider.read(),
-          queriedProvider.read(),
-          queriedProvider.read(),
-          queriedProvider.read()
+          queriedSelector.read(),
+          queriedSelector.read(),
+          queriedSelector.read(),
+          queriedSelector.read()
         ]).then(() => {
-          return test.expect(queriedProvider.read.getters.stats().success).to.equal(4);
+          return test.expect(queriedSelector.read.stats.success).to.equal(4);
         });
       });
     });
 
     test.describe("error property", () => {
       test.it("should return 0 until read method has finished", () => {
-        test.expect(queriedProvider.read.getters.stats().error).to.equal(0);
+        test.expect(queriedSelector.read.stats.error).to.equal(0);
       });
 
       test.it("should return 1 when read has finished with an error", () => {
         hasToReject = true;
-        return queriedProvider.read().then(
+        return queriedSelector.read().then(
           () => {
             return test.assert.fail();
           },
           () => {
-            return test.expect(queriedProvider.read.getters.stats().error).to.equal(1);
+            return test.expect(queriedSelector.read.stats.error).to.equal(1);
           }
         );
       });
@@ -224,16 +226,16 @@ test.describe("Provider stats getters", () => {
         () => {
           hasToReject = true;
           return Promise.all([
-            queriedProvider.read(),
-            queriedProvider.read(),
-            queriedProvider.read(),
-            queriedProvider.read()
+            queriedSelector.read(),
+            queriedSelector.read(),
+            queriedSelector.read(),
+            queriedSelector.read()
           ]).then(
             () => {
               return test.assert.fail();
             },
             () => {
-              return test.expect(queriedProvider.read.getters.stats().error).to.equal(4);
+              return test.expect(queriedSelector.read.stats.error).to.equal(4);
             }
           );
         }

@@ -10,13 +10,13 @@ Unless required by applicable law or agreed to in writing, software distributed 
 
 const test = require("mocha-sinon-chai");
 
-const { Provider, instances } = require("../src/Provider");
+const { Origin, sources } = require("../src/Origin");
 
-test.describe("Provider cache", () => {
+test.describe("Origin cache", () => {
   let sandbox;
   let spys;
-  let TestProvider;
-  let testProvider;
+  let TestOrigin;
+  let testOrigin;
 
   test.beforeEach(() => {
     sandbox = test.sinon.createSandbox();
@@ -25,7 +25,7 @@ test.describe("Provider cache", () => {
       read: test.sinon.spy()
     };
 
-    TestProvider = class extends Provider {
+    TestOrigin = class extends Origin {
       _read(query, extraParams) {
         const cached = this._cache.get(query);
         if (cached) {
@@ -42,27 +42,27 @@ test.describe("Provider cache", () => {
       }
     };
 
-    testProvider = new TestProvider();
+    testOrigin = new TestOrigin();
   });
 
   test.afterEach(() => {
     sandbox.restore();
-    instances.clear();
+    sources.clear();
   });
 
   test.describe("without query", () => {
     const expectCalledOnce = () => () => {
-      return testProvider.read().then(() => {
+      return testOrigin.read().then(() => {
         return test.expect(spys.read.callCount).to.equal(1);
       });
     };
 
     test.it("should not execute method more than once if it is cached", () => {
-      return testProvider.read().then(expectCalledOnce);
+      return testOrigin.read().then(expectCalledOnce);
     });
 
     test.it("should not execute method more than once when it is called in parallel", () => {
-      return Promise.all([testProvider.read(), testProvider.read(), testProvider.read()]).then(
+      return Promise.all([testOrigin.read(), testOrigin.read(), testOrigin.read()]).then(
         expectCalledOnce
       );
     });
@@ -71,35 +71,31 @@ test.describe("Provider cache", () => {
       "should emit change event only twice, one when starts loading and one when finish loading",
       () => {
         let called = 0;
-        testProvider.onChange(() => {
+        testOrigin.onChange(() => {
           called = called + 1;
         });
-        return Promise.all([testProvider.read(), testProvider.read(), testProvider.read()]).then(
-          () => {
-            return testProvider.read().then(() => {
-              return test.expect(called).to.equal(2);
-            });
-          }
-        );
+        return Promise.all([testOrigin.read(), testOrigin.read(), testOrigin.read()]).then(() => {
+          return testOrigin.read().then(() => {
+            return test.expect(called).to.equal(2);
+          });
+        });
       }
     );
 
     test.it("should execute method again when cache is cleaned", () => {
-      return Promise.all([testProvider.read(), testProvider.read(), testProvider.read()]).then(
-        () => {
-          testProvider.clean();
-          return testProvider.read().then(() => {
-            return test.expect(spys.read.callCount).to.equal(2);
-          });
-        }
-      );
+      return Promise.all([testOrigin.read(), testOrigin.read(), testOrigin.read()]).then(() => {
+        testOrigin.clean();
+        return testOrigin.read().then(() => {
+          return test.expect(spys.read.callCount).to.equal(2);
+        });
+      });
     });
   });
 
   test.describe("with query", () => {
     const QUERY = { foo: "foo-query" };
     const expectCalledOnce = () => {
-      return testProvider
+      return testOrigin
         .query(QUERY)
         .read()
         .then(() => {
@@ -108,7 +104,7 @@ test.describe("Provider cache", () => {
     };
 
     test.it("should not execute method more than once if it is cached", () => {
-      return testProvider
+      return testOrigin
         .query(QUERY)
         .read()
         .then(expectCalledOnce);
@@ -116,9 +112,9 @@ test.describe("Provider cache", () => {
 
     test.it("should not execute method more than once when it is called in parallel", () => {
       return Promise.all([
-        testProvider.query(QUERY).read(),
-        testProvider.query(QUERY).read(),
-        testProvider.query(QUERY).read()
+        testOrigin.query(QUERY).read(),
+        testOrigin.query(QUERY).read(),
+        testOrigin.query(QUERY).read()
       ]).then(expectCalledOnce);
     });
 
@@ -126,15 +122,15 @@ test.describe("Provider cache", () => {
       "should emit change event only twice, one when starts loading and one when finish loading",
       () => {
         let called = 0;
-        testProvider.query(QUERY).onChange(() => {
+        testOrigin.query(QUERY).onChange(() => {
           called = called + 1;
         });
         return Promise.all([
-          testProvider.query(QUERY).read(),
-          testProvider.query(QUERY).read(),
-          testProvider.query(QUERY).read()
+          testOrigin.query(QUERY).read(),
+          testOrigin.query(QUERY).read(),
+          testOrigin.query(QUERY).read()
         ]).then(() => {
-          return testProvider
+          return testOrigin
             .query(QUERY)
             .read()
             .then(() => {
@@ -146,12 +142,12 @@ test.describe("Provider cache", () => {
 
     test.it("should execute method again when cache is cleaned", () => {
       return Promise.all([
-        testProvider.query(QUERY).read(),
-        testProvider.query(QUERY).read(),
-        testProvider.query(QUERY).read()
+        testOrigin.query(QUERY).read(),
+        testOrigin.query(QUERY).read(),
+        testOrigin.query(QUERY).read()
       ]).then(() => {
-        testProvider.query(QUERY).clean();
-        return testProvider
+        testOrigin.query(QUERY).clean();
+        return testOrigin
           .query(QUERY)
           .read()
           .then(() => {

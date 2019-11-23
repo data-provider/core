@@ -1,5 +1,4 @@
 /*
-Copyright 2019 Javier Brea
 Copyright 2019 XbyOrange
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
@@ -11,17 +10,17 @@ Unless required by applicable law or agreed to in writing, software distributed 
 
 const test = require("mocha-sinon-chai");
 
-const { Provider, instances } = require("../src/Provider");
+const { Origin, sources } = require("../src/Origin");
 
-test.describe("Provider error", () => {
+test.describe("Origin error", () => {
   const fooError = new Error("foo-error");
   let sandbox;
-  let TestProvider;
-  let testProvider;
+  let TestOrigin;
+  let testOrigin;
 
   test.beforeEach(() => {
     sandbox = test.sinon.createSandbox();
-    TestProvider = class extends Provider {
+    TestOrigin = class extends Origin {
       _read() {
         return new Promise((resolve, reject) => {
           setTimeout(() => {
@@ -30,26 +29,26 @@ test.describe("Provider error", () => {
         });
       }
     };
-    testProvider = new TestProvider("foo-id");
+    testOrigin = new TestOrigin("foo-id");
   });
 
   test.afterEach(() => {
     sandbox.restore();
-    instances.clear();
+    sources.clear();
   });
 
   test.describe("using getter", () => {
     test.it("should return null until read is dispatched", () => {
-      test.expect(testProvider.read.getters.error()).to.be.null();
+      test.expect(testOrigin.read.getters.error()).to.be.null();
     });
 
     test.it("should return error when read finish", () => {
-      return testProvider.read().then(
+      return testOrigin.read().then(
         () => {
           return test.assert.fail();
         },
         () => {
-          return test.expect(testProvider.read.getters.error()).to.equal(fooError);
+          return test.expect(testOrigin.read.getters.error()).to.equal(fooError);
         }
       );
     });
@@ -57,22 +56,22 @@ test.describe("Provider error", () => {
 
   test.describe("without query", () => {
     test.it("should return null until read is dispatched", () => {
-      test.expect(testProvider.read.error).to.be.null();
+      test.expect(testOrigin.read.error).to.be.null();
     });
 
     test.it("should return error when read finish", () => {
-      return testProvider.read().then(
+      return testOrigin.read().then(
         () => {
           return test.assert.fail();
         },
         () => {
-          return test.expect(testProvider.read.error).to.equal(fooError);
+          return test.expect(testOrigin.read.error).to.equal(fooError);
         }
       );
     });
 
     test.it("should reject the promise with the error when read finish", () => {
-      return testProvider.read().then(
+      return testOrigin.read().then(
         () => {
           return test.assert.fail();
         },
@@ -86,11 +85,11 @@ test.describe("Provider error", () => {
   test.describe("with query", () => {
     const QUERY = "foo";
     test.it("should return null until read is dispatched", () => {
-      test.expect(testProvider.query(QUERY).read.error).to.be.null();
+      test.expect(testOrigin.query(QUERY).read.error).to.be.null();
     });
 
     test.it("should return error when read finish", () => {
-      return testProvider
+      return testOrigin
         .query(QUERY)
         .read()
         .then(
@@ -98,13 +97,13 @@ test.describe("Provider error", () => {
             return test.assert.fail();
           },
           () => {
-            return test.expect(testProvider.query(QUERY).read.error).to.equal(fooError);
+            return test.expect(testOrigin.query(QUERY).read.error).to.equal(fooError);
           }
         );
     });
 
     test.it("should reject the promise with the error when read finish", () => {
-      return testProvider
+      return testOrigin
         .query(QUERY)
         .read()
         .then(
