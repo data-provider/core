@@ -1,0 +1,6 @@
+data-provider core
+Copyright 2019 Javier Brea
+
+Portions of this software were developed at XbyOrange company.
+  Forked from XByOrange Mercury v1.5.0, distributed under The Apache Software License, Version 2.0.
+  Github repository "xbyorange/mercury" (https://github.com/XbyOrange/mercury), branch master, commit 641d11a902a75dd2f53cf16d53535e8e45f39864. The  original project files were wrongly licensed because an error of the main maintainer, Javier Brea, who received instructions from the XbyOrange company about licensing it as Apache2.0, but didn't include the appropiate license header in all repository files by error. The error has been fixed and XbyOrange license headers have been added to all original files, as it was the real intention of the XbyOrange company.
