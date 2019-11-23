@@ -1,6 +1,17 @@
+/*
+Copyright 2019 Javier Brea
+Copyright 2019 XbyOrange
+
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+*/
+
 /* global window */
 
-import { Origin } from "@xbyorange/mercury";
+import { Origin } from "@data-provider/core";
 
 const TAG = "browser-storage";
 const storageKeysTags = {
@@ -29,7 +40,7 @@ export class Storage extends Origin {
     tags.push(storageKeysTags[storageKey]);
     if (!options.queriesDefaultValue) {
       console.warn(
-        'Usage of "queriesDefaultValue" option is recommended to prepare your code for next major version of "mercury-browser-storage"'
+        'Usage of "queriesDefaultValue" option is recommended to prepare your code for next major version of "@data-provider/browser-storage"'
       );
     }
     const getDefaultValue = function(query) {
