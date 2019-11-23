@@ -6,7 +6,7 @@ Cache listeners will be added too to this returned Selector, so, if any of the r
 
 ```js
 
-import { Api } from "@xbyorange/mercury-api";
+import { Api } from "@data-provider/axios";
 
 const commonBookModel = new Api("http://common-api/books/:id");
 
@@ -54,7 +54,7 @@ Selectors can return an array of sources:
 
 ```js
 
-import { Api } from "@xbyorange/mercury-api";
+import { Api } from "@data-provider/axios";
 
 import { authorsOrigin } from "./authors";
 import { booksOrigin } from "./books";
@@ -86,7 +86,7 @@ Returned sources can be defined as objects containing query callback or catch fu
 
 ```js
 
-import { Api } from "@xbyorange/mercury-api";
+import { Api } from "@data-provider/axios";
 
 import { authorsOrigin } from "./authors";
 import { booksOrigin } from "./books";

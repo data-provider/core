@@ -1,24 +1,26 @@
 {
-  "name": "@xbyorange/mercury",
-  "version": "1.5.0",
-  "description": "Mercury. Reactive CRUD data layer",
+  "name": "@data-provider/core",
+  "version": "1.6.0",
+  "description": "Extensible Data Provider and Data Selectors",
   "keywords": [
-    "reactive",
     "data",
-    "crud",
-    "cache"
+    "provider",
+    "selector",
+    "cache",
+    "reactive",
+    "extensible"
   ],
-  "author": "XByOrange",
+  "author": "Javier Brea",
   "license": "Apache-2.0",
-  "repository": "https://github.com/xbyorange/mercury",
+  "repository": "https://github.com/data-provider/core",
   "publishConfig": {
     "access": "public"
   },
   "files": [
     "dist"
   ],
-  "main": "dist/mercury.umd.js",
-  "module": "dist/mercury.esm.js",
+  "main": "dist/core.umd.js",
+  "module": "dist/core.esm.js",
   "scripts": {
     "build": "rollup --config",
     "test": "nyc mocha --recursive test",

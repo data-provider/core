@@ -10,9 +10,7 @@ cache:
 
 addons:
   sonarcloud:
-    organization: "javierbrea"
-    token:
-      secure: "$SONAR_TOKEN"
+    organization: "data-provider"
     branch:
       name: "$TRAVIS_CURRENT_BRANCH"
 
@@ -21,11 +19,11 @@ script:
   - npm run test
   - npm run build
   - npm run coveralls
-  - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then sonar-scanner; fi'
+  - 'if [ -n "$SONAR_TOKEN" ]; then sonar-scanner -Dsonar.login=${SONAR_TOKEN}; fi'
 
 deploy:
   provider: npm
-  email: "devops@xbyorange.com"
+  email: "javier.brea@gmail.com"
   api_key: "$NPM_TOKEN"
   on:
     tags: true
