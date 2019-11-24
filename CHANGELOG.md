@@ -21,6 +21,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Export library as CJS
 - Improve traces adding package name
 
+### Fixed
+- Fix devDependencies vulnerabilities
+
 ## [1.3.0] - 2019-11-23
 ### Changed
 - Project migration. Read NOTICE for further info. All previous releases in this CHANGELOG file correspond to @xbyorange/mercury-browser-storage package distribution.
