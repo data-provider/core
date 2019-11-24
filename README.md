@@ -6,7 +6,7 @@
 
 ## Overview
 
-This package provides a [Data Provider][data-provider-url] origin for reading data from Prismic CMS API. As underlay, it uses the [prismic-javascript][prismic-javascript-url] client to provide the Prismic data.
+This package provides a [Data Provider][data-provider-url] for reading data from Prismic CMS API. As underlay, it uses the [prismic-javascript][prismic-javascript-url] client to provide the Prismic data.
 
 ## Api
 
@@ -16,11 +16,11 @@ This package provides a [Data Provider][data-provider-url] origin for reading da
 * Arguments
 	* url - _`<String>`_. Prismic api url.
 	* options - _`<Object>`_ Containing options:
-		* defaultValue - _`<Any>`_ Default value of origin until real data is returned.
+		* defaultValue - _`<Any>`_ Default value of provider until real data is returned.
 		* fullResponse - _`<Boolean>`_ If `true`, the full response of the Prismic api will be used as value. If `false`, only the `response.results` property will be returned, which is the default behavior.
 		* release - _`<String>`_ Prismic release to be read. This parameter will be passed as `ref` to the [prismic-javascript][prismic-javascript-url] query.
-		* uuid - _`<String>`_ Unique id to assign to the instance. Useful when using [Data Provider `sources` handler][data-provider-sources-docs-url].
-		* tags - _`<String> or <Array of Strings>`_ Tags to assign to the instance. Useful when using [Data Provider `sources` handler][data-provider-sources-docs-url]. A "prismic" tag will be always added to provided tags by default.
+		* uuid - _`<String>`_ Unique id to assign to the instance. Useful when using [Data Provider `instances` handler][data-provider-instances-docs-url].
+		* tags - _`<String> or <Array of Strings>`_ Tags to assign to the instance. Useful when using [Data Provider `instances` handler][data-provider-instances-docs-url]. A "prismic" tag will be always added to provided tags by default.
 
 ## Methods
 
@@ -43,14 +43,14 @@ Configure instance for all next `read` executions.
 		* fullResponse - _`<Boolean>`_ If `true`, the full response of the Prismic api will be used as value. If `false`, only the `response.results` property will be returned, which is the default behavior.
 		* release - _`<String>`_ Prismic release to be read. This parameter will be passed as `ref` to the [prismic-javascript][prismic-javascript-url] query.
 
-Read about how to configure all @data-provider/prismic instances at a time using the [Data Provider `sources` handler][data-provider-sources-docs-url].
+Read about how to configure all @data-provider/prismic instances at a time using the [Data Provider `instances` handler][data-provider-instances-docs-url].
 
 Example of how to change all `@data-provider/prismic` requests urls at a time:
 
 ```js
-import { sources } from "@data-provider/core";
+import { instances } from "@data-provider/core";
 
-sources.getByTag("prismic").config({
+instances.getByTag("prismic").config({
   url: "https://foo-prismic-repository.cdn.prismic.io/api/v2"
 });
 
@@ -82,10 +82,10 @@ prismic
 
 Please refer to the [@data-provider/connector-react][data-provider-connector-react-url] documentation to see how simple is the data-binding between React Components and @data-provider/prismic.
 
-Connect a source to all components that need it. Data Provider will fetch data only when needed, and will avoid making it more than once, no matter how many components need the data.
+Connect a provider to all components that need it. Data Provider will fetch data only when needed, and will avoid making it more than once, no matter how many components need the data.
 
 [data-provider-url]: https://github.com/data-provider/core
-[data-provider-sources-docs-url]: https://github.com/data-provider/core/blob/master/docs/sources/api.md
+[data-provider-instances-docs-url]: https://github.com/data-provider/core/blob/master/docs/instances/api.md
 [prismic-javascript-url]: https://www.npmjs.com/package/prismic-javascript
 [data-provider-connector-react-url]: https://github.com/data-provider/connector-react
 
