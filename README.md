@@ -6,7 +6,7 @@
 
 ## Overview
 
-This package provides browser localStorage and sessionStorage Data Providers.
+This package provides browser localStorage and sessionStorage [Data Providers][data-provider-url].
 
 * __Data Provider queries__ based on object keys.
 * __Reactivity__ to CRUD actions. When a "create", "update" or "delete" method is called over an instance, the cache clean events are dispatched.
