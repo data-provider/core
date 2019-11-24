@@ -1,6 +1,6 @@
 {
   "name": "@data-provider/axios",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "description": "Api Data Provider using Axios",
   "keywords": [
     "data-provider",
@@ -21,19 +21,19 @@
   "files": [
     "dist"
   ],
-  "main": "dist/data-provider-axios.umd.js",
+  "main": "dist/data-provider-axios.cjs.js",
   "module": "dist/data-provider-axios.esm.js",
   "scripts": {
     "lint": "eslint src test",
     "lint-staged": "lint-staged",
-    "mocks": "mocks-server --features=./mocks --port=3100 --cli false",
+    "mocks": "mocks-server --behaviors=./mocks --port=3100 --cli false",
     "build": "rollup --config",
     "test": "jest",
-    "test:mocks": "start-server-and-test mocks http-get://localhost:3100/mocks/features jest",
+    "test:mocks": "start-server-and-test mocks http-get://localhost:3100/mocks/behaviors jest",
     "coveralls": "cat ./coverage/lcov.info | coveralls"
   },
   "peerDependencies": {
-    "@data-provider/core": "1.6.0"
+    "@data-provider/core": "^1.7.0"
   },
   "dependencies": {
     "axios": "0.18.0",
@@ -44,7 +44,7 @@
   "devDependencies": {
     "@babel/core": "^7.6.4",
     "@babel/preset-env": "^7.6.3",
-    "@data-provider/core": "1.6.0",
+    "@data-provider/core": "^1.7.0",
     "@mocks-server/main": "1.3.0",
     "babel-core": "^7.0.0-bridge.0",
     "babel-jest": "^24.9.0",
@@ -61,8 +61,6 @@
     "rollup-plugin-babel": "^4.3.3",
     "rollup-plugin-commonjs": "10.1.0",
     "rollup-plugin-json": "4.0.0",
-    "rollup-plugin-node-builtins": "^2.1.2",
-    "rollup-plugin-node-globals": "^1.4.0",
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-uglify": "^6.0.3",
     "sinon": "7.5.0",

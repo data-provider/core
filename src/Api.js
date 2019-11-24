@@ -13,7 +13,7 @@ import { once } from "lodash";
 import pathToRegexp from "path-to-regexp";
 import axios from "axios";
 import axiosRetry from "axios-retry";
-import { Origin } from "@data-provider/core";
+import { Provider } from "@data-provider/core";
 
 import { ApisHandler, TAG } from "./ApisHandler";
 import { defaultConfig } from "./defaultConfig";
@@ -22,7 +22,7 @@ const PATH_SEP = "/";
 
 export const apis = new ApisHandler();
 
-export class Api extends Origin {
+export class Api extends Provider {
   constructor(url, options = {}) {
     const tags = Array.isArray(options.tags) ? options.tags : [options.tags];
     tags.unshift(TAG);

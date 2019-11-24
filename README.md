@@ -20,7 +20,7 @@ This package provides an Api [Data Provider][data-provider-url] using Axios.
 * Arguments
 	* url - _`<String>`_. Api url. Parameters can be defined using ":parameterName". Please refer to the [path-to-regexp][path-to-regex-url] package for further info.
 	* options - _`<Object>`_ Containing options:
-		* tags - _`<String or Array of Strings>`_ - The api instance is added to correspondant groups using these tags. Afterwards, configuration, headers, etc. can be changed for certain groups using the [`sources` object methods described in the Data Provider docs][data-provider-sources-docs-url], or the `api` object methods described below. The "api" tag is added automatically to all Api instances.
+		* tags - _`<String or Array of Strings>`_ - The api instance is added to correspondant groups using these tags. Afterwards, configuration, headers, etc. can be changed for certain groups using the [`instances` object methods described in the Data Provider docs][data-provider-instances-docs-url], or the `api` object methods described below. The "api" tag is added automatically to all Api instances.
 		* baseUrl - _`<String>`_ - Added as prefix to all requests.
 		* createMethod - _`<String>`_ - HTTP method to be used in axios requests for `create` method.
 		* readMethod - _`<String>`_ - HTTP method to be used in axios requests for `read` method.
@@ -29,18 +29,18 @@ This package provides an Api [Data Provider][data-provider-url] using Axios.
 		* authErrorStatus -  _`<Number>`_ - Status code that will be considered as an authentication error. When detected, the `authErrorHandler` function will be executed instead of returning an error. See the authentication example below.
 		* authErrorHandler - _`<Function>`_ - Handler that will be executed when an authentication error is received.
 			* Arguments:
-				* origin - _`origin instance`_ As first argument, the function will receive the origin itself. This will allow to set custom authentication headers after executing login, as example.
+				* provider - _`provider instance`_ As first argument, the function will receive the provider itself. This will allow to set custom authentication headers after executing login, as example.
 				* retry - _`<Function>` As second argument, a `retry` function is received, it has to be executed in order to retry the authentication failed request.
 			* Returns: This function should return a `Promise` rejected with an error, or the execution of the received `retry` method.
-		* onBeforeRequest - _`<Function>`_ - Handler that will be executed before any source method. Useful, for example, to set origin headers just before each request is executed.
+		* onBeforeRequest - _`<Function>`_ - Handler that will be executed before any request method. Useful, for example, to set provider headers just before each request is executed.
 			* Arguments:
-				* origin - _`origin instance`_ As first argument, the function will receive the origin itself.
-		* onceBeforeRequest - _`<Function>`_ - Handler that will be executed once time just before the first request. Useful to set origin configuration, for example.
+				* provider - _`provider instance`_ As first argument, the function will receive the provider itself.
+		* onceBeforeRequest - _`<Function>`_ - Handler that will be executed once time just before the first request. Useful to set provider configuration, for example.
 			* Arguments:
-				* origin - _`origin instance`_ As first argument, the function will receive the origin itself.
+				* provider - _`provider instance`_ As first argument, the function will receive the provider itself.
 		* expirationTime - _`<Number>`_ - The cache will be automatically cleaned each `expirationTime` miliseconds.
 		* retries - _`<Number>`_ - Number of retries that will be executed when a request fails before definitively failing. Requests will be retried for network errors or a 5xx error on an idempotent request (GET, PUT, DELETE).
-		* cache - _`<Boolean>`_ - Defines whether the resource will use cache or not. If `false`, all "read" executions will be sent to the server.
+		* cache - _`<Boolean>`_ - Defines whether the provider will use cache or not. If `false`, all "read" executions will be sent to the server.
 		* fullResponse - _`<Boolean>`_ - If `true`, the full response object will be used as value, so you can consult headers, etc. If `false`, only the `response.data` will be returned, which is the default behavior.
 		* validateStatus - _`<Function>`_ - Function that will be used to determine if response status has to be considered as `failed` or `success`.
 			* Arguments:
@@ -50,11 +50,11 @@ This package provides an Api [Data Provider][data-provider-url] using Axios.
 			* Arguments:
 				* response - _`<Object>`_ - Response of the request.
 			* Returns: Should return a Promise resolves for `success` requests, and a Promise rejected with an error for failed ones.
-		* errorHandler - _`<Function>`_ - Function used to parse errors. The returned value will be setted as `error` in the origin `error` property.
+		* errorHandler - _`<Function>`_ - Function used to parse errors. The returned value will be setted as `error` in the provider `error` property.
 			* Arguments:
 				* error - _`<Error>`_ - Error object produced by a failed request.
 			* Returns: Should return a rejected Promise, containing the new Error.
-		* defaultValue - _`<Any>`_ - Default value of origin until real data is requested.
+		* defaultValue - _`<Any>`_ - Default value of provider until real data is requested.
 
 ## Methods
 
@@ -72,7 +72,7 @@ This package provides an Api [Data Provider][data-provider-url] using Axios.
 `api.clean()`
 
 * The `cache` of a queried api resource will be automatically cleaned when the `update` or `delete` methods are executed for that query.
-* If `update` or `delete` methods are executed over the origin without query, cache of all queried resources will be cleaned too.
+* If `update` or `delete` methods are executed over the provider without query, cache of all queried instances will be cleaned too.
 * All `cache` will be cleaned if the `create` method is executed.
 
 ### setHeaders
@@ -123,12 +123,12 @@ If no tags are provided when invoking methods, they will be applied to all api i
 
 ### clean cache
 
-Use the ["Data Provider" `sources` method][data-provider-sources-docs-url] for cleaning many instances at a time. Use the "api" tag to clean all "@data-provider/axios" instances:
+Use the ["Data Provider" `instances` method][data-provider-instances-docs-url] for cleaning many instances at a time. Use the "api" tag to clean all "@data-provider/axios" instances:
 
 ```js
-import { sources } from "@data-provider/core";
+import { instances } from "@data-provider/core";
 
-sources.getByTag("api").clean();
+instances.getByTag("api").clean();
 ```
 
 ### setHeaders
@@ -159,12 +159,12 @@ apis.addHeaders({ Authorization: `Bearer ${token}` }, ["need-auth"]);
 
 ### config
 
-Use the ["Data Provider" `sources` method][data-provider-sources-docs-url] for configuring many instances at a time. Use the "api" tag to configure all "@data-provider/axios" instances:
+Use the ["Data Provider" `instances` method][data-provider-instances-docs-url] for configuring many instances at a time. Use the "api" tag to configure all "@data-provider/axios" instances:
 
 ```js
-import { sources } from "@data-provider/core";
+import { instances } from "@data-provider/core";
 
-sources.getByTag("api").config({
+instances.getByTag("api").config({
   retries: 0
 });
 ```
@@ -182,26 +182,26 @@ const authorsCollection = new Api("http://api.library.com/authors");
 
 const booksWithAuthors = new Selector(
   {
-    source: booksCollection,
-    query: author => {
+    provider: booksCollection,
+    query: author => ({
       queryString: {
         author
       }
-    }
+    })
   },
   authorsCollection,
   (booksResults, authorsResults) =>
-      booksResults.map(book => ({
+    booksResults.map(book => ({
       ...book,
       authorName: authorsResults.find(author => author.id === book.author)
     }))
 );
 
 // Each book now includes an "authorName" property.
-const results = await booksWithAuthors.read();
+booksWithAuthors.read();
 
 // Request is not dispatched again, now results are cached.
-await booksWithAuthors.read();
+booksWithAuthors.read();
 
 console.log(booksWithAuthors.read.value); //Value still remain the same
 
@@ -211,24 +211,23 @@ booksCollection.create({
 });
 
 // Request to books is dispatched again, as cache was cleaned. Authors are still cached.
-await booksWithAuthors.read();
+booksWithAuthors.read();
 
 // Request is dispatched, but passing "author" query string
-const booksOfOrwell = await booksWithAuthors.query("George Orwell").read();
+booksWithAuthors.query("George Orwell").read();
 
 // Request is already cached. It will not be repeated.
-await booksWithAuthors.query("George Orwell");
-
+booksWithAuthors.query("George Orwell").read();
 ```
 
 ### More examples
 
-The [Data Provider][data-provider-url] library uses this origin in his examples, so you can refer to the [library documentation][data-provider-url] to found more examples.
+The [Data Provider][data-provider-url] library uses this Provider in his examples, so you can refer to the [library documentation][data-provider-url] to found more examples.
 
-Specific api origin examples:
+Specific Axios Provider examples:
 
 * [configuration](docs/config.md)
-* [configuring multiple instance at a time](docs/apis-config.md)
+* [configuring multiple instances at a time](docs/apis-config.md)
 * [authentication](docs/authentication.md)
 
 ## Usage with frameworks
@@ -237,7 +236,7 @@ Specific api origin examples:
 
 Please refer to the [@data-provider/connector-react][data-provider-connector-react-url] documentation to see how simple is the data-binding between React Components and @data-provider/axios.
 
-Connect a source to all components that need it. Data Provider will fetch data only when needed, and will avoid making it more than once, no matter how many components need the data.
+Connect a provider to all components that need it. [Data Provider][data-provider-url] will fetch data only when needed, and will avoid making it more than once, no matter how many components need the data.
 
 ## Contributing
 
@@ -246,7 +245,7 @@ Please read the [contributing guidelines](.github/CONTRIBUTING.md) and [code of 
 
 [data-provider-url]: https://github.com/data-provider/core
 [data-provider-connector-react-url]: https://github.com/data-provider/connector-react
-[data-provider-sources-docs-url]: https://github.com/data-provider/core/blob/master/docs/sources/api.md
+[data-provider-instances-docs-url]: https://github.com/data-provider/core/blob/master/docs/instances/api.md
 [path-to-regex-url]: https://www.npmjs.com/package/path-to-regexp
 
 [coveralls-image]: https://coveralls.io/repos/github/data-provider/axios/badge.svg
