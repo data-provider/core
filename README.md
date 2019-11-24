@@ -116,7 +116,7 @@ currentAuthorBooks.read();
 
 Please refer to the [@data-provider/connector-react][data-provider-connector-react-url] documentation to see how simple is the data-binding between React Components and Data Provider Browser Storage.
 
-Connect a provider to all components that need it. Data Provider will rerender automatically connected components when data in providers is updated.
+Connect a provider to all components that need it. Data Provider will rerender automatically connected components when data in providers are updated.
 
 ## Contributing
 
