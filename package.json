@@ -1,6 +1,6 @@
 {
   "name": "@data-provider/browser-storage",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "localStorage and sessionStorage Data Providers",
   "keywords": [
     "data-provider",
@@ -22,7 +22,7 @@
   "files": [
     "dist"
   ],
-  "main": "dist/data-provider-browser-storage.umd.js",
+  "main": "dist/data-provider-browser-storage.cjs.js",
   "module": "dist/data-provider-browser-storage.esm.js",
   "scripts": {
     "lint": "eslint src test",
@@ -33,13 +33,13 @@
     "coveralls": "cat ./coverage/lcov.info | coveralls"
   },
   "peerDependencies": {
-    "@data-provider/core": "1.6.0"
+    "@data-provider/core": "^1.7.0"
   },
   "devDependencies": {
     "@babel/core": "^7.6.4",
     "@babel/preset-env": "^7.6.3",
     "@babel/preset-react": "^7.6.3",
-    "@data-provider/core": "1.6.0",
+    "@data-provider/core": "^1.7.0",
     "babel-core": "^7.0.0-bridge.0",
     "babel-jest": "^24.9.0",
     "babel-polyfill": "^6.26.0",
@@ -55,8 +55,6 @@
     "rollup-plugin-babel": "^4.3.3",
     "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-json": "^4.0.0",
-    "rollup-plugin-node-builtins": "^2.1.2",
-    "rollup-plugin-node-globals": "^1.4.0",
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-uglify": "^6.0.3",
     "sinon": "^7.5.0"
