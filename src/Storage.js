@@ -11,7 +11,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 
 /* global window */
 
-import { Origin } from "@data-provider/core";
+import { Provider } from "@data-provider/core";
 
 const TAG = "browser-storage";
 const storageKeysTags = {
@@ -33,14 +33,14 @@ class StorageMock {
   }
 }
 
-export class Storage extends Origin {
+export class Storage extends Provider {
   constructor(namespace, defaultValue, storageKey, options = {}) {
     const tags = Array.isArray(options.tags) ? options.tags : [options.tags];
     tags.push(TAG);
     tags.push(storageKeysTags[storageKey]);
     if (!options.queriesDefaultValue) {
       console.warn(
-        'Usage of "queriesDefaultValue" option is recommended to prepare your code for next major version of "@data-provider/browser-storage"'
+        '@data-provider/browser-storage: Deprecation warning: Usage of "queriesDefaultValue" option is recommended to prepare your code for next major version'
       );
     }
     const getDefaultValue = function(query) {
