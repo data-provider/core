@@ -6,7 +6,7 @@
 
 ## Overview
 
-This package provides Data Provider browser localStorage and sessionStorage origins. It "wraps" localStorage and sessionStorage with a [Data Provider][data-provider-url] interface, providing:
+This package provides browser localStorage and sessionStorage Data Providers.
 
 * __Data Provider queries__ based on object keys.
 * __Reactivity__ to CRUD actions. When a "create", "update" or "delete" method is called over an instance, the cache clean events are dispatched.
@@ -21,18 +21,18 @@ npm i @data-provider/browser-storage --save
 
 * SessionStorage - _`<Class>`_ `new SessionStorage(namespace[, defaultValue[, options]])` - Class for instancing Data Provider objects persisted in the browser sessionStorage.
 	* Arguments
-		* namespace - _`<String>`_. Namespace to be used in the sessionStorage object, in which the origin data will be persisted.
+		* namespace - _`<String>`_. Namespace to be used in the sessionStorage object, in which the provider data will be persisted.
 		* defaultValue - _`<Any>`_ Default value until the first async read is resolved.
 		* options - `<Object>` containing properties:
-			* queriesDefaultValue - _`<Boolean>`_ If `true`, the default value of queried sources will be the value of the "key" in the query. If not defined, the default value of queried sources will be the full `defaultValue` object.
-			* tags - _`<String> or <Array of Strings>`_ Tags to assign to the instance. Useful when using [Data Provider `sources` handler][data-provider-sources-docs-url]. Tags "browser-storage" and "session-storage" will be always added to provided tags by default.
+			* queriesDefaultValue - _`<Boolean>`_ If `true`, the default value of queried instances will be the value of the "key" in the query. If not defined, the default value of queried instances will be the full `defaultValue` object.
+			* tags - _`<String> or <Array of Strings>`_ Tags to assign to the instance. Useful when using [Data Provider `instances` handler][data-provider-instances-docs-url]. Tags "browser-storage" and "session-storage" will be always added to provided tags by default.
 * LocalStorage - _`<Class>`_ `new LocalStorage(namespace[, defaultValue[, options]])` - Class for instancing Data Provider objects persisted in the browser localStorage.
 	* Arguments
-		* namespace - _`<String>`_. Namespace to be used in the localStorage object, in which the origin data will be persisted.
+		* namespace - _`<String>`_. Namespace to be used in the localStorage object, in which the provider data will be persisted.
 		* defaultValue - _`<Any>`_ Default value until the first async read is resolved.
 		* options - `<Object>` containing properties:
-			* queriesDefaultValue - _`<Boolean>`_ If `true`, the default value of queried sources will be the value of the "key" in the query. If not defined, the default value of queried sources will be the full `defaultValue` object.
-			* tags - _`<String> or <Array of Strings>`_ Tags to assign to the instance. Useful when using [Data Provider `sources` handler][data-provider-sources-docs-url]. Tags "browser-storage" and "local-storage" will be always added to provided tags by default.
+			* queriesDefaultValue - _`<Boolean>`_ If `true`, the default value of queried instances will be the value of the "key" in the query. If not defined, the default value of queried instances will be the full `defaultValue` object.
+			* tags - _`<String> or <Array of Strings>`_ Tags to assign to the instance. Useful when using [Data Provider `instances` handler][data-provider-instances-docs-url]. Tags "browser-storage" and "local-storage" will be always added to provided tags by default.
 
 ## Common Methods
 
@@ -58,16 +58,16 @@ const sessionDetails = new SessionStorage("user", {
   isLogedIn: false
 });
 
-const userId = await sessionDetails.query("id").read();
+sessionDetails.query("id").read();
 
 sessionDetails.query("isLogedIn").update(true);
-
 ```
 
-Use Data Provider Browser Storage objects in combination with Api Origins, and take advantage of the built-in reactivity. Use the storage objects to query the api origins, and, when you update the storage object, the API object caches will be cleaned as a consequence:
+Use Data Provider Browser Storage objects in combination with Axios Data Provider, and take advantage of the built-in reactivity. Use the storage objects to query the Axios providers, and, when you update the storage object, the API object caches will be cleaned as a consequence:
 
 
 ```js
+import { Selector } from "@data-provider/core";
 import { LocalStorage } from "@data-provider/browser-storage";
 import { Api } from "@data-provider/axios";
 
@@ -77,14 +77,14 @@ const currentAuthor = new LocalStorage("current-author", {
 const booksCollection = new Api("http://api.library.com/books");
 
 const currentAuthorBooks = new Selector(
-  { 
-    source: currentAuthor,
+  {
+    provider: currentAuthor,
     query: () => "id"
   },
   {
-    source: booksCollection,
+    provider: booksCollection,
     query: (query, previousResults) => {
-      if(!previousResults[0]) {
+      if (!previousResults[0]) {
         return;
       }
       return {
@@ -98,17 +98,16 @@ const currentAuthorBooks = new Selector(
 );
 
 // Api request to "http://api.library.com/books". Return all books
-await currentAuthorBooks.read();
+currentAuthorBooks.read();
 
 // Api request is not repeated, as query has no changed.
-await currentAuthorBooks.read();
+currentAuthorBooks.read();
 
 currentAuthor.query("id").update("foo-author-id");
 
 // Api request now is sent to "http://api.library.com/books?authorId=foo-author-id". Return author books
 // As current author is stored in localStorage, the next time the page is loaded, the queryString applied to the api will be the same
-await currentAuthorBooks.read();
-
+currentAuthorBooks.read();
 ```
 
 ## Usage with frameworks
@@ -117,7 +116,7 @@ await currentAuthorBooks.read();
 
 Please refer to the [@data-provider/connector-react][data-provider-connector-react-url] documentation to see how simple is the data-binding between React Components and Data Provider Browser Storage.
 
-Connect a source to all components that need it. Data Provider will rerender automatically connected components when data in sources is updated.
+Connect a provider to all components that need it. Data Provider will rerender automatically connected components when data in providers is updated.
 
 ## Contributing
 
@@ -125,7 +124,7 @@ Contributors are welcome.
 Please read the [contributing guidelines](.github/CONTRIBUTING.md) and [code of conduct](.github/CODE_OF_CONDUCT.md).
 
 [data-provider-url]: https://github.com/data-provider/core
-[data-provider-sources-docs-url]: https://github.com/data-provider/core/blob/master/docs/sources/api.md
+[data-provider-instances-docs-url]: https://github.com/data-provider/core/blob/master/docs/instances/api.md
 [data-provider-connector-react-url]: https://github.com/data-provider/connector-react
 
 [coveralls-image]: https://coveralls.io/repos/github/data-provider/browser-storage/badge.svg
