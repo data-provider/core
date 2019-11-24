@@ -17,8 +17,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [1.5.0] - 2019-11-24
 ### Changed
 - Upgrade @data-provider/core dependency
+- Use new core Provider class instead of Origin.
+- Use new core instances object instead of sources.
 - Export library as CJS
 - Improve traces adding package name.
+- Adapt documentation to new version of @data-provider/core.
 
 ## [1.4.0] - 2019-11-23
 ### Changed
