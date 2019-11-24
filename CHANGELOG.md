@@ -12,7 +12,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### BREAKING CHANGES
 
 ## [TO BE DEPRECATED]
-- apis "config" and "clean" methods. Mercury "sources" methods should be used instead.
+- apis "config" and "clean" methods. Mercury "instances" methods should be used instead.
+
+## [1.5.0] - 2019-11-24
+### Changed
+- Upgrade @data-provider/core dependency
 
 ## [1.4.0] - 2019-11-23
 ### Changed
