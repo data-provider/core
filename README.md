@@ -6,7 +6,7 @@
 
 ## Overview
 
-This package provides a Data Provider origin for handling memory objects.
+This package provides a Data Provider for handling memory objects.
 
 * __Data Provider queries__ based on object keys.
 * __Reactivity__ to CRUD actions. When a "create", "update" or "delete" method is called over an instance, the cache clean events are dispatched.
@@ -22,11 +22,10 @@ npm i @data-provider/memory --save
 `new Memory(defaultValue[, options || uuid][, options])`
 * Arguments
 	* defaultValue - _`<Object>`_. Object to be stored. Default value is assigned too at the same time.
-	* uuid - _`<String>`_. Unique id to assign to returned Data Provider instance. Useful when using [Data Provider `sources` handler][data-provider-sources-docs-url]. __To be deprecated in next releases. Options object should be passed as second argument instead of uuid.__
 	* options - `<Object>` containing properties:
-		* queriesDefaultValue - _`<Boolean>`_ If `true`, the default value of queried sources will be the value of the "key" in the query. If not defined, the default value of queried sources will be the full `defaultValue` object.
-		* uuid - _`<String>`_ Unique id to assign to returned Data Provider instance. Useful when using [Data Provider `sources` handler][data-provider-sources-docs-url].
-		* tags - _`<String> or <Array of Strings>`_ Tags to assign to the instance. Useful when using [Data Provider `sources` handler][data-provider-sources-docs-url]. A "memory" tag will be always added to provided tags by default.
+		* queriesDefaultValue - _`<Boolean>`_ If `true`, the default value of queried instances will be the value of the "key" in the query. If not defined, the default value of queried instances will be the full `defaultValue` object.
+		* uuid - _`<String>`_ Unique id to assign to returned Data Provider instance. Useful when using [Data Provider `instances` handler][data-provider-instances-docs-url].
+		* tags - _`<String> or <Array of Strings>`_ Tags to assign to the instance. Useful when using [Data Provider `instances` handler][data-provider-instances-docs-url]. A "memory" tag will be always added to provided tags by default.
 
 ## Methods
 
@@ -52,7 +51,7 @@ const fooMemory = new Memory({
   var: "var-value"
 });
 
-console.log(fooMemory.query("foo").read.value) // {foo: "foo-value", var: "var-value"}
+console.log(fooMemory.query("foo").read.value); // {foo: "foo-value", var: "var-value"}
 
 const fooMemory2 = new Memory({
   foo: "foo-value",
@@ -61,8 +60,7 @@ const fooMemory2 = new Memory({
   queriesDefaultValue: true
 });
 
-console.log(fooMemory.query("foo").read.value) // "foo"
-
+console.log(fooMemory2.query("foo").read.value); // "foo"
 ```
 
 ## Examples
@@ -77,16 +75,27 @@ const sessionDetails = new Memory({
   isLogedIn: false
 });
 
-const userId = await sessionDetails.read("userId");
+// Pass key to read method
+sessionDetails.read("userId").then(userId => {
+  console.log(userId);
+});
 
-sessionDetails.query("isLogedIn").update(true)
+// Pass key as a query
+sessionDetails
+  .query("userId")
+  .read()
+  .then(userId => {
+    console.log(userId);
+  });
 
+sessionDetails.query("isLogedIn").update(true);
 ```
 
-Use Data Provider Memory objects in combination with Api Origins, and take advantage of the built-in reactivity. Use the memory objects to query the api origins, and, when you update the Memory Object, the API object caches will be cleaned as a consequence:
+Use Data Provider Memory objects in combination with Axios Data Provider, and take advantage of the built-in reactivity. Use the memory objects to query the API providers, and, when you update the Memory Object, the API object caches will be cleaned as a consequence:
 
 
 ```js
+import { Selector } from "@data-provider/core";
 import { Memory } from "@data-provider/memory";
 import { Api } from "@data-provider/axios";
 
@@ -96,14 +105,14 @@ const currentAuthor = new Memory({
 const booksCollection = new Api("http://api.library.com/books");
 
 const currentAuthorBooks = new Selector(
-  { 
-    source: currentAuthor,
+  {
+    provider: currentAuthor,
     query: () => "id"
   },
   {
-    source: booksCollection,
+    provider: booksCollection,
     query: (query, previousResults) => {
-      if(!previousResults[0]) {
+      if (!previousResults[0]) {
         return;
       }
       return {
@@ -117,16 +126,15 @@ const currentAuthorBooks = new Selector(
 );
 
 // Api request to "http://api.library.com/books". Return all books
-await currentAuthorBooks.read();
+currentAuthorBooks.read();
 
 // Api request is not repeated, as query has no changed.
-await currentAuthorBooks.read();
+currentAuthorBooks.read();
 
 currentAuthor.query("id").update("foo-author-id");
 
 // Api request now is sent to "http://api.library.com/books?authorId=foo-author-id". Return author books
-await currentAuthorBooks.read();
-
+currentAuthorBooks.read();
 ```
 
 ## Contributing
@@ -135,7 +143,7 @@ Contributors are welcome.
 Please read the [contributing guidelines](.github/CONTRIBUTING.md) and [code of conduct](.github/CODE_OF_CONDUCT.md).
 
 [data-provider-url]: https://github.com/data-provider/core
-[data-provider-sources-docs-url]: https://github.com/data-provider/core/blob/master/docs/sources/api.md
+[data-provider-instances-docs-url]: https://github.com/data-provider/core/blob/master/docs/instances/api.md
 
 [coveralls-image]: https://coveralls.io/repos/github/data-provider/memory/badge.svg
 [coveralls-url]: https://coveralls.io/github/data-provider/memory

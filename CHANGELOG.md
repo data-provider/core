@@ -20,6 +20,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Upgrade @data-provider/core dependency
 - Use new core Provider class instead of Origin.
 - Export library as CJS.
+- Improve traces adding package name.
+- Adapt documentation to new version of @data-provider/core.
+
+### Removed
+- Remove method to be deprecated from documentation.
 
 ### Fixed
 - Fix devDependencies vulnerabilities
