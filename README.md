@@ -6,7 +6,7 @@
 
 ## Overview
 
-This package provides a Data Provider for handling memory objects.
+This package provides a [Data Provider][data-provider-url] for handling memory objects.
 
 * __Data Provider queries__ based on object keys.
 * __Reactivity__ to CRUD actions. When a "create", "update" or "delete" method is called over an instance, the cache clean events are dispatched.
