@@ -26,10 +26,10 @@
   "scripts": {
     "lint": "eslint src test",
     "lint-staged": "lint-staged",
-    "mocks": "mocks-server --features=./mocks --port=3100 --cli false",
+    "mocks": "mocks-server --behaviors=./mocks --port=3100 --cli false",
     "build": "rollup --config",
     "test": "jest",
-    "test:mocks": "start-server-and-test mocks http-get://localhost:3100/mocks/features jest",
+    "test:mocks": "start-server-and-test mocks http-get://localhost:3100/mocks/behaviors jest",
     "coveralls": "cat ./coverage/lcov.info | coveralls"
   },
   "peerDependencies": {

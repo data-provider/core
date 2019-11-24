@@ -9,7 +9,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 */
 
-import { sources } from "@data-provider/core";
+import { instances } from "@data-provider/core";
 
 export const TAG = "api";
 
@@ -30,47 +30,47 @@ export class ApisHandler {
   config(configuration, tags) {
     warn("config");
     if (!tags) {
-      sources.getByTag(TAG).config(configuration);
+      instances.getByTag(TAG).config(configuration);
     } else {
       this._ensureArray(tags).forEach(tag => {
-        sources.getByTag(tag).config(configuration);
+        instances.getByTag(tag).config(configuration);
       });
     }
   }
 
   _getHeaders(tags) {
-    let headers = sources.getByTag(TAG)._apiHeaders;
+    let headers = instances.getByTag(TAG)._apiHeaders;
     tags.forEach(tag => {
-      const byTagSources = sources.getByTag(tag);
-      headers = { ...headers, ...byTagSources._apiHeaders };
+      const byTaginstances = instances.getByTag(tag);
+      headers = { ...headers, ...byTaginstances._apiHeaders };
     });
     return headers;
   }
 
   setHeaders(headers, tags) {
     if (!tags) {
-      const allSources = sources.getByTag(TAG);
-      allSources._apiHeaders = headers;
-      allSources.call(SET_HEADERS_METHOD, headers);
+      const allinstances = instances.getByTag(TAG);
+      allinstances._apiHeaders = headers;
+      allinstances.call(SET_HEADERS_METHOD, headers);
     } else {
       this._ensureArray(tags).forEach(tag => {
-        const byTagSources = sources.getByTag(tag);
-        byTagSources._apiHeaders = headers;
-        sources.getByTag(tag).call(SET_HEADERS_METHOD, headers);
+        const byTaginstances = instances.getByTag(tag);
+        byTaginstances._apiHeaders = headers;
+        instances.getByTag(tag).call(SET_HEADERS_METHOD, headers);
       });
     }
   }
 
   addHeaders(headers, tags) {
     if (!tags) {
-      const allSources = sources.getByTag(TAG);
-      allSources._apiHeaders = { ...allSources._apiHeaders, ...headers };
-      allSources.call(ADD_HEADERS_METHOD, headers);
+      const allinstances = instances.getByTag(TAG);
+      allinstances._apiHeaders = { ...allinstances._apiHeaders, ...headers };
+      allinstances.call(ADD_HEADERS_METHOD, headers);
     } else {
       this._ensureArray(tags).forEach(tag => {
-        const byTagSources = sources.getByTag(tag);
-        byTagSources._apiHeaders = { ...byTagSources._apiHeaders, ...headers };
-        sources.getByTag(tag).call(ADD_HEADERS_METHOD, headers);
+        const byTaginstances = instances.getByTag(tag);
+        byTaginstances._apiHeaders = { ...byTaginstances._apiHeaders, ...headers };
+        instances.getByTag(tag).call(ADD_HEADERS_METHOD, headers);
       });
     }
   }
@@ -78,16 +78,16 @@ export class ApisHandler {
   clean(tags) {
     warn("clean");
     if (!tags) {
-      sources.getByTag(TAG).clean();
+      instances.getByTag(TAG).clean();
     } else {
       this._ensureArray(tags).forEach(tag => {
-        sources.getByTag(tag).clean();
+        instances.getByTag(tag).clean();
       });
     }
   }
 
   reset() {
     warn("reset");
-    sources.getByTag(TAG).clear();
+    instances.getByTag(TAG).clear();
   }
 }
