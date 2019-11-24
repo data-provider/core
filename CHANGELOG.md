@@ -14,6 +14,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [TO BE DEPRECATED]
 - "queriesDefaultValue" option has to be removed.
 
+## [1.4.0] - 2019-11-24
+### Changed
+
 ## [1.3.0] - 2019-11-23
 ### Changed
 - Project migration. Read NOTICE for further info. All previous releases in this CHANGELOG file correspond to @xbyorange/mercury-browser-storage package distribution.
