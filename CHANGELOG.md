@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [1.4.0] - 2019-11-24
 ### Changed
 - Upgrade @data-provider/core dependency
+- Export library as CJS
 
 ## [1.3.0] - 2019-11-23
 ### Changed

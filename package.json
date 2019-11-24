@@ -22,7 +22,7 @@
   "files": [
     "dist"
   ],
-  "main": "dist/data-provider-browser-storage.umd.js",
+  "main": "dist/data-provider-browser-storage.cjs.js",
   "module": "dist/data-provider-browser-storage.esm.js",
   "scripts": {
     "lint": "eslint src test",

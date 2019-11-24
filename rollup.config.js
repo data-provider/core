@@ -44,6 +44,13 @@ module.exports = [
   {
     ...BASE_CONFIG,
     output: {
+      file: "dist/data-provider-browser-storage.cjs.js",
+      format: "cjs"
+    }
+  },
+  {
+    ...BASE_CONFIG,
+    output: {
       file: "dist/data-provider-browser-storage.umd.js",
       format: "umd",
       name: "dataProviderBrowserStorage",
