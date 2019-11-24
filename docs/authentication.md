@@ -18,8 +18,8 @@ const doLogin = refreshToken => {
       refreshToken
     })
     .then(response => {
-      [booksCollection, authorsCollection].forEach(dataSource => {
-        dataSource.addHeaders({
+      [booksCollection, authorsCollection].forEach(provider => {
+        provider.addHeaders({
           Authorization: `Bearer ${response.accessToken}`
         });
       });
@@ -27,7 +27,7 @@ const doLogin = refreshToken => {
     });
 };
 
-const authErrorHandler = (dataSource, retry) => {
+const authErrorHandler = (provider, retry) => {
   const refreshToken = localStorage.getItem("refreshToken");
   // User has a refresh token, renew the authentication automatically
   if (refreshToken) {
@@ -57,4 +57,4 @@ booksCollection.config({
 });
 ```
 
-> Note that the authErrorHandler method is executed by all origins that have received an authentication error. In a common scenario, multiple requests will fail at the same time when you are loading the page for the first time without being authenticated. This is the reason why the login method promise is being "cached" and executed only once, except when it fails.
+> Note that the authErrorHandler method is executed by all providers that have received an authentication error. In a common scenario, multiple requests will fail at the same time when you are loading the page for the first time without being authenticated. This is the reason why the login method promise is being "cached" and executed only once, except when it fails.
