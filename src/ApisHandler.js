@@ -16,15 +16,19 @@ export const TAG = "api";
 const SET_HEADERS_METHOD = "setHeaders";
 const ADD_HEADERS_METHOD = "addHeaders";
 
+const warn = method => {
+  console.warn(
+    `@data-provider/axios: Deprecation warning: "apis.${method}" method will be deprecated. Use @data-provider/core "instances.getByTag('api').${method}" instead`
+  );
+};
+
 export class ApisHandler {
   _ensureArray(tags) {
     return Array.isArray(tags) ? tags : [tags];
   }
 
   config(configuration, tags) {
-    console.warn(
-      '@data-provider/axios apis.config method will be deprecated. Use @data-provider/core sources.getByTag("api").config instead'
-    );
+    warn("config");
     if (!tags) {
       sources.getByTag(TAG).config(configuration);
     } else {
@@ -72,9 +76,7 @@ export class ApisHandler {
   }
 
   clean(tags) {
-    console.warn(
-      `@data-provider/axios apis.clean method will be deprecated. Use @data-provider/core sources.getByTag("api").clean instead`
-    );
+    warn("clean");
     if (!tags) {
       sources.getByTag(TAG).clean();
     } else {
@@ -85,9 +87,7 @@ export class ApisHandler {
   }
 
   reset() {
-    console.warn(
-      '@data-provider/axios apis.reset method will be deprecated. Use @data-provider/core sources.getByTag("api").clean instead'
-    );
+    warn("reset");
     sources.getByTag(TAG).clear();
   }
 }
