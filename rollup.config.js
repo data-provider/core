@@ -13,8 +13,6 @@ const json = require("rollup-plugin-json");
 const commonjs = require("rollup-plugin-commonjs");
 const resolve = require("rollup-plugin-node-resolve");
 const babel = require("rollup-plugin-babel");
-const nodeBuiltIns = require("rollup-plugin-node-builtins");
-const nodeGlobals = require("rollup-plugin-node-globals");
 const uglifier = require("rollup-plugin-uglify");
 
 const BASE_PLUGINS = [
@@ -32,9 +30,7 @@ const BASE_PLUGINS = [
   babel({
     babelrc: false,
     presets: ["@babel/env"]
-  }),
-  nodeBuiltIns(),
-  nodeGlobals()
+  })
 ];
 
 const BASE_CONFIG = {
