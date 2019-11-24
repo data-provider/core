@@ -21,7 +21,7 @@
   "files": [
     "dist"
   ],
-  "main": "dist/data-provider-axios.umd.js",
+  "main": "dist/data-provider-axios.cjs.js",
   "module": "dist/data-provider-axios.esm.js",
   "scripts": {
     "lint": "eslint src test",
@@ -61,8 +61,6 @@
     "rollup-plugin-babel": "^4.3.3",
     "rollup-plugin-commonjs": "10.1.0",
     "rollup-plugin-json": "4.0.0",
-    "rollup-plugin-node-builtins": "^2.1.2",
-    "rollup-plugin-node-globals": "^1.4.0",
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-uglify": "^6.0.3",
     "sinon": "7.5.0",
