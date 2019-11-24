@@ -10,7 +10,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 */
 
 import PrismicClient from "prismic-javascript";
-import { Origin } from "@data-provider/core";
+import { Provider } from "@data-provider/core";
 
 const PRISMIC_TAG = "prismic";
 const defaultConfig = {
@@ -19,7 +19,7 @@ const defaultConfig = {
   url: ""
 };
 
-export class Prismic extends Origin {
+export class Prismic extends Provider {
   constructor(url, options = {}) {
     const tags = Array.isArray(options.tags) ? options.tags : [options.tags];
     tags.push(PRISMIC_TAG);
