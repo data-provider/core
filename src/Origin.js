@@ -11,12 +11,11 @@ Unless required by applicable law or agreed to in writing, software distributed 
 // TODO, deprecate
 
 import { Provider, instances } from "./Provider";
+import { deprecationWarn } from "./helpers";
 
 export class Origin extends Provider {
   constructor(defaultId, defaultValue, options = {}) {
-    console.warn(
-      `@data-provider deprecation warning: Origin class will be deprecated. Use Provider instead`
-    );
+    deprecationWarn("Origin class will be deprecated. Use Provider instead");
     super(defaultId, defaultValue, options);
   }
 }

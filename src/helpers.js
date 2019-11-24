@@ -109,3 +109,15 @@ export const areDataProviders = arrayToCheck => {
   });
   return allAreDataProviders;
 };
+
+export const message = text => {
+  return `@data-provider/core: ${text}`;
+};
+
+export const warn = text => {
+  console.warn(message(text));
+};
+
+export const deprecationWarn = text => {
+  warn(`Deprecation warning: ${text}`);
+};

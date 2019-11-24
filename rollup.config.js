@@ -52,6 +52,13 @@ module.exports = [
   {
     ...BASE_CONFIG,
     output: {
+      file: "dist/core.cjs.js",
+      format: "cjs"
+    }
+  },
+  {
+    ...BASE_CONFIG,
+    output: {
       file: "dist/core.umd.js",
       format: "umd",
       name: "dataProvider",

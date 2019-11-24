@@ -14,7 +14,8 @@ const test = require("mocha-sinon-chai");
 const { Provider, instances } = require("../src/Provider");
 const { Selector } = require("../src/Selector");
 
-const CUD_ERROR = "CUD methods can be used only when returning @data-provider instances";
+const CUD_ERROR =
+  "@data-provider/core: CUD methods in Selectors can be used only when returning Provider instances";
 
 test.describe("Selector cud methods", () => {
   let sandbox;

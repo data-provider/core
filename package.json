@@ -19,7 +19,7 @@
   "files": [
     "dist"
   ],
-  "main": "dist/core.umd.js",
+  "main": "dist/core.cjs.js",
   "module": "dist/core.esm.js",
   "scripts": {
     "build": "rollup --config",

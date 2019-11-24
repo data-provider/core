@@ -19,11 +19,13 @@ import {
   UPDATE_METHOD,
   DELETE_METHOD,
   seemsToBeSelectorOptions,
-  areDataProviders
+  areDataProviders,
+  message,
+  deprecationWarn
 } from "./helpers";
 
 const SOURCE_DEPRECATION_WARNING =
-  '@data-provider deprecation warning: "source" property in selectors will be deprecated. Please use "provider" instead';
+  '"source" property in selectors will be deprecated. Please use "provider" instead';
 
 export class Selector extends Provider {
   constructor() {
@@ -40,8 +42,8 @@ export class Selector extends Provider {
         options = defaultValue;
         defaultValue = defaultValue.defaultValue;
       } else {
-        console.warn(
-          "@data-provider: Please provide an object with 'defaultValue' property. Defining default value as last argument will be deprecated in next versions"
+        deprecationWarn(
+          `Provide an options object with "defaultValue" property as last argument to selectors. Defining default value as last argument will be deprecated`
         );
       }
     }
@@ -61,7 +63,7 @@ export class Selector extends Provider {
         } else {
           // TODO, remove "source" compatibility
           if (provider.source) {
-            console.warn(SOURCE_DEPRECATION_WARNING);
+            deprecationWarn(SOURCE_DEPRECATION_WARNING);
             provider.provider = provider.source;
           }
           const isProviderObject = !!provider.provider;
@@ -105,7 +107,7 @@ export class Selector extends Provider {
       }
       // TODO, remove source compatibility
       if (!!providerToRead.source) {
-        console.warn(SOURCE_DEPRECATION_WARNING);
+        deprecationWarn(SOURCE_DEPRECATION_WARNING);
         providerToRead.provider = providerToRead.source;
       }
       const isQueried = !!providerToRead.provider;
@@ -153,7 +155,11 @@ export class Selector extends Provider {
         const selectorResultIsProvider = areDataProviders(selectorResult);
         if (methodToDispatch !== READ_METHOD && !selectorResultIsProvider) {
           return Promise.reject(
-            new Error("CUD methods can be used only when returning @data-provider instances")
+            new Error(
+              message(
+                "CUD methods in Selectors can be used only when returning Provider instances"
+              )
+            )
           );
         }
         if (selectorResultIsProvider) {

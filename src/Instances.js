@@ -9,7 +9,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 */
 
-import { ensureArray, mergeCloned, removeFalsy } from "./helpers";
+import { ensureArray, mergeCloned, removeFalsy, warn } from "./helpers";
 
 export class InstancesHandler {
   constructor(baseTags) {
@@ -44,9 +44,7 @@ export class InstancesHandler {
       if (instance[methodName] instanceof Function) {
         return instance[methodName].apply(instance, args);
       } else {
-        console.warn(
-          `@data-provider instance with id "${instance._id}" has not method "${methodName}"`
-        );
+        warn(`Instance with id "${instance._id}" has not method "${methodName}"`);
       }
     });
   }
@@ -97,7 +95,7 @@ export class Instances {
     const idGroup = this._allInstancesById.get(instance._id);
     if (idGroup) {
       if (idGroup.size > 0) {
-        console.warn(`@data-provider: Duplicated instance id "${instance._id}"`);
+        warn(`Duplicated instance id "${instance._id}"`);
         this._createIdEmptyGroup(instance._id)._add(instance);
       } else {
         idGroup._add(instance);
