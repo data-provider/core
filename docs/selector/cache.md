@@ -1,6 +1,6 @@
 ## Cache
 
-Selectors are not executed more than once until a related source cache is cleaned.
+Selectors are not executed more than once until a related provider cache is cleaned.
 
 ```js
 let books = await booksWithAuthors.read();

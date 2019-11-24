@@ -1,4 +1,5 @@
 /*
+Copyright 2019 Javier Brea
 Copyright 2019 XbyOrange
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
@@ -13,15 +14,15 @@ const test = require("mocha-sinon-chai");
 const index = require("../src/index");
 
 test.describe("index", () => {
-  test.it("should export Origin", () => {
-    test.expect(index.Origin).to.not.be.undefined();
+  test.it("should export Provider", () => {
+    test.expect(index.Provider).to.not.be.undefined();
   });
 
   test.it("should export Selector", () => {
     test.expect(index.Selector).to.not.be.undefined();
   });
 
-  test.it("should export sources", () => {
-    test.expect(index.sources).to.not.be.undefined();
+  test.it("should export instances", () => {
+    test.expect(index.instances).to.not.be.undefined();
   });
 });

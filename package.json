@@ -1,6 +1,6 @@
 {
   "name": "@data-provider/core",
-  "version": "1.6.0",
+  "version": "1.7.0",
   "description": "Extensible Data Provider and Data Selectors",
   "keywords": [
     "data",
@@ -19,7 +19,7 @@
   "files": [
     "dist"
   ],
-  "main": "dist/core.umd.js",
+  "main": "dist/core.cjs.js",
   "module": "dist/core.esm.js",
   "scripts": {
     "build": "rollup --config",
@@ -54,8 +54,6 @@
     "rollup-plugin-babel": "^4.3.3",
     "rollup-plugin-commonjs": "10.1.0",
     "rollup-plugin-json": "4.0.0",
-    "rollup-plugin-node-builtins": "^2.1.2",
-    "rollup-plugin-node-globals": "^1.4.0",
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-uglify": "^6.0.3"
   },

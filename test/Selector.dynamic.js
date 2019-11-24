@@ -1,4 +1,5 @@
 /*
+Copyright 2019 Javier Brea
 Copyright 2019 XbyOrange
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
@@ -10,16 +11,16 @@ Unless required by applicable law or agreed to in writing, software distributed 
 
 const test = require("mocha-sinon-chai");
 
-const { Origin, sources } = require("../src/Origin");
+const { Provider, instances } = require("../src/Provider");
 const { Selector } = require("../src/Selector");
 
-test.describe("Selector returning another sources", () => {
+test.describe("Selector returning another providers", () => {
   let sandbox;
-  let testOriginResult;
+  let testProviderResult;
   let testSelectorResult;
   let testSelector2Result;
-  let updateOriginResult;
-  const TestOrigin = class extends Origin {
+  let updateProviderResult;
+  const TestProvider = class extends Provider {
     constructor(options) {
       super();
       this._readResult = options.readResult;
@@ -32,25 +33,25 @@ test.describe("Selector returning another sources", () => {
       return Promise.resolve(this._updateResult);
     }
   };
-  let testOrigin;
+  let testProvider;
   let testSelector;
   let testSelector2;
   let dynamicSelector;
 
   test.beforeEach(() => {
     sandbox = test.sinon.createSandbox();
-    testOriginResult = "read result";
-    updateOriginResult = "updated";
+    testProviderResult = "read result";
+    updateProviderResult = "updated";
     testSelectorResult = "foo-selector-result";
     testSelector2Result = "foo-selector-2-result";
-    testOrigin = new TestOrigin({
-      readResult: testOriginResult,
-      updateResult: updateOriginResult
+    testProvider = new TestProvider({
+      readResult: testProviderResult,
+      updateResult: updateProviderResult
     });
-    testSelector = new Selector(testOrigin, () => testSelectorResult, {
+    testSelector = new Selector(testProvider, () => testSelectorResult, {
       uuid: "test-selector"
     });
-    testSelector2 = new Selector(testOrigin, () => testSelector2Result, {
+    testSelector2 = new Selector(testProvider, () => testSelector2Result, {
       uuid: "test-selector-2"
     });
     sandbox.spy(testSelector.update);
@@ -59,43 +60,43 @@ test.describe("Selector returning another sources", () => {
 
   test.afterEach(() => {
     sandbox.restore();
-    sources.clear();
+    instances.clear();
   });
 
   test.describe("calling to read method", () => {
-    test.describe("when returns one source", () => {
+    test.describe("when returns one provider", () => {
       test.beforeEach(() => {
-        dynamicSelector = new Selector(testOrigin, () => {
+        dynamicSelector = new Selector(testProvider, () => {
           return testSelector;
         });
       });
 
-      test.it("should return the result returned by source", () => {
+      test.it("should return the result returned by provider", () => {
         return dynamicSelector.read().then(result => {
           return test.expect(result).to.equal(testSelectorResult);
         });
       });
     });
 
-    test.describe("when returns multiple sources", () => {
+    test.describe("when returns multiple providers", () => {
       test.beforeEach(() => {
-        dynamicSelector = new Selector(testOrigin, () => {
+        dynamicSelector = new Selector(testProvider, () => {
           return [testSelector, testSelector2];
         });
       });
 
-      test.it("should return the result returned by all sources", () => {
+      test.it("should return the result returned by all providers", () => {
         return dynamicSelector.read().then(result => {
           return test.expect(result).to.deep.equal([testSelectorResult, testSelector2Result]);
         });
       });
     });
 
-    test.describe("when returns another source with catch", () => {
+    test.describe("when returns another provider with catch", () => {
       test.beforeEach(() => {
-        dynamicSelector = new Selector(testOrigin, () => {
+        dynamicSelector = new Selector(testProvider, () => {
           return {
-            source: testSelector,
+            provider: testSelector,
             catch: () => Promise.resolve("Foo catch result")
           };
         });
@@ -109,23 +110,23 @@ test.describe("Selector returning another sources", () => {
       });
     });
 
-    test.describe("when returns multiple sources with catch", () => {
+    test.describe("when returns multiple providers with catch", () => {
       test.beforeEach(() => {
-        dynamicSelector = new Selector(testOrigin, () => {
+        dynamicSelector = new Selector(testProvider, () => {
           return [
             {
-              source: testSelector,
+              provider: testSelector,
               catch: () => Promise.resolve("Foo catch result")
             },
             {
-              source: testSelector2,
+              provider: testSelector2,
               query: () => "foo2"
             }
           ];
         });
       });
 
-      test.it("should return the sources results, including result returned by catch", () => {
+      test.it("should return the providers results, including result returned by catch", () => {
         sandbox.stub(testSelector.read, "dispatch").rejects(new Error());
         return dynamicSelector.read().then(result => {
           return test.expect(result).to.deep.equal(["Foo catch result", testSelector2Result]);
@@ -133,27 +134,27 @@ test.describe("Selector returning another sources", () => {
       });
     });
 
-    test.describe("when returns multiple sources with queries", () => {
+    test.describe("when returns multiple providers with queries", () => {
       test.beforeEach(() => {
-        dynamicSelector = new Selector(testOrigin, () => {
+        dynamicSelector = new Selector(testProvider, () => {
           return [
             {
-              source: testSelector,
+              provider: testSelector,
               query: () => "foo"
             },
             {
-              source: testSelector2,
+              provider: testSelector2,
               query: () => "foo2"
             },
             {
-              source: testSelector2,
+              provider: testSelector2,
               query: () => "foo3"
             }
           ];
         });
       });
 
-      test.it("should return the result returned by all sources", () => {
+      test.it("should return the result returned by all providers", () => {
         return dynamicSelector.read().then(result => {
           return test
             .expect(result)
@@ -162,11 +163,11 @@ test.describe("Selector returning another sources", () => {
       });
     });
 
-    test.describe("when returns sources recursively", () => {
+    test.describe("when returns providers recursively", () => {
       let recursiveSelector;
       test.beforeEach(() => {
         recursiveSelector = new Selector(
-          testOrigin,
+          testProvider,
           () => {
             return testSelector2;
           },
@@ -175,23 +176,23 @@ test.describe("Selector returning another sources", () => {
           }
         );
 
-        dynamicSelector = new Selector(testOrigin, () => {
+        dynamicSelector = new Selector(testProvider, () => {
           return recursiveSelector;
         });
       });
 
-      test.it("should return the result returned by last source", () => {
+      test.it("should return the result returned by last provider", () => {
         return dynamicSelector.read().then(result => {
           return test.expect(result).to.equal(testSelector2Result);
         });
       });
     });
 
-    test.describe("when returns multiple sources recursively", () => {
+    test.describe("when returns multiple providers recursively", () => {
       let recursiveSelector;
       test.beforeEach(() => {
         recursiveSelector = new Selector(
-          testOrigin,
+          testProvider,
           () => {
             return [testSelector2, testSelector];
           },
@@ -200,12 +201,12 @@ test.describe("Selector returning another sources", () => {
           }
         );
 
-        dynamicSelector = new Selector(testOrigin, () => {
+        dynamicSelector = new Selector(testProvider, () => {
           return recursiveSelector;
         });
       });
 
-      test.it("should return the result returned by last sources", () => {
+      test.it("should return the result returned by last providers", () => {
         return dynamicSelector.read().then(result => {
           return test.expect(result).to.deep.equal([testSelector2Result, testSelectorResult]);
         });
@@ -216,82 +217,82 @@ test.describe("Selector returning another sources", () => {
   test.describe("calling to CUD method", () => {
     test.describe("when returns one origin", () => {
       test.beforeEach(() => {
-        dynamicSelector = new Selector(testOrigin, () => {
-          return testOrigin;
+        dynamicSelector = new Selector(testProvider, () => {
+          return testProvider;
         });
       });
 
-      test.it("should call to same method of returned source", () => {
+      test.it("should call to same method of returned provider", () => {
         return dynamicSelector.update().then(result => {
-          return test.expect(result).to.equal(updateOriginResult);
+          return test.expect(result).to.equal(updateProviderResult);
         });
       });
     });
 
     test.describe("when returns multiple origins", () => {
-      let testOrigin2;
-      let updateOriginResult2;
+      let testProvider2;
+      let updateProviderResult2;
       test.beforeEach(() => {
-        updateOriginResult2 = "foo-update-origin-2-result";
-        testOrigin2 = new TestOrigin({
-          readResult: testOriginResult,
-          updateResult: updateOriginResult2
+        updateProviderResult2 = "foo-update-origin-2-result";
+        testProvider2 = new TestProvider({
+          readResult: testProviderResult,
+          updateResult: updateProviderResult2
         });
-        dynamicSelector = new Selector(testOrigin, () => {
-          return [testOrigin, testOrigin2];
+        dynamicSelector = new Selector(testProvider, () => {
+          return [testProvider, testProvider2];
         });
       });
 
-      test.it("should call to same method of returned source", () => {
+      test.it("should call to same method of returned provider", () => {
         return dynamicSelector.update().then(result => {
-          return test.expect(result).to.deep.equal([updateOriginResult, updateOriginResult2]);
+          return test.expect(result).to.deep.equal([updateProviderResult, updateProviderResult2]);
         });
       });
     });
 
-    test.describe("when returns another sources recursively", () => {
+    test.describe("when returns another providers recursively", () => {
       let recursiveSelector;
       test.beforeEach(() => {
-        dynamicSelector = new Selector(testOrigin, () => {
-          return testOrigin;
+        dynamicSelector = new Selector(testProvider, () => {
+          return testProvider;
         });
 
-        recursiveSelector = new Selector(testOrigin, () => {
+        recursiveSelector = new Selector(testProvider, () => {
           return dynamicSelector;
         });
       });
 
-      test.it("should call to same method of last source", () => {
+      test.it("should call to same method of last provider", () => {
         return recursiveSelector.update().then(result => {
-          return test.expect(result).to.equal(updateOriginResult);
+          return test.expect(result).to.equal(updateProviderResult);
         });
       });
     });
 
-    test.describe("when returns multiple sources recursively", () => {
-      let testOrigin2;
+    test.describe("when returns multiple providers recursively", () => {
+      let testProvider2;
       let recursiveSelector;
       let updateResult2;
 
       test.beforeEach(() => {
         updateResult2 = "update-result-2";
-        testOrigin2 = new TestOrigin({
-          readResult: testOriginResult,
+        testProvider2 = new TestProvider({
+          readResult: testProviderResult,
           updateResult: updateResult2
         });
 
-        dynamicSelector = new Selector(testOrigin, () => {
-          return [testOrigin, testOrigin2];
+        dynamicSelector = new Selector(testProvider, () => {
+          return [testProvider, testProvider2];
         });
 
-        recursiveSelector = new Selector(testOrigin, () => {
+        recursiveSelector = new Selector(testProvider, () => {
           return dynamicSelector;
         });
       });
 
-      test.it("should call to same method of last source", () => {
+      test.it("should call to same method of last provider", () => {
         return recursiveSelector.update().then(result => {
-          return test.expect(result).to.deep.equal([updateOriginResult, updateResult2]);
+          return test.expect(result).to.deep.equal([updateProviderResult, updateResult2]);
         });
       });
     });

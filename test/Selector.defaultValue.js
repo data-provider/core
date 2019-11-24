@@ -1,4 +1,5 @@
 /*
+Copyright 2019 Javier Brea
 Copyright 2019 XbyOrange
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
@@ -10,35 +11,35 @@ Unless required by applicable law or agreed to in writing, software distributed 
 
 const test = require("mocha-sinon-chai");
 
-const { Origin, sources } = require("../src/Origin");
+const { Provider, instances } = require("../src/Provider");
 const { Selector } = require("../src/Selector");
 
 test.describe("Selector defaultValue", () => {
   const DEFAULT_VALUE = "foo-default-value";
   const VALUE = "foo-value";
   let sandbox;
-  let TestOrigin;
-  let testOrigin;
+  let TestProvider;
+  let testProvider;
   let testSelector;
 
   test.beforeEach(() => {
     sandbox = test.sinon.createSandbox();
-    TestOrigin = class extends Origin {
+    TestProvider = class extends Provider {
       _read() {
         return Promise.resolve(VALUE);
       }
     };
-    testOrigin = new TestOrigin();
+    testProvider = new TestProvider();
   });
 
   test.afterEach(() => {
     sandbox.restore();
-    sources.clear();
+    instances.clear();
   });
 
   test.describe("when has defaultValue defined in deprecated way", () => {
     test.it("should return defaultValue until real value is returned", () => {
-      testSelector = new Selector(testOrigin, originResult => originResult, DEFAULT_VALUE);
+      testSelector = new Selector(testProvider, originResult => originResult, DEFAULT_VALUE);
       test.expect(testSelector.read.value).to.equal(DEFAULT_VALUE);
       return testSelector.read().then(() => {
         return test.expect(testSelector.read.value).to.equal(VALUE);
@@ -48,7 +49,7 @@ test.describe("Selector defaultValue", () => {
 
   test.describe("when has defaultValue defined", () => {
     test.it("should return defaultValue until real value is returned", () => {
-      testSelector = new Selector(testOrigin, originResult => originResult, {
+      testSelector = new Selector(testProvider, originResult => originResult, {
         defaultValue: DEFAULT_VALUE
       });
       test.expect(testSelector.read.value).to.equal(DEFAULT_VALUE);

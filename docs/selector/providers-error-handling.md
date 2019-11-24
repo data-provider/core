@@ -1,8 +1,8 @@
-## Sources error handling
+## Providers error handling
 
-Dependant sources of a Selector can return an error. Then, the full Selector will not be resolved. You can catch those source errors and transform them into a data of your convenience, or even delegate or "retry" that source into another source or array of sources.
+Dependant providers of a Selector can return an error. Then, the full Selector will not be resolved. You can catch those provider errors and transform them into a data of your convenience, or even delegate or "retry" that provider into another provider or array of providers.
 
-Use the `catch` property of a custom source to catch his errors:
+Use the `catch` property of a custom provider to catch his errors:
 
 ```js
 import { Selector } from "@data-provider/core";
@@ -12,7 +12,7 @@ const alternativeBooksCollectionApi = new Api("http://foo-alternative-api/books"
 
 const specificAuthorBooks = new Selector(
   {
-    source: authorsCollection,
+    provider: authorsCollection,
     query: nameParameter => ({
       queryString: {
         name: nameParameter
@@ -23,7 +23,7 @@ const specificAuthorBooks = new Selector(
     }
   },
   {
-    source: booksCollection,
+    provider: booksCollection,
     query: (nameParameter, previousResults) => {
       const authorsResults = previousResults[0];
       return {

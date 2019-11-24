@@ -91,19 +91,33 @@ export const seemsToBeSelectorOptions = defaultValueOrOptions => {
   );
 };
 
-export const isSource = objectToCheck => {
+export const isDataProvider = objectToCheck => {
   return (
     objectToCheck &&
-    (objectToCheck._isSource === true || (objectToCheck.source && objectToCheck.source._isSource))
+    (objectToCheck._isDataProvider === true ||
+      (objectToCheck.provider && objectToCheck.provider._isDataProvider) ||
+      (objectToCheck.source && objectToCheck.source._isDataProvider)) // TODO, deprecate
   );
 };
 
-export const areSources = arrayToCheck => {
-  let allAreSources = true;
+export const areDataProviders = arrayToCheck => {
+  let allAreDataProviders = true;
   ensureArray(arrayToCheck).forEach(arrayElement => {
-    if (!isSource(arrayElement)) {
-      allAreSources = false;
+    if (!isDataProvider(arrayElement)) {
+      allAreDataProviders = false;
     }
   });
-  return allAreSources;
+  return allAreDataProviders;
+};
+
+export const message = text => {
+  return `@data-provider/core: ${text}`;
+};
+
+export const warn = text => {
+  console.warn(message(text));
+};
+
+export const deprecationWarn = text => {
+  warn(`Deprecation warning: ${text}`);
 };

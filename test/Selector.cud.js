@@ -1,4 +1,5 @@
 /*
+Copyright 2019 Javier Brea
 Copyright 2019 XbyOrange
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
@@ -10,17 +11,18 @@ Unless required by applicable law or agreed to in writing, software distributed 
 
 const test = require("mocha-sinon-chai");
 
-const { Origin, sources } = require("../src/Origin");
+const { Provider, instances } = require("../src/Provider");
 const { Selector } = require("../src/Selector");
 
-const CUD_ERROR = "CUD methods can be used only when returning sources";
+const CUD_ERROR =
+  "@data-provider/core: CUD methods in Selectors can be used only when returning Provider instances";
 
 test.describe("Selector cud methods", () => {
   let sandbox;
-  let TestOrigin;
-  let testOrigin;
-  let TestOrigin2;
-  let testOrigin2;
+  let TestProvider;
+  let testProvider;
+  let TestProvider2;
+  let testProvider2;
   let testSelector;
   let spies;
 
@@ -31,13 +33,13 @@ test.describe("Selector cud methods", () => {
       update: sandbox.spy(),
       delete: sandbox.spy()
     };
-    TestOrigin = class extends Origin {
+    TestProvider = class extends Provider {
       _read() {
         return Promise.resolve();
       }
     };
-    testOrigin = new TestOrigin();
-    TestOrigin2 = class extends Origin {
+    testProvider = new TestProvider();
+    TestProvider2 = class extends Provider {
       _create(query, params) {
         spies.create(query, params);
         return Promise.resolve();
@@ -51,21 +53,21 @@ test.describe("Selector cud methods", () => {
         return Promise.resolve();
       }
     };
-    testOrigin2 = new TestOrigin2();
+    testProvider2 = new TestProvider2();
     testSelector = new Selector(
       {
-        source: testOrigin,
+        provider: testProvider,
         query: query => query
       },
       (results, query) => {
-        return testOrigin2.query(query);
+        return testProvider2.query(query);
       }
     );
   });
 
   test.afterEach(() => {
     sandbox.restore();
-    sources.clear();
+    instances.clear();
   });
 
   const testMethod = methodName => {
@@ -73,8 +75,8 @@ test.describe("Selector cud methods", () => {
       const FOO_PARAM = "foo";
       const FOO_QUERY = "foo-query";
 
-      test.it("should return an error if selector does not return another source", () => {
-        testSelector = new Selector(testOrigin, results => {
+      test.it("should return an error if selector does not return another provider", () => {
+        testSelector = new Selector(testProvider, results => {
           return results;
         });
         return testSelector[methodName](FOO_PARAM).then(
@@ -87,14 +89,14 @@ test.describe("Selector cud methods", () => {
         );
       });
 
-      test.it(`should call to ${methodName} method of returned source`, () => {
+      test.it(`should call to ${methodName} method of returned provider`, () => {
         return testSelector[methodName](FOO_PARAM).then(() => {
           return test.expect(spies[methodName]).to.have.been.calledWith(undefined, FOO_PARAM);
         });
       });
 
       test.it(
-        `should call to ${methodName} method of returned source passing the current query`,
+        `should call to ${methodName} method of returned provider passing the current query`,
         () => {
           return testSelector
             .query(FOO_QUERY)

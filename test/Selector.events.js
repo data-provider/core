@@ -1,4 +1,5 @@
 /*
+Copyright 2019 Javier Brea
 Copyright 2019 XbyOrange
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
@@ -10,18 +11,18 @@ Unless required by applicable law or agreed to in writing, software distributed 
 
 const test = require("mocha-sinon-chai");
 
-const { Origin, sources } = require("../src/Origin");
+const { Provider, instances } = require("../src/Provider");
 const { Selector } = require("../src/Selector");
 
 test.describe("Selector events", () => {
   let sandbox;
-  let TestOrigin;
-  let testOrigin;
+  let TestProvider;
+  let testProvider;
   let testSelector;
 
   test.beforeEach(() => {
     sandbox = test.sinon.createSandbox();
-    TestOrigin = class extends Origin {
+    TestProvider = class extends Provider {
       _create() {
         return Promise.resolve("foo-create-result");
       }
@@ -35,13 +36,13 @@ test.describe("Selector events", () => {
         return Promise.resolve("foo-delete-result");
       }
     };
-    testOrigin = new TestOrigin();
-    testSelector = new Selector(testOrigin, result => result);
+    testProvider = new TestProvider();
+    testSelector = new Selector(testProvider, result => result);
   });
 
   test.afterEach(() => {
     sandbox.restore();
-    sources.clear();
+    instances.clear();
   });
 
   test.describe("Without query", () => {
@@ -62,7 +63,7 @@ test.describe("Selector events", () => {
       });
     });
 
-    test.it("should emit a changeAny event when Origin method is dispatched", () => {
+    test.it("should emit a changeAny event when Provider method is dispatched", () => {
       let spy = sandbox.spy();
       testSelector.onChangeAny(spy);
       return testSelector.read().then(() => {
@@ -70,7 +71,7 @@ test.describe("Selector events", () => {
       });
     });
 
-    test.it("should emit a changeAny event when Origin method finish loading", () => {
+    test.it("should emit a changeAny event when Provider method finish loading", () => {
       let spy = sandbox.spy();
       testSelector.onChangeAny(spy);
       return testSelector.read().then(() => {
@@ -87,7 +88,7 @@ test.describe("Selector events", () => {
       });
     });
 
-    test.it("should emit a clean event when Origin cache is cleaned", () => {
+    test.it("should emit a clean event when Provider cache is cleaned", () => {
       let spy = sandbox.spy();
       testSelector.onClean(spy);
       return testSelector.read().then(() => {
@@ -115,7 +116,7 @@ test.describe("Selector events", () => {
       });
     });
 
-    test.it("should emit a cleanAny event when Origin cache is cleaned", () => {
+    test.it("should emit a cleanAny event when Provider cache is cleaned", () => {
       let spy = sandbox.spy();
       testSelector.onCleanAny(spy);
       return testSelector.read().then(() => {
@@ -124,7 +125,7 @@ test.describe("Selector events", () => {
       });
     });
 
-    test.it("should emit a cleanAny event containing data about the cleaned source", () => {
+    test.it("should emit a cleanAny event containing data about the cleaned instance", () => {
       let spy = sandbox.spy();
       testSelector.onCleanAny(spy);
       return testSelector.read().then(() => {
@@ -132,9 +133,9 @@ test.describe("Selector events", () => {
         const eventData = spy.getCall(0).args[0];
         return Promise.all([
           test.expect(eventData.action).to.equal("clean"),
-          test.expect(eventData.source._id).to.equal(testSelector._id),
-          test.expect(eventData.source._queryId).to.equal(undefined),
-          test.expect(eventData.source._root).to.equal(testSelector)
+          test.expect(eventData.instance._id).to.equal(testSelector._id),
+          test.expect(eventData.instance._queryId).to.equal(undefined),
+          test.expect(eventData.instance._root).to.equal(testSelector)
         ]);
       });
     });
@@ -184,7 +185,7 @@ test.describe("Selector events", () => {
       });
     });
 
-    test.it("should emit a changeAny event when Origin method finish loading", () => {
+    test.it("should emit a changeAny event when Provider method finish loading", () => {
       let spy = sandbox.spy();
       testSelector.onChangeAny(spy);
       return queriedSelector.read().then(() => {
@@ -201,7 +202,7 @@ test.describe("Selector events", () => {
       });
     });
 
-    test.it("should emit a clean event when Origin cache is cleaned", () => {
+    test.it("should emit a clean event when Provider cache is cleaned", () => {
       let spy = sandbox.spy();
       queriedSelector.onClean(spy);
       return queriedSelector.read().then(() => {
@@ -229,7 +230,7 @@ test.describe("Selector events", () => {
       });
     });
 
-    test.it("should emit a cleanAny event when Origin cache is cleaned", () => {
+    test.it("should emit a cleanAny event when Provider cache is cleaned", () => {
       let spy = sandbox.spy();
       testSelector.onCleanAny(spy);
       return queriedSelector.read().then(() => {
@@ -238,7 +239,7 @@ test.describe("Selector events", () => {
       });
     });
 
-    test.it("should emit a cleanAny event containing data about the cleaned source", () => {
+    test.it("should emit a cleanAny event containing data about the cleaned instance", () => {
       let spy = sandbox.spy();
       testSelector.onCleanAny(spy);
       return queriedSelector.read().then(() => {
@@ -246,9 +247,9 @@ test.describe("Selector events", () => {
         const eventData = spy.getCall(0).args[0];
         return Promise.all([
           test.expect(eventData.action).to.equal("clean"),
-          test.expect(eventData.source._id).to.equal(queriedSelector._id),
-          test.expect(eventData.source._queryId).to.equal(`(${JSON.stringify(FOO_QUERY)})`),
-          test.expect(eventData.source._root).to.equal(testSelector)
+          test.expect(eventData.instance._id).to.equal(queriedSelector._id),
+          test.expect(eventData.instance._queryId).to.equal(`(${JSON.stringify(FOO_QUERY)})`),
+          test.expect(eventData.instance._root).to.equal(testSelector)
         ]);
       });
     });

@@ -18,7 +18,7 @@ expect(mySelector.test.selector(["foo"])).toEqual("foo");
 
 ```js
 const mySelector = new Selector({
-  source: booksCollection,
+  provider: booksCollection,
   query: id => {
     params: {
       id
@@ -35,11 +35,11 @@ expect(mySelector.test.queries[0]("foo")).toEqual({
 });
 ```
 
-#### Testing selector sources "catch" methods
+#### Testing selector providers "catch" methods
 
 ```js
 const mySelector = new Selector({
-  source: booksCollection,
+  provider: booksCollection,
   query: id => {
     params: {
       id
@@ -53,14 +53,14 @@ const mySelector = new Selector({
 expect(mySelector.test.catches[0](new Error("foo"))).toEqual("foo");
 ```
 
-#### Testing selector queries and catches when sources are concurrent
+#### Testing selector queries and catches when providers are concurrent
 
-For concurrent sources, testing objects will be exposed inside an array in the same order than sources are declared.
+For concurrent providers, testing objects will be exposed inside an array in the same order than providers are declared.
 
 ```js
 const mySelector = new Selector(
   [{
-    source: booksCollection,
+    provider: booksCollection,
     query: id => {
       params: {
         bookId
@@ -69,7 +69,7 @@ const mySelector = new Selector(
     catch: () => "Error retrieving books";
   },
   {
-    source: authorsCollection,
+    provider: authorsCollection,
     query: id => {
       params: {
         authorId

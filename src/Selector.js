@@ -1,4 +1,5 @@
 /*
+Copyright 2019 Javier Brea
 Copyright 2019 XbyOrange
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
@@ -11,17 +12,22 @@ Unless required by applicable law or agreed to in writing, software distributed 
 import { once, isFunction } from "lodash";
 import isPromise from "is-promise";
 
-import { Origin } from "./Origin";
+import { Provider } from "./Provider";
 import {
   READ_METHOD,
   CREATE_METHOD,
   UPDATE_METHOD,
   DELETE_METHOD,
   seemsToBeSelectorOptions,
-  areSources
+  areDataProviders,
+  message,
+  deprecationWarn
 } from "./helpers";
 
-export class Selector extends Origin {
+const SOURCE_DEPRECATION_WARNING =
+  '"source" property in selectors will be deprecated. Please use "provider" instead';
+
+export class Selector extends Provider {
   constructor() {
     const args = Array.from(arguments);
     let lastIndex = args.length - 1;
@@ -36,32 +42,37 @@ export class Selector extends Origin {
         options = defaultValue;
         defaultValue = defaultValue.defaultValue;
       } else {
-        console.warn(
-          "Please provide an object with 'defaultValue' property. Defining default value as last argument will be deprecated in next versions"
+        deprecationWarn(
+          `Provide an options object with "defaultValue" property as last argument to selectors. Defining default value as last argument will be deprecated`
         );
       }
     }
 
-    const sources = args.slice(0, lastIndex);
+    const providers = args.slice(0, lastIndex);
 
-    const sourceIds = [];
+    const providersIds = [];
 
-    const getTestObjects = sourcesOfLevel => {
+    const getTestObjects = providersOfLevel => {
       const queries = [];
       const catches = [];
-      sourcesOfLevel.forEach(source => {
-        if (Array.isArray(source)) {
-          const childTestObjects = getTestObjects(source);
+      providersOfLevel.forEach(provider => {
+        if (Array.isArray(provider)) {
+          const childTestObjects = getTestObjects(provider);
           queries.push(childTestObjects.queries);
           catches.push(childTestObjects.catches);
         } else {
-          const isSourceObject = !!source.source;
-          sourceIds.push(isSourceObject ? source.source._id : source._id);
-          if (isSourceObject && source.query) {
-            queries.push(source.query);
+          // TODO, remove "source" compatibility
+          if (provider.source) {
+            deprecationWarn(SOURCE_DEPRECATION_WARNING);
+            provider.provider = provider.source;
           }
-          if (isSourceObject && source.catch) {
-            catches.push(source.catch);
+          const isProviderObject = !!provider.provider;
+          providersIds.push(isProviderObject ? provider.provider._id : provider._id);
+          if (isProviderObject && provider.query) {
+            queries.push(provider.query);
+          }
+          if (isProviderObject && provider.catch) {
+            catches.push(provider.catch);
           }
         }
       });
@@ -71,43 +82,49 @@ export class Selector extends Origin {
       };
     };
 
-    const testObjects = getTestObjects(sources);
+    const testObjects = getTestObjects(providers);
 
-    super(`select:${sourceIds.join(":")}`, defaultValue, options);
+    super(`select:${providersIds.join(":")}`, defaultValue, options);
 
-    this._sources = sources;
+    this._sources = providers; // TODO, deprecate
+    this._providers = providers;
     this._resultsParser = args[lastIndex];
     this.test.queries = testObjects.queries;
     this.test.catches = testObjects.catches;
     this.test.selector = this._resultsParser;
   }
 
-  _readAllSourcesAndDispatch(query, extraParams, methodToDispatch) {
-    const sourcesResults = [];
-    const sources = [];
+  _readAllProvidersAndDispatch(query, extraParams, methodToDispatch) {
+    const providersResults = [];
+    const providers = [];
     const cleanQuery = once(() => {
       this.clean(query);
     });
 
-    const readSource = sourceToRead => {
-      if (Array.isArray(sourceToRead)) {
-        return Promise.all(sourceToRead.map(readSource));
+    const readProvider = providerToRead => {
+      if (Array.isArray(providerToRead)) {
+        return Promise.all(providerToRead.map(readProvider));
       }
-      const isQueried = !!sourceToRead.source;
-      const hasToQuery = !!sourceToRead.query;
-      const hasToCatch = !!sourceToRead.catch;
-      const source = isQueried
+      // TODO, remove source compatibility
+      if (!!providerToRead.source) {
+        deprecationWarn(SOURCE_DEPRECATION_WARNING);
+        providerToRead.provider = providerToRead.source;
+      }
+      const isQueried = !!providerToRead.provider;
+      const hasToQuery = !!providerToRead.query;
+      const hasToCatch = !!providerToRead.catch;
+      const provider = isQueried
         ? hasToQuery
-          ? sourceToRead.source.query(sourceToRead.query(query, sourcesResults))
-          : sourceToRead.source
-        : sourceToRead;
-      sources.push(source);
-      return source[READ_METHOD].dispatch().catch(error => {
+          ? providerToRead.provider.query(providerToRead.query(query, providersResults))
+          : providerToRead.provider
+        : providerToRead;
+      providers.push(provider);
+      return provider[READ_METHOD].dispatch().catch(error => {
         if (hasToCatch) {
-          const catchResult = sourceToRead.catch(error, query);
-          if (areSources(catchResult)) {
-            sources.push(catchResult);
-            return readSource(catchResult);
+          const catchResult = providerToRead.catch(error, query);
+          if (areDataProviders(catchResult)) {
+            providers.push(catchResult);
+            return readProvider(catchResult);
           }
           return catchResult;
         }
@@ -115,37 +132,43 @@ export class Selector extends Origin {
       });
     };
 
-    const readSourceIndex = sourceIndex => {
-      return readSource(this._sources[sourceIndex]).then(sourceResult => {
-        sourcesResults.push(sourceResult);
-        if (sourceIndex < this._sources.length - 1) {
-          return readSourceIndex(sourceIndex + 1);
+    const readProviderIndex = providerIndex => {
+      return readProvider(this._providers[providerIndex]).then(providerResult => {
+        providersResults.push(providerResult);
+        if (providerIndex < this._providers.length - 1) {
+          return readProviderIndex(providerIndex + 1);
         }
-        const result = this._resultsParser.apply(null, sourcesResults.concat(query));
+        const result = this._resultsParser.apply(null, providersResults.concat(query));
         return isPromise(result) ? result : Promise.resolve(result);
       });
     };
 
     const addCleanQueryListeners = () => {
-      sources.forEach(source => {
-        source.onceClean(cleanQuery);
+      providers.forEach(provider => {
+        provider.onceClean(cleanQuery);
       });
     };
 
-    return readSourceIndex(0)
+    return readProviderIndex(0)
       .then(result => {
         const selectorResult = result;
-        const selectorResultIsSource = areSources(selectorResult);
-        if (methodToDispatch !== READ_METHOD && !selectorResultIsSource) {
-          return Promise.reject(new Error("CUD methods can be used only when returning sources"));
+        const selectorResultIsProvider = areDataProviders(selectorResult);
+        if (methodToDispatch !== READ_METHOD && !selectorResultIsProvider) {
+          return Promise.reject(
+            new Error(
+              message(
+                "CUD methods in Selectors can be used only when returning Provider instances"
+              )
+            )
+          );
         }
-        if (selectorResultIsSource) {
+        if (selectorResultIsProvider) {
           if (methodToDispatch === READ_METHOD) {
-            return readSource(selectorResult);
+            return readProvider(selectorResult);
           }
           if (Array.isArray(selectorResult)) {
             return Promise.all(
-              selectorResult.map(source => source[methodToDispatch].dispatch(extraParams))
+              selectorResult.map(provider => provider[methodToDispatch].dispatch(extraParams))
             );
           }
           return selectorResult[methodToDispatch].dispatch(extraParams);
@@ -168,13 +191,13 @@ export class Selector extends Origin {
     if (cached) {
       return cached;
     }
-    const resultPromise = this._readAllSourcesAndDispatch(query, extraParams, READ_METHOD);
+    const resultPromise = this._readAllProvidersAndDispatch(query, extraParams, READ_METHOD);
     this._cache.set(query, resultPromise);
     return resultPromise;
   }
 
   _cleanAfter(query, extraParams, method) {
-    return this._readAllSourcesAndDispatch(query, extraParams, method).then(responseData => {
+    return this._readAllProvidersAndDispatch(query, extraParams, method).then(responseData => {
       this._clean(query);
       return Promise.resolve(responseData);
     });

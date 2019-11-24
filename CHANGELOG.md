@@ -13,6 +13,18 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [TO BE DEPRECATED]
 - Last argument of Selectors will stop being assigned as "defaultValue". To define default value, it will be mandatory to pass an options object as last argument, containing a "defaultValue" property.
+- "Origin" constructor. "Provider" has to be used instead.
+- "source" property in selectors. "provider" has to be used instead.
+- "source" property emitted in events. "provider" has to be used instead.
+- "sources" handler. "instances" has to be used instead.
+
+## [1.7.0] - 2019-11-23
+### Changed
+- Rename Origin into Provider. Maintain Origin due to backward compatibility.
+- Rename sources into instances. Maintain sources due to backward compatibility.
+- Change selectors "source" property to "provider". Maintain also old property due to backward compatibility.
+- Improve traces, add package name namespace.
+- Export library in CJS format.
 
 ## [1.6.0] - 2019-11-23
 ### Changed
