@@ -15,6 +15,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - Upgrade @data-provider/core dependency
 
+### Fixed
+- Fix devDependencies vulnerabilities
+
 ## [1.4.0] - 2019-11-23
 ### Changed
 - Project migration. __Read NOTICE__ for further info. All previous releases in this CHANGELOG file correspond to @xbyorange/mercury-prismic package distribution.
