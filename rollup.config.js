@@ -45,6 +45,13 @@ module.exports = [
   {
     ...BASE_CONFIG,
     output: {
+      file: "dist/data-provider-prismic.cjs.js",
+      format: "cjs"
+    }
+  },
+  {
+    ...BASE_CONFIG,
+    output: {
       file: "dist/data-provider-prismic.umd.js",
       format: "umd",
       name: "dataProviderPrismic",
