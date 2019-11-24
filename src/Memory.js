@@ -9,15 +9,24 @@ http://www.apache.org/licenses/LICENSE-2.0
 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 */
 
-import { Origin } from "@data-provider/core";
+import { Provider } from "@data-provider/core";
 import { cloneDeep } from "lodash";
 
 const TAG = "memory";
 
 const ensureId = id => id || TAG;
+
+const warn = text => {
+  console.warn(`@data-provider/memory: ${text}`);
+};
+
+const deprecationWarn = text => {
+  warn(`Deprecation warning: ${text}`);
+};
+
 const traceLegacyOptions = () => {
-  console.warn(
-    'Defining "id" as second argument will be deprecated in next major versions of "@data-provider/memory". Please define an options object with "uuid" property'
+  deprecationWarn(
+    'Defining "id" as second argument will be deprecated. Please provide an options object with "uuid" property'
   );
 };
 
@@ -42,7 +51,7 @@ const getOptions = (receivedId, receivedOptions) => {
   };
 };
 
-export class Memory extends Origin {
+export class Memory extends Provider {
   constructor(value, receivedId, receivedOptions) {
     const options = getOptions(receivedId, receivedOptions);
     const tags = Array.isArray(options.tags) ? options.tags : [options.tags];
@@ -52,8 +61,8 @@ export class Memory extends Origin {
       tags
     };
     if (!options.queriesDefaultValue) {
-      console.warn(
-        'Usage of "queriesDefaultValue" option is recommended to prepare your code for next major version of "@data-provider/memory"'
+      deprecationWarn(
+        'Usage of "queriesDefaultValue" option is recommended to prepare your code for next major version'
       );
     }
     const getDefaultValue = function(query) {

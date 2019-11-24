@@ -15,6 +15,20 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - "queriesDefaultValue" option has to be removed.
 - Options should be accepted only as second argument. "uuid" should be defined only using the "uuid" option, not as second argument.
 
+## [1.4.0] - 2019-11-24
+### Changed
+- Upgrade @data-provider/core dependency
+- Use new core Provider class instead of Origin.
+- Export library as CJS.
+- Improve traces adding package name.
+- Adapt documentation to new version of @data-provider/core.
+
+### Removed
+- Remove method to be deprecated from documentation.
+
+### Fixed
+- Fix devDependencies vulnerabilities
+
 ## [1.3.0] - 2019-11-23
 ### Changed
 - Project migration. Read NOTICE for further info. All previous releases in this CHANGELOG file correspond to @xbyorange/mercury-memory package distribution.

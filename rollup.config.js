@@ -13,8 +13,6 @@ const json = require("rollup-plugin-json");
 const commonjs = require("rollup-plugin-commonjs");
 const resolve = require("rollup-plugin-node-resolve");
 const babel = require("rollup-plugin-babel");
-const nodeBuiltIns = require("rollup-plugin-node-builtins");
-const nodeGlobals = require("rollup-plugin-node-globals");
 const uglifier = require("rollup-plugin-uglify");
 
 const BASE_PLUGINS = [
@@ -29,9 +27,7 @@ const BASE_PLUGINS = [
     include: "node_modules/**"
   }),
   json(),
-  babel(),
-  nodeBuiltIns(),
-  nodeGlobals()
+  babel()
 ];
 
 const BASE_CONFIG = {
@@ -49,16 +45,23 @@ module.exports = [
   {
     ...BASE_CONFIG,
     output: {
-      file: "dist/memory.umd.js",
+      file: "dist/data-provider-memory.cjs.js",
+      format: "cjs"
+    }
+  },
+  {
+    ...BASE_CONFIG,
+    output: {
+      file: "dist/data-provider-memory.umd.js",
       format: "umd",
-      name: "memoryDataProvider",
+      name: "dataProviderMemory",
       globals: GLOBALS
     }
   },
   {
     ...BASE_CONFIG,
     output: {
-      file: "dist/memory.esm.js",
+      file: "dist/data-provider-memory.esm.js",
       format: "esm",
       globals: GLOBALS
     },
