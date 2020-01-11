@@ -1,6 +1,6 @@
 {
   "name": "@data-provider/axios",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "description": "Api Data Provider using Axios",
   "keywords": [
     "data-provider",
@@ -26,10 +26,11 @@
   "scripts": {
     "lint": "eslint src test",
     "lint-staged": "lint-staged",
-    "mocks": "mocks-server --behaviors=./mocks --port=3100 --cli false",
+    "mocks": "mocks-server",
     "build": "rollup --config",
     "test": "jest",
-    "test:mocks": "start-server-and-test mocks http-get://localhost:3100/mocks/behaviors jest",
+    "mocks-and-test": "start-server-and-test mocks tcp:3100 jest",
+    "test:ci": "npm run mocks-and-test",
     "coveralls": "cat ./coverage/lcov.info | coveralls"
   },
   "peerDependencies": {
@@ -45,7 +46,7 @@
     "@babel/core": "^7.6.4",
     "@babel/preset-env": "^7.6.3",
     "@data-provider/core": "^1.7.0",
-    "@mocks-server/main": "1.3.0",
+    "@mocks-server/main": "1.8.0",
     "babel-core": "^7.0.0-bridge.0",
     "babel-jest": "^24.9.0",
     "babel-polyfill": "^6.26.0",
