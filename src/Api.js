@@ -10,7 +10,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 */
 
 import { once } from "lodash";
-import pathToRegexp from "path-to-regexp";
+import { compile } from "path-to-regexp";
 import axios from "axios";
 import axiosRetry from "axios-retry";
 import { Provider } from "@data-provider/core";
@@ -109,10 +109,11 @@ export class Api extends Provider {
       base: hasProtocol ? `${splittedUrl[0]}//${splittedUrl[1]}` : "",
       full: baseUrl,
       trailingSlash: baseUrl[baseUrl.length - 1] === "/" ? "/" : "",
-      segment: pathToRegexp.compile(
+      segment: compile(
         hasProtocol
           ? splittedUrl.slice(2, splittedUrl.length).join(PATH_SEP)
-          : splittedUrl.join(PATH_SEP)
+          : splittedUrl.join(PATH_SEP),
+        { encode: encodeURIComponent }
       )
     };
   }

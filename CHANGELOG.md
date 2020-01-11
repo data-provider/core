@@ -17,6 +17,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [1.6.0] - 2020-01-11
 ### Fixed
 - Upgrade axios version
+- Maintain trailing slash in urls with params
+
+### Changed
+- Upgrade path-to-regex dependency
+- Upgrade devDependencies
 
 ## [1.5.0] - 2019-11-24
 ### Changed
