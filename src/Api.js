@@ -94,7 +94,9 @@ export class Api extends Provider {
     const queryString = query.queryString || query.query;
     const urlParams = query.urlParams || query.params;
     if (urlParams) {
-      return `${this.url.base}/${this.url.segment(urlParams)}${this._getQueryString(queryString)}`;
+      return `${this.url.base}/${this.url.segment(urlParams)}${
+        this.url.trailingSlash
+      }${this._getQueryString(queryString)}`;
     }
     return `${this.url.full}${this._getQueryString(queryString)}`;
   }
@@ -106,6 +108,7 @@ export class Api extends Provider {
     this.url = {
       base: hasProtocol ? `${splittedUrl[0]}//${splittedUrl[1]}` : "",
       full: baseUrl,
+      trailingSlash: baseUrl[baseUrl.length - 1] === "/" ? "/" : "",
       segment: pathToRegexp.compile(
         hasProtocol
           ? splittedUrl.slice(2, splittedUrl.length).join(PATH_SEP)

@@ -92,6 +92,18 @@ describe("Api queries", () => {
       expect(axios.stubs.instance.getCall(0).args[0].url).toEqual("/books/foo");
     });
 
+    it("should replace params in axios request maintaining trailing slash", async () => {
+      axios.stubs.instance.resetHistory();
+      const books = new Api("/books/:id/");
+      books.addCustomQuery({
+        byId
+      });
+
+      const queriedBooks = books.byId("foo");
+      await queriedBooks.read();
+      expect(axios.stubs.instance.getCall(0).args[0].url).toEqual("/books/foo/");
+    });
+
     it("should replace params in axios request when url includes protocol", async () => {
       axios.stubs.instance.resetHistory();
       const books = new Api("http://localhost/books/:id");
