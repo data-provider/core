@@ -6,6 +6,8 @@
 
 # Extensible Data Provider and Selector.
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/data-provider/core.svg)](https://greenkeeper.io/)
+
 ## Overview
 
 __Data Provider__ provides an asynchronous CRUD data abstraction layer that can be used to isolate your code from specific methods of different data origins.
