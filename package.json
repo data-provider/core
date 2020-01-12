@@ -33,7 +33,7 @@
     "coveralls": "cat ./coverage/lcov.info | coveralls"
   },
   "peerDependencies": {
-    "@data-provider/core": "1.7.1"
+    "@data-provider/core": "^1.7.0"
   },
   "devDependencies": {
     "@babel/core": "7.6.4",
