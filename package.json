@@ -1,6 +1,6 @@
 {
   "name": "@data-provider/prismic",
-  "version": "1.5.1",
+  "version": "1.5.2",
   "description": "Data Provider for reading data from Prismic CMS API",
   "keywords": [
     "data-provider",
@@ -31,7 +31,7 @@
     "coveralls": "cat ./coverage/lcov.info | coveralls"
   },
   "peerDependencies": {
-    "@data-provider/core": "1.7.0"
+    "@data-provider/core": "^1.7.0"
   },
   "dependencies": {
     "prismic-javascript": "2.0.3"
