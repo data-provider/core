@@ -14,6 +14,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [TO BE DEPRECATED]
 - apis "config" and "clean" methods. Mercury "instances" methods should be used instead.
 
+## [1.6.1] - 2020-01-12
+### Changed
+- Update dependencies
+
 ## [1.6.0] - 2020-01-11
 ### Fixed
 - Upgrade axios version
