@@ -6,6 +6,8 @@
 
 ## Overview
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/data-provider/memory.svg)](https://greenkeeper.io/)
+
 This package provides a [Data Provider][data-provider-url] for handling memory objects.
 
 * __Data Provider queries__ based on object keys.
