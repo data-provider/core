@@ -6,6 +6,8 @@
 
 ## Overview
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/data-provider/prismic.svg)](https://greenkeeper.io/)
+
 This package provides a [Data Provider][data-provider-url] for reading data from Prismic CMS API. As underlay, it uses the [prismic-javascript][prismic-javascript-url] client to provide the Prismic data.
 
 ## Api
