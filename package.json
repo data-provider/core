@@ -29,7 +29,7 @@
     "coveralls": "cat ./coverage/lcov.info | coveralls"
   },
   "peerDependencies": {
-    "@data-provider/core": "1.7.1"
+    "@data-provider/core": "^1.7.0"
   },
   "dependencies": {
     "lodash": "4.17.15"
