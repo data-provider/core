@@ -11,3 +11,5 @@ statements: 100
 exclude:
   - dist
   - test
+  - rollup.config.js
+  - coverage
