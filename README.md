@@ -6,6 +6,8 @@
 
 ## Overview
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/data-provider/browser-storage.svg)](https://greenkeeper.io/)
+
 This package provides browser localStorage and sessionStorage [Data Providers][data-provider-url].
 
 * __Data Provider queries__ based on object keys.
