@@ -15,6 +15,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - "queriesDefaultValue" option has to be removed.
 - Options should be accepted only as second argument. "uuid" should be defined only using the "uuid" option, not as second argument.
 
+## [1.4.1] - 2020-01-12
+### Changed
+- Update dependencies
+
 ## [1.4.0] - 2019-11-24
 ### Changed
 - Upgrade @data-provider/core dependency
