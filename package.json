@@ -1,6 +1,6 @@
 {
   "name": "@data-provider/axios",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "description": "Api Data Provider using Axios",
   "keywords": [
     "data-provider",
