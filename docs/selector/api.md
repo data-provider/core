@@ -67,6 +67,7 @@
 		* query - `<Any>` Any object, string, array etc. for quering the provider.
 	* Returns
 		* `<undefined>` - Selector instance cache corresponding to the provided query will be cleaned.
+* cleanState `selector.cleanState()` - Returns `value` to defaultValue, and `error` to null. Correspondent change event will be also emitted.
 * query `selector.query([query])`
 	* Arguments
 		* query - `<Any>` Any object, string, array etc. for quering the provider.

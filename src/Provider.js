@@ -116,6 +116,17 @@ export class Provider {
   _clean(query) {
     this._cache.clean(query, this);
   }
+  _cleanAllStates() {
+    Object.entries(this._queries).forEach(([queriedInstanceId, queriedInstance]) => {
+      if (!isUndefined(queriedInstanceId) && queriedInstanceId !== "undefined") {
+        queriedInstance.cleanState();
+      }
+    });
+  }
+
+  _getDefaultValue(query) {
+    return isFunction(this._defaultValue) ? this._defaultValue(query) : this._defaultValue;
+  }
 
   _createQueryMethods(query, id) {
     const methods = {};
@@ -201,23 +212,30 @@ export class Provider {
         methods[methodName] = dispatchMethod;
         methods[methodName].dispatch = dispatchMethod;
         methods[methodName].value =
-          methodName === READ_METHOD
-            ? isFunction(this._defaultValue)
-              ? this._defaultValue(query)
-              : this._defaultValue
-            : undefined;
+          methodName === READ_METHOD ? this._getDefaultValue(query) : undefined;
         methods[methodName].error = null;
         methods[methodName].loading = false;
         methods[methodName].stats = {
           dispatch: 0,
           success: 0,
-          error: 0
+          error: 0,
+          cleanState: 0
         };
         methods[methodName]._source = methods; // TODO, deprecate
         methods[methodName]._instance = methods;
         methods[methodName]._isDataProviderMethod = true;
         methods[methodName]._isSourceMethod = true; // TODO, deprecate
         methods[methodName]._methodName = methodName;
+        methods[methodName].cleanState = () => {
+          updateData(
+            {
+              error: null,
+              value: this._getDefaultValue(query)
+            },
+            methodName,
+            "cleanState"
+          );
+        };
 
         const createGetter = prop => {
           const getter = () => methods[methodName][prop];
@@ -271,6 +289,14 @@ export class Provider {
     newQuery.onChangeAny = listener => this._onChangeAny(listener);
     newQuery.removeChangeAnyListener = listener => this._removeChangeAnyListener(listener);
     newQuery.clean = () => this._clean(query);
+    newQuery.cleanState = () => {
+      VALID_METHODS.forEach(methodName => {
+        newQuery[methodName] && newQuery[methodName].cleanState();
+      });
+      if (!query) {
+        this._cleanAllStates();
+      }
+    };
     newQuery.onceClean = listener => this._onceClean(listener, query);
     newQuery.onClean = listener => this._onClean(listener, query);
     newQuery.removeCleanListener = listener => this._removeCleanListener(listener, query);

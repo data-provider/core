@@ -62,6 +62,30 @@ test.describe("Selector error", () => {
         }
       );
     });
+
+    test.it("should return null when read cleanState is called", () => {
+      return testSelector.read().then(
+        () => {
+          return test.assert.fail();
+        },
+        () => {
+          testSelector.read.cleanState();
+          return test.expect(testSelector.read.getters.error()).to.be.null();
+        }
+      );
+    });
+
+    test.it("should return null when cleanState is called", () => {
+      return testSelector.read().then(
+        () => {
+          return test.assert.fail();
+        },
+        () => {
+          testSelector.cleanState();
+          return test.expect(testSelector.read.getters.error()).to.be.null();
+        }
+      );
+    });
   });
 
   test.describe("without query", () => {
@@ -76,6 +100,30 @@ test.describe("Selector error", () => {
         },
         () => {
           return test.expect(testSelector.read.error).to.equal(fooError);
+        }
+      );
+    });
+
+    test.it("should return null when read cleanAllState is called", () => {
+      return testSelector.read().then(
+        () => {
+          return test.assert.fail();
+        },
+        () => {
+          testSelector.read.cleanState();
+          return test.expect(testSelector.read.error).to.be.null();
+        }
+      );
+    });
+
+    test.it("should return null when cleanAllState is called", () => {
+      return testSelector.read().then(
+        () => {
+          return test.assert.fail();
+        },
+        () => {
+          testSelector.cleanState();
+          return test.expect(testSelector.read.error).to.be.null();
         }
       );
     });
@@ -152,6 +200,20 @@ test.describe("Selector error", () => {
         });
       }
     );
+
+    test.it("should have undefined value after read cleanState method is called", () => {
+      return testSelector.read().then(() => {
+        testSelector.read.cleanState();
+        return test.expect(testSelector.read.value).to.equal(undefined);
+      });
+    });
+
+    test.it("should have undefined value after cleanState method is called", () => {
+      return testSelector.read().then(() => {
+        testSelector.cleanState();
+        return test.expect(testSelector.read.value).to.equal(undefined);
+      });
+    });
   });
 
   test.describe("with query", () => {
@@ -170,6 +232,51 @@ test.describe("Selector error", () => {
           },
           () => {
             return test.expect(testSelector.query(QUERY).read.error).to.equal(fooError);
+          }
+        );
+    });
+
+    test.it("should return null when read cleanState is called with query", () => {
+      return testSelector
+        .query(QUERY)
+        .read()
+        .then(
+          () => {
+            return test.assert.fail();
+          },
+          () => {
+            testSelector.query(QUERY).read.cleanState();
+            return test.expect(testSelector.query(QUERY).read.error).to.be.null();
+          }
+        );
+    });
+
+    test.it("should return null when cleanState is called with query", () => {
+      return testSelector
+        .query(QUERY)
+        .read()
+        .then(
+          () => {
+            return test.assert.fail();
+          },
+          () => {
+            testSelector.query(QUERY).cleanState();
+            return test.expect(testSelector.query(QUERY).read.error).to.be.null();
+          }
+        );
+    });
+
+    test.it("should return null when cleanState is called", () => {
+      return testSelector
+        .query(QUERY)
+        .read()
+        .then(
+          () => {
+            return test.assert.fail();
+          },
+          () => {
+            testSelector.cleanState();
+            return test.expect(testSelector.query(QUERY).read.error).to.be.null();
           }
         );
     });

@@ -64,6 +64,18 @@ test.describe("Provider loading", () => {
       test.expect(testProvider.read.loading).to.be.true();
     });
 
+    test.it("should return true even when read cleanState is called", () => {
+      testProvider.read();
+      testProvider.read.cleanState();
+      test.expect(testProvider.read.loading).to.be.true();
+    });
+
+    test.it("should return true even when cleanState is called", () => {
+      testProvider.read();
+      testProvider.cleanState();
+      test.expect(testProvider.read.loading).to.be.true();
+    });
+
     test.it("should return false when read finish", () => {
       return testProvider.read().then(() => {
         return test.expect(testProvider.read.loading).to.be.false();
@@ -79,6 +91,27 @@ test.describe("Provider loading", () => {
 
     test.it("should return true while read is loading", () => {
       testProvider.query(QUERY).read();
+      test.expect(testProvider.query(QUERY).read.loading).to.be.true();
+    });
+
+    test.it(
+      "should return true while read is loading even when queried read cleanState is called",
+      () => {
+        testProvider.query(QUERY).read();
+        testProvider.query(QUERY).read.cleanState();
+        test.expect(testProvider.query(QUERY).read.loading).to.be.true();
+      }
+    );
+
+    test.it("should return true while read is loading even when cleanState is called", () => {
+      testProvider.query(QUERY).read();
+      testProvider.query(QUERY).cleanState();
+      test.expect(testProvider.query(QUERY).read.loading).to.be.true();
+    });
+
+    test.it("should return true while read is loading even when cleanState is called", () => {
+      testProvider.query(QUERY).read();
+      testProvider.cleanState();
       test.expect(testProvider.query(QUERY).read.loading).to.be.true();
     });
 
