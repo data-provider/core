@@ -23,6 +23,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Add `cleanState` method
 
 ### Changed
+- Update dependency husky to v4.0.10
+- Update dependency babel monorepo to v7.8.3
 
 ## [1.7.3] - 2020-01-13
 ### Changed
