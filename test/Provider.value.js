@@ -46,6 +46,20 @@ test.describe("Provider value", () => {
         test.expect(testProvider.read.getters.value()).to.equal(VALUE);
       });
     });
+
+    test.it("should return a clone of defaultValue after read cleanState is called", () => {
+      return testProvider.read().then(() => {
+        testProvider.read.cleanState();
+        test.expect(testProvider.read.getters.value()).to.deep.equal(DEFAULT_VALUE);
+      });
+    });
+
+    test.it("should return a clone of defaultValue after cleanState is called", () => {
+      return testProvider.read().then(() => {
+        testProvider.cleanState();
+        test.expect(testProvider.read.getters.value()).to.deep.equal(DEFAULT_VALUE);
+      });
+    });
   });
 
   test.describe("Without query", () => {
@@ -57,6 +71,20 @@ test.describe("Provider value", () => {
     test.it("should change value property when it has finished loading", () => {
       return testProvider.read().then(() => {
         return test.expect(testProvider.read.value).to.equal(VALUE);
+      });
+    });
+
+    test.it("should return a clone of defaultValue after read cleanState is called", () => {
+      return testProvider.read().then(() => {
+        testProvider.read.cleanState();
+        return test.expect(testProvider.read.value).to.deep.equal(DEFAULT_VALUE);
+      });
+    });
+
+    test.it("should return a clone of defaultValue after cleanState is called", () => {
+      return testProvider.read().then(() => {
+        testProvider.cleanState();
+        return test.expect(testProvider.read.value).to.deep.equal(DEFAULT_VALUE);
       });
     });
 
@@ -80,6 +108,39 @@ test.describe("Provider value", () => {
         .read()
         .then(() => {
           return test.expect(testProvider.query(QUERY).read.value).to.equal(VALUE);
+        });
+    });
+
+    test.it(
+      "should return a clone of defaultValue after queried read cleanState is called",
+      () => {
+        return testProvider
+          .query(QUERY)
+          .read()
+          .then(() => {
+            testProvider.query(QUERY).read.cleanState();
+            return test.expect(testProvider.query(QUERY).read.value).to.deep.equal(DEFAULT_VALUE);
+          });
+      }
+    );
+
+    test.it("should return a clone of defaultValue after queried cleanState is called", () => {
+      return testProvider
+        .query(QUERY)
+        .read()
+        .then(() => {
+          testProvider.query(QUERY).cleanState();
+          return test.expect(testProvider.read.value).to.deep.equal(DEFAULT_VALUE);
+        });
+    });
+
+    test.it("should return a clone of defaultValue after cleanState is called", () => {
+      return testProvider
+        .query(QUERY)
+        .read()
+        .then(() => {
+          testProvider.cleanState();
+          return test.expect(testProvider.read.value).to.deep.equal(DEFAULT_VALUE);
         });
     });
 

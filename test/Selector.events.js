@@ -50,7 +50,25 @@ test.describe("Selector events", () => {
       let spy = sandbox.spy();
       testSelector.onChange(spy);
       return testSelector.read().then(() => {
-        return test.expect(spy).to.have.been.called();
+        return test.expect(spy).to.have.been.calledTwice();
+      });
+    });
+
+    test.it("should emit a change event when Provider read cleanState is called", () => {
+      let spy = sandbox.spy();
+      testSelector.onChange(spy);
+      return testSelector.read().then(() => {
+        testSelector.read.cleanState();
+        return test.expect(spy).to.have.been.calledThrice();
+      });
+    });
+
+    test.it("should emit a change event when Provider cleanState is called", () => {
+      let spy = sandbox.spy();
+      testSelector.onChange(spy);
+      return testSelector.read().then(() => {
+        testSelector.cleanState();
+        return test.expect(spy).to.have.been.calledThrice();
       });
     });
 
@@ -165,6 +183,43 @@ test.describe("Selector events", () => {
       queriedSelector.onChange(spy);
       return queriedSelector.read().then(() => {
         return test.expect(spy).to.have.been.called();
+      });
+    });
+
+    test.it("should emit a change event when queried selector read cleanState is called", () => {
+      let spy = sandbox.spy();
+      queriedSelector.onChange(spy);
+      return queriedSelector.read().then(() => {
+        queriedSelector.read.cleanState();
+        return test.expect(spy).to.have.been.calledThrice();
+      });
+    });
+
+    test.it("should emit a change event when queried selector cleanState is called", () => {
+      let spy = sandbox.spy();
+      queriedSelector.onChange(spy);
+      return queriedSelector.read().then(() => {
+        queriedSelector.cleanState();
+        return test.expect(spy).to.have.been.calledThrice();
+      });
+    });
+
+    test.it("should emit a change event when selector cleanState is called", () => {
+      let spy = sandbox.spy();
+      queriedSelector.onChange(spy);
+      return queriedSelector.read().then(() => {
+        testSelector.cleanState();
+        return test.expect(spy).to.have.been.calledThrice();
+      });
+    });
+
+    // TODO in next major release. Currently selectors only listen to onClean events. They should listen also (maybe only) to data (value) state
+    test.it.skip("should emit a change event when provider cleanState is called", () => {
+      let spy = sandbox.spy();
+      queriedSelector.onChange(spy);
+      return queriedSelector.read().then(() => {
+        testProvider.cleanState();
+        return test.expect(spy).to.have.been.calledThrice();
       });
     });
 

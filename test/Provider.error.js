@@ -53,6 +53,30 @@ test.describe("Provider error", () => {
         }
       );
     });
+
+    test.it("should return null when read cleanState is called", () => {
+      return testProvider.read().then(
+        () => {
+          return test.assert.fail();
+        },
+        () => {
+          testProvider.read.cleanState();
+          return test.expect(testProvider.read.getters.error()).to.be.null();
+        }
+      );
+    });
+
+    test.it("should return null when cleanState is called", () => {
+      return testProvider.read().then(
+        () => {
+          return test.assert.fail();
+        },
+        () => {
+          testProvider.cleanState();
+          return test.expect(testProvider.read.getters.error()).to.be.null();
+        }
+      );
+    });
   });
 
   test.describe("without query", () => {
@@ -78,6 +102,30 @@ test.describe("Provider error", () => {
         },
         err => {
           return test.expect(err).to.equal(fooError);
+        }
+      );
+    });
+
+    test.it("should return null when read cleanAllState is called", () => {
+      return testProvider.read().then(
+        () => {
+          return test.assert.fail();
+        },
+        () => {
+          testProvider.read.cleanState();
+          return test.expect(testProvider.read.error).to.be.null();
+        }
+      );
+    });
+
+    test.it("should return null when cleanAllState is called", () => {
+      return testProvider.read().then(
+        () => {
+          return test.assert.fail();
+        },
+        () => {
+          testProvider.cleanState();
+          return test.expect(testProvider.read.error).to.be.null();
         }
       );
     });
@@ -113,6 +161,51 @@ test.describe("Provider error", () => {
           },
           err => {
             return test.expect(err).to.equal(fooError);
+          }
+        );
+    });
+
+    test.it("should return null when read cleanState is called with query", () => {
+      return testProvider
+        .query(QUERY)
+        .read()
+        .then(
+          () => {
+            return test.assert.fail();
+          },
+          () => {
+            testProvider.query(QUERY).read.cleanState();
+            return test.expect(testProvider.query(QUERY).read.error).to.be.null();
+          }
+        );
+    });
+
+    test.it("should return null when cleanState is called with query", () => {
+      return testProvider
+        .query(QUERY)
+        .read()
+        .then(
+          () => {
+            return test.assert.fail();
+          },
+          () => {
+            testProvider.query(QUERY).cleanState();
+            return test.expect(testProvider.query(QUERY).read.error).to.be.null();
+          }
+        );
+    });
+
+    test.it("should return null when cleanState is called", () => {
+      return testProvider
+        .query(QUERY)
+        .read()
+        .then(
+          () => {
+            return test.assert.fail();
+          },
+          () => {
+            testProvider.cleanState();
+            return test.expect(testProvider.query(QUERY).read.error).to.be.null();
           }
         );
     });

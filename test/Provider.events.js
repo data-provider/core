@@ -47,7 +47,25 @@ test.describe("Provider events", () => {
       let spy = sandbox.spy();
       testProvider.onChange(spy);
       return testProvider.read().then(() => {
-        return test.expect(spy).to.have.been.called();
+        return test.expect(spy).to.have.been.calledTwice();
+      });
+    });
+
+    test.it("should emit a change event when Provider read cleanState is called", () => {
+      let spy = sandbox.spy();
+      testProvider.onChange(spy);
+      return testProvider.read().then(() => {
+        testProvider.read.cleanState();
+        return test.expect(spy).to.have.been.calledThrice();
+      });
+    });
+
+    test.it("should emit a change event when Provider cleanState is called", () => {
+      let spy = sandbox.spy();
+      testProvider.onChange(spy);
+      return testProvider.read().then(() => {
+        testProvider.cleanState();
+        return test.expect(spy).to.have.been.calledThrice();
       });
     });
 
@@ -161,7 +179,34 @@ test.describe("Provider events", () => {
       let spy = sandbox.spy();
       queriedProvider.onChange(spy);
       return queriedProvider.read().then(() => {
-        return test.expect(spy).to.have.been.called();
+        return test.expect(spy).to.have.been.calledTwice();
+      });
+    });
+
+    test.it("should emit a change event when QueriedProvider read cleanState is called", () => {
+      let spy = sandbox.spy();
+      queriedProvider.onChange(spy);
+      return queriedProvider.read().then(() => {
+        queriedProvider.read.cleanState();
+        return test.expect(spy).to.have.been.calledThrice();
+      });
+    });
+
+    test.it("should emit a change event when QueriedProvider cleanState is called", () => {
+      let spy = sandbox.spy();
+      queriedProvider.onChange(spy);
+      return queriedProvider.read().then(() => {
+        queriedProvider.cleanState();
+        return test.expect(spy).to.have.been.calledThrice();
+      });
+    });
+
+    test.it("should emit a change event when Provider cleanState is called", () => {
+      let spy = sandbox.spy();
+      queriedProvider.onChange(spy);
+      return queriedProvider.read().then(() => {
+        testProvider.cleanState();
+        return test.expect(spy).to.have.been.calledThrice();
       });
     });
 
