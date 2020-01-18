@@ -117,7 +117,7 @@ export class Provider {
     this._cache.clean(query, this);
   }
   _cleanAllStates() {
-    Object.entries(this._queries).map(([queryId, queriedInstance]) => {
+    Object.entries(this._queries).forEach(([queryId, queriedInstance]) => {
       if (!isUndefined(queryId) && queryId !== "undefined") {
         queriedInstance.cleanState();
       }
