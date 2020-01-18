@@ -108,6 +108,41 @@ test.describe("Selector stats", () => {
       });
     });
 
+    test.describe("cleanState property", () => {
+      test.it("should return 0 until cleanState method has been called", () => {
+        test.expect(testSelector.read.stats.cleanState).to.equal(0);
+      });
+
+      test.it("should return 1 when cleanState method has been called over read method", () => {
+        testSelector.read.cleanState();
+        test.expect(testSelector.read.stats.cleanState).to.equal(1);
+      });
+
+      test.it("should return 1 when cleanState method has been called", () => {
+        testSelector.cleanState();
+        test.expect(testSelector.read.stats.cleanState).to.equal(1);
+      });
+
+      test.it(
+        "should return 4 when read has finished and it has been called 4 times over read method",
+        () => {
+          testSelector.read.cleanState();
+          testSelector.read.cleanState();
+          testSelector.read.cleanState();
+          testSelector.read.cleanState();
+          test.expect(testSelector.read.stats.cleanState).to.equal(4);
+        }
+      );
+
+      test.it("should return 4 when read has finished and it has been called 4 times", () => {
+        testSelector.cleanState();
+        testSelector.cleanState();
+        testSelector.cleanState();
+        testSelector.cleanState();
+        test.expect(testSelector.read.stats.cleanState).to.equal(4);
+      });
+    });
+
     test.describe("error property", () => {
       test.it("should return 0 until read method has finished", () => {
         test.expect(testSelector.read.stats.error).to.equal(0);
@@ -203,6 +238,55 @@ test.describe("Selector stats", () => {
           return test.expect(queriedSelector.read.stats.success).to.equal(4);
         });
       });
+    });
+
+    test.describe("cleanState property", () => {
+      test.it("should return 0 until cleanState method has been called", () => {
+        test.expect(queriedSelector.read.stats.cleanState).to.equal(0);
+      });
+
+      test.it("should return 1 when cleanState method has been called", () => {
+        queriedSelector.cleanState();
+        test.expect(queriedSelector.read.stats.cleanState).to.equal(1);
+      });
+
+      test.it("should return 1 when cleanState method has been called over read method", () => {
+        queriedSelector.read.cleanState();
+        test.expect(queriedSelector.read.stats.cleanState).to.equal(1);
+      });
+
+      test.it(
+        "should return 4 when read has finished and queried cleanState method has been called 4 times",
+        () => {
+          queriedSelector.cleanState();
+          queriedSelector.cleanState();
+          queriedSelector.cleanState();
+          queriedSelector.cleanState();
+          test.expect(queriedSelector.read.stats.cleanState).to.equal(4);
+        }
+      );
+
+      test.it(
+        "should return 4 when read has finished and queried cleanState method has been called 4 times over read method",
+        () => {
+          queriedSelector.read.cleanState();
+          queriedSelector.read.cleanState();
+          queriedSelector.read.cleanState();
+          queriedSelector.read.cleanState();
+          test.expect(queriedSelector.read.stats.cleanState).to.equal(4);
+        }
+      );
+
+      test.it(
+        "should return 4 when read has finished and cleanState method has been called 4 times",
+        () => {
+          testSelector.cleanState();
+          testSelector.cleanState();
+          testSelector.cleanState();
+          testSelector.cleanState();
+          test.expect(queriedSelector.read.stats.cleanState).to.equal(4);
+        }
+      );
     });
 
     test.describe("error property", () => {
