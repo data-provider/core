@@ -19,7 +19,7 @@ script:
   - npm run test
   - npm run build
   - npm run coveralls
-  - 'if [ -n "$SONAR_TOKEN" ]; then sonar-scanner -Dsonar.login=${SONAR_TOKEN}; fi'
+  - sonar-scanner -Dsonar.login=${SONAR_TOKEN} || true
 
 deploy:
   provider: npm
