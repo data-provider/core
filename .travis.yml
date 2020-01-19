@@ -29,4 +29,5 @@ deploy:
   api_key: "$NPM_TOKEN"
   on:
     tags: true
+    node_js: "v12.14.1"
   skip_cleanup: true
