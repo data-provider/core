@@ -1,6 +1,6 @@
 {
   "name": "@data-provider/core",
-  "version": "1.8.0",
+  "version": "1.8.1",
   "description": "Extensible Data Provider and Data Selectors",
   "keywords": [
     "data",
@@ -24,6 +24,7 @@
   "scripts": {
     "build": "rollup --config",
     "test:ci": "nyc mocha --recursive test",
+    "test:coverage": "npm run test:ci",
     "lint": "eslint src test",
     "lint-staged": "lint-staged",
     "coveralls": "cat ./coverage/lcov.info | coveralls"
