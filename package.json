@@ -23,7 +23,7 @@
   "module": "dist/core.esm.js",
   "scripts": {
     "build": "rollup --config",
-    "test": "nyc mocha --recursive test",
+    "test:ci": "nyc mocha --recursive test",
     "lint": "eslint src test",
     "lint-staged": "lint-staged",
     "coveralls": "cat ./coverage/lcov.info | coveralls"
@@ -65,5 +65,8 @@
     "hooks": {
       "pre-commit": "npm run lint-staged"
     }
+  },
+  "engines": {
+    "node": "10.x || 12.x || 13.x"
   }
 }
