@@ -1,6 +1,6 @@
 {
   "name": "@data-provider/browser-storage",
-  "version": "1.4.2",
+  "version": "1.4.3",
   "description": "localStorage and sessionStorage Data Providers",
   "keywords": [
     "data-provider",
@@ -29,7 +29,8 @@
     "lint-staged": "lint-staged",
     "build": "rollup --config",
     "test": "jest",
-    "test-ci": "npm run test -- --coverage --ci --verbose=false --coverageReporters=lcov --coverageReporters=text-summary",
+    "test:ci": "npm run test -- --coverage --ci --verbose=false --coverageReporters=lcov --coverageReporters=text-summary",
+    "test:coverage": "npm run test:ci",
     "coveralls": "cat ./coverage/lcov.info | coveralls"
   },
   "peerDependencies": {
