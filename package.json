@@ -25,7 +25,7 @@
     "lint-staged": "lint-staged",
     "build": "rollup --config",
     "test": "jest",
-    "test-ci": "npm run test -- --coverage --ci --verbose=false --coverageReporters=lcov --coverageReporters=text-summary",
+    "test:ci": "npm run test -- --coverage --ci --verbose=false --coverageReporters=lcov --coverageReporters=text-summary",
     "coveralls": "cat ./coverage/lcov.info | coveralls"
   },
   "peerDependencies": {
@@ -66,5 +66,8 @@
     "hooks": {
       "pre-commit": "npm run lint-staged"
     }
+  },
+  "engines": {
+    "node": "10.x || 12.x || 13.x"
   }
 }
