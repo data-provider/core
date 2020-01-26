@@ -1,6 +1,6 @@
 {
   "name": "@data-provider/prismic",
-  "version": "1.5.2",
+  "version": "1.5.3",
   "description": "Data Provider for reading data from Prismic CMS API",
   "keywords": [
     "data-provider",
@@ -27,7 +27,8 @@
     "lint-staged": "lint-staged",
     "build": "rollup --config",
     "test": "jest",
-    "test-ci": "npm run test -- --coverage --ci --verbose=false --coverageReporters=lcov --coverageReporters=text-summary",
+    "test:ci": "npm run test -- --coverage --ci --verbose=false --coverageReporters=lcov --coverageReporters=text-summary",
+    "test:coverage": "npm run test:ci",
     "coveralls": "cat ./coverage/lcov.info | coveralls"
   },
   "peerDependencies": {
