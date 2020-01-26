@@ -1,6 +1,6 @@
 {
   "name": "@data-provider/axios",
-  "version": "1.6.1",
+  "version": "1.6.2",
   "description": "Api Data Provider using Axios",
   "keywords": [
     "data-provider",
@@ -31,6 +31,7 @@
     "test": "jest",
     "mocks-and-test": "start-server-and-test mocks tcp:3100 jest",
     "test:ci": "npm run mocks-and-test",
+    "test:coverage": "npm run test:ci",
     "coveralls": "cat ./coverage/lcov.info | coveralls"
   },
   "peerDependencies": {
