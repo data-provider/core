@@ -18,7 +18,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - "source" property emitted in events. "provider" has to be used instead.
 - "sources" handler. "instances" has to be used instead.
 
-## [1.8.1] - 2020-01-26
+## [1.8.1] - 2020-01-
 ### Changed
 - Update dependencies
 
