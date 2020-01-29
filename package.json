@@ -65,7 +65,7 @@
     "rollup-plugin-json": "4.0.0",
     "rollup-plugin-node-resolve": "5.2.0",
     "rollup-plugin-uglify": "6.0.4",
-    "sinon": "8.0.4",
+    "sinon": "8.1.1",
     "start-server-and-test": "1.10.6"
   },
   "lint-staged": {
