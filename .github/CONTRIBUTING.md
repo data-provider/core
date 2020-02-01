@@ -31,7 +31,7 @@ Individuals making significant and valuable contributions are given commit-acces
 There are a few basic ground-rules for contributors:
 
 1. **No `--force` pushes** or modifying the Git history in any way.
-2. **All modifications** should be subject to a **pull request** to solicit feedback from other contributors. The base branch of the pull request should correspond with the assigned "release milestone" of the related issue. When an issue is created, it will be prioritized and a "release milestone" will be assigned to it, at the criteria of contributors. A branch will be created from master for that release milestone, and all related issues should be merged into it, until is ready to declare a formal release.
+2. **All modifications** should be subject to a **pull request** to solicit feedback from other contributors. The base branch of the pull request should be the "release" branch. All issues should be merged into it until is ready to declare a formal release.
 
 ### Releases
 
