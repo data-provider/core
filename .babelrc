@@ -1,6 +1,5 @@
 {
   "presets": [
     "@babel/env"
-  ],
-  "plugins": ["istanbul"]
+  ]
 }
