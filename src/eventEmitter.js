@@ -1,4 +1,5 @@
 /*
+Copyright 2020 Javier Brea
 Copyright 2019 XbyOrange
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
@@ -24,6 +25,7 @@ export class EventEmitter {
 
   on(eventName, fn) {
     this._getEventListByName(eventName).add(fn);
+    return this.removeListener(fn);
   }
 
   once(eventName, fn) {
@@ -34,6 +36,7 @@ export class EventEmitter {
       fn.apply(self, args);
     };
     this.on(eventName, onceFn);
+    return this.removeListener(onceFn);
   }
 
   emit(eventName, ...args) {
@@ -50,3 +53,7 @@ export class EventEmitter {
     return Object.keys(this.events);
   }
 }
+
+const eventEmitter = new EventEmitter();
+
+export default eventEmitter;
