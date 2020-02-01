@@ -59,7 +59,7 @@
     "rollup-plugin-uglify": "6.0.4"
   },
   "lint-staged": {
-    "_src/**/*.js": "eslint",
+    "src/**/*.js": "eslint",
     "test/**/*.js": "eslint"
   },
   "husky": {
