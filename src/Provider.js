@@ -17,7 +17,6 @@ import {
   ensureArray,
   isFunction,
   isUndefined,
-  merge,
   ANY_EVENT,
   childEventName,
   getAutomaticId,
@@ -148,7 +147,7 @@ class Provider {
     if (isUndefined(query)) {
       return this;
     }
-    const newQuery = merge({}, this._query, query);
+    const newQuery = { ...this._query, ...query };
     const id = childId(this._id, newQuery);
     if (this._children.has(id)) {
       return this._children.get(id);

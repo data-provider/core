@@ -22,7 +22,6 @@ const {
   getAutomaticId,
   ensureArray,
   removeFalsy,
-  mergeCloned,
   message,
   warn
 } = require("../src/helpers");
@@ -127,22 +126,6 @@ describe("helpers", () => {
 
     it("should remove 0 values", () => {
       expect(removeFalsy(["foo", 0, "foo2"])).toEqual(["foo", "foo2"]);
-    });
-  });
-
-  describe("mergeCloned method", () => {
-    it("should modify dest object", () => {
-      const dest = { foo: "foo" };
-      const origin = { var: "var" };
-      mergeCloned(dest, origin);
-      expect(dest).toEqual({ foo: "foo", var: "var" });
-    });
-
-    it("should not modify origin object", () => {
-      const dest = { foo: "foo" };
-      const origin = { var: "var" };
-      mergeCloned(dest, origin);
-      expect(origin).toEqual({ var: "var" });
     });
   });
 

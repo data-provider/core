@@ -9,14 +9,14 @@ http://www.apache.org/licenses/LICENSE-2.0
 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 */
 
-import { merge, cloneDeep, once } from "lodash";
+import { once } from "lodash";
 export { default as isPromise } from "is-promise";
 
 let automaticIdCounter = 0;
 
 const CHILD_EVENT_PREFIX = "child-";
 
-export { merge, cloneDeep, once };
+export { once };
 
 export const ANY_EVENT = "*";
 
@@ -49,7 +49,7 @@ export function eventNamespace(eventName, id) {
 
 export function getAutomaticId() {
   automaticIdCounter++;
-  return `selector-${(Date.now() + automaticIdCounter).toString()}`;
+  return (Date.now() + automaticIdCounter).toString();
 }
 
 export function ensureArray(els) {
@@ -58,10 +58,6 @@ export function ensureArray(els) {
 
 export function removeFalsy(array) {
   return array.filter(el => !!el);
-}
-
-export function mergeCloned(dest, origin) {
-  return merge(dest, cloneDeep(origin));
 }
 
 export const message = text => {

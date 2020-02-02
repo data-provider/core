@@ -10,13 +10,15 @@ Unless required by applicable law or agreed to in writing, software distributed 
 
 const sinon = require("sinon");
 
-const { Provider, providers } = require("../../src/index");
+const { Provider, Selector, providers } = require("../../src/index");
 
-describe("Provider id", () => {
+describe("Selector id", () => {
   let sandbox;
+  let provider;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
+    provider = new Provider();
   });
 
   afterEach(() => {
@@ -26,27 +28,33 @@ describe("Provider id", () => {
 
   it("should not return two equal ids is no specific id is provided", () => {
     expect.assertions(3);
-    const provider = new Provider();
-    const provider2 = new Provider();
-    const provider3 = new Provider();
-    expect(provider.id).not.toEqual(provider2.id);
-    expect(provider2.id).not.toEqual(provider3.id);
-    expect(provider3.id).not.toEqual(provider.id);
+    const selector = new Selector(provider, () => {});
+    const selector2 = new Selector(provider, () => {});
+    const selector3 = new Selector(provider, () => {});
+    expect(selector.id).not.toEqual(selector2.id);
+    expect(selector2.id).not.toEqual(selector3.id);
+    expect(selector3.id).not.toEqual(selector.id);
   });
 
   it("should be provided id", () => {
-    const provider = new Provider("foo-id");
-    expect(provider.id).toEqual("foo-id");
+    const selector = new Selector(provider, () => {}, {
+      id: "foo-id"
+    });
+    expect(selector.id).toEqual("foo-id");
   });
 
   it("should be provided id adding query id", () => {
-    const provider = new Provider("foo-id");
-    expect(provider.query({ foo: "foo" }).id).toEqual('foo-id({"foo":"foo"})');
+    const selector = new Selector(provider, () => {}, {
+      id: "foo-id"
+    });
+    expect(selector.query({ foo: "foo" }).id).toEqual('foo-id({"foo":"foo"})');
   });
 
   it("should be provided id adding all childs query ids", () => {
-    const provider = new Provider("foo-id");
-    expect(provider.query({ foo: "foo" }).query({ var: "var" }).id).toEqual(
+    const selector = new Selector(provider, () => {}, {
+      id: "foo-id"
+    });
+    expect(selector.query({ foo: "foo" }).query({ var: "var" }).id).toEqual(
       'foo-id({"foo":"foo"})({"foo":"foo","var":"var"})'
     );
   });
