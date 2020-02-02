@@ -20,7 +20,8 @@ import {
   merge,
   ANY_EVENT,
   childEventName,
-  getAutomaticId
+  getAutomaticId,
+  isPromise
 } from "./helpers";
 import { providers } from "./providers";
 import { init, cleanCache, cleanState, readStart, readSuccess, readError } from "./reducer";
@@ -43,11 +44,9 @@ class Provider {
   }
 
   _getInitialData() {
-    return (
-      (isFunction(this._options.initialData)
-        ? this._options.initialData(this._query)
-        : this._options.initialData) || null
-    );
+    return isFunction(this._options.initialData)
+      ? this._options.initialData(this._query)
+      : this._options.initialData;
   }
 
   _eventNamespace(eventName) {
@@ -69,8 +68,6 @@ class Provider {
   // Public methods
 
   emit(eventName, data) {
-    // console.log("emitting", this._eventNamespace(eventName));
-    // console.log("emitting", this._eventNamespace(ANY_EVENT));
     eventEmitter.emit(this._eventNamespace(eventName), data);
     eventEmitter.emit(this._eventNamespace(ANY_EVENT), eventName, data);
   }
@@ -85,7 +82,6 @@ class Provider {
   }
 
   onChild(eventName, fn) {
-    // console.log(this._eventNamespace(childEventName(eventName)));
     return eventEmitter.on(this._eventNamespace(childEventName(eventName)), fn);
   }
 
@@ -120,11 +116,21 @@ class Provider {
     if (this._cache) {
       return this._cache;
     }
-    // TODO, custom dispatcher, add event name and prevState
     this._dispatch(readStart(this._id, true));
     const args = Array.from(arguments);
-    const readPromise = this.readMethod
-      .apply(this, args)
+    let readPromise;
+    let error;
+    try {
+      readPromise = this.readMethod.apply(this, args);
+    } catch (err) {
+      error = err;
+    }
+
+    if (!isPromise(readPromise)) {
+      readPromise = error ? Promise.reject(error) : Promise.resolve(readPromise);
+    }
+
+    const resultPromise = readPromise
       .then(result => {
         this._dispatch(readSuccess(this._id, result));
         return Promise.resolve(result);
@@ -134,7 +140,7 @@ class Provider {
         this._cache = null;
         return Promise.reject(error);
       });
-    this._cache = readPromise;
+    this._cache = resultPromise;
     return this._cache;
   }
 

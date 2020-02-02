@@ -194,20 +194,20 @@ describe("Provider state", () => {
       expect(provider.query({ foo: "foo" }).state.data).toEqual({ foo: "foo" });
     });
 
-    it("should return null in state when function returns undefined", () => {
+    it("should return undefined in state when function returns undefined", () => {
       expect.assertions(2);
       provider = new TestProvider("foo-id-2", {
         initialData: () => {}
       });
-      expect(provider.state.data).toEqual(null);
-      expect(provider.query({ foo: "foo" }).state.data).toEqual(null);
+      expect(provider.state.data).toEqual(undefined);
+      expect(provider.query({ foo: "foo" }).state.data).toEqual(undefined);
     });
   });
 
   describe("when initialData is not provided", () => {
-    it("should return null in data state", () => {
+    it("should return undefined in data state", () => {
       provider = new TestProvider("foo-id-2");
-      expect(provider.state.data).toEqual(null);
+      expect(provider.state.data).toEqual(undefined);
     });
   });
 });
