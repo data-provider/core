@@ -1,0 +1,213 @@
+/*
+Copyright 2020 Javier Brea
+Copyright 2019 XbyOrange
+
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+*/
+
+const sinon = require("sinon");
+
+const { Provider, providers } = require("../../src/index");
+
+describe("Provider state", () => {
+  let sandbox;
+  let spies;
+  let results;
+  let TestProvider;
+  let provider;
+
+  beforeEach(() => {
+    sandbox = sinon.createSandbox();
+
+    spies = {
+      read: sinon.spy()
+    };
+    results = {
+      throwError: null,
+      returnData: null
+    };
+
+    TestProvider = class extends Provider {
+      readMethod() {
+        return new Promise((resolve, reject) => {
+          spies.read(this.queryValue);
+          setTimeout(() => {
+            if (!results.throwError) {
+              resolve(results.returnData);
+            } else {
+              reject(results.throwError);
+            }
+          }, 50);
+        });
+      }
+    };
+
+    provider = new TestProvider("foo-id", {
+      initialData: "foo"
+    });
+  });
+
+  afterEach(() => {
+    sandbox.restore();
+    providers.clear();
+  });
+
+  describe("when read has not been called", () => {
+    it("should return initialData in data property", () => {
+      expect(provider.state.data).toEqual("foo");
+    });
+
+    it("should return null in error property", () => {
+      expect(provider.state.error).toEqual(null);
+    });
+
+    it("should return false in loading property", () => {
+      expect(provider.state.error).toEqual(null);
+    });
+  });
+
+  describe("when read is called", () => {
+    it("should return true in loading property until it finish loading", async () => {
+      expect.assertions(2);
+      provider.read();
+      expect(provider.state.loading).toEqual(true);
+      await provider.read();
+      expect(provider.state.loading).toEqual(false);
+    });
+
+    it("should return data in read promise", async () => {
+      results.returnData = "foo2";
+      const data = await provider.read();
+      expect(data).toEqual("foo2");
+    });
+
+    it("should return data in data property when it finish loading", async () => {
+      results.returnData = "foo2";
+      await provider.read();
+      expect(provider.state.data).toEqual("foo2");
+    });
+
+    it("should maintain data when cleanCache is called", async () => {
+      expect.assertions(2);
+      results.returnData = "foo2";
+      await provider.read();
+      expect(provider.state.data).toEqual("foo2");
+      provider.cleanCache();
+      expect(provider.state.data).toEqual("foo2");
+    });
+
+    it("should return different states for different queries", async () => {
+      expect.assertions(2);
+      results.returnData = "foo2";
+      const testProvider = provider.query({
+        foo: "foo"
+      });
+      await testProvider.read();
+      expect(testProvider.state.data).toEqual("foo2");
+      expect(provider.state.data).toEqual("foo");
+    });
+  });
+
+  describe("when read throws an error", () => {
+    it("should return null in error property until it finish loading", async () => {
+      expect.assertions(2);
+      const error = new Error("foo error message");
+      results.throwError = error;
+      provider.read().catch(() => {});
+      expect(provider.state.error).toEqual(null);
+      await provider.read().catch(() => {});
+      expect(provider.state.error).toBe(error);
+    });
+
+    it("should return null in error property after read returns data again", async () => {
+      expect.assertions(3);
+      const error = new Error("foo error message");
+      results.throwError = error;
+      provider.read().catch(() => {});
+      expect(provider.state.error).toEqual(null);
+      await provider.read().catch(() => {});
+      expect(provider.state.error).toBe(error);
+      results.throwError = null;
+      results.returnData = "foo";
+      await provider.read();
+      expect(provider.state.error).toEqual(null);
+    });
+  });
+
+  describe("when cleanState is called", () => {
+    it("should reset data to initalData", async () => {
+      expect.assertions(2);
+      results.returnData = "foo2";
+      await provider.read();
+      expect(provider.state.data).toEqual("foo2");
+      provider.cleanState();
+      expect(provider.state.data).toEqual("foo");
+    });
+
+    it("should reset error state to null", async () => {
+      expect.assertions(2);
+      const error = new Error("foo error message");
+      results.throwError = error;
+      await provider.read().catch(() => {});
+      expect(provider.state.error).toBe(error);
+      provider.cleanState();
+      expect(provider.state.error).toEqual(null);
+    });
+
+    it("should not change loading property in case it is still loading", async () => {
+      results.returnData = "foo2";
+      provider.read();
+      provider.read();
+      provider.cleanState();
+      expect(provider.state.loading).toEqual(true);
+    });
+
+    it("should reset data to initalData of all childs providers", async () => {
+      expect.assertions(6);
+      const provider2 = provider.query({ foo: "foo" });
+      const provider3 = provider2.query({ foo2: "foo2" });
+      results.returnData = "foo2";
+      await provider.read();
+      await provider2.read();
+      await provider3.read();
+      expect(provider.state.data).toEqual("foo2");
+      expect(provider2.state.data).toEqual("foo2");
+      expect(provider3.state.data).toEqual("foo2");
+      provider.cleanState();
+      expect(provider.state.data).toEqual("foo");
+      expect(provider2.state.data).toEqual("foo");
+      expect(provider3.state.data).toEqual("foo");
+    });
+  });
+
+  describe("when initialData is a callback", () => {
+    it("should return initialData result based in current query value", () => {
+      expect.assertions(2);
+      provider = new TestProvider("foo-id-2", {
+        initialData: query => query
+      });
+      expect(provider.state.data).toEqual({});
+      expect(provider.query({ foo: "foo" }).state.data).toEqual({ foo: "foo" });
+    });
+
+    it("should return null in state when function returns undefined", () => {
+      expect.assertions(2);
+      provider = new TestProvider("foo-id-2", {
+        initialData: () => {}
+      });
+      expect(provider.state.data).toEqual(null);
+      expect(provider.query({ foo: "foo" }).state.data).toEqual(null);
+    });
+  });
+
+  describe("when initialData is not provided", () => {
+    it("should return null in data state", () => {
+      provider = new TestProvider("foo-id-2");
+      expect(provider.state.data).toEqual(null);
+    });
+  });
+});

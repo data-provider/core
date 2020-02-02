@@ -76,6 +76,7 @@ export default function reducer(state = {}, action = {}) {
         state,
         {
           state: {
+            ...state[action.id].state,
             data: action.initialData,
             error: null
           }

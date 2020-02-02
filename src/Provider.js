@@ -60,9 +60,9 @@ class Provider {
     eventEmitter.emit(this._eventNamespace(childEventName(ANY_EVENT)), eventName, data);
   }
 
-  _dispatch(action, data) {
+  _dispatch(action) {
     const prevState = this.store;
-    storeManager.store.dispatch(action, data);
+    storeManager.store.dispatch(action);
     this.emit(action.baseType, prevState, this.store);
   }
 
@@ -112,7 +112,7 @@ class Provider {
   }
 
   cleanState() {
-    this._dispatch(cleanState(this._id), this._getInitialData());
+    this._dispatch(cleanState(this._id, this._getInitialData()));
     this._children.forEach(child => child.cleanState());
   }
 
@@ -170,6 +170,10 @@ class Provider {
 
   get id() {
     return this._id;
+  }
+
+  get queryValue() {
+    return this._query;
   }
 
   get queries() {

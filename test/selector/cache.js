@@ -17,7 +17,7 @@ describe("Selector cache", () => {
   let sandbox;
   let spies;
   let TestProvider;
-  let testProvider;
+  let provider;
   let selector;
 
   beforeEach(() => {
@@ -43,8 +43,8 @@ describe("Selector cache", () => {
       }
     };
 
-    testProvider = new TestProvider();
-    selector = new Selector(testProvider, testResult => {
+    provider = new TestProvider();
+    selector = new Selector(provider, testResult => {
       spies.selectorRead();
       return testResult;
     });
@@ -182,7 +182,7 @@ describe("Selector cache", () => {
     beforeEach(() => {
       providers.clear();
       selector = new Selector(
-        query => testProvider.query(query),
+        query => provider.query(query),
         testResult => {
           spies.selectorRead();
           return testResult;
@@ -222,7 +222,7 @@ describe("Selector cache", () => {
       selector.query({ foo: "foo" }).read();
       await selector.query({ foo: "foo" }).read();
       expect(spies.selectorRead.callCount).toEqual(1);
-      testProvider.query({ foo: "foo" }).cleanCache();
+      provider.query({ foo: "foo" }).cleanCache();
       selector.query({ foo: "foo" }).read();
       await selector.query({ foo: "foo" }).read();
       expect(spies.selectorRead.callCount).toEqual(2);
@@ -234,11 +234,30 @@ describe("Selector cache", () => {
       await selector.query({ foo: "foo" }).read();
       expect(spies.selectorRead.callCount).toEqual(1);
       expect(spies.dependencyRead.callCount).toEqual(1);
-      testProvider.cleanCache();
+      provider.cleanCache();
       selector.query({ foo: "foo" }).read();
       await selector.query({ foo: "foo" }).read();
       expect(spies.selectorRead.callCount).toEqual(2);
       expect(spies.dependencyRead.callCount).toEqual(2);
+    });
+  });
+
+  describe("when selector method throws an error", () => {
+    beforeEach(() => {
+      providers.clear();
+      selector = new Selector(provider, () => {
+        spies.selectorRead();
+        throw new Error();
+      });
+    });
+
+    it("should clean cache", async () => {
+      selector.read().catch(() => {});
+      selector.read().catch(() => {});
+      selector.read().catch(() => {});
+      await selector.read().catch(() => {});
+      await selector.read().catch(() => {});
+      expect(spies.selectorRead.callCount).toEqual(2);
     });
   });
 });
