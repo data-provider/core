@@ -9,7 +9,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 */
 
-import { getAutomaticId, isFunction, isArray, once, isPromise, ensureArray } from "./helpers";
+import { isFunction, isArray, once, isPromise, ensureArray } from "./helpers";
 import Provider from "./Provider";
 
 const isDataProvider = objectToCheck => {
@@ -121,17 +121,15 @@ class SelectorInterface extends Selector {
     const lastIndex = args.length - 1;
     let selectorIndex = lastIndex;
     let options = {};
-    let id;
 
     if (!isFunction(args[lastIndex])) {
       selectorIndex = args.length - 2;
       options = args[lastIndex];
     }
-    id = options.id || getAutomaticId();
 
     options._dependencies = args.slice(0, selectorIndex);
     options._selector = args[selectorIndex];
-    super(id, options);
+    super(options.id, options);
   }
 
   queryMethod(id, options, query) {

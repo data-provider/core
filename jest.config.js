@@ -29,5 +29,6 @@ module.exports = {
   // testMatch: ["**/test/unit/Config.spec.js"],
 
   // The test environment that will be used for testing
-  testEnvironment: "node"
+  testEnvironment: "node",
+  setupFiles: ["<rootDir>/jest.init.js"]
 };

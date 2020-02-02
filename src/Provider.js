@@ -19,7 +19,8 @@ import {
   isUndefined,
   merge,
   ANY_EVENT,
-  childEventName
+  childEventName,
+  getAutomaticId
 } from "./helpers";
 import { providers } from "./providers";
 import { init, cleanCache, cleanState, readStart, readSuccess, readError } from "./reducer";
@@ -28,10 +29,10 @@ import eventEmitter from "./eventEmitter";
 class Provider {
   constructor(id, options, query) {
     this._emitChild = this._emitChild.bind(this);
-    this._id = id;
+    this._id = id || getAutomaticId();
     this._options = { ...options };
     this._query = { ...query };
-    this._tags = removeFalsy(ensureArray(options.tags));
+    this._tags = removeFalsy(ensureArray(this._options.tags));
     this._children = new Map();
     this._customQueries = new Map();
     this._queries = new Map();
