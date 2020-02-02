@@ -38,63 +38,7 @@ test.describe("Provider error", () => {
     instances.clear();
   });
 
-  test.describe("using getter", () => {
-    test.it("should return null until read is dispatched", () => {
-      test.expect(testProvider.read.getters.error()).to.be.null();
-    });
-
-    test.it("should return error when read finish", () => {
-      return testProvider.read().then(
-        () => {
-          return test.assert.fail();
-        },
-        () => {
-          return test.expect(testProvider.read.getters.error()).to.equal(fooError);
-        }
-      );
-    });
-
-    test.it("should return null when read cleanState is called", () => {
-      return testProvider.read().then(
-        () => {
-          return test.assert.fail();
-        },
-        () => {
-          testProvider.read.cleanState();
-          return test.expect(testProvider.read.getters.error()).to.be.null();
-        }
-      );
-    });
-
-    test.it("should return null when cleanState is called", () => {
-      return testProvider.read().then(
-        () => {
-          return test.assert.fail();
-        },
-        () => {
-          testProvider.cleanState();
-          return test.expect(testProvider.read.getters.error()).to.be.null();
-        }
-      );
-    });
-  });
-
   test.describe("without query", () => {
-    test.it("should return null until read is dispatched", () => {
-      test.expect(testProvider.read.error).to.be.null();
-    });
-
-    test.it("should return error when read finish", () => {
-      return testProvider.read().then(
-        () => {
-          return test.assert.fail();
-        },
-        () => {
-          return test.expect(testProvider.read.error).to.equal(fooError);
-        }
-      );
-    });
-
     test.it("should reject the promise with the error when read finish", () => {
       return testProvider.read().then(
         () => {
@@ -105,55 +49,12 @@ test.describe("Provider error", () => {
         }
       );
     });
-
-    test.it("should return null when read cleanAllState is called", () => {
-      return testProvider.read().then(
-        () => {
-          return test.assert.fail();
-        },
-        () => {
-          testProvider.read.cleanState();
-          return test.expect(testProvider.read.error).to.be.null();
-        }
-      );
-    });
-
-    test.it("should return null when cleanAllState is called", () => {
-      return testProvider.read().then(
-        () => {
-          return test.assert.fail();
-        },
-        () => {
-          testProvider.cleanState();
-          return test.expect(testProvider.read.error).to.be.null();
-        }
-      );
-    });
   });
 
   test.describe("with query", () => {
-    const QUERY = "foo";
-    test.it("should return null until read is dispatched", () => {
-      test.expect(testProvider.query(QUERY).read.error).to.be.null();
-    });
-
-    test.it("should return error when read finish", () => {
-      return testProvider
-        .query(QUERY)
-        .read()
-        .then(
-          () => {
-            return test.assert.fail();
-          },
-          () => {
-            return test.expect(testProvider.query(QUERY).read.error).to.equal(fooError);
-          }
-        );
-    });
-
     test.it("should reject the promise with the error when read finish", () => {
       return testProvider
-        .query(QUERY)
+        .query({})
         .read()
         .then(
           () => {
@@ -161,51 +62,6 @@ test.describe("Provider error", () => {
           },
           err => {
             return test.expect(err).to.equal(fooError);
-          }
-        );
-    });
-
-    test.it("should return null when read cleanState is called with query", () => {
-      return testProvider
-        .query(QUERY)
-        .read()
-        .then(
-          () => {
-            return test.assert.fail();
-          },
-          () => {
-            testProvider.query(QUERY).read.cleanState();
-            return test.expect(testProvider.query(QUERY).read.error).to.be.null();
-          }
-        );
-    });
-
-    test.it("should return null when cleanState is called with query", () => {
-      return testProvider
-        .query(QUERY)
-        .read()
-        .then(
-          () => {
-            return test.assert.fail();
-          },
-          () => {
-            testProvider.query(QUERY).cleanState();
-            return test.expect(testProvider.query(QUERY).read.error).to.be.null();
-          }
-        );
-    });
-
-    test.it("should return null when cleanState is called", () => {
-      return testProvider
-        .query(QUERY)
-        .read()
-        .then(
-          () => {
-            return test.assert.fail();
-          },
-          () => {
-            testProvider.cleanState();
-            return test.expect(testProvider.query(QUERY).read.error).to.be.null();
           }
         );
     });
