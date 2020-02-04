@@ -139,7 +139,7 @@ describe("Provider state", () => {
   });
 
   describe("when resetState is called", () => {
-    it("should reset data to initalData", async () => {
+    it("should reset data to initialData", async () => {
       expect.assertions(2);
       results.returnData = "foo2";
       await provider.read();
@@ -166,7 +166,7 @@ describe("Provider state", () => {
       expect(provider.state.loading).toEqual(true);
     });
 
-    it("should reset data to initalData of all childs providers", async () => {
+    it("should reset data to initialData of all childs providers", async () => {
       expect.assertions(6);
       const provider2 = provider.query({ foo: "foo" });
       const provider3 = provider2.query({ foo2: "foo2" });

@@ -13,6 +13,7 @@ import { storeNamespace } from "./storeNamespace";
 const INIT = "init";
 const CLEAN_CACHE = "cleanCache";
 const RESET_STATE = "resetState";
+const RESET_STATS = "resetStats";
 const READ_START = "readStart";
 const READ_SUCCESS = "readSuccess";
 const READ_ERROR = "readError";
@@ -23,16 +24,27 @@ const merge = (state, actionIdState, action) => {
     ...state,
     [action.id]: {
       ...state[action.id],
-      ...actionIdState,
       stats: {
         ...state[action.id].stats,
         actions: {
           ...state[action.id].stats.actions,
           [action.baseType]: state[action.id].stats.actions[action.baseType] + 1
         }
-      }
+      },
+      ...actionIdState
     }
   };
+};
+
+const INITIAL_STATS = {
+  actions: {
+    [INIT]: 1,
+    [CLEAN_CACHE]: 0,
+    [RESET_STATE]: 0,
+    [READ_START]: 0,
+    [READ_SUCCESS]: 0,
+    [READ_ERROR]: 0
+  }
 };
 
 export default function reducer(state = {}, action = {}) {
@@ -52,15 +64,7 @@ export default function reducer(state = {}, action = {}) {
             data: action.initialData
           },
           cache: false,
-          stats: {
-            actions: {
-              [INIT]: 1,
-              [CLEAN_CACHE]: 0,
-              [READ_START]: 0,
-              [READ_SUCCESS]: 0,
-              [READ_ERROR]: 0
-            }
-          }
+          stats: INITIAL_STATS
         }
       };
     case CLEAN_CACHE:
@@ -80,6 +84,14 @@ export default function reducer(state = {}, action = {}) {
             data: action.initialData,
             error: null
           }
+        },
+        action
+      );
+    case storeNamespace.add(RESET_STATS):
+      return merge(
+        state,
+        {
+          stats: INITIAL_STATS
         },
         action
       );
@@ -139,6 +151,10 @@ export function cleanCache(id) {
 
 export function resetState(id, initialData) {
   return { baseType: RESET_STATE, type: storeNamespace.add(RESET_STATE), id, initialData };
+}
+
+export function resetStats(id) {
+  return { baseType: RESET_STATS, type: storeNamespace.add(RESET_STATS), id };
 }
 
 export function readStart(id) {

@@ -23,7 +23,15 @@ import {
   isPromise
 } from "./helpers";
 import { providers } from "./providers";
-import { init, cleanCache, resetState, readStart, readSuccess, readError } from "./reducer";
+import {
+  init,
+  cleanCache,
+  resetState,
+  resetStats,
+  readStart,
+  readSuccess,
+  readError
+} from "./reducer";
 import eventEmitter from "./eventEmitter";
 
 class Provider {
@@ -109,6 +117,11 @@ class Provider {
   resetState() {
     this._dispatch(resetState(this._id, this._getInitialData()));
     this._children.forEach(child => child.resetState());
+  }
+
+  resetStats() {
+    this._dispatch(resetStats(this._id));
+    this._children.forEach(child => child.resetStats());
   }
 
   read() {

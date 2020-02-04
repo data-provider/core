@@ -12,7 +12,7 @@ const sinon = require("sinon");
 
 const { Provider, providers } = require("../../src/index");
 
-describe.only("Provider query", () => {
+describe("Provider query", () => {
   let sandbox;
   let provider;
 
