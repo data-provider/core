@@ -12,7 +12,7 @@ import { storeNamespace } from "./storeNamespace";
 
 const INIT = "init";
 const CLEAN_CACHE = "cleanCache";
-const CLEAN_STATE = "cleanState";
+const RESET_STATE = "resetState";
 const READ_START = "readStart";
 const READ_SUCCESS = "readSuccess";
 const READ_ERROR = "readError";
@@ -71,7 +71,7 @@ export default function reducer(state = {}, action = {}) {
         },
         action
       );
-    case storeNamespace.add(CLEAN_STATE):
+    case storeNamespace.add(RESET_STATE):
       return merge(
         state,
         {
@@ -137,8 +137,8 @@ export function cleanCache(id) {
   return { baseType: CLEAN_CACHE, type: storeNamespace.add(CLEAN_CACHE), id };
 }
 
-export function cleanState(id, initialData) {
-  return { baseType: CLEAN_STATE, type: storeNamespace.add(CLEAN_STATE), id, initialData };
+export function resetState(id, initialData) {
+  return { baseType: RESET_STATE, type: storeNamespace.add(RESET_STATE), id, initialData };
 }
 
 export function readStart(id) {

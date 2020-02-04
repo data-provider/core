@@ -138,13 +138,13 @@ describe("Provider state", () => {
     });
   });
 
-  describe("when cleanState is called", () => {
+  describe("when resetState is called", () => {
     it("should reset data to initalData", async () => {
       expect.assertions(2);
       results.returnData = "foo2";
       await provider.read();
       expect(provider.state.data).toEqual("foo2");
-      provider.cleanState();
+      provider.resetState();
       expect(provider.state.data).toEqual("foo");
     });
 
@@ -154,7 +154,7 @@ describe("Provider state", () => {
       results.throwError = error;
       await provider.read().catch(() => {});
       expect(provider.state.error).toBe(error);
-      provider.cleanState();
+      provider.resetState();
       expect(provider.state.error).toEqual(null);
     });
 
@@ -162,7 +162,7 @@ describe("Provider state", () => {
       results.returnData = "foo2";
       provider.read();
       provider.read();
-      provider.cleanState();
+      provider.resetState();
       expect(provider.state.loading).toEqual(true);
     });
 
@@ -177,7 +177,7 @@ describe("Provider state", () => {
       expect(provider.state.data).toEqual("foo2");
       expect(provider2.state.data).toEqual("foo2");
       expect(provider3.state.data).toEqual("foo2");
-      provider.cleanState();
+      provider.resetState();
       expect(provider.state.data).toEqual("foo");
       expect(provider2.state.data).toEqual("foo");
       expect(provider3.state.data).toEqual("foo");
