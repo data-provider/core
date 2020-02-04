@@ -29,11 +29,10 @@ export class EventEmitter {
   }
 
   once(eventName, fn) {
-    const self = this;
-
-    const onceFn = function(...args) {
-      self.removeListener(eventName, onceFn);
-      fn.apply(self, args);
+    const onceFn = () => {
+      const args = Array.from(arguments);
+      this.removeListener(eventName, onceFn);
+      fn.apply(this, args);
     };
     this.on(eventName, onceFn);
     return this.removeListener(onceFn);
@@ -47,10 +46,6 @@ export class EventEmitter {
 
   removeListener(eventName, fn) {
     this._getEventListByName(eventName).delete(fn);
-  }
-
-  get eventNames() {
-    return Object.keys(this.events);
   }
 }
 
