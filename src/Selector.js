@@ -132,7 +132,7 @@ class SelectorInterface extends Selector {
     super(options.id, options);
   }
 
-  queryMethod(id, options, query) {
+  createChild(id, options, query) {
     return new Selector(id, options, query);
   }
 }

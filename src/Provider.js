@@ -34,8 +34,8 @@ class Provider {
     this._query = { ...query };
     this._tags = removeFalsy(ensureArray(this._options.tags));
     this._children = new Map();
-    this._customQueries = new Map();
-    this._queries = new Map();
+    this._queryMethods = new Map();
+    this._queryMethodsParsers = new Map();
 
     providers._add(this); // initial configuration is made by providers handler
 
@@ -92,12 +92,12 @@ class Provider {
     return eventEmitter.once(this._eventNamespace(childEventName(eventName)), fn);
   }
 
-  setQuery(key, queryFunc) {
+  addQueryMethod(key, queryFunc) {
     const returnQuery = query => {
       return this.query(queryFunc(query));
     };
-    this._customQueries.set(key, queryFunc);
-    this._queries.set(key, returnQuery);
+    this._queryMethodsParsers.set(key, queryFunc);
+    this._queryMethods.set(key, returnQuery);
   }
 
   cleanCache() {
@@ -152,12 +152,13 @@ class Provider {
     if (this._children.has(id)) {
       return this._children.get(id);
     }
-    const child = this.queryMethod(id, this._options, newQuery);
-    this._customQueries.forEach((customQuery, customQueryKey) =>
-      child.setQuery(customQueryKey, customQuery)
+    const child = this.createChild(id, this._options, newQuery);
+    this._queryMethodsParsers.forEach((queryMethodParser, queryMethodKey) =>
+      child.addQueryMethod(queryMethodKey, queryMethodParser)
     );
     child.on(ANY_EVENT, this._emitChild);
     this._children.set(id, child);
+    child._parent = this;
     return child;
   }
 
@@ -181,13 +182,25 @@ class Provider {
     return this._query;
   }
 
-  get queries() {
-    return Object.fromEntries(this._queries);
+  get callQuery() {
+    return Object.fromEntries(this._queryMethods);
+  }
+
+  get queryMethods() {
+    return Object.fromEntries(this._queryMethodsParsers);
+  }
+
+  get children() {
+    return Array.from(this._children.values());
+  }
+
+  get parent() {
+    return this._parent;
   }
 
   // Methods to be overwritten
 
-  queryMethod(id, options, query) {
+  createChild(id, options, query) {
     return new this.constructor(id, options, query);
   }
 
