@@ -67,7 +67,7 @@ export default function reducer(state = {}, action = {}) {
           stats: INITIAL_STATS
         }
       };
-    case CLEAN_CACHE:
+    case storeNamespace.add(CLEAN_CACHE):
       return merge(
         state,
         {
