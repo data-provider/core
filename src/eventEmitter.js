@@ -25,7 +25,7 @@ export class EventEmitter {
 
   on(eventName, fn) {
     this._getEventListByName(eventName).add(fn);
-    return this.removeListener(fn);
+    return this._createRemoveListener(eventName, fn);
   }
 
   once(eventName, fn) {
@@ -35,13 +35,19 @@ export class EventEmitter {
       fn.apply(this, args);
     };
     this.on(eventName, onceFn);
-    return this.removeListener(onceFn);
+    return this._createRemoveListener(eventName, onceFn);
   }
 
   emit(eventName, ...args) {
     this._getEventListByName(eventName).forEach(fn => {
       fn.apply(this, args);
     });
+  }
+
+  _createRemoveListener(eventName, fn) {
+    return () => {
+      this.removeListener(eventName, fn);
+    };
   }
 
   removeListener(eventName, fn) {
