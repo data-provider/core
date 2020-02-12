@@ -18,14 +18,19 @@ describe("Provider events", () => {
   let TestProvider;
   let provider;
   let childProvider;
+  let hasToThrow;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
     TestProvider = class extends Provider {
       readMethod(data) {
-        return new Promise(resolve => {
+        return new Promise((resolve, reject) => {
           setTimeout(() => {
-            resolve(data);
+            if (!hasToThrow) {
+              resolve(data);
+            } else {
+              reject(hasToThrow);
+            }
           }, 100);
         });
       }
@@ -145,7 +150,7 @@ describe("Provider events", () => {
       expect(spy.getCall(0).args[0]).toEqual("readStart");
     });
 
-    it("should pass previous store to child listener as first argument when child listener is added with wildcard", async () => {
+    it("should pass previous store to child listener as second argument when child listener is added with wildcard", async () => {
       const spy = sandbox.spy();
       const prevStore = childProvider.store;
       provider.onChild("*", spy);
@@ -173,6 +178,164 @@ describe("Provider events", () => {
       const spy = sandbox.spy();
       provider.onChild("readStart", spy);
       await childProvider.read();
+      expect(spy.callCount).toEqual(1);
+    });
+  });
+
+  describe("readSuccess event", () => {
+    it("should emit a readSuccess event when provider finish read method", async () => {
+      const spy = sandbox.spy();
+      provider.on("readSuccess", spy);
+      await provider.read();
+      expect(spy.callCount).toEqual(1);
+    });
+
+    it("should emit a readSuccess event when listener is added with wildcard", async () => {
+      const spy = sandbox.spy();
+      provider.on("*", spy);
+      await provider.read();
+      expect(spy.getCall(1).args[0]).toEqual("readSuccess");
+    });
+
+    it("should emit a child readStart event when child finish read method", async () => {
+      const spy = sandbox.spy();
+      provider.onChild("readSuccess", spy);
+      await childProvider.read();
+      expect(spy.callCount).toEqual(1);
+    });
+  });
+
+  describe("readError event", () => {
+    beforeEach(() => {
+      hasToThrow = new Error();
+    });
+
+    it("should emit a readError event when provider throws in read method", async () => {
+      const spy = sandbox.spy();
+      provider.on("readError", spy);
+      try {
+        await provider.read();
+      } catch (err) {}
+      expect(spy.callCount).toEqual(1);
+    });
+
+    it("should emit a readError event when listener is added with wildcard", async () => {
+      const spy = sandbox.spy();
+      provider.on("*", spy);
+      try {
+        await provider.read();
+      } catch (err) {}
+      expect(spy.getCall(1).args[0]).toEqual("readError");
+    });
+
+    it("should emit a child readError event when child finish read method", async () => {
+      const spy = sandbox.spy();
+      provider.onChild("readError", spy);
+      try {
+        await childProvider.read();
+      } catch (err) {}
+      expect(spy.callCount).toEqual(1);
+    });
+  });
+
+  describe("cleanCache event", () => {
+    beforeEach(() => {
+      hasToThrow = new Error();
+    });
+
+    it("should emit a cleanCache event when provider cache is clean", async () => {
+      const spy = sandbox.spy();
+      provider.on("cleanCache", spy);
+      provider.cleanCache();
+      expect(spy.callCount).toEqual(1);
+    });
+
+    it("should emit a cleanCache event when listener is added with wildcard", async () => {
+      const spy = sandbox.spy();
+      provider.on("*", spy);
+      provider.cleanCache();
+      expect(spy.getCall(0).args[0]).toEqual("cleanCache");
+    });
+
+    it("should emit a child cleanCache event when child cache is clean", async () => {
+      const spy = sandbox.spy();
+      provider.onChild("cleanCache", spy);
+      childProvider.cleanCache();
+      expect(spy.callCount).toEqual(1);
+    });
+
+    it("should emit a child cleanCache event when parent cache is clean", async () => {
+      const spy = sandbox.spy();
+      provider.onChild("cleanCache", spy);
+      provider.cleanCache();
+      expect(spy.callCount).toEqual(1);
+    });
+  });
+
+  describe("resetState event", () => {
+    beforeEach(() => {
+      hasToThrow = new Error();
+    });
+
+    it("should emit a resetState event when provider resetState is called", async () => {
+      const spy = sandbox.spy();
+      provider.on("resetState", spy);
+      provider.resetState();
+      expect(spy.callCount).toEqual(1);
+    });
+
+    it("should emit a resetState event when listener is added with wildcard", async () => {
+      const spy = sandbox.spy();
+      provider.on("*", spy);
+      provider.resetState();
+      expect(spy.getCall(0).args[0]).toEqual("resetState");
+    });
+
+    it("should emit a child resetState event when child resetState is called", async () => {
+      const spy = sandbox.spy();
+      provider.onChild("resetState", spy);
+      childProvider.resetState();
+      expect(spy.callCount).toEqual(1);
+    });
+
+    it("should emit a child resetState event when parent resetState is called", async () => {
+      const spy = sandbox.spy();
+      provider.onChild("resetState", spy);
+      provider.resetState();
+      expect(spy.callCount).toEqual(1);
+    });
+  });
+
+  describe("resetStats event", () => {
+    beforeEach(() => {
+      hasToThrow = new Error();
+    });
+
+    it("should emit a resetStats event when provider resetStats is called", async () => {
+      const spy = sandbox.spy();
+      provider.on("resetStats", spy);
+      provider.resetStats();
+      expect(spy.callCount).toEqual(1);
+    });
+
+    it("should emit a resetStats event when listener is added with wildcard", async () => {
+      const spy = sandbox.spy();
+      provider.on("*", spy);
+      provider.resetStats();
+      expect(spy.getCall(0).args[0]).toEqual("resetStats");
+    });
+
+    it("should emit a child resetStats event when child resetStats is called", async () => {
+      const spy = sandbox.spy();
+      provider.onChild("resetStats", spy);
+      childProvider.resetStats();
+      expect(spy.callCount).toEqual(1);
+    });
+
+    it("should emit a child resetStats event when parent resetStats is called", async () => {
+      const spy = sandbox.spy();
+      provider.onChild("resetStats", spy);
+      provider.resetStats();
       expect(spy.callCount).toEqual(1);
     });
   });

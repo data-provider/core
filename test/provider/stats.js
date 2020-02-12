@@ -108,6 +108,26 @@ describe("Provider stats", () => {
     });
   });
 
+  describe("when cleanCache is called", () => {
+    it("should increase 1 cleanCache action", async () => {
+      provider.cleanCache();
+      expect(provider.stats.actions.cleanCache).toEqual(1);
+    });
+  });
+
+  describe("when cleanCache is called and provider has children", () => {
+    it("should increase 1 cleanCache action in all children", async () => {
+      expect.assertions(4);
+      const child = provider.query({ foo: "foo" });
+      const grandChild = child.query({ var: "var" });
+      expect(grandChild.stats.actions.cleanCache).toEqual(0);
+      expect(child.stats.actions.cleanCache).toEqual(0);
+      provider.cleanCache();
+      expect(grandChild.stats.actions.cleanCache).toEqual(1);
+      expect(child.stats.actions.cleanCache).toEqual(1);
+    });
+  });
+
   describe("when resetStats is called", () => {
     it("should return stats to initial state", async () => {
       expect.assertions(2);
