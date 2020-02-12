@@ -134,25 +134,6 @@ test.describe("Selector cache", () => {
       testSelector = new Selector(testProvider, testProvider2, selectorResult);
     });
 
-    test.it(
-      "should not execute selector function when read method is executed more than once",
-      () => {
-        return testSelector.read().then(dispatchReadAndCheckHasBeenCalledOnce);
-      }
-    );
-
-    test.it(
-      "should not execute selector function when read method is executed more than once in parallel",
-      () => {
-        return Promise.all([
-          testSelector.read(),
-          testSelector.read(),
-          testSelector.read(),
-          testSelector.read()
-        ]).then(dispatchReadAndCheckHasBeenCalledOnce);
-      }
-    );
-
     test.it("should clean cache when one of the providers is cleaned", () => {
       return testSelector.read().then(() => {
         testProvider.clean();

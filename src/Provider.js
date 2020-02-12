@@ -211,6 +211,10 @@ class Provider {
     return this._parent;
   }
 
+  get options() {
+    return this._options;
+  }
+
   // Methods to be overwritten
 
   createChild(id, options, query) {

@@ -9,20 +9,28 @@ http://www.apache.org/licenses/LICENSE-2.0
 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 */
 
-import { isFunction, isArray, once, isPromise, ensureArray } from "./helpers";
+import { isFunction, isArray, once, isPromise, ensureArray, message } from "./helpers";
 import Provider from "./Provider";
 
 const isDataProvider = objectToCheck => {
+  return objectToCheck && objectToCheck instanceof Provider;
+};
+
+const isDataProviderExpression = objectToCheck => {
+  if (!objectToCheck) {
+    return false;
+  }
   return (
-    objectToCheck &&
-    (objectToCheck instanceof Provider ||
-      (objectToCheck.provider && objectToCheck.provider instanceof Provider))
+    isDataProvider(objectToCheck) ||
+    isFunction(objectToCheck) ||
+    isDataProvider(objectToCheck.provider) ||
+    isFunction(objectToCheck.provider)
   );
 };
 
-const areDataProviders = arrayToCheck => {
+const areDataProvidersExpressions = arrayToCheck => {
   return ensureArray(arrayToCheck).reduce((allAreDataProviders, arrayElement) => {
-    if (!allAreDataProviders || !isDataProvider(arrayElement)) {
+    if (!allAreDataProviders || !isDataProviderExpression(arrayElement)) {
       return false;
     }
     return true;
@@ -55,6 +63,13 @@ class Selector extends Provider {
         if (isFunction(provider)) {
           provider = provider(this._query, dependenciesResults);
         }
+        if (!isDataProvider(provider)) {
+          throw new Error(
+            message(
+              "Only data providers can be used as dependencies in Selectors. If you are returning a function, ensure it also returns a valid data provider"
+            )
+          );
+        }
         hasToQuery = !!dependencyToRead.query;
         hasToCatch = !!dependencyToRead.catch;
         dependency = hasToQuery
@@ -67,7 +82,7 @@ class Selector extends Provider {
       return dependency.read().catch(error => {
         if (hasToCatch) {
           const catchResult = dependencyToRead.catch(error, this._query, dependenciesResults);
-          if (areDataProviders(catchResult)) {
+          if (areDataProvidersExpressions(catchResult)) {
             return readDependency(catchResult);
           }
           return catchResult;
@@ -95,7 +110,7 @@ class Selector extends Provider {
 
     return readDependencies()
       .then(result => {
-        if (areDataProviders(result)) {
+        if (areDataProvidersExpressions(result)) {
           return readDependency(result);
         }
         return Promise.resolve(result);
