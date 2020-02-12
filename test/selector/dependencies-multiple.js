@@ -222,5 +222,28 @@ describe("Selector with multiple dependencies", () => {
       expect(spies.dependency16Read.callCount).toEqual(1);
       expect(spies.selectorRead.callCount).toEqual(1);
     });
+
+    it("should execute selector read methods again when first dependency clean cache", async () => {
+      await selector.read();
+      dependency1.cleanCache();
+      await selector.read();
+      expect(spies.dependency1Read.callCount).toEqual(2);
+      expect(spies.dependency2Read.callCount).toEqual(1);
+      expect(spies.dependency3Read.callCount).toEqual(2);
+      expect(spies.dependency4Read.callCount).toEqual(2);
+      expect(spies.dependency5Read.callCount).toEqual(2);
+      expect(spies.dependency6Read.callCount).toEqual(1);
+      expect(spies.dependency7Read.callCount).toEqual(1);
+      expect(spies.dependency8Read.callCount).toEqual(2);
+      expect(spies.dependency9Read.callCount).toEqual(1);
+      expect(spies.dependency10Read.callCount).toEqual(2);
+      expect(spies.dependency11Read.callCount).toEqual(2); // Retries provider because it throwed error
+      expect(spies.dependency12Read.callCount).toEqual(1);
+      expect(spies.dependency13Read.callCount).toEqual(1);
+      expect(spies.dependency14Read.callCount).toEqual(2);
+      expect(spies.dependency15Read.callCount).toEqual(2); // Retries provider because it throwed error
+      expect(spies.dependency16Read.callCount).toEqual(2);
+      expect(spies.selectorRead.callCount).toEqual(2);
+    });
   });
 });
