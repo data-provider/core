@@ -12,7 +12,7 @@ const sinon = require("sinon");
 
 const { Provider, providers, Selector } = require("../../src/index");
 
-describe("Provider query", () => {
+describe("Selector query", () => {
   let sandbox;
   let provider;
   let selector;
@@ -104,6 +104,20 @@ describe("Provider query", () => {
       selector.addQueryMethod("byId", byIdMethod);
       const queried = selector.query({ var: "var" });
       expect(queried.callQuery.byId("foo").queryValue).toEqual({ var: "var", foo: "foo" });
+    });
+  });
+
+  describe("used in selector function", () => {
+    beforeEach(() => {
+      selector = new Selector(provider, (providerResult, queryValue) => {
+        return queryValue;
+      });
+    });
+
+    it("should be available at the selector function as last argument", async () => {
+      const QUERY = { foo: "foo" };
+      const result = await selector.query(QUERY).read();
+      expect(result).toEqual(QUERY);
     });
   });
 });
