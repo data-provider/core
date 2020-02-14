@@ -9,7 +9,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 */
 
-import { isFunction, isArray, once, isPromise, ensureArray, message } from "./helpers";
+import { isFunction, isArray, isPromise, ensureArray, message } from "./helpers";
 import Provider from "./Provider";
 
 const isDataProvider = objectToCheck => {
@@ -47,9 +47,15 @@ class Selector extends Provider {
   _readAllDependenciesAndSelect() {
     const dependenciesResults = [];
     const dependencies = [];
-    const cleanCache = once(() => {
-      this.cleanCache();
-    });
+    let removeListenersFuncs;
+    let cacheClean;
+    const cleanCache = () => {
+      if (!cacheClean) {
+        cacheClean = true;
+        this.cleanCache();
+        removeListenersFuncs.forEach(removeListener => removeListener());
+      }
+    };
 
     const readDependency = dependencyToRead => {
       if (isArray(dependencyToRead)) {
@@ -102,9 +108,9 @@ class Selector extends Provider {
       });
     };
 
-    const addCleanQueryListeners = () => {
-      dependencies.forEach(dependency => {
-        dependency.on("cleanCache", cleanCache);
+    const addCleanListeners = () => {
+      removeListenersFuncs = dependencies.map(dependency => {
+        return dependency.once("cleanCache", cleanCache);
       });
     };
 
@@ -116,11 +122,11 @@ class Selector extends Provider {
         return Promise.resolve(result);
       })
       .then(result => {
-        addCleanQueryListeners();
+        addCleanListeners();
         return Promise.resolve(result);
       })
       .catch(error => {
-        addCleanQueryListeners();
+        addCleanListeners();
         return Promise.reject(error);
       });
   }

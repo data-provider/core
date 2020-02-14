@@ -24,22 +24,51 @@ export class ProvidersHandler {
     return this;
   }
 
+  _run(method) {
+    this._providers.forEach(provider => provider[method]());
+    return this;
+  }
+
+  _addListener(method, eventName, fn) {
+    const removeListenersFuncs = this.call.apply(this, [method, eventName, fn]);
+    const removeListeners = () => {
+      removeListenersFuncs.forEach(removeListener => removeListener());
+    };
+    return removeListeners;
+  }
+
   config(options) {
     this._config = { ...this._config, ...options };
     this._providers.forEach(provider => provider.config(this._config));
   }
 
   cleanCache() {
-    this._providers.forEach(provider => provider.cleanCache());
-    return this;
+    return this._run("cleanCache");
   }
 
-  cleanState() {
-    this._providers.forEach(provider => provider.cleanState());
-    return this;
+  resetState() {
+    return this._run("resetState");
   }
 
-  // TODO, add on, onChild, once, onChild methods
+  resetStats() {
+    return this._run("resetStats");
+  }
+
+  on(eventName, fn) {
+    return this._addListener("on", eventName, fn);
+  }
+
+  onChild(eventName, fn) {
+    return this._addListener("onChild", eventName, fn);
+  }
+
+  once(eventName, fn) {
+    return this._addListener("once", eventName, fn);
+  }
+
+  onceChild(eventName, fn) {
+    return this._addListener("onceChild", eventName, fn);
+  }
 
   call() {
     const args = Array.from(arguments);
@@ -131,12 +160,33 @@ export class Providers {
     return this._allProviders.cleanCache();
   }
 
-  cleanState() {
-    return this._allProviders.cleanState();
+  resetState() {
+    return this._allProviders.resetState();
+  }
+
+  resetStats() {
+    return this._allProviders.resetStats();
+  }
+
+  on(eventName, fn) {
+    return this._allProviders.on(eventName, fn);
+  }
+
+  onChild(eventName, fn) {
+    return this._allProviders.onChild(eventName, fn);
+  }
+
+  once(eventName, fn) {
+    return this._allProviders.once(eventName, fn);
+  }
+
+  onceChild(eventName, fn) {
+    return this._allProviders.onceChild(eventName, fn);
   }
 
   call() {
-    return this._allProviders.call.apply(this._allProviders, arguments);
+    const args = Array.from(arguments);
+    return this._allProviders.call.apply(this._allProviders, args);
   }
 
   get size() {
