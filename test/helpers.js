@@ -23,7 +23,8 @@ const {
   ensureArray,
   removeFalsy,
   message,
-  warn
+  warn,
+  fromEntries
 } = require("../src/helpers");
 
 describe("helpers", () => {
@@ -149,6 +150,26 @@ describe("helpers", () => {
     it("should console.warn message", () => {
       warn("foo");
       expect(console.warn.getCall(0).args[0]).toEqual("@data-provider/core: foo");
+    });
+  });
+
+  describe("fromEntries method", () => {
+    let originalFromEntries;
+    beforeEach(() => {
+      originalFromEntries = Object.fromEntries;
+      Object.fromEntries = null;
+    });
+
+    afterEach(() => {
+      Object.fromEntries = originalFromEntries;
+    });
+
+    it("should work even when no Object.fromEntries method is available", () => {
+      const map = new Map();
+      map.set("fooKey", "fooValue");
+      expect(fromEntries(map)).toEqual({
+        fooKey: "fooValue"
+      });
     });
   });
 });

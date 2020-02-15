@@ -20,7 +20,8 @@ import {
   ANY_EVENT,
   childEventName,
   getAutomaticId,
-  isPromise
+  isPromise,
+  fromEntries
 } from "./helpers";
 import { providers } from "./providers";
 import {
@@ -196,11 +197,11 @@ class Provider {
   }
 
   get callQuery() {
-    return Object.fromEntries(this._queryMethods);
+    return fromEntries(this._queryMethods);
   }
 
   get queryMethods() {
-    return Object.fromEntries(this._queryMethodsParsers);
+    return fromEntries(this._queryMethodsParsers);
   }
 
   get children() {

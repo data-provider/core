@@ -130,6 +130,14 @@ class Selector extends Provider {
   readMethod() {
     return this._readAllDependenciesAndSelect();
   }
+
+  get dependencies() {
+    return this._dependencies;
+  }
+
+  get selector() {
+    return this._selector;
+  }
 }
 
 class SelectorInterface extends Selector {
