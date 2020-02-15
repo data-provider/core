@@ -65,13 +65,18 @@ export function warn(text) {
   console.warn(message(text));
 }
 
+// TODO, remove when node 10 is not maintained
+export function fromEntriesPolyfill(map) {
+  return Array.from(map.entries()).reduce((accumulator, [key, value]) => {
+    accumulator[key] = value;
+    return accumulator;
+  }, {});
+}
+
 export function fromEntries(map) {
   // TODO, remove when node 10 is not maintained
   if (Object.fromEntries) {
     return Object.fromEntries(map);
   }
-  return Array.from(map.entries()).reduce((accumulator, [key, value]) => {
-    accumulator[key] = value;
-    return accumulator;
-  }, {});
+  return fromEntriesPolyfill(map);
 }

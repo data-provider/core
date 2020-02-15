@@ -24,7 +24,8 @@ const {
   removeFalsy,
   message,
   warn,
-  fromEntries
+  fromEntries,
+  fromEntriesPolyfill
 } = require("../src/helpers");
 
 describe("helpers", () => {
@@ -153,7 +154,7 @@ describe("helpers", () => {
     });
   });
 
-  describe("fromEntries method", () => {
+  describe("fromEntries method polyfill", () => {
     let originalFromEntries;
     beforeEach(() => {
       originalFromEntries = Object.fromEntries;
@@ -172,4 +173,24 @@ describe("helpers", () => {
       });
     });
   });
+
+  if (!Object.fromEntries) {
+    describe("fromEntries method", () => {
+      beforeEach(() => {
+        Object.fromEntries = fromEntriesPolyfill;
+      });
+
+      afterEach(() => {
+        delete Object.fromEntries;
+      });
+
+      it("should work", () => {
+        const map = new Map();
+        map.set("fooKey", "fooValue");
+        expect(fromEntries(map)).toEqual({
+          fooKey: "fooValue"
+        });
+      });
+    });
+  }
 });
