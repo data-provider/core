@@ -48,13 +48,9 @@ class Selector extends Provider {
     const dependenciesResults = [];
     const dependencies = [];
     let removeListenersFuncs;
-    let cacheClean;
     const cleanCache = () => {
-      if (!cacheClean) {
-        cacheClean = true;
-        this.cleanCache();
-        removeListenersFuncs.forEach(removeListener => removeListener());
-      }
+      removeListenersFuncs.forEach(removeListener => removeListener());
+      this.cleanCache();
     };
 
     const readDependency = dependencyToRead => {

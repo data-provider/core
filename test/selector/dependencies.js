@@ -155,6 +155,17 @@ describe("Selector dependencies", () => {
       await selector.read();
       expect(spies.selectorRead.callCount).toEqual(2);
     });
+
+    it("should clean cache only once when dependency 1 and dependency 2 caches are clean", async () => {
+      sinon.spy(selector, "cleanCache");
+      await selector.read();
+      expect(spies.selectorRead.callCount).toEqual(1);
+      dependency1.cleanCache();
+      dependency2.cleanCache();
+      await selector.read();
+      expect(spies.selectorRead.callCount).toEqual(2);
+      expect(selector.cleanCache.callCount).toEqual(1);
+    });
   });
 
   describe("when defined as data provider instances array", () => {
