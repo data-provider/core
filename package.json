@@ -24,8 +24,12 @@
   "scripts": {
     "build": "rollup --config",
     "test": "jest",
-    "test:ci": "npm run test",
-    "test:coverage": "npm run test:ci",
+    "test:coverage": "npm run test",
+    "test:e2e:install": "cd test-e2e/browser && npm i && cd vanilla-app && npm i",
+    "test:e2e:browser": "cd test-e2e/browser && npm run test:vanilla-app",
+    "test:e2e": "npm run test:e2e:browser",
+    "test:e2e:ci": "npm run test:e2e:install && npm run test:e2e",
+    "test:ci": "npm run build && npm run test:coverage && npm run test:e2e:ci",
     "lint": "eslint src test",
     "lint-staged": "lint-staged",
     "coveralls": "cat ./coverage/lcov.info | coveralls"
