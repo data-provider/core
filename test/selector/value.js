@@ -64,12 +64,14 @@ describe("Selector value", () => {
           return RESULT;
         },
         {
-          initialData: "foo"
+          initialState: {
+            data: "foo"
+          }
         }
       );
     });
 
-    it("should have initialData in initial state", async () => {
+    it("should have initialState in initial state", async () => {
       expect(selector.state.data).toEqual("foo");
     });
   });

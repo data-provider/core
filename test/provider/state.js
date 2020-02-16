@@ -46,7 +46,9 @@ describe("Provider state", () => {
     };
 
     provider = new TestProvider("foo-id", {
-      initialData: "foo"
+      initialState: {
+        data: "foo"
+      }
     });
   });
 
@@ -56,7 +58,7 @@ describe("Provider state", () => {
   });
 
   describe("when read has not been called", () => {
-    it("should return initialData in data property", () => {
+    it("should return initialState in data property", () => {
       expect(provider.state.data).toEqual("foo");
     });
 
@@ -138,7 +140,7 @@ describe("Provider state", () => {
   });
 
   describe("when resetState is called", () => {
-    it("should reset data to initialData", async () => {
+    it("should reset state to initialState", async () => {
       expect.assertions(2);
       results.returnData = "foo2";
       await provider.read();
@@ -147,7 +149,7 @@ describe("Provider state", () => {
       expect(provider.state.data).toEqual("foo");
     });
 
-    it("should reset error state to null", async () => {
+    it("should reset error state to null if no error was defined in initialState", async () => {
       expect.assertions(2);
       const error = new Error("foo error message");
       results.throwError = error;
@@ -157,15 +159,18 @@ describe("Provider state", () => {
       expect(provider.state.error).toEqual(null);
     });
 
-    it("should not change loading property in case it is still loading", async () => {
+    it("should reset loading state to false if no loading was defined in initialState", async () => {
+      expect.assertions(3);
       results.returnData = "foo2";
       provider.read();
-      provider.read();
-      provider.resetState();
       expect(provider.state.loading).toEqual(true);
+      provider.resetState();
+      expect(provider.state.loading).toEqual(false);
+      await provider.read();
+      expect(provider.state.loading).toEqual(false);
     });
 
-    it("should reset data to initialData of all childs providers", async () => {
+    it("should reset data to initialState of all childs providers", async () => {
       expect.assertions(6);
       const provider2 = provider.query({ foo: "foo" });
       const provider3 = provider2.query({ foo2: "foo2" });
@@ -183,11 +188,37 @@ describe("Provider state", () => {
     });
   });
 
-  describe("when initialData is a callback", () => {
-    it("should return initialData result based in current query value", () => {
+  describe("when initialState also defines error and loading properties", () => {
+    const error = new Error();
+    beforeEach(() => {
+      provider = new TestProvider("foo-id-2", {
+        initialState: {
+          data: "foo",
+          error,
+          loading: true
+        }
+      });
+    });
+
+    it("should reset state to initialState", async () => {
+      expect.assertions(6);
+      results.returnData = "foo2";
+      await provider.read();
+      expect(provider.state.error).toEqual(null);
+      expect(provider.state.loading).toEqual(false);
+      expect(provider.state.data).toEqual("foo2");
+      provider.resetState();
+      expect(provider.state.error).toEqual(error);
+      expect(provider.state.loading).toEqual(true);
+      expect(provider.state.data).toEqual("foo");
+    });
+  });
+
+  describe("when initialState is a callback", () => {
+    it("should return initialState result based in current query value", () => {
       expect.assertions(2);
       provider = new TestProvider("foo-id-2", {
-        initialData: query => query
+        initialState: query => ({ data: query })
       });
       expect(provider.state.data).toEqual({});
       expect(provider.query({ foo: "foo" }).state.data).toEqual({ foo: "foo" });
@@ -196,14 +227,14 @@ describe("Provider state", () => {
     it("should return undefined in state when function returns undefined", () => {
       expect.assertions(2);
       provider = new TestProvider("foo-id-2", {
-        initialData: () => {}
+        initialState: () => {}
       });
       expect(provider.state.data).toEqual(undefined);
       expect(provider.query({ foo: "foo" }).state.data).toEqual(undefined);
     });
   });
 
-  describe("when initialData is not provided", () => {
+  describe("when initialState is not provided", () => {
     it("should return undefined in data state", () => {
       provider = new TestProvider("foo-id-2");
       expect(provider.state.data).toEqual(undefined);

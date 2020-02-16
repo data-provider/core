@@ -18,6 +18,11 @@ const READ_START = "readStart";
 const READ_SUCCESS = "readSuccess";
 const READ_ERROR = "readError";
 const MIGRATE_STORE = "migrateStore";
+const DEFAULT_INITAL_STATE = {
+  loading: false,
+  error: null,
+  data: undefined
+};
 
 const merge = (state, actionIdState, action) => {
   return {
@@ -58,11 +63,7 @@ export default function reducer(state = {}, action = {}) {
       return {
         ...state,
         [action.id]: {
-          state: {
-            loading: false,
-            error: null,
-            data: action.initialData
-          },
+          state: { ...DEFAULT_INITAL_STATE, ...action.initialState },
           cache: false,
           stats: INITIAL_STATS
         }
@@ -79,11 +80,7 @@ export default function reducer(state = {}, action = {}) {
       return merge(
         state,
         {
-          state: {
-            ...state[action.id].state,
-            data: action.initialData,
-            error: null
-          }
+          state: { ...DEFAULT_INITAL_STATE, ...action.initialState }
         },
         action
       );
@@ -141,16 +138,16 @@ export function migrate(state, newNamespace) {
   return { baseType: MIGRATE_STORE, type: storeNamespace.add(MIGRATE_STORE), state, newNamespace };
 }
 
-export function init(id, initialData) {
-  return { baseType: INIT, type: storeNamespace.add(INIT), id, initialData };
+export function init(id, initialState) {
+  return { baseType: INIT, type: storeNamespace.add(INIT), id, initialState };
 }
 
 export function cleanCache(id) {
   return { baseType: CLEAN_CACHE, type: storeNamespace.add(CLEAN_CACHE), id };
 }
 
-export function resetState(id, initialData) {
-  return { baseType: RESET_STATE, type: storeNamespace.add(RESET_STATE), id, initialData };
+export function resetState(id, initialState) {
+  return { baseType: RESET_STATE, type: storeNamespace.add(RESET_STATE), id, initialState };
 }
 
 export function resetStats(id) {

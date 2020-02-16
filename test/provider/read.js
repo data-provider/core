@@ -27,7 +27,9 @@ describe("Provider read method", () => {
   describe("when no readMethod is defined", () => {
     it("should resolve data state", async () => {
       const provider = new Provider("foo-id", {
-        initialData: "foo"
+        initialState: {
+          data: "foo"
+        }
       });
       const data = await provider.read();
       expect(data).toEqual("foo");

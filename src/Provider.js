@@ -48,13 +48,13 @@ class Provider {
 
     providers._add(this); // initial configuration is made by providers handler
 
-    this._dispatch(init(this._id, this._getInitialData()));
+    this._dispatch(init(this._id, this._getInitialState()));
   }
 
-  _getInitialData() {
-    return isFunction(this._options.initialData)
-      ? this._options.initialData(this._query)
-      : this._options.initialData;
+  _getInitialState() {
+    return isFunction(this._options.initialState)
+      ? this._options.initialState(this._query)
+      : this._options.initialState;
   }
 
   _eventNamespace(eventName) {
@@ -116,7 +116,7 @@ class Provider {
   }
 
   resetState() {
-    this._dispatch(resetState(this._id, this._getInitialData()));
+    this._dispatch(resetState(this._id, this._getInitialState()));
     this._children.forEach(child => child.resetState());
   }
 

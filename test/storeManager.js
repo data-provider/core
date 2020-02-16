@@ -19,7 +19,9 @@ describe("storeManager", () => {
   beforeEach(() => {
     sandbox = sinon.createSandbox();
     new Provider("foo", {
-      initialData: "foo-data"
+      initialState: {
+        data: "foo-data"
+      }
     });
   });
 
