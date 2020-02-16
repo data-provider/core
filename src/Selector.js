@@ -37,7 +37,7 @@ const areDataProvidersExpressions = arrayToCheck => {
   }, true);
 };
 
-class Selector extends Provider {
+class SelectorBase extends Provider {
   constructor(id, options, query) {
     super(id, options, query);
     this._dependencies = options._dependencies;
@@ -140,7 +140,7 @@ class Selector extends Provider {
   }
 }
 
-class SelectorInterface extends Selector {
+class Selector extends SelectorBase {
   constructor() {
     const args = Array.from(arguments);
     const lastIndex = args.length - 1;
@@ -154,12 +154,12 @@ class SelectorInterface extends Selector {
 
     options._dependencies = args.slice(0, selectorIndex);
     options._selector = args[selectorIndex];
-    super(options.id, options);
+    super(options.id, options, undefined);
   }
 
   createChild(id, options, query) {
-    return new Selector(id, options, query);
+    return new SelectorBase(id, options, query);
   }
 }
 
-export default SelectorInterface;
+export default Selector;

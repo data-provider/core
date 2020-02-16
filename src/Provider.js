@@ -148,10 +148,10 @@ class Provider {
         this._dispatch(readSuccess(this._id, result));
         return Promise.resolve(result);
       })
-      .catch(error => {
-        this._dispatch(readError(this._id, error));
+      .catch(resultError => {
+        this._dispatch(readError(this._id, resultError));
         this._cache = null;
-        return Promise.reject(error);
+        return Promise.reject(resultError);
       });
     this._cache = resultPromise;
     return this._cache;
