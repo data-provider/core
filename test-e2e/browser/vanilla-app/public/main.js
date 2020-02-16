@@ -192,7 +192,7 @@ var authorsOptionsAppender = function($container, authors) {
 
 var authorsAppender = function($container, authors, idSuffix = "") {
   authors.forEach(function(author) {
-    $container.append(`<li id="author-${author.id}${idSuffix}">${author.name}</li>`);
+    $container.append(`<li id="author-${author.id}${idSuffix}"> ${author.name}</li>`);
     $(`<span class="delete">🗑️</span>`)
       .click(function() {
         authorBooks
