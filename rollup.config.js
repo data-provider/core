@@ -17,10 +17,7 @@ const uglifier = require("rollup-plugin-uglify");
 
 const BASE_PLUGINS = [
   resolve({
-    module: true,
-    main: true,
-    browser: true,
-    jsnext: true,
+    mainFields: ["module", "main"],
     preferBuiltins: true
   }),
   commonjs({
@@ -35,12 +32,12 @@ const BASE_PLUGINS = [
 
 const BASE_CONFIG = {
   input: "src/index.js",
-  external: ["lodash", "is-promise"],
+  external: ["redux", "is-promise"],
   plugins: [...BASE_PLUGINS, uglifier.uglify()]
 };
 
 const GLOBALS = {
-  lodash: "lodash",
+  redux: "Redux",
   "is-promise": "isPromise"
 };
 
