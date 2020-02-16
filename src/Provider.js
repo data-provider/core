@@ -18,6 +18,8 @@ import {
   isFunction,
   isUndefined,
   ANY_EVENT,
+  CHANGE_STATE_EVENTS,
+  CHANGE_STATE_EVENT,
   childEventName,
   getAutomaticId,
   isPromise,
@@ -70,12 +72,15 @@ class Provider {
   _dispatch(action) {
     const prevState = this.store;
     storeManager.store.dispatch(action);
-    this.emit(action.baseType, prevState, this.store);
+    this.emit(action.baseType, prevState);
   }
 
   // Public methods
 
   emit(eventName, data) {
+    if (CHANGE_STATE_EVENTS.includes(eventName)) {
+      eventEmitter.emit(this._eventNamespace(CHANGE_STATE_EVENT), data);
+    }
     eventEmitter.emit(this._eventNamespace(eventName), data);
     eventEmitter.emit(this._eventNamespace(ANY_EVENT), eventName, data);
   }

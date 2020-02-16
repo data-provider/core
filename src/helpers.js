@@ -15,7 +15,18 @@ let automaticIdCounter = 0;
 
 const CHILD_EVENT_PREFIX = "child-";
 
+export const INIT = "init";
+export const CLEAN_CACHE = "cleanCache";
+export const RESET_STATE = "resetState";
+export const RESET_STATS = "resetStats";
+export const READ_START = "readStart";
+export const READ_SUCCESS = "readSuccess";
+export const READ_ERROR = "readError";
+export const MIGRATE_STORE = "migrateStore";
 export const ANY_EVENT = "*";
+
+export const CHANGE_STATE_EVENT = "changeState";
+export const CHANGE_STATE_EVENTS = [INIT, RESET_STATE, READ_START, READ_SUCCESS, READ_ERROR];
 
 export const childEventName = eventName =>
   `${CHILD_EVENT_PREFIX}${eventName.replace(CHILD_EVENT_PREFIX, "")}`;

@@ -12,7 +12,6 @@ const { default: reducer } = require("../src/reducer");
 
 describe("reducer", () => {
   it("should return state when called without action", async () => {
-    console.log(reducer);
     expect(reducer()).toEqual({});
   });
 });

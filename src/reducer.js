@@ -9,15 +9,17 @@ Unless required by applicable law or agreed to in writing, software distributed 
 */
 
 import { storeNamespace } from "./storeNamespace";
+import {
+  INIT,
+  CLEAN_CACHE,
+  RESET_STATE,
+  RESET_STATS,
+  READ_START,
+  READ_SUCCESS,
+  READ_ERROR,
+  MIGRATE_STORE
+} from "./helpers";
 
-const INIT = "init";
-const CLEAN_CACHE = "cleanCache";
-const RESET_STATE = "resetState";
-const RESET_STATS = "resetStats";
-const READ_START = "readStart";
-const READ_SUCCESS = "readSuccess";
-const READ_ERROR = "readError";
-const MIGRATE_STORE = "migrateStore";
 const DEFAULT_INITAL_STATE = {
   loading: false,
   error: null,
@@ -147,7 +149,12 @@ export function cleanCache(id) {
 }
 
 export function resetState(id, initialState) {
-  return { baseType: RESET_STATE, type: storeNamespace.add(RESET_STATE), id, initialState };
+  return {
+    baseType: RESET_STATE,
+    type: storeNamespace.add(RESET_STATE),
+    id,
+    initialState
+  };
 }
 
 export function resetStats(id) {
@@ -159,7 +166,12 @@ export function readStart(id) {
 }
 
 export function readSuccess(id, data) {
-  return { baseType: READ_SUCCESS, type: storeNamespace.add(READ_SUCCESS), id, data };
+  return {
+    baseType: READ_SUCCESS,
+    type: storeNamespace.add(READ_SUCCESS),
+    id,
+    data
+  };
 }
 
 export function readError(id, error) {
