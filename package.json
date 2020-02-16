@@ -37,8 +37,8 @@
     "is-promise": "2.1.0"
   },
   "devDependencies": {
-    "@babel/core": "7.8.3",
-    "@babel/preset-env": "7.8.3",
+    "@babel/core": "7.8.4",
+    "@babel/preset-env": "7.8.4",
     "@babel/register": "7.8.3",
     "babel-core": "7.0.0-bridge.0",
     "babel-polyfill": "6.26.0",
@@ -48,10 +48,10 @@
     "eslint-plugin-prettier": "3.1.2",
     "husky": "4.2.1",
     "jest": "25.1.0",
-    "lint-staged": "10.0.3",
+    "lint-staged": "10.0.7",
     "prettier": "1.19.1",
     "redux": "4.0.5",
-    "rollup": "1.30.1",
+    "rollup": "1.31.0",
     "rollup-plugin-babel": "4.3.3",
     "rollup-plugin-commonjs": "10.1.0",
     "rollup-plugin-json": "4.0.0",
