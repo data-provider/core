@@ -113,20 +113,30 @@ describe("Selector dependencies errors", () => {
     });
 
     it("should emit a cleanCache event when dependency cache is clean", async () => {
-      expect.assertions(1);
+      expect.assertions(2);
       hasToThrow = FOO_ERROR;
       let eventReceived;
       const promiseResolver = new Promise(resolve => {
         eventReceived = resolve;
       });
-      selector.on("cleanCache", async () => {
-        await selector.read();
-        expect(selectorSpy.callCount).toEqual(1);
-        eventReceived();
+      selector.once("cleanCache", () => {
+        setTimeout(() => {
+          // Removing event listeners (in a Set) does not block the execution.
+          // Probably read starts before selector dependency once clean is removed;
+          // This "issue" is assumed as Selector read does not returns value until no more cleanCache events are received
+          // It is better than "blocking" the execution, which could have performance impact
+          // selector has to be executed again when cache is clean, because maybe it could return another dependency
+          selector.read().then(result => {
+            expect(result).toEqual(DEPENDENCY_1_RESULT);
+            expect(selectorSpy.callCount).toEqual(1);
+            eventReceived();
+          });
+        }, 50);
       });
       await selector.read().catch(() => {});
       hasToThrow = null;
       dependency1.cleanCache();
+
       await promiseResolver;
     });
   });

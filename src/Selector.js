@@ -45,11 +45,23 @@ class SelectorBase extends Provider {
   }
 
   _readAllDependenciesAndSelect() {
-    const dependenciesResults = [];
-    const dependencies = [];
-    let removeListenersFuncs;
+    let dependenciesResults;
+    let dependencies;
+    let dependenciesListeners;
+    let hasToReadAgain = false;
+    const inProgressDependencies = new Set();
+    const inProgressListeners = [];
+
+    const markToReadAgain = () => {
+      hasToReadAgain = true;
+    };
+
+    const removeInProgressListenerFuncs = () => {
+      inProgressListeners.forEach(removeListener => removeListener());
+    };
+
     const cleanCache = () => {
-      removeListenersFuncs.forEach(removeListener => removeListener());
+      dependenciesListeners.forEach(removeListener => removeListener());
       this.cleanCache();
     };
 
@@ -81,6 +93,11 @@ class SelectorBase extends Provider {
         dependency = dependencyToRead;
       }
       dependencies.push(dependency);
+      if (!inProgressDependencies.has(dependency)) {
+        inProgressDependencies.add(dependency);
+        inProgressListeners.push(dependency.on("cleanCache", markToReadAgain));
+      }
+
       return dependency.read().catch(error => {
         if (hasToCatch) {
           const catchResult = dependencyToRead.catch(error, this._query, dependenciesResults);
@@ -94,6 +111,10 @@ class SelectorBase extends Provider {
     };
 
     const readDependencies = (dependencyIndex = 0) => {
+      if (dependencyIndex === 0) {
+        dependenciesResults = [];
+        dependencies = [];
+      }
       return readDependency(this._dependencies[dependencyIndex]).then(dependencyResult => {
         dependenciesResults.push(dependencyResult);
         if (dependencyIndex < this._dependencies.length - 1) {
@@ -105,26 +126,39 @@ class SelectorBase extends Provider {
     };
 
     const addCleanListeners = () => {
-      removeListenersFuncs = dependencies.map(dependency => {
+      dependenciesListeners = dependencies.map(dependency => {
         return dependency.once("cleanCache", cleanCache);
       });
     };
 
-    return readDependencies()
-      .then(result => {
-        if (areDataProvidersExpressions(result)) {
-          return readDependency(result);
-        }
-        return Promise.resolve(result);
-      })
-      .then(result => {
-        addCleanListeners();
-        return Promise.resolve(result);
-      })
-      .catch(error => {
-        addCleanListeners();
-        return Promise.reject(error);
-      });
+    const readAndReturn = () => {
+      return readDependencies()
+        .then(result => {
+          if (areDataProvidersExpressions(result)) {
+            return readDependency(result);
+          }
+          return Promise.resolve(result);
+        })
+        .then(result => {
+          if (hasToReadAgain) {
+            hasToReadAgain = false;
+            return readAndReturn();
+          }
+          removeInProgressListenerFuncs();
+          addCleanListeners();
+          return Promise.resolve(result);
+        })
+        .catch(error => {
+          if (hasToReadAgain) {
+            hasToReadAgain = false;
+            return readAndReturn();
+          }
+          removeInProgressListenerFuncs();
+          addCleanListeners();
+          return Promise.reject(error);
+        });
+    };
+    return readAndReturn();
   }
 
   readMethod() {
