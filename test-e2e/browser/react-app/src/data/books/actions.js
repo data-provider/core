@@ -25,3 +25,11 @@ export const deleteAuthorAndBooks = authorId => {
       }
     });
 };
+
+export const createBook = ({ title, author }) => {
+  console.log(title, author);
+  return booksProvider.create({
+    title,
+    author: Number(author)
+  });
+};

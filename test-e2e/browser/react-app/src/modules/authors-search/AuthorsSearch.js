@@ -1,15 +1,24 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useMemo } from "react";
 
 import SectionContainer from "components/section-container";
 import ItemsTitle from "components/items-title";
+import { debounce } from "helpers/debounce";
 
 import AuthorsSearchResults from "./modules/authors-search-results";
 
 const AuthorsSearch = () => {
   const [search, changeSearch] = useState("");
-  const handleChange = useCallback(e => {
-    changeSearch(e.target.value);
-  });
+  const [currentSearch, changeCurrentSearch] = useState("");
+  const triggerChangeCurrentSearch = useMemo(() => {
+    return debounce(changeCurrentSearch, 50);
+  }, []);
+  const handleChange = useCallback(
+    e => {
+      changeSearch(e.target.value);
+      triggerChangeCurrentSearch(e.target.value);
+    },
+    [triggerChangeCurrentSearch]
+  );
 
   return (
     <SectionContainer id="authors-search">
@@ -21,7 +30,7 @@ const AuthorsSearch = () => {
         placeholder="Type to search"
         onChange={handleChange}
       />
-      <AuthorsSearchResults search={search} />
+      <AuthorsSearchResults search={currentSearch} />
     </SectionContainer>
   );
 };

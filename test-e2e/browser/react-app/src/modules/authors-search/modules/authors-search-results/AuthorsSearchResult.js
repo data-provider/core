@@ -1,42 +1,35 @@
-import React from "react";
+import React, { useMemo, memo } from "react";
 import Proptypes from "prop-types";
 
 import { authorsSearch } from "data/authors";
-import { deleteAuthorAndBooks } from "data/books";
 
+import AuthorsList from "modules/authors-list";
 import ItemsListContainer from "components/items-list-container";
-import DeleteIcon from "components/delete-icon";
-import Author from "components/author";
+import Loading from "components/loading";
+import NoResults from "components/no-results";
 import { useRefresh, useData, useLoading } from "helpers/data-provider";
 
-const BooksSearchResults = ({ search }) => {
-  console.log(search);
-  useRefresh(authorsSearch.query({ search }), [search]);
-  const authors = useData(authorsSearch.query({ search }));
-  const loading = useLoading(authorsSearch.query({ search }));
+const AuthorsSearchResults = ({ search }) => {
+  const provider = useMemo(() => {
+    return authorsSearch.query({ search });
+  }, [search]);
+  useRefresh(provider);
+  const authors = useData(provider);
+  const loading = useLoading(provider);
 
   console.log("Rendering authors search results", loading, authors);
-
+  const hasNotResults = !loading && authors.length < 1 && search.length > 1;
   return (
     <ItemsListContainer id="authors-search-container">
-      {authors.map(author => {
-        const deleteIcon = (
-          <DeleteIcon
-            onClick={() => {
-              deleteAuthorAndBooks(author.id);
-            }}
-          />
-        );
-        return (
-          <Author id={author.id} name={author.name} key={author.id} deleteIcon={deleteIcon} />
-        );
-      })}
+      {loading && <Loading />}
+      {hasNotResults && <NoResults />}
+      <AuthorsList authors={authors} />
     </ItemsListContainer>
   );
 };
 
-BooksSearchResults.propTypes = {
+AuthorsSearchResults.propTypes = {
   search: Proptypes.string
 };
 
-export default BooksSearchResults;
+export default memo(AuthorsSearchResults);

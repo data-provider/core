@@ -68,6 +68,7 @@ describe("Demo page", () => {
     it("should display new authors matching search", () => {
       authors.add(NEW_AUTHOR_2);
       authors.search.shouldBeLoading();
+      cy.wait(1000);
       authors.search.shouldDisplayItems(3);
     });
 
@@ -119,6 +120,7 @@ describe("Demo page", () => {
     it("should display new books matching search", () => {
       books.add(NEW_BOOK_2, NEW_AUTHOR);
       books.search.shouldBeLoading();
+      cy.wait(1000);
       books.search.shouldDisplayItems(3);
     });
 

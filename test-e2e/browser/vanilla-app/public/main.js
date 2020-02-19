@@ -76,7 +76,7 @@ class MockProvider extends dataProvider.Provider {
     var that = this;
     return new Promise(function(resolve) {
       setTimeout(function() {
-        resolve(that.options.data);
+        resolve([...that.options.data]);
       }, 1000);
     });
   }

@@ -1,1 +1,1 @@
-export default from "./AuthorNew";
+export { default } from "./AuthorNew";
