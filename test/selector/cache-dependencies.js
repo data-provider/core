@@ -149,6 +149,66 @@ describe("Selector dependencies cache", () => {
     return promise;
   });
 
+  it("should stop reading dependencies and start again when one cleans cache", async () => {
+    expect.assertions(2);
+    sandbox.spy(dependency1, "read");
+    sandbox.spy(dependency2, "read");
+    let dependency3HasToThrow = true;
+    timeouts = {
+      dependency1: 200,
+      dependency2: 200
+    };
+    const TestProvider2 = class extends Provider {
+      readMethod() {
+        return new Promise((resolve, reject) => {
+          setTimeout(() => {
+            if (dependency3HasToThrow) {
+              reject(new Error());
+            } else {
+              resolve();
+            }
+          }, 1000);
+        });
+      }
+    };
+    const dependency3 = new TestProvider2("dependency-3");
+    selector = new Selector(
+      {
+        provider: dependency3,
+        catch: () => {
+          return [dependency1, dependency2];
+        }
+      },
+      results => {
+        spies.selectorRead();
+        return results;
+      }
+    );
+    const promise = selector.read().then(() => {
+      expect(dependency1.read.callCount).toEqual(1);
+      expect(dependency2.read.callCount).toEqual(1);
+    });
+    setTimeout(() => {
+      dependency3.cleanCache();
+    }, 300);
+    return promise;
+  });
+
+  it("should stop reading dependencies and start again when one cleans cache", async () => {
+    sandbox.spy(dependency2, "read");
+    timeouts = {
+      dependency1: 1000,
+      dependency2: 200
+    };
+    let promise = selector.read().then(() => {
+      expect(dependency2.read.callCount).toEqual(1);
+    });
+    setTimeout(() => {
+      dependency1.cleanCache();
+    }, 200);
+    return promise;
+  });
+
   it("should return last data returned by all dependencies, even when a dependency cache is clean while reading and dependencies are parallel", async () => {
     expect.assertions(3);
     let resolveTest;

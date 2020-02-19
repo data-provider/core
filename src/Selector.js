@@ -66,6 +66,9 @@ class SelectorBase extends Provider {
     };
 
     const readDependency = dependencyToRead => {
+      if (hasToReadAgain) {
+        return Promise.resolve();
+      }
       if (isArray(dependencyToRead)) {
         return Promise.all(dependencyToRead.map(readDependency));
       }
@@ -111,6 +114,9 @@ class SelectorBase extends Provider {
     };
 
     const readDependencies = (dependencyIndex = 0) => {
+      if (hasToReadAgain) {
+        return Promise.resolve();
+      }
       if (dependencyIndex === 0) {
         dependenciesResults = [];
         dependencies = [];

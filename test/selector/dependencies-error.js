@@ -24,8 +24,10 @@ describe("Selector dependencies errors", () => {
   let dependency2;
   let selector;
   let hasToThrow;
+  let dependency1Timeout;
 
   beforeEach(() => {
+    dependency1Timeout = 50;
     sandbox = sinon.createSandbox();
     hasToThrow = null;
 
@@ -38,7 +40,7 @@ describe("Selector dependencies errors", () => {
             } else {
               reject(new Error());
             }
-          }, 50);
+          }, dependency1Timeout);
         });
       }
     };
@@ -71,7 +73,8 @@ describe("Selector dependencies errors", () => {
     beforeEach(() => {
       selectorSpy = sandbox.spy();
       sandbox.spy(dependency1, "read");
-      selector = new Selector(dependency1, dependencyResult => {
+      sandbox.spy(dependency2, "read");
+      selector = new Selector(dependency1, dependency2, dependencyResult => {
         selectorSpy();
         return dependencyResult;
       });
@@ -84,6 +87,16 @@ describe("Selector dependencies errors", () => {
         await selector.read();
       } catch (error) {
         expect(error).toEqual(FOO_ERROR);
+      }
+    });
+
+    it("should stop reading dependencies on first fail", async () => {
+      expect.assertions(1);
+      hasToThrow = FOO_ERROR;
+      try {
+        await selector.read();
+      } catch (error) {
+        expect(dependency2.read.callCount).toEqual(0);
       }
     });
 
@@ -114,24 +127,18 @@ describe("Selector dependencies errors", () => {
 
     it("should emit a cleanCache event when dependency cache is clean", async () => {
       expect.assertions(2);
+      dependency1Timeout = 2000;
       hasToThrow = FOO_ERROR;
       let eventReceived;
       const promiseResolver = new Promise(resolve => {
         eventReceived = resolve;
       });
       selector.once("cleanCache", () => {
-        setTimeout(() => {
-          // Removing event listeners (in a Set) does not block the execution.
-          // Probably read starts before selector dependency once clean is removed;
-          // This "issue" is assumed as Selector read does not returns value until no more cleanCache events are received
-          // It is better than "blocking" the execution, which could have performance impact
-          // selector has to be executed again when cache is clean, because maybe it could return another dependency
-          selector.read().then(result => {
-            expect(result).toEqual(DEPENDENCY_1_RESULT);
-            expect(selectorSpy.callCount).toEqual(1);
-            eventReceived();
-          });
-        }, 50);
+        selector.read().then(result => {
+          expect(result).toEqual(DEPENDENCY_1_RESULT);
+          expect(selectorSpy.callCount).toEqual(1);
+          eventReceived();
+        });
       });
       await selector.read().catch(() => {});
       hasToThrow = null;
