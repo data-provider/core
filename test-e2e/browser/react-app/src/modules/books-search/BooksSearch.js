@@ -12,10 +12,13 @@ const BooksSearch = () => {
   const triggerChangeCurrentSearch = useMemo(() => {
     return debounce(changeCurrentSearch, 50);
   }, []);
-  const handleChange = useCallback(e => {
-    changeSearch(e.target.value);
-    triggerChangeCurrentSearch(e.target.value);
-  }, []);
+  const handleChange = useCallback(
+    e => {
+      changeSearch(e.target.value);
+      triggerChangeCurrentSearch(e.target.value);
+    },
+    [triggerChangeCurrentSearch]
+  );
 
   return (
     <SectionContainer id="books-search">
