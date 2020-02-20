@@ -1,6 +1,4 @@
-import { Provider } from "@data-provider/core";
-
-import { debounce } from "helpers/debounce";
+const { Provider } = require("../../../../../dist/core.cjs");
 
 class MockProvider extends Provider {
   readMethod() {
@@ -8,22 +6,8 @@ class MockProvider extends Provider {
     return new Promise(function(resolve) {
       setTimeout(function() {
         resolve([...that.options.data]);
-      }, 1000);
+      }, 100);
     });
-  }
-
-  _cleanCache() {
-    this.cleanCache();
-  }
-
-  _debouncedCleanCache() {}
-
-  configMethod(options) {
-    if (options.cleanCacheDebounceTime > 0) {
-      this._debouncedCleanCache = debounce(this._cleanCache, options.cleanCacheDebounceTime);
-    } else {
-      this._debouncedCleanCache = this._cleanCache;
-    }
   }
 
   _getLastIndex() {
@@ -37,7 +21,7 @@ class MockProvider extends Provider {
     this.options.data = this.options.data.filter(function(item) {
       return item.id !== id;
     });
-    this._debouncedCleanCache();
+    this.cleanCache();
   }
 
   create(item) {
@@ -45,8 +29,8 @@ class MockProvider extends Provider {
       id: this._getLastIndex(),
       ...item
     });
-    this._debouncedCleanCache();
+    this.cleanCache();
   }
 }
 
-export default MockProvider;
+module.exports = MockProvider;

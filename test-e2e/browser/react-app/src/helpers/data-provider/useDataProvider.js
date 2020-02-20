@@ -1,34 +1,34 @@
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 
-export const useRefresh = (dataProvider, observe) => {
+export const useRefresh = dataProvider => {
   useEffect(() => {
     dataProvider.read();
     return dataProvider.on("cleanCache", () => {
       dataProvider.read();
     });
-  }, [dataProvider, observe]);
+  }, [dataProvider]);
 };
 
-export const useData = dataProvider => {
-  return useSelector(() => dataProvider.state.data);
+export const useData = (dataProvider, comparator) => {
+  return useSelector(() => dataProvider.state.data, comparator);
 };
 
-export const useLoading = dataProvider => {
-  return useSelector(() => dataProvider.state.loading);
+export const useLoading = (dataProvider, comparator) => {
+  return useSelector(() => dataProvider.state.loading, comparator);
 };
 
-export const useError = dataProvider => {
-  return useSelector(() => dataProvider.state.error);
+export const useError = (dataProvider, comparator) => {
+  return useSelector(() => dataProvider.state.error, comparator);
 };
 
-export const useDataProvider = (dataProvider, observe) => {
-  useRefresh(dataProvider, observe);
-  return {
-    data: useData(dataProvider),
-    loading: useLoading(dataProvider),
-    error: useError(dataProvider)
-  };
+export const useDataProvider = (dataProvider, comparator) => {
+  useRefresh(dataProvider);
+  return [
+    useData(dataProvider, comparator),
+    useLoading(dataProvider, comparator),
+    useError(dataProvider, comparator)
+  ];
 };
 
 /*
