@@ -30,7 +30,7 @@
     "test:e2e": "npm run test:e2e:browser",
     "test:e2e:ci": "npm run test:e2e:install && npm run test:e2e",
     "test:ci": "npm run build && npm run test:coverage && npm run test:e2e:ci",
-    "lint": "eslint src test",
+    "lint": "eslint src test test-e2e/browser/vanilla-app/public/main.js test-e2e/browser/react-app/src",
     "lint-staged": "lint-staged",
     "coveralls": "cat ./coverage/lcov.info | coveralls"
   },
@@ -44,13 +44,18 @@
     "@babel/core": "7.8.4",
     "@babel/preset-env": "7.8.4",
     "@babel/register": "7.8.3",
+    "@rollup/plugin-commonjs": "11.0.2",
+    "@rollup/plugin-json": "4.0.2",
+    "@rollup/plugin-node-resolve": "7.1.1",
     "babel-core": "7.0.0-bridge.0",
+    "babel-eslint": "10.0.3",
     "babel-polyfill": "6.26.0",
     "coveralls": "3.0.9",
     "eslint": "6.8.0",
     "eslint-config-prettier": "6.10.0",
     "eslint-plugin-prettier": "3.1.2",
     "eslint-plugin-react": "7.17.0",
+    "eslint-plugin-react-hooks": "2.4.0",
     "husky": "4.2.1",
     "jest": "25.1.0",
     "lint-staged": "10.0.7",
@@ -58,15 +63,14 @@
     "redux": "4.0.5",
     "rollup": "1.31.0",
     "rollup-plugin-babel": "4.3.3",
-    "rollup-plugin-commonjs": "10.1.0",
-    "rollup-plugin-json": "4.0.0",
-    "rollup-plugin-node-resolve": "5.2.0",
     "rollup-plugin-uglify": "6.0.4",
     "sinon": "8.1.1"
   },
   "lint-staged": {
     "src/**/*.js": "eslint",
-    "test/**/*.js": "eslint"
+    "test/**/*.js": "eslint",
+    "test-e2e/browser/vanilla-app/public/main.js": "eslint",
+    "test-e2e/browser/react-app/src/**/*.js": "eslint"
   },
   "husky": {
     "hooks": {

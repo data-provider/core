@@ -1,2 +1,1 @@
-export { default } from "./AuthorSelect";
-
+export { default } from "./AuthorSelect";
