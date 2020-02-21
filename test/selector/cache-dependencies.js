@@ -91,8 +91,8 @@ describe("Selector dependencies cache", () => {
       dependency2: ["foo3"]
     };
     expect.assertions(1);
-    const promise = selector.read().then(results => {
-      expect(results).toEqual(["foo2", "foo3"]);
+    const promise = selector.read().then(result => {
+      expect(result).toEqual(["foo2", "foo3"]);
     });
     setTimeout(() => {
       dependency1.cleanCache();
@@ -179,9 +179,9 @@ describe("Selector dependencies cache", () => {
           return [dependency1, dependency2];
         }
       },
-      results => {
+      result => {
         spies.selectorRead();
-        return results;
+        return result;
       }
     );
     const promise = selector.read().then(() => {
@@ -229,12 +229,12 @@ describe("Selector dependencies cache", () => {
     const result = await selector.read();
     expect(result).toEqual(["foo", "foo3"]);
     selector.on("cleanCache", () => {
-      selector.read().then(results => {
-        expect(results).toEqual(["foo2", "foo4"]);
+      selector.read().then(result => {
+        expect(result).toEqual(["foo2", "foo4"]);
       });
       setTimeout(() => {
-        selector.read().then(results => {
-          expect(results).toEqual(["foo2", "foo4"]);
+        selector.read().then(result => {
+          expect(result).toEqual(["foo2", "foo4"]);
           resolveTest();
         });
       }, 200);
