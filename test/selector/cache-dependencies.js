@@ -229,12 +229,12 @@ describe("Selector dependencies cache", () => {
     const result = await selector.read();
     expect(result).toEqual(["foo", "foo3"]);
     selector.on("cleanCache", () => {
-      selector.read().then(result => {
-        expect(result).toEqual(["foo2", "foo4"]);
+      selector.read().then(selectorResult => {
+        expect(selectorResult).toEqual(["foo2", "foo4"]);
       });
       setTimeout(() => {
-        selector.read().then(result => {
-          expect(result).toEqual(["foo2", "foo4"]);
+        selector.read().then(selectorResult => {
+          expect(selectorResult).toEqual(["foo2", "foo4"]);
           resolveTest();
         });
       }, 200);

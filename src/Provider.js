@@ -201,7 +201,7 @@ class Provider {
     return this._query;
   }
 
-  get callQuery() {
+  get queries() {
     return fromEntries(this._queryMethods);
   }
 

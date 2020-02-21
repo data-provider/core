@@ -94,14 +94,14 @@ describe("Provider query", () => {
     it("should apply the value returned by queryMethod as query", () => {
       const byIdMethod = foo => ({ foo });
       provider.addQueryMethod("byId", byIdMethod);
-      expect(provider.callQuery.byId("foo").queryValue).toEqual({ foo: "foo" });
+      expect(provider.queries.byId("foo").queryValue).toEqual({ foo: "foo" });
     });
 
     it("should apply also the current query", () => {
       const byIdMethod = foo => ({ foo });
       provider.addQueryMethod("byId", byIdMethod);
       const queried = provider.query({ var: "var" });
-      expect(queried.callQuery.byId("foo").queryValue).toEqual({ var: "var", foo: "foo" });
+      expect(queried.queries.byId("foo").queryValue).toEqual({ var: "var", foo: "foo" });
     });
   });
 });
