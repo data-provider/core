@@ -96,10 +96,7 @@ class MockProvider extends dataProvider.Provider {
   }
 
   create(item) {
-    this.options.data.push({
-      id: this._getLastIndex(),
-      ...item
-    });
+    this.options.data.push(Object.assign({ id: this._getLastIndex() }, item));
     this.cleanCache();
   }
 }
