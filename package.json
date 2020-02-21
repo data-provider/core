@@ -25,13 +25,14 @@
     "build": "rollup --config",
     "test": "jest",
     "test:coverage": "npm run test",
-    "test:e2e:install": "cd test-e2e/browser && npm i && cd vanilla-app && npm i && cd ../react-app && npm i",
-    "test:e2e:node": "cd test-e2e/nodejs/cjs && node index.js",
+    "test:e2e:browser:install": "cd test-e2e/browser && npm i && cd vanilla-app && npm i && cd ../react-app && npm i",
     "test:e2e:browser": "cd test-e2e/browser && npm run test:vanilla-app && npm run test:react-app",
+    "test:e2e:node:install": "cd test-e2e/nodejs/esm && npm i",
+    "test:e2e:node": "cd test-e2e/nodejs/cjs && npm run test && cd ../esm && npm run test",
     "test:e2e": "npm run test:e2e:browser && npm run test:e2e:node",
-    "test:e2e:ci": "npm run test:e2e:install && npm run test:e2e",
+    "test:e2e:ci": "npm run test:e2e:browser:install && npm run test:e2e:node:install && npm run test:e2e",
     "test:ci": "npm run build && npm run test:coverage && npm run test:e2e:ci",
-    "lint": "eslint src test test-e2e/browser/vanilla-app/public/main.js test-e2e/browser/react-app/src test-e2e/nodejs/cjs",
+    "lint": "eslint src test test-e2e/browser/vanilla-app/public/main.js test-e2e/browser/react-app/src test-e2e/nodejs/cjs test-e2e/nodejs/esm/src",
     "lint-staged": "lint-staged",
     "coveralls": "cat ./coverage/lcov.info | coveralls"
   },
@@ -72,7 +73,8 @@
     "test/**/*.js": "eslint",
     "test-e2e/browser/vanilla-app/public/main.js": "eslint",
     "test-e2e/browser/react-app/src/**/*.js": "eslint",
-    "test-e2e/nodejs/cjs/**/*.js": "eslint"
+    "test-e2e/nodejs/cjs/**/*.js": "eslint",
+    "test-e2e/nodejs/esm/src/**/*.js": "eslint"
   },
   "husky": {
     "hooks": {

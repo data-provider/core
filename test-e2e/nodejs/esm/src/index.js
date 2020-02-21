@@ -1,11 +1,11 @@
-const { authorsSearch, authorsProvider, createAuthor } = require("./data/authors");
-const {
+import { authorsSearch, authorsProvider, createAuthor } from "./data/authors";
+import {
   booksWithAuthorName,
   booksSearch,
   deleteAuthorAndBooks,
   deleteBook,
   createBook
-} = require("./data/books");
+} from "./data/books";
 
 const wait = (time = 1000) => {
   return new Promise(resolve => {
