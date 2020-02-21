@@ -12,7 +12,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [2.0.0-beta.1] - 2020-02-22
 
-> This major release still maintains the concept of the previous "data-provider" versions, but a lot of changes in the interfaces has been made to improve the usage experience, apart of performance boost and fixes. A chapter "how to migrate from 1.x" will be added to the documentation website.
+> DISCLAIMER: This major release still maintains the concept of the previous "data-provider" versions, but a lot of BREAKING CHANGES has been made to the interfaces in order to improve the usage experience, apart of performance boost and fixes. A chapter "how to migrate from 1.x" will be added to the documentation website to facilitate the migration to this new version, as the maintenance of 1.X versions will be stopped soon.
 
 ### Added
 - feat(state): Use Redux internally for handling state. Added storeManager to allow to migrate the internal store to any other shared store.
