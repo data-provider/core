@@ -9,16 +9,43 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 ### Fixed
 ### Removed
-### BREAKING CHANGES
 
-## [TO BE DEPRECATED]
-- Last argument of Selectors will stop being assigned as "defaultValue". To define default value, it will be mandatory to pass an options object as last argument, containing a "defaultValue" property.
-- "Origin" constructor. "Provider" has to be used instead.
-- "source" property in selectors. "provider" has to be used instead.
-- "source" property emitted in events. "provider" has to be used instead.
-- "sources" handler. "instances" has to be used instead.
+## [2.0.0-beta.1] - 2020-02-22
 
-## [2.0.0] - 2020-02-
+> This major release still maintains the concept of the previous "data-provider" versions, but a lot of changes in the interfaces has been made to improve the usage experience, apart of performance boost and fixes. A chapter "how to migrate from 1.x" will be added to the documentation website.
+
+### Added
+- feat(state): Use Redux internally for handling state. Added storeManager to allow to migrate the internal store to any other shared store.
+- feat(storeManager): Expose storeManager, which allows to manage the redux store. 
+- feat(Selector): Selector dependencies can be defined as functions.
+- feat(Selector): Improved Selector logic for dealing with dependencies caches while it is reading. Now it does not resolve in progress promise if a dependency cache is clean while reading. Instead of that, it will start reading dependencies again in order to ensure last available result is being returned.
+- feat(Provider): Add "state", "store" and "stats" getters to allow accessing to state.
+- feat(Provider): Add "children" getter, returning all children "queried" instances.
+- feat(Provider): Add "parent" getter, returning parent instance in children ones.
+- feat(Provider): Add "initialState" option, which allows to determine the initial state.
+- feat(Provider): Add "resetStats" and "resetState" methods.
+- feat(Provider): Add "queryValue", "queries" and "queryMethods" getters.
+- feat(Provider): Add "options" getter.
+- feat(providers): Add "config", "cleanCache", "resetState", "resetStats", "on", "onChild", "once" and "onceChild" methods to providers handler, allowing to manage instances groups at a time.
+- test(e2e): Add e2e tests using all distributions (umd, cjs and esm), in browser and with nodejs.
+
+### Changed
+- feat(providers): [BREAKING CHANGE] Rename "instances" into "providers".
+- feat(Provider): [BREAKING CHANGE] Change "clean" method by "cleanCache".
+- feat(Provider): [BREAKING CHANGE] Change emitted event names.
+- feat(Provider): [BREAKING CHANGE] Change methods names to add listeners. Now there are only available "on", "once", "onChild" and "onceChild". Wilcard "\*" can be used to listen to any event.
+- feat(Provider): [BREAKING CHANGE] Provider Class now accepts "id", "options" and "query" arguments (this last one only for internal and plugins usage). All plugins should follow same pattern from now.
+- feat(Provider): [BREAKING CHANGE] Custom read method now has to be defined as "readMethod" in plugins.
+- feat(Provider): [BREAKING CHANGE] Custom config method now has to be defined as "configMethod" in plugins.
+- feat(Provider): [BREAKING CHANGE] Changed "addCustomQuery" method, now called "addQueryMethod".
+- feat(Provider): [BREAKING CHANGE] Stop exposing custom query methods in root object. Now can be accessed through "queries" getter.
+
+### Removed
+- feat(Provider): [BREAKING CHANGE] Remove support for "create", "update" and "delete" methods. Now have to be added by plugins, if necessary.
+- feat(Provider): [BREAKING CHANGE] Remove defaultValue property. Now "initialState" should be used instead.
+- chore(deps): Remove lodash dependency.
+- feat(Provider): [BREAKING CHANGE] Remove state "getters".
+- feat(Selector): [BREAKING CHANGE] Remove "test" getter. Added "selector" and "dependencies" getters as alternatives.
 
 ## [1.8.0] - 2020-01-18
 ### Added
