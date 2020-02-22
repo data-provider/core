@@ -12,7 +12,7 @@ import BookNew from "./modules/book-new";
 
 const Books = () => {
   useRefresh(booksWithAuthorName);
-  const books = useData(booksWithAuthorName, []);
+  const books = useData(booksWithAuthorName);
   const loading = useLoading(booksWithAuthorName);
 
   console.log("Rendering books", loading, books);

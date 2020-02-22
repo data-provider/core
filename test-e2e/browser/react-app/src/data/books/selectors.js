@@ -36,3 +36,5 @@ export const authorBooks = new Selector(booksProvider, function(booksResults, qu
     return book.author === query.author;
   });
 });
+
+window.booksWithAuthorName = booksWithAuthorName;
