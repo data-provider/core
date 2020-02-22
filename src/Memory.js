@@ -66,8 +66,7 @@ class Memory extends Provider {
   }
 
   create(data) {
-    this.update(data);
-    return Promise.resolve();
+    return this.update(data);
   }
 
   delete() {
