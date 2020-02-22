@@ -10,12 +10,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 ### Removed
 
+## [2.0.0-beta.2] - 2020-02-22
+### Added
+- feat(initial state): Allow plugins to define his own initialState getter, overwritting the original one. 
+
 ## [2.0.0-beta.1] - 2020-02-22
 
-> DISCLAIMER: This major release still maintains the concept of the previous "data-provider" versions, but a lot of BREAKING CHANGES has been made to the interfaces in order to improve the usage experience, apart of performance improvements and fixes. A chapter "how to migrate from 1.x" will be added to the documentation website to facilitate the migration to this new version, as the maintenance of 1.X versions will be stopped soon.
+> DISCLAIMER: This major release still maintains the concept of the previous "data-provider" versions, but a lot of BREAKING CHANGES have been made to the interfaces in order to improve the usage experience, apart of performance improvements and fixes. A chapter "how to migrate from 1.x" will be added to the documentation website to facilitate the migration to this new version, as the maintenance of 1.X versions will be stopped soon.
 
 ### Added
-- feat(state): Use Redux internally for handling state. Added storeManager to allow to migrate the internal store to any other shared store.
+- feat(Provider): Use Redux internally for handling state. Added storeManager to allow to migrate the internal store to any other shared store.
 - feat(storeManager): Expose storeManager, which allows to manage the redux store. 
 - feat(Selector): Selector dependencies can be defined as functions.
 - feat(Selector): Improved Selector logic for dealing with dependencies caches while it is reading. Now it does not resolve in progress promise if a dependency cache is clean while reading. Instead of that, it will start reading dependencies again in order to ensure last available result is being returned.
@@ -30,6 +34,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - test(e2e): Add e2e tests using all distributions (umd, cjs and esm), in browser and with nodejs.
 
 ### Changed
+- feat(Provider): [BREAKING CHANGE] "value" property modified to "data".
+- feat(Provider): [BREAKING CHANGE] Tags option now only can be an array.
 - feat(providers): [BREAKING CHANGE] Rename "instances" into "providers".
 - feat(Provider): [BREAKING CHANGE] Change "clean" method by "cleanCache".
 - feat(Provider): [BREAKING CHANGE] Change emitted event names.

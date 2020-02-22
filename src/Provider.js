@@ -50,13 +50,7 @@ class Provider {
 
     providers._add(this); // initial configuration is made by providers handler
 
-    this._dispatch(init(this._id, this._getInitialState()));
-  }
-
-  _getInitialState() {
-    return isFunction(this._options.initialState)
-      ? this._options.initialState(this._query)
-      : this._options.initialState;
+    this._dispatch(init(this._id, this.initialState));
   }
 
   _eventNamespace(eventName) {
@@ -121,7 +115,7 @@ class Provider {
   }
 
   resetState() {
-    this._dispatch(resetState(this._id, this._getInitialState()));
+    this._dispatch(resetState(this._id, this.initialState));
     this._children.forEach(child => child.resetState());
   }
 
@@ -221,7 +215,17 @@ class Provider {
     return this._options;
   }
 
-  // Methods to be overwritten
+  get initialStateFromOptions() {
+    return isFunction(this._options.initialState)
+      ? this._options.initialState(this._query)
+      : this._options.initialState;
+  }
+
+  // Methods that can be overwritten by plugins
+
+  get initialState() {
+    return this.initialStateFromOptions;
+  }
 
   createChild(id, options, query) {
     return new this.constructor(id, options, query);

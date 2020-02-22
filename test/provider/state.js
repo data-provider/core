@@ -240,4 +240,33 @@ describe("Provider state", () => {
       expect(provider.state.data).toEqual(undefined);
     });
   });
+
+  describe("when custom initialState getter is defined", () => {
+    let TestProvider2;
+    beforeEach(() => {
+      TestProvider2 = class extends TestProvider {
+        get initialState() {
+          if (this.queryValue) {
+            return {
+              ...this.initialStateFromOptions,
+              data: this.initialStateFromOptions.data[this.queryValue.key]
+            };
+          }
+          return this.initialStateFromOptions;
+        }
+      };
+    });
+
+    it("should return undefined in data state", async () => {
+      provider = new TestProvider2("foo-id-2", {
+        initialState: {
+          data: {
+            foo: "foo"
+          }
+        }
+      });
+      const child = provider.query({ key: "foo" });
+      expect(child.state.data).toEqual("foo");
+    });
+  });
 });
