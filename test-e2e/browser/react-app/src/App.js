@@ -8,6 +8,7 @@ import Authors from "modules/authors";
 import Books from "modules/books";
 import AuthorsSearch from "modules/authors-search";
 import BooksSearch from "modules/books-search";
+// import Rerender from "modules/rerenderer";
 
 const store = createStore(
   combineReducers({

@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo } from "react";
+import React, { useState, useCallback, useMemo, memo } from "react";
 
 import SectionContainer from "components/section-container";
 import ItemsTitle from "components/items-title";
@@ -20,6 +20,8 @@ const BooksSearch = () => {
     [triggerChangeCurrentSearch]
   );
 
+  console.log("Rerender books search");
+
   return (
     <SectionContainer id="books-search">
       <ItemsTitle title="Books Search" />
@@ -35,4 +37,4 @@ const BooksSearch = () => {
   );
 };
 
-export default BooksSearch;
+export default memo(BooksSearch);
