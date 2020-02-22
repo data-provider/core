@@ -1,4 +1,5 @@
 /*
+Copyright 2020 Javier Brea
 Copyright 2019 XbyOrange
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
@@ -11,7 +12,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 import { Storage } from "./Storage";
 
 export class SessionStorage extends Storage {
-  constructor(namespace, defaultValue, options) {
-    super(namespace, defaultValue, "sessionStorage", options);
+  constructor(id, options, query) {
+    super(id, { ...options, storageKey: "sessionStorage" }, query);
   }
 }

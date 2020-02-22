@@ -9,7 +9,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 */
 
-const { sources } = require("@data-provider/core");
+const { providers } = require("@data-provider/core");
 const Storage = require("./Storage.mock");
 
 const { SessionStorage } = require("../src/SessionStorage");
@@ -23,28 +23,53 @@ describe("SessionStorage Storage", () => {
 
   afterEach(() => {
     storage.restore();
-    sources.clear();
+    providers.clear();
   });
 
   describe("Available methods", () => {
     it("should have all CRUD methods", () => {
-      const userData = new SessionStorage(
-        "userData",
-        {},
-        {
-          root: storage.mock
-        }
-      );
+      const userData = new SessionStorage("userData", { root: storage.mock });
       expect(userData.create).toBeDefined();
       expect(userData.read).toBeDefined();
       expect(userData.update).toBeDefined();
       expect(userData.delete).toBeDefined();
     });
 
-    it("should get sessionStorage from window if root object is not defined", () => {
+    it("should return a sessionStorage mock from window if root object is not defined", () => {
       expect.assertions(1);
-      const userData = new SessionStorage("userData", {});
+      const userData = new SessionStorage("userData");
       expect(userData._storage.removeItem).toEqual(undefined);
+    });
+  });
+
+  describe("When window is not available and it uses storage mock", () => {
+    let userData;
+    const fooData = {
+      foo: "foo-value"
+    };
+
+    beforeEach(() => {
+      userData = new SessionStorage("userData");
+    });
+
+    it("should clean the cache when finish successfully", async () => {
+      expect.assertions(3);
+      let promise = userData.read();
+      expect(userData.state.loading).toEqual(true);
+      await promise;
+      await userData.update("");
+      promise = userData.read();
+      expect(userData.state.loading).toEqual(true);
+      return promise.then(() => {
+        expect(userData.state.loading).toEqual(false);
+      });
+    });
+
+    it("should set the new value", async () => {
+      expect.assertions(1);
+      await userData.update(fooData);
+      await userData.read();
+      expect(userData.state.data).toEqual(fooData);
     });
   });
 
@@ -52,56 +77,45 @@ describe("SessionStorage Storage", () => {
     let userData;
 
     beforeAll(() => {
-      userData = new SessionStorage(
-        "userData",
-        {},
-        {
-          root: storage.mock
-        }
-      );
+      userData = new SessionStorage("userData", {
+        root: storage.mock
+      });
     });
 
     it("should be true while resource is being loaded, false when finished", () => {
       expect.assertions(2);
       const promise = userData.read();
-      expect(userData.read.loading).toEqual(true);
+      expect(userData.state.loading).toEqual(true);
       return promise.then(() => {
-        expect(userData.read.loading).toEqual(false);
+        expect(userData.state.loading).toEqual(false);
       });
     });
 
     it("should not be loading when request promise is cached", async () => {
       expect.assertions(3);
       await userData.read();
-      expect(userData.read.loading).toEqual(false);
+      expect(userData.state.loading).toEqual(false);
       const secondRead = userData.read();
-      expect(userData.read.loading).toEqual(false);
+      expect(userData.state.loading).toEqual(false);
       return secondRead.then(() => {
-        expect(userData.read.loading).toEqual(false);
+        expect(userData.state.loading).toEqual(false);
       });
     });
 
     it("should be loading again after cleaning cache", async () => {
       expect.assertions(3);
       await userData.read();
-      expect(userData.read.loading).toEqual(false);
-      userData.clean();
+      expect(userData.state.loading).toEqual(false);
+      userData.cleanCache();
       const secondRead = userData.read();
-      expect(userData.read.loading).toEqual(true);
+      expect(userData.state.loading).toEqual(true);
       return secondRead.then(() => {
-        expect(userData.read.loading).toEqual(false);
-      });
-    });
-
-    it("should be accesible through getter", async () => {
-      expect.assertions(1);
-      return userData.read().then(() => {
-        expect(userData.read.getters.loading()).toEqual(false);
+        expect(userData.state.loading).toEqual(false);
       });
     });
   });
 
-  describe("Value property of a method", () => {
+  describe("Data property of a method", () => {
     let userData;
     const fooData = {
       foo: "foo-value"
@@ -109,77 +123,39 @@ describe("SessionStorage Storage", () => {
 
     beforeEach(() => {
       storage.stubs.getItem.returns(JSON.stringify(fooData));
-      userData = new SessionStorage("userData", undefined, {
+      userData = new SessionStorage("userData", {
         root: storage.mock
       });
     });
 
     describe("without query", () => {
-      it("should be undefined while resource is being loaded, and returned value when finished successfully if no default value is defined", () => {
+      it("should be sessionStorage value while resource is being loaded", () => {
         expect.assertions(2);
         const promise = userData.read();
-        expect(userData.read.value).toEqual(undefined);
+        expect(userData.state.data).toEqual(fooData);
         return promise.then(() => {
-          expect(userData.read.value).toEqual(fooData);
+          expect(userData.state.data).toEqual(fooData);
         });
-      });
-
-      it("should be equal to default value while resource is being loaded, and returned value when finished successfully", () => {
-        expect.assertions(2);
-        userData = new SessionStorage("userData", fooData, {
-          root: storage.mock
-        });
-        const promise = userData.read();
-        expect(userData.read.value).toEqual(fooData);
-        return promise.then(() => {
-          expect(userData.read.value).toEqual(fooData);
-        });
-      });
-
-      it("should be accesible through getter", async () => {
-        expect.assertions(1);
-        await userData.read();
-        expect(userData.read.getters.value()).toEqual(fooData);
-      });
-
-      it("should be accesible through getter", async () => {
-        expect.assertions(1);
-        await userData.read();
-        expect(userData.read.getters.value()).toEqual(fooData);
       });
     });
 
     describe("when queried", () => {
       it("should return the property corresponding to applied query", async () => {
-        let queriedData = userData.query("foo");
+        let queriedData = userData.query({ prop: "foo" });
         const result = await queriedData.read();
         expect(result).toEqual("foo-value");
       });
 
-      it("should return default value correspondent to query while resource is being loaded if queriesDefaultValue option is set", () => {
+      it("should return default value correspondent to query while resource is being loaded", () => {
         expect.assertions(2);
-        userData = new SessionStorage("userData", fooData, {
-          root: storage.mock,
-          queriesDefaultValue: true
-        });
-        let queriedData = userData.query("foo");
-        const promise = queriedData.read();
-        expect(queriedData.read.value).toEqual(fooData.foo);
-        return promise.then(() => {
-          expect(queriedData.read.value).toEqual(fooData.foo);
-        });
-      });
-
-      it("should return root default value if queriesDefaultValue option is not set", () => {
-        expect.assertions(2);
-        userData = new SessionStorage("userData", fooData, {
+        userData = new SessionStorage("userData", {
           root: storage.mock
         });
-        let queriedData = userData.query("foo");
+        let queriedData = userData.query({ prop: "foo" });
         const promise = queriedData.read();
-        expect(queriedData.read.value).toEqual(fooData);
+        expect(queriedData.state.data).toEqual(fooData.foo);
         return promise.then(() => {
-          expect(queriedData.read.value).toEqual(fooData.foo);
+          expect(queriedData.state.data).toEqual(fooData.foo);
         });
       });
     });
@@ -193,26 +169,22 @@ describe("SessionStorage Storage", () => {
 
     beforeEach(() => {
       storage.stubs.getItem.returns(JSON.stringify(fooData));
-      userData = new SessionStorage(
-        "userData",
-        {},
-        {
-          root: storage.mock
-        }
-      );
+      userData = new SessionStorage("userData", {
+        root: storage.mock
+      });
     });
 
     describe("without query", () => {
       it("should clean the cache when finish successfully", async () => {
         expect.assertions(3);
         let promise = userData.read();
-        expect(userData.read.loading).toEqual(true);
+        expect(userData.state.loading).toEqual(true);
         await promise;
         await userData.update("");
         promise = userData.read();
-        expect(userData.read.loading).toEqual(true);
+        expect(userData.state.loading).toEqual(true);
         return promise.then(() => {
-          expect(userData.read.loading).toEqual(false);
+          expect(userData.state.loading).toEqual(false);
         });
       });
 
@@ -225,7 +197,7 @@ describe("SessionStorage Storage", () => {
 
     describe("when queried", () => {
       it("should set the property corresponding to applied query", async () => {
-        let queriedData = userData.query("foo");
+        let queriedData = userData.query({ prop: "foo" });
         await queriedData.update("foo-updated-value");
         expect(storage.stubs.setItem.getCall(0).args[1]).toEqual(
           JSON.stringify({
@@ -237,13 +209,13 @@ describe("SessionStorage Storage", () => {
       it("should clean the cache of root when finish successfully", async () => {
         expect.assertions(3);
         let promise = userData.read();
-        expect(userData.read.loading).toEqual(true);
+        expect(userData.state.loading).toEqual(true);
         await promise;
-        await userData.query("foo").update("");
+        await userData.query({ prop: "foo" }).update("");
         promise = userData.read();
-        expect(userData.read.loading).toEqual(true);
+        expect(userData.state.loading).toEqual(true);
         return promise.then(() => {
-          expect(userData.read.loading).toEqual(false);
+          expect(userData.state.loading).toEqual(false);
         });
       });
     });
@@ -257,31 +229,27 @@ describe("SessionStorage Storage", () => {
 
     beforeEach(() => {
       storage.stubs.getItem.returns(JSON.stringify(fooData));
-      userData = new SessionStorage(
-        "userData",
-        {},
-        {
-          root: storage.mock
-        }
-      );
+      userData = new SessionStorage("userData", {
+        root: storage.mock
+      });
     });
 
     it("should clean the cache when finish successfully", async () => {
       expect.assertions(3);
       let promise = userData.read();
-      expect(userData.read.loading).toEqual(true);
+      expect(userData.state.loading).toEqual(true);
       await promise;
       await userData.delete();
       promise = userData.read();
-      expect(userData.read.loading).toEqual(true);
+      expect(userData.state.loading).toEqual(true);
       return promise.then(() => {
-        expect(userData.read.loading).toEqual(false);
+        expect(userData.state.loading).toEqual(false);
       });
     });
 
     describe("when queried", () => {
       it("should delete the property corresponding to applied query", async () => {
-        let queriedData = userData.query("foo");
+        let queriedData = userData.query({ prop: "foo" });
         await queriedData.delete();
         expect(storage.stubs.setItem.getCall(0).args[1]).toEqual(JSON.stringify({}));
       });
@@ -296,30 +264,26 @@ describe("SessionStorage Storage", () => {
 
     beforeEach(() => {
       storage.stubs.getItem.returns(JSON.stringify(fooData));
-      userData = new SessionStorage(
-        "userData",
-        {},
-        {
-          root: storage.mock
-        }
-      );
+      userData = new SessionStorage("userData", {
+        root: storage.mock
+      });
     });
 
     it("should clean the cache when finish successfully", async () => {
       expect.assertions(3);
       let promise = userData.read();
-      expect(userData.read.loading).toEqual(true);
+      expect(userData.state.loading).toEqual(true);
       await promise;
       await userData.create("foo-new");
       promise = userData.read();
-      expect(userData.read.loading).toEqual(true);
+      expect(userData.state.loading).toEqual(true);
       return promise.then(() => {
-        expect(userData.read.loading).toEqual(false);
+        expect(userData.state.loading).toEqual(false);
       });
     });
 
     it("should add the new key", async () => {
-      await userData.query("foo2").create("foo-new");
+      await userData.query({ prop: "foo2" }).create("foo-new");
       expect(storage.stubs.setItem.getCall(0).args[1]).toEqual(
         JSON.stringify({
           foo: "foo-value",
@@ -338,71 +302,55 @@ describe("SessionStorage Storage", () => {
       });
 
       it("should contain the browser-storage tag", () => {
-        expect(sources.getByTag("browser-storage").elements[0]).toEqual(fooData);
+        expect(providers.getByTag("browser-storage").elements[0]).toEqual(fooData);
       });
 
       it("should contain the session-storage tag", () => {
-        expect(sources.getByTag("session-storage").elements[0]).toEqual(fooData);
+        expect(providers.getByTag("session-storage").elements[0]).toEqual(fooData);
       });
     });
 
     describe("when passing tags", () => {
       it("should contain the session-storage tag even when a custom tag is received", () => {
-        fooData = new SessionStorage(
-          "fooData",
-          {},
-          {
-            tags: "foo-tag"
-          }
-        );
-        expect(sources.getByTag("session-storage").elements[0]).toEqual(fooData);
+        fooData = new SessionStorage("fooData", {
+          tags: ["foo-tag"]
+        });
+        expect(providers.getByTag("session-storage").elements[0]).toEqual(fooData);
       });
 
-      it("should contain the session-storage tag even when an array of custom tags is received", () => {
-        fooData = new SessionStorage(
-          "fooData",
-          {},
-          {
-            tags: ["foo-tag", "foo-tag-2"]
-          }
-        );
-        expect(sources.getByTag("session-storage").elements[0]).toEqual(fooData);
+      it("should contain the ocal-storage tag even when an array of custom tags is received", () => {
+        fooData = new SessionStorage("fooData", {
+          tags: ["foo-tag", "foo-tag-2"]
+        });
+        expect(providers.getByTag("session-storage").elements[0]).toEqual(fooData);
       });
 
       it("should contain defined custom tag if received", () => {
         const FOO_TAG = "foo-tag";
-        fooData = new SessionStorage(
-          "fooData",
-          {},
-          {
-            tags: FOO_TAG
-          }
-        );
-        expect(sources.getByTag(FOO_TAG).elements[0]).toEqual(fooData);
+        fooData = new SessionStorage("fooData", {
+          tags: [FOO_TAG]
+        });
+        expect(providers.getByTag(FOO_TAG).elements[0]).toEqual(fooData);
       });
 
       it("should contain defined custom tags if received", () => {
         expect.assertions(2);
         const FOO_TAG = "foo-tag";
         const FOO_TAG_2 = "foo-tag-2";
-        fooData = new SessionStorage(
-          "fooData",
-          {},
-          {
-            tags: [FOO_TAG, FOO_TAG_2]
-          }
-        );
-        expect(sources.getByTag(FOO_TAG).elements[0]).toEqual(fooData);
-        expect(sources.getByTag(FOO_TAG_2).elements[0]).toEqual(fooData);
+        fooData = new SessionStorage("fooData", {
+          tags: [FOO_TAG, FOO_TAG_2]
+        });
+        expect(providers.getByTag(FOO_TAG).elements[0]).toEqual(fooData);
+        expect(providers.getByTag(FOO_TAG_2).elements[0]).toEqual(fooData);
       });
     });
   });
 
   describe("Instance id", () => {
-    it("should be assigned based on first parameter", () => {
+    it("should be assigned based on first argument", () => {
       const FOO_ID = "foo-id";
       const fooData = new SessionStorage(FOO_ID);
-      expect(sources.getById(FOO_ID).elements[0]).toEqual(fooData);
+      expect(providers.getById(FOO_ID).elements[0]).toEqual(fooData);
     });
   });
 });

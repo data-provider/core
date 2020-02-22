@@ -1,6 +1,6 @@
 {
   "name": "@data-provider/browser-storage",
-  "version": "1.4.3",
+  "version": "2.0.0-beta.1",
   "description": "localStorage and sessionStorage Data Providers",
   "keywords": [
     "data-provider",
@@ -22,8 +22,8 @@
   "files": [
     "dist"
   ],
-  "main": "dist/data-provider-browser-storage.cjs.js",
-  "module": "dist/data-provider-browser-storage.esm.js",
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.esm.js",
   "scripts": {
     "lint": "eslint src test",
     "lint-staged": "lint-staged",
@@ -34,13 +34,16 @@
     "coveralls": "cat ./coverage/lcov.info | coveralls"
   },
   "peerDependencies": {
-    "@data-provider/core": "^1.7.0"
+    "@data-provider/core": "2.x"
   },
   "devDependencies": {
     "@babel/core": "7.8.4",
     "@babel/preset-env": "7.8.4",
     "@babel/preset-react": "7.8.3",
-    "@data-provider/core": "1.8.0",
+    "@data-provider/core": "2.0.0-beta.2",
+    "@rollup/plugin-commonjs": "11.0.2",
+    "@rollup/plugin-json": "4.0.2",
+    "@rollup/plugin-node-resolve": "7.1.1",
     "babel-core": "7.0.0-bridge.0",
     "babel-jest": "24.9.0",
     "babel-polyfill": "6.26.0",
@@ -52,11 +55,9 @@
     "jest": "24.9.0",
     "lint-staged": "9.5.0",
     "prettier": "1.19.1",
+    "redux": "4.0.5",
     "rollup": "1.30.1",
     "rollup-plugin-babel": "4.3.3",
-    "rollup-plugin-commonjs": "10.1.0",
-    "rollup-plugin-json": "4.0.0",
-    "rollup-plugin-node-resolve": "5.2.0",
     "rollup-plugin-uglify": "6.0.4",
     "sinon": "8.1.1"
   },

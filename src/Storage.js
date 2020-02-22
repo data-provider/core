@@ -34,27 +34,11 @@ class StorageMock {
 }
 
 export class Storage extends Provider {
-  constructor(namespace, defaultValue, storageKey, options = {}) {
-    const tags = Array.isArray(options.tags) ? options.tags : [options.tags];
+  constructor(id, options, query) {
+    const tags = options.tags || [];
     tags.push(TAG);
-    tags.push(storageKeysTags[storageKey]);
-    if (!options.queriesDefaultValue) {
-      console.warn(
-        '@data-provider/browser-storage: Deprecation warning: Usage of "queriesDefaultValue" option is recommended to prepare your code for next major version'
-      );
-    }
-    const getDefaultValue = function(query) {
-      if (query && options.queriesDefaultValue) {
-        return defaultValue && defaultValue[query];
-      }
-      return defaultValue;
-    };
-    super(null, getDefaultValue, {
-      uuid: namespace,
-      tags
-    });
-    this._namespace = namespace;
-    this._storage = this._getStorage(storageKey, options.root);
+    tags.push(storageKeysTags[options.storageKey]);
+    super(id, { ...options, tags }, query);
   }
 
   _getStorage(storageKey, root) {
@@ -77,44 +61,65 @@ export class Storage extends Provider {
     this._storage.setItem(this._namespace, JSON.stringify(value));
   }
 
-  _read(key) {
-    const cached = this._cache.get(key);
-    if (cached) {
-      return cached;
-    }
-    const promise = Promise.resolve(key ? this._getRootValue()[key] : this._getRootValue());
-    this._cache.set(key, promise);
-    return promise;
+  get initialState() {
+    let initialState = this.initialStateFromOptions || {};
+    this._namespace = this.options.namespace;
+    this._storage = this._getStorage(this.options.storageKey, this.options.root);
+    return {
+      ...initialState,
+      data: this.readMethod()
+    };
   }
 
-  _update(filter, data) {
+  get _queriedProp() {
+    return this.queryValue && this.queryValue.prop;
+  }
+
+  readMethod() {
+    const queryProp = this._queriedProp;
+    const rootValue = this._getRootValue();
+    if (queryProp) {
+      return rootValue[queryProp];
+    }
+    return rootValue;
+  }
+
+  _cleanParentCache() {
+    if (this.parent) {
+      this.parent._cleanParentCache();
+    } else {
+      this.cleanCache();
+    }
+  }
+
+  update(data) {
     let rootValue;
-    if (filter) {
+    const queryProp = this._queriedProp;
+    if (queryProp) {
       rootValue = this._getRootValue();
-      rootValue[filter] = data;
+      rootValue[queryProp] = data;
     } else {
       rootValue = data;
     }
     this._setRootValue(rootValue);
-    this._clean();
+    this._cleanParentCache();
     return Promise.resolve();
   }
 
-  _create(filter, data) {
-    this._update(filter, data);
-    this._clean();
-    return Promise.resolve();
+  create(data) {
+    return this.update(data);
   }
 
-  _delete(filter) {
+  delete() {
     let rootValue = this._getRootValue();
-    if (filter) {
-      delete rootValue[filter];
+    const queryProp = this._queriedProp;
+    if (queryProp) {
+      delete rootValue[queryProp];
     } else {
       rootValue = {};
     }
     this._setRootValue(rootValue);
-    this._clean();
+    this._cleanParentCache();
     return Promise.resolve();
   }
 }
