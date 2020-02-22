@@ -18,8 +18,8 @@
   "files": [
     "dist"
   ],
-  "main": "dist/data-provider-memory.cjs.js",
-  "module": "dist/data-provider-memory.esm.js",
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.esm.js",
   "scripts": {
     "lint": "eslint src test",
     "lint-staged": "lint-staged",

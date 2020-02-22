@@ -25,6 +25,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - feat(Memory): [BREAKING CHANGE] - Remove defaultValue argument, now "initialState" option has to be used instead.
 - feat(Memory): [BREAKING CHANGE] - Remove uuid option. Now id is required as first argument.
 - feat(Memory): [BREAKING CHANGE] - Remove queriesDefaultValue option. Now this is the default behavior
+- chore(umd distribution): [BREAKING CHANGE] - Rename umd dist file name to "index.umd.js"
 
 ## [1.4.3] - 2020-01-26
 ### Changed
