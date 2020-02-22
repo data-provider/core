@@ -9,50 +9,49 @@ http://www.apache.org/licenses/LICENSE-2.0
 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 */
 
-const json = require("rollup-plugin-json");
-const commonjs = require("rollup-plugin-commonjs");
-const resolve = require("rollup-plugin-node-resolve");
+const json = require("@rollup/plugin-json");
+const commonjs = require("@rollup/plugin-commonjs");
+const resolve = require("@rollup/plugin-node-resolve");
 const babel = require("rollup-plugin-babel");
 const uglifier = require("rollup-plugin-uglify");
 
 const BASE_PLUGINS = [
   resolve({
-    module: true,
-    main: true,
-    browser: true,
-    jsnext: true,
+    mainFields: ["module", "main"],
     preferBuiltins: true
   }),
   commonjs({
     include: "node_modules/**"
   }),
   json(),
-  babel()
+  babel({
+    babelrc: false,
+    presets: ["@babel/env"]
+  })
 ];
 
 const BASE_CONFIG = {
   input: "src/index.js",
-  external: ["@data-provider/core", "lodash"],
+  external: ["@data-provider/core"],
   plugins: [...BASE_PLUGINS, uglifier.uglify()]
 };
 
 const GLOBALS = {
-  "@data-provider/core": "dataProvider",
-  lodash: "lodash"
+  "@data-provider/core": "dataProvider"
 };
 
 module.exports = [
   {
     ...BASE_CONFIG,
     output: {
-      file: "dist/data-provider-memory.cjs.js",
+      file: "dist/index.cjs.js",
       format: "cjs"
     }
   },
   {
     ...BASE_CONFIG,
     output: {
-      file: "dist/data-provider-memory.umd.js",
+      file: "dist/index.umd.js",
       format: "umd",
       name: "dataProviderMemory",
       globals: GLOBALS
@@ -61,7 +60,7 @@ module.exports = [
   {
     ...BASE_CONFIG,
     output: {
-      file: "dist/data-provider-memory.esm.js",
+      file: "dist/index.esm.js",
       format: "esm",
       globals: GLOBALS
     },

@@ -15,6 +15,17 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - "queriesDefaultValue" option has to be removed.
 - Options should be accepted only as second argument. "uuid" should be defined only using the "uuid" option, not as second argument.
 
+## [2.0.0.beta-1]
+
+> DISCLAIMER: This major release adapts this plugin to the @data-provider v2.x interface. Read @data-provider docs for further info.
+
+### Changed
+- feat(Memory): [BREAKING CHANGE] - Use data-provider v2 standard arguments (id, options)
+- feat(Memory): [BREAKING CHANGE] - Queries now has to be defined as an object: { prop: "foo-prop" }
+- feat(Memory): [BREAKING CHANGE] - Remove defaultValue argument, now "initialState" option has to be used instead.
+- feat(Memory): [BREAKING CHANGE] - Remove uuid option. Now id is required as first argument.
+- feat(Memory): [BREAKING CHANGE] - Remove queriesDefaultValue option. Now this is the default behavior
+
 ## [1.4.3] - 2020-01-26
 ### Changed
 - Update dependencies

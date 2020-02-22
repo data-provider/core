@@ -10,107 +10,75 @@ Unless required by applicable law or agreed to in writing, software distributed 
 */
 
 import { Provider } from "@data-provider/core";
-import { cloneDeep } from "lodash";
 
 const TAG = "memory";
 
-const ensureId = id => id || TAG;
-
-const warn = text => {
-  console.warn(`@data-provider/memory: ${text}`);
-};
-
-const deprecationWarn = text => {
-  warn(`Deprecation warning: ${text}`);
-};
-
-const traceLegacyOptions = () => {
-  deprecationWarn(
-    'Defining "id" as second argument will be deprecated. Please provide an options object with "uuid" property'
-  );
-};
-
-const getOptions = (receivedId, receivedOptions) => {
-  if (receivedOptions) {
-    traceLegacyOptions();
-    return {
-      ...receivedOptions,
-      uuid: receivedOptions.uuid || ensureId(receivedId)
-    };
-  } else if (receivedId && typeof receivedId === "object") {
-    return {
-      ...receivedId,
-      uuid: receivedId.uuid || TAG
-    };
-  }
-  if (receivedId) {
-    traceLegacyOptions();
-  }
-  return {
-    uuid: ensureId(receivedId)
-  };
-};
-
-export class Memory extends Provider {
-  constructor(value, receivedId, receivedOptions) {
-    const options = getOptions(receivedId, receivedOptions);
-    const tags = Array.isArray(options.tags) ? options.tags : [options.tags];
+class Memory extends Provider {
+  constructor(id, options = {}, query) {
+    const tags = options.tags || [];
     tags.push(TAG);
-    const baseOptions = {
-      ...options,
-      tags
-    };
-    if (!options.queriesDefaultValue) {
-      deprecationWarn(
-        'Usage of "queriesDefaultValue" option is recommended to prepare your code for next major version'
-      );
-    }
-    const getDefaultValue = function(query) {
-      const valueToReturn = value || {};
-      if (query && options.queriesDefaultValue) {
-        return valueToReturn[query];
-      }
-      return valueToReturn;
-    };
-    super(null, getDefaultValue, baseOptions);
-    this._memory = cloneDeep(value || {});
-    this.update(this._memory);
+    super(id, { ...options, tags }, query);
+    this._data = this.initialState.data;
+    this.options._data = this._options._data || this._data;
   }
 
-  _read(key) {
-    const cached = this._cache.get(key);
-    if (cached) {
-      return cached;
+  get initialState() {
+    let initialState = this.initialStateFromOptions || {};
+    if (!initialState.data) {
+      initialState.data = {};
     }
-    const promise = Promise.resolve(key ? this._memory[key] : this._memory);
-    this._cache.set(key, promise);
-    return promise;
+    if (this._queriedProp) {
+      return {
+        ...initialState,
+        data: initialState.data[this._queriedProp]
+      };
+    }
+    return initialState;
   }
 
-  _update(query, value) {
-    const data = cloneDeep(value);
-    if (query) {
-      this._memory[query] = data;
+  get _queriedProp() {
+    return this.queryValue && this.queryValue.prop;
+  }
+
+  _cleanParentCache() {
+    if (this.parent) {
+      this.parent._cleanParentCache();
     } else {
-      this._memory = data;
+      this.cleanCache();
     }
-    this._clean();
+  }
+
+  readMethod() {
+    if (this._queriedProp) {
+      return this._options._data[this._queriedProp];
+    }
+    return this._options._data;
+  }
+
+  update(data) {
+    if (this._queriedProp) {
+      this._options._data[this._queriedProp] = data;
+    } else {
+      this._options._data = data;
+    }
+    this._cleanParentCache();
     return Promise.resolve();
   }
 
-  _create(query, value) {
-    this._update(query, value);
-    this._clean();
+  create(data) {
+    this.update(data);
     return Promise.resolve();
   }
 
-  _delete(query) {
-    if (query) {
-      delete this._memory[query];
+  delete() {
+    if (this._queriedProp) {
+      delete this._options._data[this._queriedProp];
     } else {
-      this._memory = {};
+      this._options._data = {};
     }
-    this._clean();
+    this._cleanParentCache();
     return Promise.resolve();
   }
 }
+
+export default Memory;
