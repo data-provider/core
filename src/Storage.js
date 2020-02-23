@@ -36,8 +36,8 @@ class StorageMock {
 export class Storage extends Provider {
   constructor(id, options, query) {
     const tags = options.tags || [];
-    tags.push(TAG);
-    tags.push(storageKeysTags[options.storageKey]);
+    tags.unshift(storageKeysTags[options.storageKey]);
+    tags.unshift(TAG);
     super(id, { ...options, tags }, query);
   }
 
