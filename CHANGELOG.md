@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 ### Removed
 
-## [2.0.0-beta.1] - 2020-02-23
+## [2.0.0-alpha.1] - 2020-02-23
 
 > DISCLAIMER: This major release adapts this origin to the @data-provider v2.x interface. Read @data-provider docs for further info.
 

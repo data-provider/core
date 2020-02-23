@@ -32,7 +32,7 @@ const BASE_PLUGINS = [
 
 const BASE_CONFIG = {
   input: "src/index.js",
-  external: ["@data-provider/core", "axios", "axios-retry", "lodash", "path-to-regexp"],
+  external: ["@data-provider/core", "axios", "axios-retry", "path-to-regexp"],
   plugins: [...BASE_PLUGINS, uglifier.uglify()]
 };
 
@@ -40,7 +40,6 @@ const GLOBALS = {
   "@data-provider/core": "dataProvider",
   axios: "axios",
   "axios-retry": "axiosRetry",
-  lodash: "lodash",
   "path-to-regexp": "pathToRegexp"
 };
 

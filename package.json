@@ -40,14 +40,13 @@
   "dependencies": {
     "axios": "0.19.2",
     "axios-retry": "3.1.2",
-    "lodash": "4.17.15",
     "path-to-regexp": "6.1.0"
   },
   "devDependencies": {
     "@babel/core": "7.8.4",
     "@babel/preset-env": "7.8.4",
     "@babel/preset-react": "7.8.3",
-    "@data-provider/core": "2.0.0-alpha.3",
+    "@data-provider/core": "2.0.0-alpha.4",
     "@mocks-server/main": "1.8.2",
     "@rollup/plugin-commonjs": "11.0.2",
     "@rollup/plugin-json": "4.0.2",

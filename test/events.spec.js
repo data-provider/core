@@ -167,7 +167,7 @@ describe("Axios events", () => {
   });
 
   describe("when any property of a queried source change", () => {
-    it.skip("should execute change listeners, and changeAny listeners", async () => {
+    it("should execute change listeners, and changeAny listeners", async () => {
       expect.assertions(2);
       let called = false;
       let calledAny = false;
