@@ -15,6 +15,10 @@ let automaticIdCounter = 0;
 
 const CHILD_EVENT_PREFIX = "child-";
 
+export const defaultOptions = {
+  cache: true
+};
+
 export const INIT = "init";
 export const CLEAN_CACHE = "cleanCache";
 export const RESET_STATE = "resetState";

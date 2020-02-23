@@ -10,11 +10,22 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 ### Removed
 
-## [2.0.0-beta.2] - 2020-02-22
+## [2.0.0-alpha.3] - 2020-02-23
+### Added
+- feat(Provider): Add cache option, which disables cache if set to false. Default is true.
+
+### Changed
+- feat(Provider): [BREAKING CHANGE] Rename createChild into createChildMethod, for better identification of methods that can be overwritten.
+- feat(Provider): [BREAKING CHANGE] Rename addQueryMethod into addQuery, to avoid confussions as it is not designed to be overwritten by data origins implementations.
+
+### Added
+- feat(Provider): Add "getChildQueryMethod", which allow origins to define its own method for extending child queries.
+
+## [2.0.0-beta.2] - 2020-02-22 [DEPRECATED] This version was intended to be a prerelease.
 ### Added
 - feat(initial state): Allow plugins to define his own initialState getter, overwritting the original one. 
 
-## [2.0.0-beta.1] - 2020-02-22
+## [2.0.0-beta.1] - 2020-02-22 [DEPRECATED] This version was intended to be a prerelease.
 
 > DISCLAIMER: This major release still maintains the concept of the previous "data-provider" versions, but a lot of BREAKING CHANGES have been made to the interfaces in order to improve the usage experience, apart of performance improvements and fixes. A chapter "how to migrate from 1.x" will be added to the documentation website to facilitate the migration to this new version, as the maintenance of 1.X versions will be stopped soon.
 

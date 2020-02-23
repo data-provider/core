@@ -24,6 +24,24 @@ describe("Provider config", () => {
     providers.clear();
   });
 
+  it("should have cache option as true by default", () => {
+    const provider = new Provider("foo-id");
+
+    expect(provider.options).toEqual({
+      cache: true
+    });
+  });
+
+  it("should define cache option if received", () => {
+    const provider = new Provider("foo-id", {
+      cache: false
+    });
+
+    expect(provider.options).toEqual({
+      cache: false
+    });
+  });
+
   it("should be created from options", () => {
     const provider = new Provider("foo-id", {
       option1: "foo",
@@ -31,6 +49,7 @@ describe("Provider config", () => {
     });
 
     expect(provider.options).toEqual({
+      cache: true,
       option1: "foo",
       option2: "foo2"
     });
@@ -48,6 +67,7 @@ describe("Provider config", () => {
     });
 
     expect(provider.options).toEqual({
+      cache: true,
       option1: "foo",
       option2: "foo-2",
       option3: "foo3"

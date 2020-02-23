@@ -82,6 +82,19 @@ describe("Provider cache", () => {
     });
   });
 
+  describe("with cache disables", () => {
+    it("should execute read all time it is called", async () => {
+      provider = new TestProvider(null, {
+        cache: false
+      });
+      await provider.read();
+      await provider.read();
+      await provider.read();
+      await provider.read();
+      expect(spies.read.callCount).toEqual(4);
+    });
+  });
+
   describe("with query", () => {
     it("should execute read method always for different queries", async () => {
       await provider.read();

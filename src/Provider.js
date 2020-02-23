@@ -23,7 +23,8 @@ import {
   childEventName,
   getAutomaticId,
   isPromise,
-  fromEntries
+  fromEntries,
+  defaultOptions
 } from "./helpers";
 import { providers } from "./providers";
 import {
@@ -41,7 +42,7 @@ class Provider {
   constructor(id, options, query) {
     this._emitChild = this._emitChild.bind(this);
     this._id = id || getAutomaticId();
-    this._options = { ...options };
+    this._options = { ...defaultOptions, ...options };
     this._query = { ...query };
     this._tags = removeFalsy(ensureArray(this._options.tags));
     this._children = new Map();
@@ -100,7 +101,7 @@ class Provider {
     return eventEmitter.once(this._eventNamespace(childEventName(eventName)), fn);
   }
 
-  addQueryMethod(key, queryFunc) {
+  addQuery(key, queryFunc) {
     const returnQuery = query => {
       return this.query(queryFunc(query));
     };
@@ -125,7 +126,7 @@ class Provider {
   }
 
   read() {
-    if (this._cache) {
+    if (this._cache && this.options.cache) {
       return this._cache;
     }
     this._dispatch(readStart(this._id, true));
@@ -160,14 +161,14 @@ class Provider {
     if (isUndefined(query)) {
       return this;
     }
-    const newQuery = { ...this._query, ...query };
+    const newQuery = this.getChildQueryMethod(query);
     const id = childId(this._id, newQuery);
     if (this._children.has(id)) {
       return this._children.get(id);
     }
-    const child = this.createChild(id, this._options, newQuery);
+    const child = this.createChildMethod(id, this._options, newQuery);
     this._queryMethodsParsers.forEach((queryMethodParser, queryMethodKey) =>
-      child.addQueryMethod(queryMethodKey, queryMethodParser)
+      child.addQuery(queryMethodKey, queryMethodParser)
     );
     child.on(ANY_EVENT, this._emitChild);
     this._children.set(id, child);
@@ -227,7 +228,11 @@ class Provider {
     return this.initialStateFromOptions;
   }
 
-  createChild(id, options, query) {
+  getChildQueryMethod(query) {
+    return { ...this.queryValue, ...query };
+  }
+
+  createChildMethod(id, options, query) {
     return new this.constructor(id, options, query);
   }
 

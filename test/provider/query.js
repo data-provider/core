@@ -70,8 +70,8 @@ describe("Provider query", () => {
     it("should inherit query methods", () => {
       const byIdMethod = () => {};
       const byNameMethod = () => {};
-      provider.addQueryMethod("byId", byIdMethod);
-      provider.addQueryMethod("byName", byNameMethod);
+      provider.addQuery("byId", byIdMethod);
+      provider.addQuery("byName", byNameMethod);
       const queried = provider.query({ foo: "foo" });
       expect(queried.queryMethods.byId).toBe(provider.queryMethods.byId);
       expect(queried.queryMethods.byName).toBe(provider.queryMethods.byName);
@@ -87,21 +87,53 @@ describe("Provider query", () => {
   describe("when adding query methods", () => {
     it("should be available at the queryMethods property", () => {
       const byIdMethod = () => {};
-      provider.addQueryMethod("byId", byIdMethod);
+      provider.addQuery("byId", byIdMethod);
       expect(provider.queryMethods.byId).toBe(byIdMethod);
     });
 
     it("should apply the value returned by queryMethod as query", () => {
       const byIdMethod = foo => ({ foo });
-      provider.addQueryMethod("byId", byIdMethod);
+      provider.addQuery("byId", byIdMethod);
       expect(provider.queries.byId("foo").queryValue).toEqual({ foo: "foo" });
     });
 
     it("should apply also the current query", () => {
       const byIdMethod = foo => ({ foo });
-      provider.addQueryMethod("byId", byIdMethod);
+      provider.addQuery("byId", byIdMethod);
       const queried = provider.query({ var: "var" });
       expect(queried.queries.byId("foo").queryValue).toEqual({ var: "var", foo: "foo" });
+    });
+  });
+
+  describe("when provider implementation defines his own getChildQueryMethod", () => {
+    beforeEach(() => {
+      class CustomProvider extends Provider {
+        getChildQueryMethod(query) {
+          return {
+            ...this.queryValue,
+            ...query,
+            foo: {
+              ...this.queryValue.foo,
+              ...query.foo
+            }
+          };
+        }
+      }
+      provider = new CustomProvider();
+    });
+
+    it("should use defined method to calculate child query", () => {
+      const byIdMethod = foo => ({ foo });
+      provider.addQuery("byId", byIdMethod);
+      expect(
+        provider.queries
+          .byId({
+            var: "var"
+          })
+          .queries.byId({
+            var2: "var2"
+          }).queryValue
+      ).toEqual({ foo: { var: "var", var2: "var2" } });
     });
   });
 });

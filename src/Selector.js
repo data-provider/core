@@ -197,7 +197,7 @@ class Selector extends SelectorBase {
     super(options.id, options, undefined);
   }
 
-  createChild(id, options, query) {
+  createChildMethod(id, options, query) {
     return new SelectorBase(id, options, query);
   }
 }

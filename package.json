@@ -1,14 +1,16 @@
 {
   "name": "@data-provider/core",
-  "version": "2.0.0-beta.2",
-  "description": "Extensible Data Provider and Data Selectors",
+  "version": "2.0.0-alpha.3",
+  "description": "Async data provider agnostic about data origins",
   "keywords": [
     "data",
     "provider",
+    "redux",
     "selector",
     "cache",
     "reactive",
-    "extensible"
+    "extensible",
+    "state"
   ],
   "author": "Javier Brea",
   "license": "Apache-2.0",

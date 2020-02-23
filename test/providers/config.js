@@ -48,14 +48,17 @@ describe("providers handler config method", () => {
       });
 
       expect(fooProvider.options).toEqual({
+        cache: true,
         foo: "foo",
         tags: "tag-1"
       });
       expect(fooProvider2.options).toEqual({
+        cache: true,
         foo: "foo",
         tags: ["tag-2", "tag-3"]
       });
       expect(fooProvider3.options).toEqual({
+        cache: true,
         foo: "foo",
         tags: "tag-3"
       });
@@ -69,6 +72,7 @@ describe("providers handler config method", () => {
       const fooProvider4 = new Provider("foo-4");
 
       expect(fooProvider4.options).toEqual({
+        cache: true,
         foo: "foo"
       });
     });
@@ -87,12 +91,14 @@ describe("providers handler config method", () => {
       });
 
       expect(fooProvider.options).toEqual({
+        cache: true,
         foo: "foo",
         foo2: "new-foo2",
         foo3: "foo3",
         tags: "tag-1"
       });
       expect(fooProvider4.options).toEqual({
+        cache: true,
         foo: "foo",
         foo2: "new-foo2",
         foo3: "foo3"
@@ -124,13 +130,16 @@ describe("providers handler config method", () => {
       });
 
       expect(fooProvider.options).toEqual({
+        cache: true,
         tags: "tag-1"
       });
       expect(fooProvider2.options).toEqual({
+        cache: true,
         foo: "foo",
         tags: ["tag-2", "tag-3"]
       });
       expect(fooProvider3.options).toEqual({
+        cache: true,
         foo: "foo",
         tags: "tag-3"
       });
@@ -144,6 +153,7 @@ describe("providers handler config method", () => {
       const fooProvider4 = new Provider("foo-4", { tags: "tag-4" });
 
       expect(fooProvider4.options).toEqual({
+        cache: true,
         foo: "foo",
         tags: "tag-4"
       });
@@ -157,6 +167,7 @@ describe("providers handler config method", () => {
       const fooProvider4 = new Provider("foo-4", { tags: ["tag-4", "tag-2"] });
 
       expect(fooProvider4.options).toEqual({
+        cache: true,
         foo: "foo",
         tags: ["tag-4", "tag-2"]
       });
@@ -176,21 +187,25 @@ describe("providers handler config method", () => {
       });
 
       expect(fooProvider.options).toEqual({
+        cache: true,
         tags: "tag-1"
       });
       expect(fooProvider2.options).toEqual({
+        cache: true,
         foo: "foo",
         foo2: "new-foo2",
         foo3: "foo3",
         tags: ["tag-2", "tag-3"]
       });
       expect(fooProvider3.options).toEqual({
+        cache: true,
         foo: "foo",
         foo2: "new-foo2",
         foo3: "foo3",
         tags: "tag-3"
       });
       expect(fooProvider4.options).toEqual({
+        cache: true,
         foo: "foo",
         foo2: "new-foo2",
         foo3: "foo3",
@@ -212,6 +227,7 @@ describe("providers handler config method", () => {
       });
 
       expect(fooProvider4.options).toEqual({
+        cache: true,
         foo: "foo",
         foo2: "new-foo2",
         foo3: "foo3",
@@ -243,6 +259,7 @@ describe("providers handler config method", () => {
       });
 
       expect(fooProvider3.options).toEqual({
+        cache: true,
         foo: "foo",
         tags: "tag-3"
       });
@@ -256,6 +273,7 @@ describe("providers handler config method", () => {
       const fooProvider4 = new Provider("foo-4");
 
       expect(fooProvider4.options).toEqual({
+        cache: true,
         foo: "foo"
       });
     });
@@ -274,6 +292,7 @@ describe("providers handler config method", () => {
       });
 
       expect(fooProvider4.options).toEqual({
+        cache: true,
         foo: "foo",
         foo2: "new-foo2",
         foo3: "foo3"

@@ -72,8 +72,8 @@ describe("Selector query", () => {
     it("should inherit query methods", () => {
       const byIdMethod = () => {};
       const byNameMethod = () => {};
-      selector.addQueryMethod("byId", byIdMethod);
-      selector.addQueryMethod("byName", byNameMethod);
+      selector.addQuery("byId", byIdMethod);
+      selector.addQuery("byName", byNameMethod);
       const queried = selector.query({ foo: "foo" });
       expect(queried.queryMethods.byId).toBe(selector.queryMethods.byId);
       expect(queried.queryMethods.byName).toBe(selector.queryMethods.byName);
@@ -89,19 +89,19 @@ describe("Selector query", () => {
   describe("when adding query methods", () => {
     it("should be available at the queryMethods property", () => {
       const byIdMethod = () => {};
-      selector.addQueryMethod("byId", byIdMethod);
+      selector.addQuery("byId", byIdMethod);
       expect(selector.queryMethods.byId).toBe(byIdMethod);
     });
 
     it("should apply the value returned by queryMethod as query", () => {
       const byIdMethod = foo => ({ foo });
-      selector.addQueryMethod("byId", byIdMethod);
+      selector.addQuery("byId", byIdMethod);
       expect(selector.queries.byId("foo").queryValue).toEqual({ foo: "foo" });
     });
 
     it("should apply also the current query", () => {
       const byIdMethod = foo => ({ foo });
-      selector.addQueryMethod("byId", byIdMethod);
+      selector.addQuery("byId", byIdMethod);
       const queried = selector.query({ var: "var" });
       expect(queried.queries.byId("foo").queryValue).toEqual({ var: "var", foo: "foo" });
     });

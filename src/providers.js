@@ -145,7 +145,6 @@ export class Providers {
   }
 
   clear() {
-    this._allProviders.clear();
     this._allProvidersById.clear();
     this._tags.clear();
     return this._allProviders.clear();
