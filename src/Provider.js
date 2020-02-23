@@ -59,6 +59,9 @@ class Provider {
   }
 
   _emitChild(eventName, data) {
+    if (CHANGE_STATE_EVENTS.includes(eventName)) {
+      eventEmitter.emit(this._eventNamespace(childEventName(CHANGE_STATE_EVENT)), data);
+    }
     const prefixedEventName = childEventName(eventName);
     this.emit(prefixedEventName, data);
     eventEmitter.emit(this._eventNamespace(childEventName(ANY_EVENT)), eventName, data);

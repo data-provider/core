@@ -10,6 +10,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 ### Removed
 
+## [2.0.0-alpha.4] - 2020-02-23
+### Fixed
+- fix(Provider): Emit "changeState" children event.
+
 ## [2.0.0-alpha.3] - 2020-02-23
 ### Added
 - feat(Provider): Add cache option, which disables cache if set to false. Default is true.
