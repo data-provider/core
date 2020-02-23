@@ -1,4 +1,5 @@
 /*
+Copyright 2020 Javier Brea
 Copyright 2019 XbyOrange
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
@@ -12,19 +13,19 @@ const sinon = require("sinon");
 
 const AxiosMock = require("./Axios.mock.js");
 
-const { Api, apis } = require("../src/index");
+const { providers } = require("@data-provider/core");
+const { Axios } = require("../src/index");
 
-describe("Api configuration", () => {
+describe("Axios configuration", () => {
   let axios;
 
   beforeAll(() => {
     axios = new AxiosMock();
-    apis.reset();
+    providers.clear();
   });
 
   afterAll(() => {
-    axios.restore();
-    apis.reset();
+    providers.clear();
   });
 
   beforeEach(() => {
@@ -37,7 +38,8 @@ describe("Api configuration", () => {
   describe("baseUrl option", () => {
     it("should set the base url for axios requests", async () => {
       expect.assertions(1);
-      const books = new Api("/books", {
+      const books = new Axios(null, {
+        url: "/books",
         baseUrl: "http://localhost:3000"
       });
       await books.read();
@@ -46,10 +48,12 @@ describe("Api configuration", () => {
 
     it("should work with config method", async () => {
       expect.assertions(2);
-      const books = new Api("/books");
+      const books = new Axios(null, {
+        url: "/books"
+      });
       await books.read();
       expect(axios.stubs.instance.getCall(0).args[0].url).toEqual("/books");
-      books.clean();
+      books.cleanCache();
       books.config({
         baseUrl: "http://localhost:3000"
       });
@@ -61,7 +65,8 @@ describe("Api configuration", () => {
   describe("readMethod option", () => {
     it("should set the read method for axios requests", async () => {
       expect.assertions(1);
-      const books = new Api("/books", {
+      const books = new Axios(null, {
+        url: "/books",
         readMethod: "post"
       });
       await books.read();
@@ -70,10 +75,12 @@ describe("Api configuration", () => {
 
     it("should work with config method", async () => {
       expect.assertions(2);
-      const books = new Api("/books");
+      const books = new Axios(null, {
+        url: "/books"
+      });
       await books.read();
       expect(axios.stubs.instance.getCall(0).args[0].method).toEqual("get");
-      books.clean();
+      books.cleanCache();
       books.config({
         readMethod: "post"
       });
@@ -85,7 +92,8 @@ describe("Api configuration", () => {
   describe("updateMethod option", () => {
     it("should set the update method for axios requests", async () => {
       expect.assertions(1);
-      const books = new Api("/books", {
+      const books = new Axios(null, {
+        url: "/books",
         updateMethod: "get"
       });
       await books.update();
@@ -94,7 +102,9 @@ describe("Api configuration", () => {
 
     it("should work with config method", async () => {
       expect.assertions(2);
-      const books = new Api("/books");
+      const books = new Axios(null, {
+        url: "/books"
+      });
       await books.update();
       expect(axios.stubs.instance.getCall(0).args[0].method).toEqual("patch");
       books.config({
@@ -108,7 +118,8 @@ describe("Api configuration", () => {
   describe("createMethod option", () => {
     it("should set the create method for axios requests", async () => {
       expect.assertions(1);
-      const books = new Api("/books", {
+      const books = new Axios(null, {
+        url: "/books",
         createMethod: "get"
       });
       await books.create();
@@ -117,7 +128,9 @@ describe("Api configuration", () => {
 
     it("should work with config method", async () => {
       expect.assertions(2);
-      const books = new Api("/books");
+      const books = new Axios(null, {
+        url: "/books"
+      });
       await books.create();
       expect(axios.stubs.instance.getCall(0).args[0].method).toEqual("post");
       books.config({
@@ -131,7 +144,8 @@ describe("Api configuration", () => {
   describe("deleteMethod option", () => {
     it("should set the delete method for axios requests", async () => {
       expect.assertions(1);
-      const books = new Api("/books", {
+      const books = new Axios(null, {
+        url: "/books",
         deleteMethod: "get"
       });
       await books.delete();
@@ -140,7 +154,10 @@ describe("Api configuration", () => {
 
     it("should work with config method", async () => {
       expect.assertions(2);
-      const books = new Api("/books");
+      const books = new Axios(null, {
+        url: "/books",
+        deleteMethod: "delete"
+      });
       await books.delete();
       expect(axios.stubs.instance.getCall(0).args[0].method).toEqual("delete");
       books.config({
@@ -160,7 +177,8 @@ describe("Api configuration", () => {
         status: 1240
       };
       axios.stubs.instance.rejects(error);
-      const books = new Api("/books", {
+      const books = new Axios(null, {
+        url: "/books",
         authErrorStatus: 1240,
         authErrorHandler: () => {
           authError = true;
@@ -183,7 +201,8 @@ describe("Api configuration", () => {
         status: 401
       };
       axios.stubs.instance.rejects(error);
-      const books = new Api("/books", {
+      const books = new Axios(null, {
+        url: "/books",
         authErrorHandler: (dataSource, retry) => {
           dataSource.setHeaders({
             foo: "foo"
@@ -213,7 +232,8 @@ describe("Api configuration", () => {
         dataSource = source;
       });
 
-      const books = new Api("/books", {
+      const books = new Axios(null, {
+        url: "/books",
         onBeforeRequest: stub
       });
       await books.read();
@@ -236,7 +256,8 @@ describe("Api configuration", () => {
         dataSource = source;
       });
 
-      const books = new Api("/books", {
+      const books = new Axios(null, {
+        url: "/books",
         onceBeforeRequest: stub
       });
       await books.read();
@@ -254,7 +275,8 @@ describe("Api configuration", () => {
       let dataSource;
       const stub = sinon.stub();
 
-      const books = new Api("/books", {
+      const books = new Axios(null, {
+        url: "/books",
         baseUrl: "/foo-base-url",
         onceBeforeRequest: source => {
           dataSource = source;
@@ -288,7 +310,8 @@ describe("Api configuration", () => {
     let books;
 
     beforeAll(() => {
-      books = new Api("/books", {
+      books = new Axios(null, {
+        url: "/books",
         expirationTime: 100
       });
     });
@@ -319,7 +342,7 @@ describe("Api configuration", () => {
       books.config({
         expirationTime: 0
       });
-      books.clean();
+      books.cleanCache();
       return new Promise(resolve => {
         const interval = setInterval(() => {
           books.read();
@@ -337,7 +360,8 @@ describe("Api configuration", () => {
   describe("cache option", () => {
     it("should do requests always if it is false", async () => {
       expect.assertions(1);
-      const books = new Api("/books", {
+      const books = new Axios(null, {
+        url: "/books",
         cache: false
       });
       await books.read();
@@ -358,19 +382,22 @@ describe("Api configuration", () => {
     it("should set value with full axios response when true", async () => {
       axios.stubs.instance.resolves(axiosResponse);
       expect.assertions(1);
-      const books = new Api("/books", {
+      const books = new Axios(null, {
+        url: "/books",
         fullResponse: true
       });
       await books.read();
-      expect(books.read.value).toEqual(axiosResponse);
+      expect(books.state.data).toEqual(axiosResponse);
     });
 
     it("should set value with axios data when false", async () => {
       axios.stubs.instance.resolves(axiosResponse);
       expect.assertions(1);
-      const books = new Api("/books");
+      const books = new Axios(null, {
+        url: "/books"
+      });
       await books.read();
-      expect(books.read.value).toEqual(axiosResponse.data);
+      expect(books.state.data).toEqual(axiosResponse.data);
     });
   });
 
@@ -378,7 +405,8 @@ describe("Api configuration", () => {
     it("should be used as axios validateStatus callback", async () => {
       expect.assertions(2);
       const validateStatus = status => status !== 200;
-      const books = new Api("/books", {
+      const books = new Axios(null, {
+        url: "/books",
         validateStatus
       });
       await books.read();
@@ -387,17 +415,23 @@ describe("Api configuration", () => {
     });
 
     it("should consider error responses with status lower than 200 by default", () => {
-      const books = new Api("/books");
+      const books = new Axios(null, {
+        url: "/books"
+      });
       expect(books._validateStatus(140)).toEqual(false);
     });
 
     it("should consider error responses with status upper than 300 by default", () => {
-      const books = new Api("/books");
+      const books = new Axios(null, {
+        url: "/books"
+      });
       expect(books._validateStatus(320)).toEqual(false);
     });
 
     it("should consider valid responses with status between 200 and 300", () => {
-      const books = new Api("/books");
+      const books = new Axios(null, {
+        url: "/books"
+      });
       expect(books._validateStatus(200)).toEqual(true);
     });
   });
@@ -407,7 +441,8 @@ describe("Api configuration", () => {
       expect.assertions(1);
       const fooErrorMessage = "foo";
       const fooError = new Error(fooErrorMessage);
-      const books = new Api("/books", {
+      const books = new Axios(null, {
+        url: "/books",
         validateResponse: () => {
           return Promise.reject(fooError);
         }
@@ -415,14 +450,15 @@ describe("Api configuration", () => {
       try {
         await books.read();
       } catch (err) {
-        expect(books.read.error.message).toBe(fooErrorMessage);
+        expect(books.state.error.message).toBe(fooErrorMessage);
       }
     });
 
     it("should resolve if response pass validation", async () => {
       expect.assertions(1);
       let called;
-      const books = new Api("/books", {
+      const books = new Axios(null, {
+        url: "/books",
         validateResponse: () => {
           called = true;
           return Promise.resolve();
@@ -442,7 +478,8 @@ describe("Api configuration", () => {
         status: 401
       };
       axios.stubs.instance.rejects(error);
-      const books = new Api("/books", {
+      const books = new Axios(null, {
+        url: "/books",
         errorHandler: err => {
           expect(err).toBe(error);
           return Promise.reject(newError);
@@ -451,7 +488,7 @@ describe("Api configuration", () => {
       try {
         await books.read();
       } catch (err) {
-        expect(books.read.error).toBe(newError);
+        expect(books.state.error).toBe(newError);
       }
     });
 
@@ -462,11 +499,13 @@ describe("Api configuration", () => {
         statusText: "Foo new error"
       };
       axios.stubs.instance.rejects(error);
-      const books = new Api("/books");
+      const books = new Axios(null, {
+        url: "/books"
+      });
       try {
         await books.read();
       } catch (err) {
-        expect(books.read.error.message).toEqual("Foo new error");
+        expect(books.state.error.message).toEqual("Foo new error");
       }
     });
 
@@ -480,11 +519,13 @@ describe("Api configuration", () => {
         }
       };
       axios.stubs.instance.rejects(error);
-      const books = new Api("/books");
+      const books = new Axios(null, {
+        url: "/books"
+      });
       try {
         await books.read();
       } catch (err) {
-        expect(books.read.error.data).toEqual({
+        expect(books.state.error.data).toEqual({
           status: 401
         });
       }
@@ -494,11 +535,13 @@ describe("Api configuration", () => {
       expect.assertions(1);
       const error = new Error("Foo error");
       axios.stubs.instance.rejects(error);
-      const books = new Api("/books");
+      const books = new Axios(null, {
+        url: "/books"
+      });
       try {
         await books.read();
       } catch (err) {
-        expect(books.read.error.message).toEqual("Foo error");
+        expect(books.state.error.message).toEqual("Foo error");
       }
     });
 
@@ -506,11 +549,13 @@ describe("Api configuration", () => {
       expect.assertions(1);
       const error = new Error();
       axios.stubs.instance.rejects(error);
-      const books = new Api("/books");
+      const books = new Axios(null, {
+        url: "/books"
+      });
       try {
         await books.read();
       } catch (err) {
-        expect(books.read.error.message).toEqual("Request error");
+        expect(books.state.error.message).toEqual("Request error");
       }
     });
   });

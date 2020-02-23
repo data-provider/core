@@ -9,8 +9,8 @@ http://www.apache.org/licenses/LICENSE-2.0
 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 */
 
-const { sources } = require("@data-provider/core");
-const { Api } = require("../src/index");
+const { providers } = require("@data-provider/core");
+const { Axios } = require("../src/index");
 
 describe("retry config", () => {
   let apiStatsCallCount;
@@ -18,23 +18,25 @@ describe("retry config", () => {
   let booksServerError;
 
   beforeAll(async () => {
-    sources.getByTag("mocks").config({
+    providers.getByTag("mocks").config({
       baseUrl: "http://localhost:3100"
     });
 
-    apiStatsReset = new Api("/api/stats/reset", {
-      tags: "mocks"
-    });
+    apiStatsReset = new Axios(null, { url: "/api/stats/reset", tags: ["mocks"] });
     await apiStatsReset.create();
 
-    apiStatsCallCount = new Api("/api/stats/call-count", {
+    apiStatsCallCount = new Axios(null, {
+      url: "/api/stats/call-count",
       cache: false,
-      tags: "mocks"
+      tags: ["mocks"]
     });
 
-    booksServerError = new Api("/api/books/server-error", {
-      defaultValue: [],
-      tags: "mocks"
+    booksServerError = new Axios(null, {
+      url: "/api/books/server-error",
+      tags: ["mocks"],
+      initialState: {
+        data: []
+      }
     });
   });
 
@@ -43,7 +45,7 @@ describe("retry config", () => {
   });
 
   afterAll(() => {
-    sources.clear();
+    providers.clear();
   });
 
   describe("when api GET fails with a 500 error", () => {
@@ -72,7 +74,7 @@ describe("retry config", () => {
 
     it("should retry 5 times if config is changed using tag method", async () => {
       expect.assertions(1);
-      sources.getByTag("mocks").config({
+      providers.getByTag("mocks").config({
         retries: 5
       });
       try {
@@ -98,7 +100,7 @@ describe("retry config", () => {
 
     it("should not retry if config is set to 0 using tag method for all apis", async () => {
       expect.assertions(1);
-      sources.getByTag("api").config({
+      providers.getByTag("api").config({
         retries: 0
       });
       try {
@@ -112,9 +114,10 @@ describe("retry config", () => {
 
   describe("when api GET fails with a 404 error", () => {
     it("should not retry", async () => {
-      const booksNotFoundError = new Api("/api/books/not-found-error", {
+      const booksNotFoundError = new Axios(null, {
+        url: "/api/books/not-found-error",
         retries: 3,
-        tags: "mocks"
+        tags: ["mocks"]
       });
       expect.assertions(1);
       try {

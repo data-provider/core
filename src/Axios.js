@@ -9,38 +9,31 @@ http://www.apache.org/licenses/LICENSE-2.0
 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 */
 
-import { once } from "lodash";
+import { Provider } from "@data-provider/core";
 import { compile } from "path-to-regexp";
 import axios from "axios";
 import axiosRetry from "axios-retry";
-import { Provider } from "@data-provider/core";
 
-import { ApisHandler, TAG } from "./ApisHandler";
+import { once, isEmpty, TAG, PATH_SEP } from "./helpers";
 import { defaultConfig } from "./defaultConfig";
 
-const PATH_SEP = "/";
-
-export const apis = new ApisHandler();
-
-export class Api extends Provider {
-  constructor(url, options = {}) {
-    const tags = Array.isArray(options.tags) ? options.tags : [options.tags];
+export class Axios extends Provider {
+  constructor(id, options = {}, query) {
+    const tags = options.tags || [];
     tags.unshift(TAG);
-    options.tags = tags;
-    options.url = url;
-    super(`api-${url}`, options.defaultValue, { ...defaultConfig, ...options });
-    this.setHeaders(apis._getHeaders(this._tags));
+    super(id, { ...defaultConfig, ...options, tags }, query);
   }
 
-  _addOnBeforeRequest(onceBeforeRequest) {
+  _addOnceBeforeRequest(onceBeforeRequest) {
     this._originalOnceBeforeRequest = onceBeforeRequest;
     this._onceBeforeRequest = onceBeforeRequest ? once(onceBeforeRequest) : null;
   }
 
-  _config(configuration) {
+  configMethod(configuration) {
     if (configuration.onceBeforeRequest !== this._originalOnceBeforeRequest) {
-      this._addOnBeforeRequest(configuration.onceBeforeRequest);
+      this._addOnceBeforeRequest(configuration.onceBeforeRequest);
     }
+    this._headers = this._headers || configuration.headers;
     this._readMethod = configuration.readMethod;
     this._updateMethod = configuration.updateMethod;
     this._createMethod = configuration.createMethod;
@@ -71,7 +64,7 @@ export class Api extends Provider {
         clearInterval(this.cleanInterval);
       }
       if (configuration.expirationTime > 0) {
-        this.cleanInterval = setInterval(() => this.clean(), configuration.expirationTime);
+        this.cleanInterval = setInterval(() => this.cleanCache(), configuration.expirationTime);
       }
     }
 
@@ -79,7 +72,7 @@ export class Api extends Provider {
   }
 
   _getQueryString(queryString) {
-    if (!queryString) {
+    if (!queryString || isEmpty(queryString)) {
       return "";
     }
     return (
@@ -90,10 +83,10 @@ export class Api extends Provider {
     );
   }
 
-  _getUrl(query = {}) {
-    const queryString = query.queryString || query.query;
-    const urlParams = query.urlParams || query.params;
-    if (urlParams) {
+  _getUrl() {
+    const queryString = this.queryValue.queryString;
+    const urlParams = this.queryValue.urlParams;
+    if (urlParams && !isEmpty(urlParams)) {
       return `${this.url.base}/${this.url.segment(urlParams)}${
         this.url.trailingSlash
       }${this._getQueryString(queryString)}`;
@@ -101,14 +94,14 @@ export class Api extends Provider {
     return `${this.url.full}${this._getQueryString(queryString)}`;
   }
 
-  _setUrl(baseUrl) {
-    const splittedUrl = baseUrl.split(PATH_SEP).filter(pathPortion => pathPortion !== "");
+  _setUrl(fullUrl) {
+    const splittedUrl = fullUrl.split(PATH_SEP).filter(pathPortion => pathPortion !== "");
     const hasProtocol = splittedUrl[0].indexOf("http") > -1;
 
     this.url = {
-      base: hasProtocol ? `${splittedUrl[0]}//${splittedUrl[1]}` : "",
-      full: baseUrl,
-      trailingSlash: baseUrl[baseUrl.length - 1] === "/" ? "/" : "",
+      base: hasProtocol ? `${splittedUrl[0]}${PATH_SEP}${PATH_SEP}${splittedUrl[1]}` : "",
+      full: fullUrl,
+      trailingSlash: fullUrl[fullUrl.length - 1] === PATH_SEP ? PATH_SEP : "",
       segment: compile(
         hasProtocol
           ? splittedUrl.slice(2, splittedUrl.length).join(PATH_SEP)
@@ -124,7 +117,7 @@ export class Api extends Provider {
       return this._doRequest(
         {
           ...requestOptions,
-          headers: this._headers
+          headers: this.headers
         },
         true
       );
@@ -165,7 +158,7 @@ export class Api extends Provider {
       url,
       validateStatus: this._validateStatus,
       method: this._readMethod,
-      headers: this._headers
+      headers: this.headers
     });
   }
 
@@ -175,7 +168,7 @@ export class Api extends Provider {
       data,
       validateStatus: this._validateStatus,
       method: this._updateMethod,
-      headers: this._headers
+      headers: this.headers
     });
   }
 
@@ -185,7 +178,7 @@ export class Api extends Provider {
       data,
       validateStatus: this._validateStatus,
       method: this._createMethod,
-      headers: this._headers
+      headers: this.headers
     });
   }
 
@@ -194,52 +187,63 @@ export class Api extends Provider {
       url,
       validateStatus: this._validateStatus,
       method: this._deleteMethod,
-      headers: this._headers
+      headers: this.headers
     });
   }
 
-  _readFromCache(query, url) {
-    const cached = this._cache.get(query);
-    if (cached) {
-      return cached;
-    }
-    const request = this._readRequest(url).catch(err => {
-      this._cache.set(query, null);
-      return Promise.reject(err);
-    });
-    this._cache.set(query, request);
-    return request;
-  }
-
-  _read(query) {
-    this._doBeforeRequest();
-    const url = this._getUrl(query);
-    if (this._useCache) {
-      return this._readFromCache(query, url);
-    }
-    return this._readRequest(url);
-  }
-
-  _cleanAfterRequest(request, query) {
+  _cleanAfterRequestAndDispatch(request, eventName, data) {
     return request.then(responseData => {
-      this._clean(query);
+      this.emit(eventName, data);
+      this.cleanCache();
       return Promise.resolve(responseData);
     });
   }
 
-  _update(query, data) {
+  readMethod() {
     this._doBeforeRequest();
-    return this._cleanAfterRequest(this._updateRequest(this._getUrl(query), data), query);
+    return this._readRequest(this._getUrl());
   }
 
-  _create(query, data) {
-    this._doBeforeRequest();
-    return this._cleanAfterRequest(this._createRequest(this._getUrl(query), data));
+  getChildQueryMethod(query) {
+    return {
+      ...this.queryValue,
+      ...query,
+      queryString: {
+        ...this.queryValue.queryString,
+        ...query.queryString
+      },
+      urlParams: {
+        ...this.queryValue.urlParams,
+        ...query.urlParams
+      }
+    };
   }
 
-  _delete(query) {
+  update(data) {
     this._doBeforeRequest();
-    return this._cleanAfterRequest(this._deleteRequest(this._getUrl(query)), query);
+    return this._cleanAfterRequestAndDispatch(
+      this._updateRequest(this._getUrl(), data),
+      "update",
+      data
+    );
+  }
+
+  create(data) {
+    this._doBeforeRequest();
+    return this._cleanAfterRequestAndDispatch(
+      this._createRequest(this._getUrl(), data),
+      "create",
+      data
+    );
+  }
+
+  delete() {
+    this._doBeforeRequest();
+    return this._cleanAfterRequestAndDispatch(this._deleteRequest(this._getUrl()), "delete");
+  }
+
+  get headers() {
+    return this._headers || {};
   }
 
   setHeaders(headers) {

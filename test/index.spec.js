@@ -1,4 +1,5 @@
 /*
+Copyright 2020 Javier Brea
 Copyright 2019 XbyOrange
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
@@ -11,11 +12,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 const index = require("../src/index");
 
 describe("index", () => {
-  it("should export Api", () => {
-    expect(index.Api).toBeDefined();
-  });
-
-  it("should export apis handler", () => {
-    expect(index.apis).toBeDefined();
+  it("should export Axios", () => {
+    expect(index.Axios).toBeDefined();
   });
 });

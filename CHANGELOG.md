@@ -9,14 +9,22 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 ### Fixed
 ### Removed
-### BREAKING CHANGES
 
-## [TO BE DEPRECATED]
-- apis "config" and "clean" methods. Mercury "instances" methods should be used instead.
+## [2.0.0-beta.1] - 2020-02-23
 
-## [1.6.2] - 2020-01-
+> DISCLAIMER: This major release adapts this origin to the @data-provider v2.x interface. Read @data-provider docs for further info.
+
 ### Changed
-- Update dependencies
+- feat(Axios): [BREAKING CHANGE] - Rename exported Class from Api to Axios
+- feat(Axios): [BREAKING CHANGE] - Use data-provider v2 standard arguments (id, options)
+- feat(Axios): [BREAKING CHANGE] - Url now has to be defined as "url" option in the second argument. First argument is the provider id.
+- feat(Axios): [BREAKING CHANGE] - Remove uuid option. Now id is required as first argument.
+- chore(umd distribution): [BREAKING CHANGE] - Rename umd dist file name to "index.umd.js"
+- feat(apis): [BREAKING CHANGE] - setHeaders and addHeaders method now has to be called through providers, and will not define headers for instances still not created.
+
+### Removed
+- feat(apis): [BREAKING CHANGE] - Remove apis handler. Use @data-provider/core providers instead.
+- feat(apis): To call "addHeaders" and "setHeaders" method, use providers.call("addHeaders");
 
 ## [1.6.1] - 2020-01-12
 ### Changed

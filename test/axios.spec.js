@@ -9,8 +9,8 @@ http://www.apache.org/licenses/LICENSE-2.0
 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 */
 
-const { sources } = require("@data-provider/core");
-const { Api } = require("../src/index");
+const { providers } = require("@data-provider/core");
+const { Axios } = require("../src/index");
 
 describe("axios requests", () => {
   const BOOKS_RESULT = [
@@ -24,33 +24,38 @@ describe("axios requests", () => {
   let booksSuccess;
 
   beforeAll(async () => {
-    sources.getByTag("mocks").config({
+    providers.getByTag("mocks").config({
       baseUrl: "http://localhost:3100"
     });
 
-    apiStatsReset = new Api("/api/stats/reset", {
-      tags: "mocks"
+    apiStatsReset = new Axios("reset-stats", {
+      url: "/api/stats/reset",
+      tags: ["mocks"]
     });
     await apiStatsReset.create();
 
-    apiStatsCallCount = new Api("/api/stats/call-count", {
+    apiStatsCallCount = new Axios("call-count", {
+      url: "/api/stats/call-count",
       cache: false,
-      tags: "mocks"
+      tags: ["mocks"]
     });
 
-    booksSuccess = new Api("/api/books/success", {
-      defaultValue: [],
-      tags: "mocks"
+    booksSuccess = new Axios("books-success", {
+      url: "/api/books/success",
+      tags: ["mocks"],
+      initialState: {
+        data: []
+      }
     });
   });
 
   afterEach(async () => {
-    booksSuccess.clean();
+    booksSuccess.cleanCache();
     await apiStatsReset.create();
   });
 
   afterAll(() => {
-    sources.clear();
+    providers.clear();
   });
 
   describe("when api GET is success", () => {

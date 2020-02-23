@@ -1,4 +1,5 @@
 /*
+Copyright 2020 Javier Brea
 Copyright 2019 XbyOrange
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
@@ -10,24 +11,27 @@ Unless required by applicable law or agreed to in writing, software distributed 
 
 const AxiosMock = require("./Axios.mock.js");
 
-const { Api, apis } = require("../src/index");
+const { providers } = require("@data-provider/core");
+const { Axios } = require("../src/index");
 
-describe("Api data sources", () => {
+describe("Axios data providers", () => {
   let axios;
 
   beforeAll(() => {
     axios = new AxiosMock();
-    apis.reset();
   });
 
   afterAll(() => {
     axios.restore();
-    apis.reset();
+  });
+
+  afterEach(() => {
+    providers.clear();
   });
 
   describe("Available methods", () => {
     it("should have all crud methods available", () => {
-      const books = new Api("/books");
+      const books = new Axios("/books");
       expect(books.create).toBeDefined();
       expect(books.read).toBeDefined();
       expect(books.update).toBeDefined();
@@ -39,7 +43,7 @@ describe("Api data sources", () => {
     let books;
 
     beforeAll(() => {
-      books = new Api("/books", {
+      books = new Axios("/books", {
         delete: true
       });
     });
@@ -47,39 +51,32 @@ describe("Api data sources", () => {
     it("should be true while resource is being loaded, false when finished", () => {
       expect.assertions(2);
       const promise = books.read();
-      expect(books.read.loading).toEqual(true);
+      expect(books.state.loading).toEqual(true);
       return promise.then(() => {
-        expect(books.read.loading).toEqual(false);
+        expect(books.state.loading).toEqual(false);
       });
     });
 
     it("should not be loading when request promise is cached", async () => {
       expect.assertions(3);
       await books.read();
-      expect(books.read.loading).toEqual(false);
+      expect(books.state.loading).toEqual(false);
       const secondRead = books.read();
-      expect(books.read.loading).toEqual(false);
+      expect(books.state.loading).toEqual(false);
       return secondRead.then(() => {
-        expect(books.read.loading).toEqual(false);
+        expect(books.state.loading).toEqual(false);
       });
     });
 
     it("should be loading again after cleaning cache", async () => {
       expect.assertions(3);
       await books.read();
-      expect(books.read.loading).toEqual(false);
-      books.clean();
+      expect(books.state.loading).toEqual(false);
+      books.cleanCache();
       const secondRead = books.read();
-      expect(books.read.loading).toEqual(true);
+      expect(books.state.loading).toEqual(true);
       return secondRead.then(() => {
-        expect(books.read.loading).toEqual(false);
-      });
-    });
-
-    it("should be accesible through getter", async () => {
-      expect.assertions(1);
-      return books.read().then(() => {
-        expect(books.read.getters.loading()).toEqual(false);
+        expect(books.state.loading).toEqual(false);
       });
     });
   });
@@ -88,45 +85,34 @@ describe("Api data sources", () => {
     let books;
 
     beforeAll(() => {
-      books = new Api("/books");
+      books = new Axios("/books");
     });
 
     it("should be null while resource is being loaded, null when finished successfully", () => {
       expect.assertions(2);
       const promise = books.read();
-      expect(books.read.error).toEqual(null);
+      expect(books.state.error).toEqual(null);
       return promise.then(() => {
-        expect(books.read.error).toEqual(null);
+        expect(books.state.error).toEqual(null);
       });
     });
 
     it("should be null while resource is being loaded, error when finished with error", () => {
       const fooErrorMessage = "Foo error";
       const fooError = new Error(fooErrorMessage);
-      books.clean();
+      books.cleanCache();
       axios.stubs.instance.rejects(new Error(fooErrorMessage));
 
       expect.assertions(2);
       const promise = books.read();
-      expect(books.read.error).toEqual(null);
+      expect(books.state.error).toEqual(null);
       return promise.catch(() => {
-        expect(books.read.error).toEqual(fooError);
-      });
-    });
-
-    it("should be accesible through getter", async () => {
-      axios.stubs.instance.resolves({
-        data: ""
-      });
-      books.clean();
-      expect.assertions(1);
-      return books.read().then(() => {
-        expect(books.read.getters.error()).toEqual(null);
+        expect(books.state.error).toEqual(fooError);
       });
     });
   });
 
-  describe("Value property of a method", () => {
+  describe("Data state", () => {
     let books;
     const fooData = "foo-data";
 
@@ -134,22 +120,16 @@ describe("Api data sources", () => {
       axios.stubs.instance.resolves({
         data: "foo-data"
       });
-      books = new Api("/books");
+      books = new Axios("/books");
     });
 
     it("should be undefined while resource is being loaded, and returned value when finished successfully", () => {
       expect.assertions(2);
       const promise = books.read();
-      expect(books.read.value).toEqual(undefined);
+      expect(books.state.data).toEqual(undefined);
       return promise.then(() => {
-        expect(books.read.value).toEqual(fooData);
+        expect(books.state.data).toEqual(fooData);
       });
-    });
-
-    it("should be accesible through getter", async () => {
-      expect.assertions(1);
-      await books.read();
-      expect(books.read.getters.value()).toEqual(fooData);
     });
   });
 
@@ -159,19 +139,19 @@ describe("Api data sources", () => {
       axios.stubs.instance.resolves({
         data: ""
       });
-      books = new Api("/books");
+      books = new Axios("/books");
     });
 
     it("should clean the cache when finish successfully", async () => {
       expect.assertions(3);
       let promise = books.read();
-      expect(books.read.loading).toEqual(true);
+      expect(books.state.loading).toEqual(true);
       await promise;
       await books.update("");
       promise = books.read();
-      expect(books.read.loading).toEqual(true);
+      expect(books.state.loading).toEqual(true);
       return promise.then(() => {
-        expect(books.read.loading).toEqual(false);
+        expect(books.state.loading).toEqual(false);
       });
     });
   });
@@ -182,19 +162,19 @@ describe("Api data sources", () => {
       axios.stubs.instance.resolves({
         data: ""
       });
-      books = new Api("/books");
+      books = new Axios("/books");
     });
 
     it("should clean the cache when finish successfully", async () => {
       expect.assertions(3);
       let promise = books.read();
-      expect(books.read.loading).toEqual(true);
+      expect(books.state.loading).toEqual(true);
       await promise;
       await books.create("");
       promise = books.read();
-      expect(books.read.loading).toEqual(true);
+      expect(books.state.loading).toEqual(true);
       return promise.then(() => {
-        expect(books.read.loading).toEqual(false);
+        expect(books.state.loading).toEqual(false);
       });
     });
   });
@@ -205,19 +185,19 @@ describe("Api data sources", () => {
       axios.stubs.instance.resolves({
         data: ""
       });
-      books = new Api("/books");
+      books = new Axios("/books");
     });
 
     it("should clean the cache when finish successfully", async () => {
       expect.assertions(3);
       let promise = books.read();
-      expect(books.read.loading).toEqual(true);
+      expect(books.state.loading).toEqual(true);
       await promise;
       await books.delete();
       promise = books.read();
-      expect(books.read.loading).toEqual(true);
+      expect(books.state.loading).toEqual(true);
       return promise.then(() => {
-        expect(books.read.loading).toEqual(false);
+        expect(books.state.loading).toEqual(false);
       });
     });
   });

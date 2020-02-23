@@ -10,36 +10,35 @@ Unless required by applicable law or agreed to in writing, software distributed 
 */
 
 const sinon = require("sinon");
-const { sources } = require("@data-provider/core");
+const { providers } = require("@data-provider/core");
+const { Axios } = require("../src/index");
 
-const { Api, apis } = require("../src/index");
+const TAG = "axios";
 
-const TAG = "api";
-
-describe("sources clean method", () => {
+describe("providers clean method", () => {
   let sandbox;
   let api_1;
   let api_2;
   let api_3;
-  let allApiSources;
+  let allAxiosSources;
 
   beforeAll(() => {
-    allApiSources = sources.getByTag(TAG);
-    apis.reset();
-    api_1 = new Api("foo-1");
-    api_2 = new Api("foo-2", {
-      tags: "tag-1"
+    providers.clear();
+    allAxiosSources = providers.getByTag(TAG);
+    api_1 = new Axios("foo-1");
+    api_2 = new Axios("foo-2", {
+      tags: ["tag-1"]
     });
-    api_3 = new Api("foo-3", {
+    api_3 = new Axios("foo-3", {
       tags: ["tag-1", "tag-2"]
     });
   });
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
-    api_1.clean = sandbox.spy();
-    api_2.clean = sandbox.spy();
-    api_3.clean = sandbox.spy();
+    api_1.cleanCache = sandbox.spy();
+    api_2.cleanCache = sandbox.spy();
+    api_3.cleanCache = sandbox.spy();
   });
 
   afterEach(() => {
@@ -47,50 +46,50 @@ describe("sources clean method", () => {
   });
 
   afterAll(() => {
-    allApiSources.clear();
+    allAxiosSources.clear();
   });
 
   describe("when calling apis clean method", () => {
     describe("if no tags are defined", () => {
       it("should clean all existant apis", () => {
-        allApiSources.clean();
-        expect(api_1.clean.called).toEqual(true);
-        expect(api_2.clean.called).toEqual(true);
-        expect(api_3.clean.called).toEqual(true);
+        allAxiosSources.cleanCache();
+        expect(api_1.cleanCache.called).toEqual(true);
+        expect(api_2.cleanCache.called).toEqual(true);
+        expect(api_3.cleanCache.called).toEqual(true);
       });
     });
 
     describe("if tag is defined as string", () => {
       it("should clean all existant apis having a tag matching with it", () => {
-        sources.getByTag("tag-1").clean();
-        expect(api_1.clean.called).toEqual(false);
-        expect(api_2.clean.called).toEqual(true);
-        expect(api_3.clean.called).toEqual(true);
+        providers.getByTag("tag-1").cleanCache();
+        expect(api_1.cleanCache.called).toEqual(false);
+        expect(api_2.cleanCache.called).toEqual(true);
+        expect(api_3.cleanCache.called).toEqual(true);
       });
 
       it("should not clean any api if any have a matching tag", () => {
-        sources.getByTag("tag-foo").clean();
-        expect(api_1.clean.called).toEqual(false);
-        expect(api_2.clean.called).toEqual(false);
-        expect(api_3.clean.called).toEqual(false);
+        providers.getByTag("tag-foo").cleanCache();
+        expect(api_1.cleanCache.called).toEqual(false);
+        expect(api_2.cleanCache.called).toEqual(false);
+        expect(api_3.cleanCache.called).toEqual(false);
       });
     });
 
     describe("if tag is an array", () => {
       it("should clean all existant apis having a tag matching with any of it", () => {
-        sources.getByTag("tag-1").clean();
-        sources.getByTag("foo").clean();
-        expect(api_1.clean.called).toEqual(false);
-        expect(api_2.clean.called).toEqual(true);
-        expect(api_3.clean.called).toEqual(true);
+        providers.getByTag("tag-1").cleanCache();
+        providers.getByTag("foo").cleanCache();
+        expect(api_1.cleanCache.called).toEqual(false);
+        expect(api_2.cleanCache.called).toEqual(true);
+        expect(api_3.cleanCache.called).toEqual(true);
       });
 
       it("should not clean any api if any have a matching tag", () => {
-        sources.getByTag("tag-foo").clean();
-        sources.getByTag("foo").clean();
-        expect(api_1.clean.called).toEqual(false);
-        expect(api_2.clean.called).toEqual(false);
-        expect(api_3.clean.called).toEqual(false);
+        providers.getByTag("tag-foo").cleanCache();
+        providers.getByTag("foo").cleanCache();
+        expect(api_1.cleanCache.called).toEqual(false);
+        expect(api_2.cleanCache.called).toEqual(false);
+        expect(api_3.cleanCache.called).toEqual(false);
       });
     });
   });

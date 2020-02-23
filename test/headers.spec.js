@@ -1,4 +1,5 @@
 /*
+Copyright 2020 Javier Brea
 Copyright 2019 XbyOrange
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
@@ -10,19 +11,22 @@ Unless required by applicable law or agreed to in writing, software distributed 
 
 const AxiosMock = require("./Axios.mock.js");
 
-const { Api, apis } = require("../src/index");
+const { providers } = require("@data-provider/core");
+const { Axios } = require("../src/index");
 
-describe("Api configuration", () => {
+describe("Axios configuration", () => {
   let axios;
 
   beforeAll(() => {
     axios = new AxiosMock();
-    apis.reset();
   });
 
   afterAll(() => {
     axios.restore();
-    apis.reset();
+  });
+
+  afterEach(() => {
+    providers.clear();
   });
 
   beforeEach(() => {
@@ -39,7 +43,7 @@ describe("Api configuration", () => {
     };
     it("should set the requests headers", async () => {
       expect.assertions(1);
-      const books = new Api("/books");
+      const books = new Axios("/books");
       books.setHeaders(headers);
       await books.read();
       expect(axios.stubs.instance.getCall(0).args[0].headers).toEqual(headers);
@@ -48,12 +52,12 @@ describe("Api configuration", () => {
     it("should override all headers", async () => {
       expect.assertions(2);
       const newHeaders = { ...headers, foo2: "foo-new-2" };
-      const books = new Api("/books");
+      const books = new Axios("/books");
       books.setHeaders(headers);
       await books.read();
       expect(axios.stubs.instance.getCall(0).args[0].headers).toEqual(headers);
       books.setHeaders(newHeaders);
-      books.clean();
+      books.cleanCache();
       await books.read();
       expect(axios.stubs.instance.getCall(1).args[0].headers).toEqual(newHeaders);
     });
@@ -69,12 +73,12 @@ describe("Api configuration", () => {
       const newHeaders = {
         foo3: "foo-3"
       };
-      const books = new Api("/books");
+      const books = new Axios("/books");
       books.setHeaders(headers);
       await books.read();
       expect(axios.stubs.instance.getCall(0).args[0].headers).toEqual(headers);
       books.addHeaders(newHeaders);
-      books.clean();
+      books.cleanCache();
       await books.read();
       expect(axios.stubs.instance.getCall(1).args[0].headers).toEqual({
         foo: "foo-1",
@@ -89,12 +93,12 @@ describe("Api configuration", () => {
         foo2: "foo-4",
         foo3: "foo-3"
       };
-      const books = new Api("/books");
+      const books = new Axios("/books");
       books.setHeaders(headers);
       await books.read();
       expect(axios.stubs.instance.getCall(0).args[0].headers).toEqual(headers);
       books.addHeaders(newHeaders);
-      books.clean();
+      books.cleanCache();
       await books.read();
       expect(axios.stubs.instance.getCall(1).args[0].headers).toEqual({
         foo: "foo-1",
