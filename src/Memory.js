@@ -16,7 +16,7 @@ const TAG = "memory";
 class Memory extends Provider {
   constructor(id, options = {}, query) {
     const tags = options.tags || [];
-    tags.push(TAG);
+    tags.unshift(TAG);
     super(id, { ...options, tags }, query);
     this._data = this.initialState.data;
     this.options._data = this._options._data || this._data;

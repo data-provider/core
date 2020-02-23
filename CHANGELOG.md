@@ -9,15 +9,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 ### Fixed
 ### Removed
-### BREAKING CHANGES
 
-## [TO BE DEPRECATED]
-- "queriesDefaultValue" option has to be removed.
-- Options should be accepted only as second argument. "uuid" should be defined only using the "uuid" option, not as second argument.
+## [2.0.0.alpha-1] - 2020-02-23
 
-## [2.0.0.beta-1]
-
-> DISCLAIMER: This major release adapts this plugin to the @data-provider v2.x interface. Read @data-provider docs for further info.
+> DISCLAIMER: This major release adapts this origin to the @data-provider v2.x interface. Read @data-provider docs for further info.
 
 ### Changed
 - feat(Memory): [BREAKING CHANGE] - Use data-provider v2 standard arguments (id, options)
