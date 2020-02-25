@@ -22,7 +22,6 @@ export const defaultOptions = {
 export const INIT = "init";
 export const CLEAN_CACHE = "cleanCache";
 export const RESET_STATE = "resetState";
-export const RESET_STATS = "resetStats";
 export const READ_START = "readStart";
 export const READ_SUCCESS = "readSuccess";
 export const READ_ERROR = "readError";

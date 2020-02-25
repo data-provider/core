@@ -33,7 +33,7 @@ describe("storeManager", () => {
 
   describe("without migrate", () => {
     it("should store state in own store, available through storeManager", async () => {
-      expect(storeManager.state.foo.state.data).toEqual("foo-data");
+      expect(storeManager.state.foo.data).toEqual("foo-data");
     });
   });
 
@@ -48,8 +48,8 @@ describe("storeManager", () => {
       storeManager.setStore(store, "newNamespace");
 
       expect(storeManager.namespace).toEqual("newNamespace");
-      expect(storeManager.state.foo.state.data).toEqual("foo-data");
-      expect(store.getState().newNamespace.foo.state.data).toEqual("foo-data");
+      expect(storeManager.state.foo.data).toEqual("foo-data");
+      expect(store.getState().newNamespace.foo.data).toEqual("foo-data");
     });
   });
 });

@@ -10,6 +10,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 ### Removed
 
+## [2.0.0-alpha.5] - 2020-02-25
+### Removed
+- feat(Provider): Do not pass previous State as argument in events.
+- feat(Provider): Remove stats and cache flag from state. Save resources. Only loading, data and error are in state now.
+
 ## [2.0.0-alpha.4] - 2020-02-23
 ### Fixed
 - fix(Provider): Emit "changeState" children event.

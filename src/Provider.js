@@ -20,6 +20,7 @@ import {
   ANY_EVENT,
   CHANGE_STATE_EVENTS,
   CHANGE_STATE_EVENT,
+  CLEAN_CACHE,
   childEventName,
   getAutomaticId,
   isPromise,
@@ -27,15 +28,7 @@ import {
   defaultOptions
 } from "./helpers";
 import { providers } from "./providers";
-import {
-  init,
-  cleanCache,
-  resetState,
-  resetStats,
-  readStart,
-  readSuccess,
-  readError
-} from "./reducer";
+import { init, resetState, readStart, readSuccess, readError } from "./reducer";
 import eventEmitter from "./eventEmitter";
 
 class Provider {
@@ -58,29 +51,27 @@ class Provider {
     return eventNamespace(eventName, this._id);
   }
 
-  _emitChild(eventName, data) {
+  _emitChild(eventName) {
     if (CHANGE_STATE_EVENTS.includes(eventName)) {
-      eventEmitter.emit(this._eventNamespace(childEventName(CHANGE_STATE_EVENT)), data);
+      eventEmitter.emit(this._eventNamespace(childEventName(CHANGE_STATE_EVENT)));
     }
-    const prefixedEventName = childEventName(eventName);
-    this.emit(prefixedEventName, data);
-    eventEmitter.emit(this._eventNamespace(childEventName(ANY_EVENT)), eventName, data);
+    this.emit(childEventName(eventName));
+    eventEmitter.emit(this._eventNamespace(childEventName(ANY_EVENT)), eventName);
   }
 
   _dispatch(action) {
-    const prevState = this.store;
     storeManager.store.dispatch(action);
-    this.emit(action.baseType, prevState);
+    this.emit(action.baseType);
   }
 
   // Public methods
 
-  emit(eventName, data) {
+  emit(eventName) {
     if (CHANGE_STATE_EVENTS.includes(eventName)) {
-      eventEmitter.emit(this._eventNamespace(CHANGE_STATE_EVENT), data);
+      eventEmitter.emit(this._eventNamespace(CHANGE_STATE_EVENT));
     }
-    eventEmitter.emit(this._eventNamespace(eventName), data);
-    eventEmitter.emit(this._eventNamespace(ANY_EVENT), eventName, data);
+    eventEmitter.emit(this._eventNamespace(eventName));
+    eventEmitter.emit(this._eventNamespace(ANY_EVENT), eventName);
   }
 
   config(options) {
@@ -114,18 +105,13 @@ class Provider {
 
   cleanCache() {
     this._cache = null;
-    this._dispatch(cleanCache(this._id));
+    this.emit(CLEAN_CACHE);
     this._children.forEach(child => child.cleanCache());
   }
 
   resetState() {
     this._dispatch(resetState(this._id, this.initialState));
     this._children.forEach(child => child.resetState());
-  }
-
-  resetStats() {
-    this._dispatch(resetStats(this._id));
-    this._children.forEach(child => child.resetStats());
   }
 
   read() {
@@ -184,11 +170,7 @@ class Provider {
   }
 
   get state() {
-    return this.store.state;
-  }
-
-  get stats() {
-    return this.store.stats;
+    return this.store;
   }
 
   get id() {

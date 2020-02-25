@@ -9,16 +9,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 */
 
 import { storeNamespace } from "./storeNamespace";
-import {
-  INIT,
-  CLEAN_CACHE,
-  RESET_STATE,
-  RESET_STATS,
-  READ_START,
-  READ_SUCCESS,
-  READ_ERROR,
-  MIGRATE_STORE
-} from "./helpers";
+import { INIT, RESET_STATE, READ_START, READ_SUCCESS, READ_ERROR, MIGRATE_STORE } from "./helpers";
 
 const DEFAULT_INITAL_STATE = {
   loading: false,
@@ -31,31 +22,49 @@ const merge = (state, actionIdState, action) => {
     ...state,
     [action.id]: {
       ...state[action.id],
-      stats: {
-        ...state[action.id].stats,
-        actions: {
-          ...state[action.id].stats.actions,
-          [action.baseType]: state[action.id].stats.actions[action.baseType] + 1
-        }
-      },
       ...actionIdState
     }
   };
 };
 
-const INITIAL_STATS = {
-  actions: {
-    [INIT]: 1,
-    [CLEAN_CACHE]: 0,
-    [RESET_STATE]: 0,
-    [READ_START]: 0,
-    [READ_SUCCESS]: 0,
-    [READ_ERROR]: 0
-  }
-};
-
 export default function reducer(state = {}, action = {}) {
   switch (action.type) {
+    case storeNamespace.add(READ_START):
+      return merge(
+        state,
+        {
+          loading: true
+        },
+        action
+      );
+    case storeNamespace.add(READ_SUCCESS):
+      return merge(
+        state,
+        {
+          loading: false,
+          data: action.data,
+          error: null
+        },
+        action
+      );
+    case storeNamespace.add(READ_ERROR):
+      return merge(
+        state,
+        {
+          loading: false,
+          error: action.error
+        },
+        action
+      );
+    case storeNamespace.add(RESET_STATE):
+      return merge(
+        state,
+        {
+          ...DEFAULT_INITAL_STATE,
+          ...action.initialState
+        },
+        action
+      );
     case storeNamespace.add(MIGRATE_STORE):
       return {
         ...state,
@@ -65,72 +74,10 @@ export default function reducer(state = {}, action = {}) {
       return {
         ...state,
         [action.id]: {
-          state: { ...DEFAULT_INITAL_STATE, ...action.initialState },
-          cache: false,
-          stats: INITIAL_STATS
+          ...DEFAULT_INITAL_STATE,
+          ...action.initialState
         }
       };
-    case storeNamespace.add(CLEAN_CACHE):
-      return merge(
-        state,
-        {
-          cache: false
-        },
-        action
-      );
-    case storeNamespace.add(RESET_STATE):
-      return merge(
-        state,
-        {
-          state: { ...DEFAULT_INITAL_STATE, ...action.initialState }
-        },
-        action
-      );
-    case storeNamespace.add(RESET_STATS):
-      return merge(
-        state,
-        {
-          stats: INITIAL_STATS
-        },
-        action
-      );
-    case storeNamespace.add(READ_START):
-      return merge(
-        state,
-        {
-          state: {
-            ...state[action.id].state,
-            loading: true
-          },
-          cache: true
-        },
-        action
-      );
-    case storeNamespace.add(READ_SUCCESS):
-      return merge(
-        state,
-        {
-          state: {
-            loading: false,
-            data: action.data,
-            error: null
-          }
-        },
-        action
-      );
-    case storeNamespace.add(READ_ERROR):
-      return merge(
-        state,
-        {
-          state: {
-            ...state[action.id].state,
-            loading: false,
-            error: action.error
-          },
-          cache: false
-        },
-        action
-      );
     default:
       return state;
   }
@@ -144,10 +91,6 @@ export function init(id, initialState) {
   return { baseType: INIT, type: storeNamespace.add(INIT), id, initialState };
 }
 
-export function cleanCache(id) {
-  return { baseType: CLEAN_CACHE, type: storeNamespace.add(CLEAN_CACHE), id };
-}
-
 export function resetState(id, initialState) {
   return {
     baseType: RESET_STATE,
@@ -155,10 +98,6 @@ export function resetState(id, initialState) {
     id,
     initialState
   };
-}
-
-export function resetStats(id) {
-  return { baseType: RESET_STATS, type: storeNamespace.add(RESET_STATS), id };
 }
 
 export function readStart(id) {

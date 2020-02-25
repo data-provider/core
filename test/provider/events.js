@@ -119,43 +119,11 @@ describe("Provider events", () => {
   });
 
   describe("listener arguments", () => {
-    it("should pass previous store to listener as second argument", async () => {
-      const spy = sandbox.spy();
-      const prevStore = provider.store;
-      provider.on("readStart", spy);
-      await provider.read();
-      expect(spy.getCall(0).args[0]).toEqual(prevStore);
-    });
-
-    it("should pass previous state to event when listener is added with wildcard", async () => {
-      const spy = sandbox.spy();
-      const prevStore = provider.store;
-      provider.on("*", spy);
-      await provider.read();
-      expect(spy.getCall(0).args[1]).toEqual(prevStore);
-    });
-
-    it("should pass child previous store to child listener as second argument", async () => {
-      const spy = sandbox.spy();
-      const prevStore = childProvider.store;
-      provider.onChild("readStart", spy);
-      await childProvider.read();
-      expect(spy.getCall(0).args[0]).toEqual(prevStore);
-    });
-
     it("should pass event name to child listener as first argument when child listener is added with wildcard", async () => {
       const spy = sandbox.spy();
       provider.onChild("*", spy);
       await childProvider.read();
       expect(spy.getCall(0).args[0]).toEqual("readStart");
-    });
-
-    it("should pass previous store to child listener as second argument when child listener is added with wildcard", async () => {
-      const spy = sandbox.spy();
-      const prevStore = childProvider.store;
-      provider.onChild("*", spy);
-      await childProvider.read();
-      expect(spy.getCall(0).args[1]).toEqual(prevStore);
     });
   });
 
@@ -329,40 +297,6 @@ describe("Provider events", () => {
       const spy = sandbox.spy();
       provider.onChild("resetState", spy);
       provider.resetState();
-      expect(spy.callCount).toEqual(1);
-    });
-  });
-
-  describe("resetStats event", () => {
-    beforeEach(() => {
-      hasToThrow = new Error();
-    });
-
-    it("should emit a resetStats event when provider resetStats is called", async () => {
-      const spy = sandbox.spy();
-      provider.on("resetStats", spy);
-      provider.resetStats();
-      expect(spy.callCount).toEqual(1);
-    });
-
-    it("should emit a resetStats event when listener is added with wildcard", async () => {
-      const spy = sandbox.spy();
-      provider.on("*", spy);
-      provider.resetStats();
-      expect(spy.getCall(0).args[0]).toEqual("resetStats");
-    });
-
-    it("should emit a child resetStats event when child resetStats is called", async () => {
-      const spy = sandbox.spy();
-      provider.onChild("resetStats", spy);
-      childProvider.resetStats();
-      expect(spy.callCount).toEqual(1);
-    });
-
-    it("should emit a child resetStats event when parent resetStats is called", async () => {
-      const spy = sandbox.spy();
-      provider.onChild("resetStats", spy);
-      provider.resetStats();
       expect(spy.callCount).toEqual(1);
     });
   });

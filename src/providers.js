@@ -50,10 +50,6 @@ export class ProvidersHandler {
     return this._run("resetState");
   }
 
-  resetStats() {
-    return this._run("resetStats");
-  }
-
   on(eventName, fn) {
     return this._addListener("on", eventName, fn);
   }
@@ -161,10 +157,6 @@ export class Providers {
 
   resetState() {
     return this._allProviders.resetState();
-  }
-
-  resetStats() {
-    return this._allProviders.resetStats();
   }
 
   on(eventName, fn) {

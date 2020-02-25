@@ -1,6 +1,6 @@
 {
   "name": "@data-provider/core",
-  "version": "2.0.0-alpha.4",
+  "version": "2.0.0-alpha.5",
   "description": "Async data provider agnostic about data origins",
   "keywords": [
     "data",
