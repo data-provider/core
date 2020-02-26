@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [2.0.0.alpha-2] - 2020-02-26
 
 ### Changed
-- Update @data-provider dependency
+- chore(deps): update @data-provider dependency
 
 ## [2.0.0.alpha-1] - 2020-02-23
 
