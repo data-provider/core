@@ -1,6 +1,6 @@
 {
   "name": "@data-provider/axios",
-  "version": "2.0.0-alpha.1",
+  "version": "2.0.0-alpha.2",
   "description": "Rest api @data-provider origin using Axios",
   "keywords": [
     "data-provider",
@@ -46,7 +46,7 @@
     "@babel/core": "7.8.4",
     "@babel/preset-env": "7.8.4",
     "@babel/preset-react": "7.8.3",
-    "@data-provider/core": "2.0.0-alpha.4",
+    "@data-provider/core": "2.0.0-alpha.6",
     "@mocks-server/main": "1.8.2",
     "@rollup/plugin-commonjs": "11.0.2",
     "@rollup/plugin-json": "4.0.2",
