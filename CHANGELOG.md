@@ -10,6 +10,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 ### Removed
 
-## [1.0.0-alpha.1] - 2020-02-25
+## [1.0.0-alpha.1] - 2020-02-26
 ### Added
 - feat: First pre-release
