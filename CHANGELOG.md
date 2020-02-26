@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 ### Removed
 
-## [2.0.0.alpha-2] - 2020-02-23
+## [2.0.0.alpha-2] - 2020-02-26
 
 ### Changed
 - Update @data-provider dependency

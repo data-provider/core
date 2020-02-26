@@ -14,10 +14,11 @@ import { Provider } from "@data-provider/core";
 const TAG = "memory";
 
 class Memory extends Provider {
-  constructor(id, options = {}, query) {
-    const tags = options.tags || [];
+  constructor(id, options, query) {
+    const opts = options || {};
+    const tags = opts.tags || [];
     tags.unshift(TAG);
-    super(id, { ...options, tags }, query);
+    super(id, { ...opts, tags }, query);
     this._data = this.initialState.data;
     this.options._data = this._options._data || this._data;
   }
