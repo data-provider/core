@@ -1,9 +1,10 @@
 {
   "name": "@data-provider/memory",
-  "version": "2.0.0-alpha.1",
-  "description": "Memory Data Provider",
+  "version": "2.0.0-alpha.2",
+  "description": "in-memory @data-provider origin",
   "keywords": [
     "data-provider",
+    "origin",
     "data",
     "crud",
     "memory",
@@ -36,7 +37,7 @@
     "@babel/core": "7.8.4",
     "@babel/preset-env": "7.8.4",
     "@babel/preset-react": "7.8.3",
-    "@data-provider/core": "2.0.0-alpha.4",
+    "@data-provider/core": "2.0.0-alpha.6",
     "@rollup/plugin-commonjs": "11.0.2",
     "@rollup/plugin-json": "4.0.2",
     "@rollup/plugin-node-resolve": "7.1.1",
