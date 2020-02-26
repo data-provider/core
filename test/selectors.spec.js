@@ -247,9 +247,9 @@ describe("Axios data providers", () => {
       let selector;
 
       beforeEach(() => {
-        query = query => ({
+        query = queryVal => ({
           queryString: {
-            author: query.author
+            author: queryVal.author
           }
         });
         selector = new Selector(

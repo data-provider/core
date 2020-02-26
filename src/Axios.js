@@ -18,10 +18,11 @@ import { once, isEmpty, TAG, PATH_SEP } from "./helpers";
 import { defaultConfig } from "./defaultConfig";
 
 export class Axios extends Provider {
-  constructor(id, options = {}, query) {
-    const tags = options.tags || [];
+  constructor(id, options, query) {
+    const opts = options || {};
+    const tags = opts.tags || [];
     tags.unshift(TAG);
-    super(id, { ...defaultConfig, ...options, tags }, query);
+    super(id, { ...defaultConfig, ...opts, tags }, query);
   }
 
   _addOnceBeforeRequest(onceBeforeRequest) {
