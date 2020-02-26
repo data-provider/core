@@ -1,0 +1,39 @@
+{
+  "name": "react-app",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "@data-provider/core": "2.0.0-alpha.6",
+    "is-promise": "2.1.0",
+    "prop-types": "15.7.2",
+    "react": "16.12.0",
+    "react-dom": "16.12.0",
+    "react-redux": "7.2.0",
+    "redux": "4.0.5"
+  },
+  "scripts": {
+    "start": "react-app-rewired start",
+    "build": "react-app-rewired build",
+    "eject": "react-scripts eject",
+    "serve": "serve -l 3000",
+    "build-and-serve": "npm run build && npm run serve"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "react-scripts": "3.3.0",
+    "react-app-rewired": "2.1.5",
+    "serve": "11.3.0",
+    "start-server-and-test": "1.10.6"
+  }
+}

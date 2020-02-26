@@ -1,0 +1,2 @@
+version: ~> 1.0
+import: data-provider/ci-cd-shared-config:.travis.yml@master
