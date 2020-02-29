@@ -8,8 +8,7 @@ import {
   withDataProviderBranch,
   withDataProvider,
   withData,
-  withLoading,
-  withRefresh
+  withLoading
 } from "helpers/data-provider";
 
 import Loading from "./Loading";
@@ -21,9 +20,10 @@ const BooksListConnected = withDataProviderBranch(booksWithAuthorName, ["books",
 );
 
 const WrapperConnected = withDataProvider(booksWithAuthorName, ["books", "isLoading"])(Wrapper);
-const WrapperConnectedToDataAndLoading = withRefresh(booksWithAuthorName)(
-  withLoading(booksWithAuthorName, "isLoading")(withData(booksWithAuthorName, "books")(Wrapper))
-);
+const WrapperConnectedToDataAndLoading = withLoading(
+  booksWithAuthorName,
+  "isLoading"
+)(withData(booksWithAuthorName, "books")(Wrapper));
 
 const BooksSearchRerendered = () => {
   const [currentRenders, changeCurrentRenders] = useState(0);
