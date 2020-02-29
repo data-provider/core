@@ -8,13 +8,13 @@ const isFunction = provider => {
 
 const defaultKeys = ["data", "loading", "error"];
 
-const useProvider = (provider, query) => {
+const useProvider = (provider, props) => {
   return useMemo(() => {
     if (isFunction(provider)) {
-      return provider(query);
+      return provider(props);
     }
     return provider;
-  }, [provider, query]);
+  }, [provider, props]);
 };
 
 const getProp = (data, key) => {
@@ -58,7 +58,7 @@ export const withDataProviderBranch = (provider, keys) => (
   LoadingComponent,
   ErrorComponent
 ) => props => {
-  const providerToRead = useProvider(provider, props.query);
+  const providerToRead = useProvider(provider, props);
   const { dataProp, loadingProp, errorProp, loading, error } = useDataProviderCustomProps(
     providerToRead,
     keys
@@ -79,25 +79,28 @@ export const withDataProviderBranch = (provider, keys) => (
 };
 
 export const withDataProvider = (provider, keys) => Component => props => {
-  const providerToRead = useProvider(provider, props.query);
+  const providerToRead = useProvider(provider, props);
   const { dataProp, loadingProp, errorProp } = useDataProviderCustomProps(providerToRead, keys);
   return <Component {...props} {...dataProp} {...loadingProp} {...errorProp} />;
 };
 
 export const withData = (provider, key) => Component => props => {
-  const providerToRead = useProvider(provider, props.query);
+  const providerToRead = useProvider(provider, props);
+  useRefresh(providerToRead);
   const { dataProp } = useDataCustomProp(providerToRead, key);
   return <Component {...props} {...dataProp} />;
 };
 
 export const withLoading = (provider, key) => Component => props => {
-  const providerToRead = useProvider(provider, props.query);
+  const providerToRead = useProvider(provider, props);
+  useRefresh(providerToRead);
   const { loadingProp } = useLoadingCustomProp(providerToRead, key);
   return <Component {...props} {...loadingProp} />;
 };
 
 export const withError = (provider, key) => Component => props => {
-  const providerToRead = useProvider(provider, props.query);
+  const providerToRead = useProvider(provider, props);
+  useRefresh(providerToRead);
   const { errorProp } = useErrorCustomProp(providerToRead, key);
   return <Component {...props} {...errorProp} />;
 };
