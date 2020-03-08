@@ -1,0 +1,9 @@
+{
+  "todos": [
+    {
+      "id": 1,
+      "text": "Finish the basic tutorial",
+      "completed": false
+    }
+  ]
+}
