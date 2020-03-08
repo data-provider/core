@@ -1,14 +1,14 @@
 import React from "react";
 
-import Link from "./Link";
+import Button from "./Button";
 
 const Filters = ({ onClick, showCompleted }) => (
   <p>
-    Show: <Link onClick={() => onClick(null)} active={showCompleted === null}>All</Link>
+    Show: <Button onClick={() => onClick(null)} active={showCompleted === null}>All</Button>
     {', '}
-    <Link onClick={() => onClick(false)} active={showCompleted === false}>Active</Link>
+    <Button onClick={() => onClick(false)} active={showCompleted === false}>Active</Button>
     {', '}
-    <Link onClick={() => onClick(true)} active={showCompleted === true}>Completed</Link>
+    <Button onClick={() => onClick(true)} active={showCompleted === true}>Completed</Button>
   </p>
 );
 
