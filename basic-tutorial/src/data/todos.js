@@ -2,17 +2,11 @@ import { Axios } from "@data-provider/axios";
 import { Selector } from "@data-provider/core";
 
 export const todos = new Axios("todos", {
-  url: "/todos",
-  initialState: {
-    data: []
-  }
+  url: "/todos"
 });
 
 export const todo = new Axios("todo", {
-  url: "/todos/:id",
-  initialState: {
-    data: {}
-  }
+  url: "/todos/:id"
 });
 
 export const todosFiltered = new Selector(
@@ -24,10 +18,7 @@ export const todosFiltered = new Selector(
     return todosResults.filter(todo => todo.completed === query.completed)
   },
   {
-    id: "todos-filtered",
-    initialState: {
-      data: []
-    }
+    id: "todos-filtered"
   }
 );
 

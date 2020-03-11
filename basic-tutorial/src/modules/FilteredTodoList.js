@@ -10,7 +10,7 @@ const FilteredTodoList = ({ showCompleted }) => {
   const todos = useData(todosProvider);
   const loading = useLoading(todosProvider);
 
-  if (loading && !todos.length) {
+  if (loading && !todos) {
     return <div>Loading...</div>;
   }
   return (
