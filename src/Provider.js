@@ -61,11 +61,6 @@ class Provider {
 
   // Public methods
 
-  emit(eventName) {
-    eventEmitter.emit(this._eventNamespace(eventName));
-    eventEmitter.emit(this._eventNamespace(ANY), eventName);
-  }
-
   config(options) {
     this._options = { ...this._options, ...options };
     this.configMethod(this._options);
@@ -177,10 +172,6 @@ class Provider {
     return fromEntries(this._queryMethods);
   }
 
-  get queryMethods() {
-    return fromEntries(this._queryMethodsParsers);
-  }
-
   get children() {
     return Array.from(this._children.values());
   }
@@ -193,13 +184,26 @@ class Provider {
     return this._options;
   }
 
+  // Methods to be used for testing
+
+  get queryMethods() {
+    return fromEntries(this._queryMethodsParsers);
+  }
+
+  // Methods to be used only by addons
+
   get initialStateFromOptions() {
     return isFunction(this._options.initialState)
       ? this._options.initialState(this._query)
       : this._options.initialState;
   }
 
-  // Methods that can be overwritten by plugins
+  emit(eventName) {
+    eventEmitter.emit(this._eventNamespace(eventName));
+    eventEmitter.emit(this._eventNamespace(ANY), eventName);
+  }
+
+  // Methods that can be overwritten by addons
 
   get initialState() {
     return this.initialStateFromOptions;
