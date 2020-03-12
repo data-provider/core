@@ -10,6 +10,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 ### Removed
 
+## [2.0.0] - 2020-03-14
+
+> DISCLAIMER: This major release still maintains the concept of the previous "data-provider" versions, but a lot of BREAKING CHANGES have been made to the interfaces in order to improve the usage experience, apart of performance improvements and fixes. A chapter "how to migrate from 1.x" will be added to the documentation website to facilitate the migration to this new version, as the maintenance of 1.X versions will be stopped soon.
+
+### Added
+- feat(events): Export eventNames constants.
+
+### Removed
+- feat(events): Remove changeState events wildcard.
+
 ## [2.0.0-alpha.6] - 2020-02-25
 ### Removed
 - feat(Provider): Do not pass previous State as argument in events.

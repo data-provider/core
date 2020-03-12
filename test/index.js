@@ -27,4 +27,14 @@ describe("index", () => {
   it("should export storeManager", () => {
     expect(index.storeManager).toBeDefined();
   });
+
+  it("should export eventNames", () => {
+    expect(index.eventNames.INIT).toBeDefined();
+    expect(index.eventNames.CLEAN_CACHE).toBeDefined();
+    expect(index.eventNames.RESET_STATE).toBeDefined();
+    expect(index.eventNames.READ_START).toBeDefined();
+    expect(index.eventNames.READ_SUCCESS).toBeDefined();
+    expect(index.eventNames.READ_ERROR).toBeDefined();
+    expect(index.eventNames.ANY).toBeDefined();
+  });
 });
