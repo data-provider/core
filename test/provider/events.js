@@ -240,33 +240,6 @@ describe("Provider events", () => {
     });
   });
 
-  describe("changeState event", () => {
-    beforeEach(() => {
-      hasToThrow = new Error();
-    });
-
-    it("should emit a changeState event when provider resetState is called", async () => {
-      const spy = sandbox.spy();
-      provider.on("changeState", spy);
-      provider.resetState();
-      expect(spy.callCount).toEqual(1);
-    });
-
-    it("should emit a child changeState event when child resetState is called", async () => {
-      const spy = sandbox.spy();
-      provider.onChild("changeState", spy);
-      childProvider.resetState();
-      expect(spy.callCount).toEqual(1);
-    });
-
-    it("should emit a child changeState event when parent resetState is called", async () => {
-      const spy = sandbox.spy();
-      provider.onChild("changeState", spy);
-      provider.resetState();
-      expect(spy.callCount).toEqual(1);
-    });
-  });
-
   describe("resetState event", () => {
     beforeEach(() => {
       hasToThrow = new Error();

@@ -20,6 +20,18 @@ var searchListeners = {
   book: null
 };
 
+var CHANGE_STATE_EVENTS = [
+  dataProvider.eventNames.RESET_STATE,
+  dataProvider.eventNames.READ_START,
+  dataProvider.eventNames.READ_SUCCESS,
+  dataProvider.eventNames.READ_ERROR,
+  dataProvider.eventNames.INIT
+];
+
+var isChangeStateEvent = function(eventName) {
+  return CHANGE_STATE_EVENTS.indexOf(eventName) > -1;
+};
+
 // INITAL COLLECTIONS
 
 var AUTHORS = [
@@ -305,7 +317,13 @@ var initSearchField = function($input, listenerId, $resultsContainer, provider, 
           renderResults($resultsContainer, currentSearch, appender);
         };
         searchListeners[listenerId] = [];
-        searchListeners[listenerId].push(currentSearch.on("changeState", refreshView));
+        searchListeners[listenerId].push(
+          currentSearch.on("*", function(eventName) {
+            if (isChangeStateEvent(eventName)) {
+              refreshView();
+            }
+          })
+        );
         searchListeners[listenerId].push(
           currentSearch.on("cleanCache", function() {
             currentSearch.read();
@@ -345,9 +363,11 @@ $.when($.ready).then(function() {
 
   initSearchField($searchBook, "book", $booksSearchContainer, booksSearch, booksSearchAppender);
 
-  authorsProvider.on("changeState", function() {
-    renderItems($authorsColumn, $authorsContainer, authorsProvider, authorsAppender);
-    renderOptions($bookAuthorSelect, authorsProvider, authorsOptionsAppender);
+  authorsProvider.on("*", function(eventName) {
+    if (isChangeStateEvent(eventName)) {
+      renderItems($authorsColumn, $authorsContainer, authorsProvider, authorsAppender);
+      renderOptions($bookAuthorSelect, authorsProvider, authorsOptionsAppender);
+    }
   });
   authorsProvider.on("cleanCache", function() {
     authorsProvider.read();
@@ -380,8 +400,10 @@ $.when($.ready).then(function() {
     }
   });
 
-  booksWithAuthorName.on("changeState", function() {
-    renderItems($booksColumn, $booksContainer, booksWithAuthorName, booksAppender);
+  booksWithAuthorName.on("*", function(eventName) {
+    if (isChangeStateEvent(eventName)) {
+      renderItems($booksColumn, $booksContainer, booksWithAuthorName, booksAppender);
+    }
   });
   booksWithAuthorName.on("cleanCache", function() {
     booksWithAuthorName.read();

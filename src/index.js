@@ -1,5 +1,5 @@
 /*
-Copyright 2019 Javier Brea
+Copyright 2020 Javier Brea
 Copyright 2019 XbyOrange
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
@@ -13,3 +13,4 @@ export { default as Provider } from "./Provider";
 export { default as Selector } from "./Selector";
 export { providers } from "./providers";
 export { storeManager } from "./storeManager";
+export { eventNames } from "./helpers";

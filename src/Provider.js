@@ -17,9 +17,7 @@ import {
   ensureArray,
   isFunction,
   isUndefined,
-  ANY_EVENT,
-  CHANGE_STATE_EVENTS,
-  CHANGE_STATE_EVENT,
+  ANY,
   CLEAN_CACHE,
   childEventName,
   getAutomaticId,
@@ -52,11 +50,8 @@ class Provider {
   }
 
   _emitChild(eventName) {
-    if (CHANGE_STATE_EVENTS.includes(eventName)) {
-      eventEmitter.emit(this._eventNamespace(childEventName(CHANGE_STATE_EVENT)));
-    }
     this.emit(childEventName(eventName));
-    eventEmitter.emit(this._eventNamespace(childEventName(ANY_EVENT)), eventName);
+    eventEmitter.emit(this._eventNamespace(childEventName(ANY)), eventName);
   }
 
   _dispatch(action) {
@@ -67,11 +62,8 @@ class Provider {
   // Public methods
 
   emit(eventName) {
-    if (CHANGE_STATE_EVENTS.includes(eventName)) {
-      eventEmitter.emit(this._eventNamespace(CHANGE_STATE_EVENT));
-    }
     eventEmitter.emit(this._eventNamespace(eventName));
-    eventEmitter.emit(this._eventNamespace(ANY_EVENT), eventName);
+    eventEmitter.emit(this._eventNamespace(ANY), eventName);
   }
 
   config(options) {
@@ -159,7 +151,7 @@ class Provider {
     this._queryMethodsParsers.forEach((queryMethodParser, queryMethodKey) =>
       child.addQuery(queryMethodKey, queryMethodParser)
     );
-    child.on(ANY_EVENT, this._emitChild);
+    child.on(ANY, this._emitChild);
     this._children.set(id, child);
     child._parent = this;
     return child;
