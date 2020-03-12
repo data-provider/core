@@ -4,9 +4,7 @@
 /node_modules
 
 # testing
-/.coverage
 /coverage
-.nyc_output
 
 # misc
 .DS_Store

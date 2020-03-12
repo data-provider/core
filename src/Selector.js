@@ -9,122 +9,103 @@ http://www.apache.org/licenses/LICENSE-2.0
 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 */
 
-import { once, isFunction } from "lodash";
-import isPromise from "is-promise";
+import { isFunction, isArray, isPromise, ensureArray, message } from "./helpers";
+import Provider from "./Provider";
 
-import { Provider } from "./Provider";
-import {
-  READ_METHOD,
-  CREATE_METHOD,
-  UPDATE_METHOD,
-  DELETE_METHOD,
-  seemsToBeSelectorOptions,
-  areDataProviders,
-  message,
-  deprecationWarn
-} from "./helpers";
+const isDataProvider = objectToCheck => {
+  return objectToCheck && objectToCheck instanceof Provider;
+};
 
-const SOURCE_DEPRECATION_WARNING =
-  '"source" property in selectors will be deprecated. Please use "provider" instead';
+const isDataProviderExpression = objectToCheck => {
+  if (!objectToCheck) {
+    return false;
+  }
+  return (
+    isDataProvider(objectToCheck) ||
+    isFunction(objectToCheck) ||
+    isDataProvider(objectToCheck.provider) ||
+    isFunction(objectToCheck.provider)
+  );
+};
 
-export class Selector extends Provider {
-  constructor() {
-    const args = Array.from(arguments);
-    let lastIndex = args.length - 1;
-    let defaultValue;
-    let options;
-
-    // Check if last argument is default value or options
-    if (!isFunction(args[lastIndex])) {
-      defaultValue = args[lastIndex];
-      lastIndex = args.length - 2;
-      if (seemsToBeSelectorOptions(defaultValue)) {
-        options = defaultValue;
-        defaultValue = defaultValue.defaultValue;
-      } else {
-        deprecationWarn(
-          `Provide an options object with "defaultValue" property as last argument to selectors. Defining default value as last argument will be deprecated`
-        );
-      }
+const areDataProvidersExpressions = arrayToCheck => {
+  return ensureArray(arrayToCheck).reduce((allAreDataProviders, arrayElement) => {
+    if (!allAreDataProviders || !isDataProviderExpression(arrayElement)) {
+      return false;
     }
+    return true;
+  }, true);
+};
 
-    const providers = args.slice(0, lastIndex);
-
-    const providersIds = [];
-
-    const getTestObjects = providersOfLevel => {
-      const queries = [];
-      const catches = [];
-      providersOfLevel.forEach(provider => {
-        if (Array.isArray(provider)) {
-          const childTestObjects = getTestObjects(provider);
-          queries.push(childTestObjects.queries);
-          catches.push(childTestObjects.catches);
-        } else {
-          // TODO, remove "source" compatibility
-          if (provider.source) {
-            deprecationWarn(SOURCE_DEPRECATION_WARNING);
-            provider.provider = provider.source;
-          }
-          const isProviderObject = !!provider.provider;
-          providersIds.push(isProviderObject ? provider.provider._id : provider._id);
-          if (isProviderObject && provider.query) {
-            queries.push(provider.query);
-          }
-          if (isProviderObject && provider.catch) {
-            catches.push(provider.catch);
-          }
-        }
-      });
-      return {
-        queries,
-        catches
-      };
-    };
-
-    const testObjects = getTestObjects(providers);
-
-    super(`select:${providersIds.join(":")}`, defaultValue, options);
-
-    this._sources = providers; // TODO, deprecate
-    this._providers = providers;
-    this._resultsParser = args[lastIndex];
-    this.test.queries = testObjects.queries;
-    this.test.catches = testObjects.catches;
-    this.test.selector = this._resultsParser;
+class SelectorBase extends Provider {
+  constructor(id, options, query) {
+    super(id, options, query);
+    this._dependencies = options._dependencies;
+    this._selector = options._selector;
   }
 
-  _readAllProvidersAndDispatch(query, extraParams, methodToDispatch) {
-    const providersResults = [];
-    const providers = [];
-    const cleanQuery = once(() => {
-      this.clean(query);
-    });
+  _readAllDependenciesAndSelect() {
+    let dependenciesResults;
+    let dependencies;
+    let dependenciesListeners;
+    let hasToReadAgain = false;
+    const inProgressDependencies = new Set();
+    const inProgressListeners = [];
 
-    const readProvider = providerToRead => {
-      if (Array.isArray(providerToRead)) {
-        return Promise.all(providerToRead.map(readProvider));
+    const markToReadAgain = () => {
+      hasToReadAgain = true;
+    };
+
+    const removeInProgressListenerFuncs = () => {
+      inProgressListeners.forEach(removeListener => removeListener());
+    };
+
+    const cleanCache = () => {
+      dependenciesListeners.forEach(removeListener => removeListener());
+      this.cleanCache();
+    };
+
+    const readDependency = dependencyToRead => {
+      if (hasToReadAgain) {
+        return Promise.resolve();
       }
-      // TODO, remove source compatibility
-      if (!!providerToRead.source) {
-        deprecationWarn(SOURCE_DEPRECATION_WARNING);
-        providerToRead.provider = providerToRead.source;
+      if (isArray(dependencyToRead)) {
+        return Promise.all(dependencyToRead.map(readDependency));
       }
-      const isQueried = !!providerToRead.provider;
-      const hasToQuery = !!providerToRead.query;
-      const hasToCatch = !!providerToRead.catch;
-      const provider = isQueried
-        ? hasToQuery
-          ? providerToRead.provider.query(providerToRead.query(query, providersResults))
-          : providerToRead.provider
-        : providerToRead;
-      providers.push(provider);
-      return provider[READ_METHOD].dispatch().catch(error => {
+      let dependency;
+      let hasToCatch;
+      let hasToQuery;
+      if (!isDataProvider(dependencyToRead)) {
+        let provider = dependencyToRead.provider || dependencyToRead;
+        if (isFunction(provider)) {
+          provider = provider(this._query, dependenciesResults);
+        }
+        if (!isDataProvider(provider)) {
+          throw new Error(
+            message(
+              "Only data providers can be used as dependencies in Selectors. If you are returning a function, ensure it also returns a valid data provider"
+            )
+          );
+        }
+        hasToQuery = !!dependencyToRead.query;
+        hasToCatch = !!dependencyToRead.catch;
+        dependency = hasToQuery
+          ? provider.query(dependencyToRead.query(this._query, dependenciesResults))
+          : provider;
+      } else {
+        dependency = dependencyToRead;
+      }
+      dependencies.push(dependency);
+      if (!inProgressDependencies.has(dependency)) {
+        inProgressDependencies.add(dependency);
+        inProgressListeners.push(dependency.on("cleanCache", markToReadAgain));
+      }
+
+      return dependency.read().catch(error => {
         if (hasToCatch) {
-          const catchResult = providerToRead.catch(error, query);
-          if (areDataProviders(catchResult)) {
-            providers.push(catchResult);
-            return readProvider(catchResult);
+          const catchResult = dependencyToRead.catch(error, this._query, dependenciesResults);
+          if (areDataProvidersExpressions(catchResult)) {
+            return readDependency(catchResult);
           }
           return catchResult;
         }
@@ -132,86 +113,93 @@ export class Selector extends Provider {
       });
     };
 
-    const readProviderIndex = providerIndex => {
-      return readProvider(this._providers[providerIndex]).then(providerResult => {
-        providersResults.push(providerResult);
-        if (providerIndex < this._providers.length - 1) {
-          return readProviderIndex(providerIndex + 1);
+    const readDependencies = (dependencyIndex = 0) => {
+      if (hasToReadAgain) {
+        return Promise.resolve();
+      }
+      if (dependencyIndex === 0) {
+        dependenciesResults = [];
+        dependencies = [];
+      }
+      return readDependency(this._dependencies[dependencyIndex]).then(dependencyResult => {
+        dependenciesResults.push(dependencyResult);
+        if (dependencyIndex < this._dependencies.length - 1) {
+          return readDependencies(dependencyIndex + 1);
         }
-        const result = this._resultsParser.apply(null, providersResults.concat(query));
+        const result = this._selector.apply(null, dependenciesResults.concat(this._query));
         return isPromise(result) ? result : Promise.resolve(result);
       });
     };
 
-    const addCleanQueryListeners = () => {
-      providers.forEach(provider => {
-        provider.onceClean(cleanQuery);
+    const addCleanListeners = () => {
+      dependenciesListeners = dependencies.map(dependency => {
+        return dependency.once("cleanCache", cleanCache);
       });
     };
 
-    return readProviderIndex(0)
-      .then(result => {
-        const selectorResult = result;
-        const selectorResultIsProvider = areDataProviders(selectorResult);
-        if (methodToDispatch !== READ_METHOD && !selectorResultIsProvider) {
-          return Promise.reject(
-            new Error(
-              message(
-                "CUD methods in Selectors can be used only when returning Provider instances"
-              )
-            )
-          );
-        }
-        if (selectorResultIsProvider) {
-          if (methodToDispatch === READ_METHOD) {
-            return readProvider(selectorResult);
+    const readAndReturn = () => {
+      return readDependencies()
+        .then(result => {
+          if (areDataProvidersExpressions(result)) {
+            return readDependency(result);
           }
-          if (Array.isArray(selectorResult)) {
-            return Promise.all(
-              selectorResult.map(provider => provider[methodToDispatch].dispatch(extraParams))
-            );
+          return Promise.resolve(result);
+        })
+        .then(result => {
+          if (hasToReadAgain) {
+            hasToReadAgain = false;
+            return readAndReturn();
           }
-          return selectorResult[methodToDispatch].dispatch(extraParams);
-        }
-        return Promise.resolve(selectorResult);
-      })
-      .then(result => {
-        addCleanQueryListeners();
-        return Promise.resolve(result);
-      })
-      .catch(error => {
-        addCleanQueryListeners();
-        this._cache.set(query, null);
-        return Promise.reject(error);
-      });
+          removeInProgressListenerFuncs();
+          addCleanListeners();
+          return Promise.resolve(result);
+        })
+        .catch(error => {
+          if (hasToReadAgain) {
+            hasToReadAgain = false;
+            return readAndReturn();
+          }
+          removeInProgressListenerFuncs();
+          addCleanListeners();
+          return Promise.reject(error);
+        });
+    };
+    return readAndReturn();
   }
 
-  _read(query, extraParams) {
-    const cached = this._cache.get(query);
-    if (cached) {
-      return cached;
-    }
-    const resultPromise = this._readAllProvidersAndDispatch(query, extraParams, READ_METHOD);
-    this._cache.set(query, resultPromise);
-    return resultPromise;
+  readMethod() {
+    return this._readAllDependenciesAndSelect();
   }
 
-  _cleanAfter(query, extraParams, method) {
-    return this._readAllProvidersAndDispatch(query, extraParams, method).then(responseData => {
-      this._clean(query);
-      return Promise.resolve(responseData);
-    });
+  get dependencies() {
+    return this._dependencies;
   }
 
-  _update(query, extraParams) {
-    return this._cleanAfter(query, extraParams, UPDATE_METHOD);
-  }
-
-  _create(query, extraParams) {
-    return this._cleanAfter(query, extraParams, CREATE_METHOD);
-  }
-
-  _delete(query, extraParams) {
-    return this._cleanAfter(query, extraParams, DELETE_METHOD);
+  get selector() {
+    return this._selector;
   }
 }
+
+class Selector extends SelectorBase {
+  constructor() {
+    const args = Array.from(arguments);
+    const lastIndex = args.length - 1;
+    let selectorIndex = lastIndex;
+    let options = {};
+
+    if (!isFunction(args[lastIndex])) {
+      selectorIndex = args.length - 2;
+      options = args[lastIndex];
+    }
+
+    options._dependencies = args.slice(0, selectorIndex);
+    options._selector = args[selectorIndex];
+    super(options.id, options, undefined);
+  }
+
+  createChildMethod(id, options, query) {
+    return new SelectorBase(id, options, query);
+  }
+}
+
+export default Selector;

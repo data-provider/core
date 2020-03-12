@@ -1,4 +1,5 @@
 /*
+Copyright 2020 Javier Brea
 Copyright 2019 XbyOrange
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
@@ -8,116 +9,88 @@ http://www.apache.org/licenses/LICENSE-2.0
 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 */
 
-import { cloneDeep, merge, isFunction } from "lodash";
+export { default as isPromise } from "is-promise";
 
-const CACHE_EVENT_PREFIX = "clean-cache-";
-const CHANGE_EVENT_PREFIX = "change-";
-const ANY_SUFIX = "any";
+let automaticIdCounter = 0;
 
-export const CREATE_METHOD = "create";
-export const READ_METHOD = "read";
-export const UPDATE_METHOD = "update";
-export const DELETE_METHOD = "delete";
+const CHILD_EVENT_PREFIX = "child-";
 
-export const DISPATCH = "Dispatch";
-export const SUCCESS = "Success";
-export const ERROR = "Error";
-
-export const VALID_METHODS = [CREATE_METHOD, READ_METHOD, UPDATE_METHOD, DELETE_METHOD];
-
-export const CHANGE_ANY_EVENT_NAME = `${CHANGE_EVENT_PREFIX}${ANY_SUFIX}`;
-export const CLEAN_ANY_EVENT_NAME = `${CACHE_EVENT_PREFIX}${ANY_SUFIX}`;
-
-export const isCacheEventName = eventName =>
-  eventName.indexOf(CACHE_EVENT_PREFIX) === 0 && eventName !== CLEAN_ANY_EVENT_NAME;
-
-export const cleanCacheEventName = query => `${CACHE_EVENT_PREFIX}${queryId(query)}`;
-export const changeEventName = query => `${CHANGE_EVENT_PREFIX}${queryId(query)}`;
-
-export const actions = {
-  [CREATE_METHOD]: {
-    dispatch: `${CREATE_METHOD}${DISPATCH}`,
-    success: `${CREATE_METHOD}${SUCCESS}`,
-    error: `${CREATE_METHOD}${ERROR}`
-  },
-  [UPDATE_METHOD]: {
-    dispatch: `${UPDATE_METHOD}${DISPATCH}`,
-    success: `${UPDATE_METHOD}${SUCCESS}`,
-    error: `${UPDATE_METHOD}${ERROR}`
-  },
-  [READ_METHOD]: {
-    dispatch: `${READ_METHOD}${DISPATCH}`,
-    success: `${READ_METHOD}${SUCCESS}`,
-    error: `${READ_METHOD}${ERROR}`
-  },
-  [DELETE_METHOD]: {
-    dispatch: `${DELETE_METHOD}${DISPATCH}`,
-    success: `${DELETE_METHOD}${SUCCESS}`,
-    error: `${DELETE_METHOD}${ERROR}`
-  }
+export const defaultOptions = {
+  cache: true
 };
 
-export const hash = str => {
-  return `${str.split("").reduce((a, b) => {
-    const c = (a << 5) - a + b.charCodeAt(0);
-    return c & c;
-  }, 0)}`;
-};
+export const INIT = "init";
+export const CLEAN_CACHE = "cleanCache";
+export const RESET_STATE = "resetState";
+export const READ_START = "readStart";
+export const READ_SUCCESS = "readSuccess";
+export const READ_ERROR = "readError";
+export const MIGRATE_STORE = "migrateStore";
+export const ANY_EVENT = "*";
 
-export const mergeCloned = (dest, origin) => merge(dest, cloneDeep(origin));
+export const CHANGE_STATE_EVENT = "changeState";
+export const CHANGE_STATE_EVENTS = [INIT, RESET_STATE, READ_START, READ_SUCCESS, READ_ERROR];
 
-export const removeFalsy = array => array.filter(el => !!el);
+export const childEventName = eventName =>
+  `${CHILD_EVENT_PREFIX}${eventName.replace(CHILD_EVENT_PREFIX, "")}`;
 
-export const isUndefined = variable => typeof variable === "undefined";
+export function isArray(obj) {
+  return Array.isArray(obj);
+}
 
-export const queryId = query => (isUndefined(query) ? query : `(${JSON.stringify(query)})`);
+export function isFunction(obj) {
+  return typeof obj === "function";
+}
 
-export const dashJoin = arr => arr.filter(val => !isUndefined(val)).join("-");
+export function isUndefined(variable) {
+  return typeof variable === "undefined";
+}
 
-export const uniqueId = (id, defaultValue) =>
-  hash(`${id}${isFunction(defaultValue) ? "" : JSON.stringify(defaultValue)}`);
+export function queryId(query) {
+  return isUndefined(query) ? query : `(${JSON.stringify(query)})`;
+}
 
-export const queriedUniqueId = (uuid, queryUniqueId) => dashJoin([uuid, queryUniqueId]);
+export function childId(id, query) {
+  return `${id}${queryId(query)}`;
+}
 
-export const ensureArray = els => (Array.isArray(els) ? els : [els]);
+export function eventNamespace(eventName, id) {
+  return `${eventName}-${id}`;
+}
 
-export const seemsToBeSelectorOptions = defaultValueOrOptions => {
-  if (!defaultValueOrOptions) {
-    return false;
-  }
-  return (
-    defaultValueOrOptions.hasOwnProperty("defaultValue") ||
-    defaultValueOrOptions.hasOwnProperty("uuid")
-  );
-};
+export function getAutomaticId() {
+  automaticIdCounter++;
+  return (Date.now() + automaticIdCounter).toString();
+}
 
-export const isDataProvider = objectToCheck => {
-  return (
-    objectToCheck &&
-    (objectToCheck._isDataProvider === true ||
-      (objectToCheck.provider && objectToCheck.provider._isDataProvider) ||
-      (objectToCheck.source && objectToCheck.source._isDataProvider)) // TODO, deprecate
-  );
-};
+export function ensureArray(els) {
+  return isArray(els) ? els : [els];
+}
 
-export const areDataProviders = arrayToCheck => {
-  let allAreDataProviders = true;
-  ensureArray(arrayToCheck).forEach(arrayElement => {
-    if (!isDataProvider(arrayElement)) {
-      allAreDataProviders = false;
-    }
-  });
-  return allAreDataProviders;
-};
+export function removeFalsy(array) {
+  return array.filter(el => !!el);
+}
 
 export const message = text => {
   return `@data-provider/core: ${text}`;
 };
 
-export const warn = text => {
+export function warn(text) {
   console.warn(message(text));
-};
+}
 
-export const deprecationWarn = text => {
-  warn(`Deprecation warning: ${text}`);
-};
+// TODO, remove when node 10 is not maintained
+export function fromEntriesPolyfill(map) {
+  return Array.from(map.entries()).reduce((accumulator, [key, value]) => {
+    accumulator[key] = value;
+    return accumulator;
+  }, {});
+}
+
+export function fromEntries(map) {
+  // TODO, remove when node 10 is not maintained
+  if (Object.fromEntries) {
+    return Object.fromEntries(map);
+  }
+  return fromEntriesPolyfill(map);
+}
