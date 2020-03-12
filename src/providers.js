@@ -40,6 +40,7 @@ export class ProvidersHandler {
   config(options) {
     this._config = { ...this._config, ...options };
     this._providers.forEach(provider => provider.config(this._config));
+    return this;
   }
 
   cleanCache() {
