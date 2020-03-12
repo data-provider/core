@@ -78,9 +78,9 @@ export function removeFalsy(array) {
   return array.filter(el => !!el);
 }
 
-export const message = text => {
+export function message(text) {
   return `@data-provider/core: ${text}`;
-};
+}
 
 export function warn(text) {
   console.warn(message(text));
