@@ -9,8 +9,8 @@
     "selector",
     "cache",
     "reactive",
-    "extensible",
-    "state"
+    "state",
+    "agnostic"
   ],
   "author": "Javier Brea",
   "license": "Apache-2.0",
