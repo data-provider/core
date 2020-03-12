@@ -49,9 +49,9 @@ class Provider {
     return eventNamespace(eventName, this._id);
   }
 
-  _emitChild(eventName) {
-    this.emit(childEventName(eventName));
-    eventEmitter.emit(this._eventNamespace(childEventName(ANY)), eventName);
+  _emitChild(eventName, child) {
+    this.emit(childEventName(eventName), child);
+    eventEmitter.emit(this._eventNamespace(childEventName(ANY)), eventName, child);
   }
 
   _dispatch(action) {
@@ -146,7 +146,7 @@ class Provider {
     this._queryMethodsParsers.forEach((queryMethodParser, queryMethodKey) =>
       child.addQuery(queryMethodKey, queryMethodParser)
     );
-    child.on(ANY, this._emitChild);
+    child.on(ANY, eventName => this._emitChild(eventName, child));
     this._children.set(id, child);
     child._parent = this;
     return child;
@@ -198,9 +198,9 @@ class Provider {
       : this._options.initialState;
   }
 
-  emit(eventName) {
-    eventEmitter.emit(this._eventNamespace(eventName));
-    eventEmitter.emit(this._eventNamespace(ANY), eventName);
+  emit(eventName, child) {
+    eventEmitter.emit(this._eventNamespace(eventName), child);
+    eventEmitter.emit(this._eventNamespace(ANY), eventName, child);
   }
 
   // Methods that can be overwritten by addons

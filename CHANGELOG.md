@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 > DISCLAIMER: This major release still maintains the concept of the previous "data-provider" versions, but a lot of BREAKING CHANGES have been made to the interfaces in order to improve the usage experience, apart of performance improvements and fixes. A chapter "how to migrate from 1.x" will be added to the documentation website to facilitate the migration to this new version, as the maintenance of 1.X versions will be stopped soon.
 
 ### Added
+- feat(events): Pass child causing an `onChild` event to the listener function.
 - feat(events): Export eventNames constants.
 - feat(selector): Accept promises or any other value as dependency. Accept dependencies returning any other type of dependendencies.
 - feat(selector): Export "catchDependencies" utility for catching dependencies errors, as defining dependencies as objects has been deprecated.
