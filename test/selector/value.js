@@ -205,138 +205,20 @@ describe("Selector value", () => {
       });
     });
 
-    describe("expressed an object containing provider property", () => {
-      beforeEach(() => {
-        selector = new Selector(dependency1, () => {
-          return {
-            provider: dependency2
-          };
-        });
-      });
-
-      it("should return the value returned by the read method of the dependency", async () => {
-        const result = await selector.read();
-        expect(result).toEqual(DEPENDENCY_2_RESULT);
-      });
-    });
-
-    describe("expressed as an array of objects containing provider property", () => {
-      beforeEach(() => {
-        selector = new Selector(dependency1, () => {
-          return [
-            {
-              provider: dependency2
-            },
-            {
-              provider: dependency3
-            }
-          ];
-        });
-      });
-
-      it("should return an array containing values returned by the read method of the dependencies", async () => {
-        const result = await selector.read();
-        expect(result).toEqual([DEPENDENCY_2_RESULT, DEPENDENCY_3_RESULT]);
-      });
-    });
-
-    describe("expressed an object containing provider property with a function returning a provider", () => {
-      let querySpy;
-      beforeEach(() => {
-        querySpy = sandbox.spy();
-        selector = new Selector(dependency1, () => {
-          return {
-            provider: query => {
-              querySpy(query);
-              return dependency2;
-            }
-          };
-        });
-      });
-
-      it("should return the value returned by the read method of the dependency", async () => {
-        const result = await selector.read();
-        expect(result).toEqual(DEPENDENCY_2_RESULT);
-      });
-
-      it("should receive query in the function", async () => {
-        const QUERY = { foo: "foo" };
-        await selector.query(QUERY).read();
-        expect(querySpy.getCall(0).args[0]).toEqual(QUERY);
-      });
-    });
-
-    describe("expressed an object containing provider property with query method", () => {
-      beforeEach(() => {
-        sandbox.spy(dependency2, "query");
-        selector = new Selector(dependency1, () => {
-          return {
-            provider: dependency2,
-            query: query => query
-          };
-        });
-      });
-
-      it("should return the value returned by the read method of the dependency", async () => {
-        const result = await selector.read();
-        expect(result).toEqual(DEPENDENCY_2_RESULT);
-      });
-
-      it("should have applied query to provider", async () => {
-        const QUERY = { foo: "foo" };
-        await selector.query(QUERY).read();
-        expect(dependency2.query.getCall(0).args[0]).toEqual(QUERY);
-      });
-    });
-
-    describe("expressed as an array of objects containing provider property with query method", () => {
-      beforeEach(() => {
-        sandbox.spy(dependency2, "query");
-        sandbox.spy(dependency3, "query");
-        selector = new Selector(dependency1, () => {
-          return [
-            {
-              provider: dependency2,
-              query: query => query
-            },
-            {
-              provider: dependency3,
-              query: query => query
-            }
-          ];
-        });
-      });
-
-      it("should return an array containing the values returned by the read method of the dependencies", async () => {
-        const result = await selector.read();
-        expect(result).toEqual([DEPENDENCY_2_RESULT, DEPENDENCY_3_RESULT]);
-      });
-
-      it("should have applied query to providers", async () => {
-        const QUERY = { foo: "foo" };
-        await selector.query(QUERY).read();
-        expect(dependency2.query.getCall(0).args[0]).toEqual(QUERY);
-        expect(dependency3.query.getCall(0).args[0]).toEqual(QUERY);
-      });
-    });
+    // TODO, test returning catchDependency
   });
 
-  describe("when returning a wrong provider expression", () => {
+  describe("when returning a function returning a result", () => {
     beforeEach(() => {
       selector = new Selector(dependency1, () => {
         return () => "foo";
       });
     });
 
-    it("should reject with data provider error", async () => {
+    it("should resolve with result", async () => {
       expect.assertions(1);
-      try {
-        await selector.read();
-      } catch (error) {
-        expect(error.message).toEqual(
-          expect.stringContaining("Only data providers can be used as dependencies")
-        );
-      }
+      const data = await selector.read();
+      expect(data).toEqual("foo");
     });
   });
 

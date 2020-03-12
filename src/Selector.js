@@ -9,32 +9,44 @@ http://www.apache.org/licenses/LICENSE-2.0
 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 */
 
-import { isFunction, isArray, isPromise, ensureArray, message } from "./helpers";
+import { CLEAN_CACHE, isFunction, isArray, isPromise, ensureArray } from "./helpers";
 import Provider from "./Provider";
+import CatchDependency from "./CatchDependency";
+
+export function catchDependency(dependency, catchMethod) {
+  return new CatchDependency(dependency, catchMethod);
+}
 
 const isDataProvider = objectToCheck => {
   return objectToCheck && objectToCheck instanceof Provider;
 };
 
-const isDataProviderExpression = objectToCheck => {
+const isCatchedDependency = objectToCheck => {
+  return objectToCheck && objectToCheck instanceof CatchDependency;
+};
+
+const isDependency = objectToCheck => {
   if (!objectToCheck) {
     return false;
   }
   return (
     isDataProvider(objectToCheck) ||
     isFunction(objectToCheck) ||
-    isDataProvider(objectToCheck.provider) ||
-    isFunction(objectToCheck.provider)
+    isCatchedDependency(objectToCheck)
   );
 };
 
-const areDataProvidersExpressions = arrayToCheck => {
+const isDependencyExpression = arrayToCheck => {
   return ensureArray(arrayToCheck).reduce((allAreDataProviders, arrayElement) => {
-    if (!allAreDataProviders || !isDataProviderExpression(arrayElement)) {
+    if (!allAreDataProviders || !isDependency(arrayElement)) {
       return false;
     }
     return true;
   }, true);
+};
+
+const resolveResult = result => {
+  return isPromise(result) ? result : Promise.resolve(result);
 };
 
 class SelectorBase extends Provider {
@@ -65,46 +77,32 @@ class SelectorBase extends Provider {
       this.cleanCache();
     };
 
-    const readDependency = dependencyToRead => {
+    const readDependency = (dependencyToRead, catchMethod) => {
       if (hasToReadAgain) {
         return Promise.resolve();
       }
       if (isArray(dependencyToRead)) {
-        return Promise.all(dependencyToRead.map(readDependency));
+        return Promise.all(dependencyToRead.map(dep => readDependency(dep, catchMethod)));
       }
-      let dependency;
-      let hasToCatch;
-      let hasToQuery;
+      if (isFunction(dependencyToRead)) {
+        return readDependency(dependencyToRead(this._query, dependenciesResults), catchMethod);
+      }
+      if (isCatchedDependency(dependencyToRead)) {
+        return readDependency(dependencyToRead.dependency, dependencyToRead.catch);
+      }
       if (!isDataProvider(dependencyToRead)) {
-        let provider = dependencyToRead.provider || dependencyToRead;
-        if (isFunction(provider)) {
-          provider = provider(this._query, dependenciesResults);
-        }
-        if (!isDataProvider(provider)) {
-          throw new Error(
-            message(
-              "Only data providers can be used as dependencies in Selectors. If you are returning a function, ensure it also returns a valid data provider"
-            )
-          );
-        }
-        hasToQuery = !!dependencyToRead.query;
-        hasToCatch = !!dependencyToRead.catch;
-        dependency = hasToQuery
-          ? provider.query(dependencyToRead.query(this._query, dependenciesResults))
-          : provider;
-      } else {
-        dependency = dependencyToRead;
+        return resolveResult(dependencyToRead);
       }
-      dependencies.push(dependency);
-      if (!inProgressDependencies.has(dependency)) {
-        inProgressDependencies.add(dependency);
-        inProgressListeners.push(dependency.on("cleanCache", markToReadAgain));
+      dependencies.push(dependencyToRead);
+      if (!inProgressDependencies.has(dependencyToRead)) {
+        inProgressDependencies.add(dependencyToRead);
+        inProgressListeners.push(dependencyToRead.on(CLEAN_CACHE, markToReadAgain));
       }
 
-      return dependency.read().catch(error => {
-        if (hasToCatch) {
-          const catchResult = dependencyToRead.catch(error, this._query, dependenciesResults);
-          if (areDataProvidersExpressions(catchResult)) {
+      return dependencyToRead.read().catch(error => {
+        if (catchMethod) {
+          const catchResult = catchMethod(error, this._query, dependenciesResults);
+          if (isDependencyExpression(catchResult)) {
             return readDependency(catchResult);
           }
           return catchResult;
@@ -127,20 +125,20 @@ class SelectorBase extends Provider {
           return readDependencies(dependencyIndex + 1);
         }
         const result = this._selector.apply(null, dependenciesResults.concat(this._query));
-        return isPromise(result) ? result : Promise.resolve(result);
+        return resolveResult(result);
       });
     };
 
     const addCleanListeners = () => {
       dependenciesListeners = dependencies.map(dependency => {
-        return dependency.once("cleanCache", cleanCache);
+        return dependency.once(CLEAN_CACHE, cleanCache);
       });
     };
 
     const readAndReturn = () => {
       return readDependencies()
         .then(result => {
-          if (areDataProvidersExpressions(result)) {
+          if (isDependencyExpression(result)) {
             return readDependency(result);
           }
           return Promise.resolve(result);

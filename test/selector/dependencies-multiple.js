@@ -11,7 +11,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 
 const sinon = require("sinon");
 
-const { Provider, Selector, providers } = require("../../src/index");
+const { Provider, Selector, providers, catchDependency } = require("../../src/index");
 
 describe("Selector with multiple dependencies", () => {
   let sandbox;
@@ -73,17 +73,23 @@ describe("Selector with multiple dependencies", () => {
       }
     };
 
-    dependency1 = new TestProvider("provider-1", {
+    dependency1 = new TestProvider("dependency-1", {
       spy: spies.dependency1Read
     });
-    dependency2 = new TestProvider("provider-2", {
+    dependency2 = new TestProvider("dependency-2", {
       spy: spies.dependency2Read
     });
 
-    dependency3 = new Selector(dependency1, testResult => {
-      spies.dependency3Read();
-      return testResult;
-    });
+    dependency3 = new Selector(
+      dependency1,
+      testResult => {
+        spies.dependency3Read();
+        return testResult;
+      },
+      {
+        id: "dependency-3"
+      }
+    );
 
     dependency4 = new Selector(
       [dependency2, dependency3],
@@ -93,94 +99,103 @@ describe("Selector with multiple dependencies", () => {
           provider2Results,
           selectorResults
         });
+      },
+      {
+        id: "dependency-4"
       }
     );
 
     dependency5 = new Selector(
-      {
-        provider: dependency4,
-        query: query => query
-      },
+      query => dependency4.query(query),
       dependency4Results => {
         spies.dependency5Read();
         return {
           dependency4Results
         };
+      },
+      {
+        id: "dependency-5"
       }
     );
 
-    dependency6 = new TestProvider("provider-3", {
+    dependency6 = new TestProvider("dependency-6", {
       spy: spies.dependency6Read
     });
 
-    dependency7 = new TestProvider("provider-4", {
+    dependency7 = new TestProvider("dependency-7", {
       spy: spies.dependency7Read
     });
 
     dependency8 = new Selector(
       dependency6,
-      {
-        provider: () => dependency5,
-        query: query => query
-      },
+      query => dependency5.query(query),
       () => {
         spies.dependency8Read();
         return dependency7;
+      },
+      {
+        id: "dependency-8"
       }
     );
 
-    dependency9 = new TestProvider("provider-5", {
+    dependency9 = new TestProvider("dependency-9", {
       spy: spies.dependency9Read
     });
 
-    dependency10 = new Selector(dependency8, () => {
-      spies.dependency10Read();
-      return () => dependency9;
-    });
+    dependency10 = new Selector(
+      dependency8,
+      () => {
+        spies.dependency10Read();
+        return () => dependency9;
+      },
+      {
+        id: "dependency-10"
+      }
+    );
 
-    dependency11 = new TestProvider("provider-6", {
+    dependency11 = new TestProvider("dependency-11", {
       spy: spies.dependency11Read
     });
 
-    dependency12 = new TestProvider("provider-7", {
+    dependency12 = new TestProvider("dependency-12", {
       spy: spies.dependency12Read
     });
 
-    dependency13 = new TestProvider("provider-8", {
+    dependency13 = new TestProvider("dependency-13", {
       spy: spies.dependency13Read
     });
 
     dependency14 = new Selector(
       [
         dependency10,
-        {
-          provider: dependency11.query({ hasToThrow: new Error() }),
-          catch: () => {
-            return dependency12;
-          }
-        }
+        catchDependency(dependency11.query({ hasToThrow: new Error() }), () => {
+          return dependency12;
+        })
       ],
       () => {
         spies.dependency14Read();
         return () => dependency13;
+      },
+      {
+        id: "dependency-14"
       }
     );
 
-    dependency15 = new TestProvider("provider-9", {
+    dependency15 = new TestProvider("dependency-15", {
       spy: spies.dependency15Read
     });
 
     dependency16 = new Selector(
       dependency14,
-      {
-        provider: dependency15.query({ hasToThrow: new Error() }),
-        catch: () => {
-          return "foo";
-        }
-      },
+      catchDependency(dependency15.query({ hasToThrow: new Error() }), () => {
+        return "foo";
+      }),
       () => {
         spies.dependency16Read();
         return () => dependency13;
+      },
+      {
+        id: "dependency-16"
       }
     );
 
@@ -189,6 +204,9 @@ describe("Selector with multiple dependencies", () => {
       selector2Results => {
         spies.selectorRead();
         return selector2Results;
+      },
+      {
+        id: "selector"
       }
     );
   });

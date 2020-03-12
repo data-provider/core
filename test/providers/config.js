@@ -64,6 +64,9 @@ describe("providers handler config method", () => {
       });
     });
 
+    // TODO, test config chainability
+    // TODO, test tags extension order
+
     it("should be applied to new created providers", () => {
       providers.config({
         foo: "foo"

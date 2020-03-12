@@ -11,7 +11,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 
 const sinon = require("sinon");
 
-const { Provider, providers, Selector } = require("../../src/index");
+const { Provider, providers, Selector, catchDependency } = require("../../src/index");
 
 describe("Selector test methods", () => {
   const RESULT = "result";
@@ -35,17 +35,16 @@ describe("Selector test methods", () => {
     };
     testProvider = new TestProvider();
     testSelector = new Selector(
-      {
-        provider: testProvider,
-        query: query => {
+      catchDependency(
+        query => {
           spies.query();
-          return query;
+          return testProvider.query(query);
         },
-        catch: err => {
+        err => {
           spies.catch();
           return err;
         }
-      },
+      ),
       spies.selector
     );
   });
@@ -58,73 +57,22 @@ describe("Selector test methods", () => {
   describe("providers query functions", () => {
     describe("when there are no concurrent queries", () => {
       it("should be avaible for testing at the dependencies property", () => {
-        expect(testSelector.dependencies[0].query("foo")).toEqual("foo");
+        expect(testSelector.dependencies[0].dependency("foo")).toEqual(testProvider.query("foo"));
         expect(spies.query.callCount).toEqual(1);
       });
     });
 
     describe("when there are concurrent providers", () => {
-      it("should be avaible for testing at the dependencies property as an array", () => {
-        const testProvider2 = new TestProvider();
-        testSelector = new Selector(
-          [
-            {
-              provider: testProvider,
-              query: query => {
-                spies.query();
-                return `${query}-1`;
-              }
-            },
-            {
-              provider: testProvider2,
-              query: query => {
-                spies.query();
-                return `${query}-2`;
-              }
-            }
-          ],
-          spies.selector
-        );
-        expect(testSelector.dependencies[0][0].query("foo")).toEqual("foo-1");
-        expect(testSelector.dependencies[0][1].query("foo")).toEqual("foo-2");
-        expect(spies.query.callCount).toEqual(2);
-      });
-
       it("should have all concurrent queries available recursively", () => {
         const testProvider2 = new TestProvider();
         const testProvider3 = new TestProvider();
         testSelector = new Selector(
-          [
-            {
-              provider: testProvider,
-              query: query => {
-                spies.query();
-                return `${query}-1`;
-              }
-            },
-            [
-              {
-                provider: testProvider2,
-                query: query => {
-                  spies.query();
-                  return `${query}-2`;
-                }
-              },
-              {
-                provider: testProvider3,
-                query: query => {
-                  spies.query();
-                  return `${query}-3`;
-                }
-              }
-            ]
-          ],
+          [() => testProvider, [() => testProvider2, () => testProvider3]],
           spies.selector
         );
-        expect(testSelector.dependencies[0][0].query("foo")).toEqual("foo-1");
-        expect(testSelector.dependencies[0][1][0].query("foo")).toEqual("foo-2");
-        expect(testSelector.dependencies[0][1][1].query("foo")).toEqual("foo-3");
-        expect(spies.query.callCount).toEqual(3);
+        expect(testSelector.dependencies[0][0]()).toBe(testProvider);
+        expect(testSelector.dependencies[0][1][0]()).toBe(testProvider2);
+        expect(testSelector.dependencies[0][1][1]()).toBe(testProvider3);
       });
     });
   });
@@ -142,20 +90,14 @@ describe("Selector test methods", () => {
         const testProvider2 = new TestProvider();
         testSelector = new Selector(
           [
-            {
-              provider: testProvider,
-              catch: err => {
-                spies.catch();
-                return `${err}-a`;
-              }
-            },
-            {
-              provider: testProvider2,
-              catch: err => {
-                spies.catch();
-                return `${err}-b`;
-              }
-            }
+            catchDependency(testProvider, err => {
+              spies.catch();
+              return `${err}-a`;
+            }),
+            catchDependency(testProvider2, err => {
+              spies.catch();
+              return `${err}-b`;
+            })
           ],
           spies.selector
         );
@@ -169,28 +111,19 @@ describe("Selector test methods", () => {
         const testProvider3 = new TestProvider();
         testSelector = new Selector(
           [
-            {
-              provider: testProvider,
-              catch: err => {
-                spies.catch();
-                return `${err}-a`;
-              }
-            },
+            catchDependency(testProvider, err => {
+              spies.catch();
+              return `${err}-a`;
+            }),
             [
-              {
-                provider: testProvider2,
-                catch: err => {
-                  spies.catch();
-                  return `${err}-b`;
-                }
-              },
-              {
-                provider: testProvider3,
-                catch: err => {
-                  spies.catch();
-                  return `${err}-c`;
-                }
-              }
+              catchDependency(testProvider2, err => {
+                spies.catch();
+                return `${err}-b`;
+              }),
+              catchDependency(testProvider3, err => {
+                spies.catch();
+                return `${err}-c`;
+              })
             ]
           ],
           spies.selector

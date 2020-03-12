@@ -11,7 +11,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 
 const sinon = require("sinon");
 
-const { Provider, Selector, providers } = require("../../src/index");
+const { Provider, Selector, providers, catchDependency } = require("../../src/index");
 
 describe("Selector dependencies errors", () => {
   const DEPENDENCY_1_RESULT = "dependency-1-result";
@@ -148,7 +148,7 @@ describe("Selector dependencies errors", () => {
     });
   });
 
-  describe("when catch property is received", () => {
+  describe("when catchDependency is used", () => {
     let selectorSpy;
     let catchSpy;
     let catchReturns;
@@ -158,13 +158,10 @@ describe("Selector dependencies errors", () => {
       catchSpy = sandbox.spy();
       sandbox.spy(dependency1, "read");
       selector = new Selector(
-        {
-          provider: dependency1,
-          catch: err => {
-            catchSpy(err);
-            return catchReturns;
-          }
-        },
+        catchDependency(dependency1, err => {
+          catchSpy(err);
+          return catchReturns;
+        }),
         dependencyResult => {
           selectorSpy();
           return dependencyResult;
