@@ -16,9 +16,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 - feat(events): Export eventNames constants.
+- feat(selector): Accept promises or any other value as dependency. Accept dependencies returning any other type of dependendencies.
+- feat(selector): Export "catchDependencies" utility for catching dependencies errors, as defining dependencies as objects has been deprecated.
 
 ### Removed
 - feat(events): Remove changeState events wildcard.
+- feat(selector): Deprecate defining dependencies as objects.
 
 ## [2.0.0-alpha.6] - 2020-02-25
 ### Removed
