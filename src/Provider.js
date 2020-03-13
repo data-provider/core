@@ -99,12 +99,11 @@ class Provider {
     this._children.forEach(child => child.resetState());
   }
 
-  read() {
+  read(...args) {
     if (this._cache && this.options.cache) {
       return this._cache;
     }
     this._dispatch(readStart(this._id, true));
-    const args = Array.from(arguments);
     let readPromise;
     let error;
     try {

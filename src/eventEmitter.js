@@ -29,10 +29,9 @@ export class EventEmitter {
   }
 
   once(eventName, fn) {
-    const onceFn = () => {
-      const args = Array.from(arguments);
+    const onceFn = (...args) => {
+      fn.apply(null, args);
       this.removeListener(eventName, onceFn);
-      fn.apply(this, args);
     };
     this.on(eventName, onceFn);
     return this._createRemoveListener(eventName, onceFn);
@@ -40,7 +39,7 @@ export class EventEmitter {
 
   emit(eventName, ...args) {
     this._getEventListByName(eventName).forEach(fn => {
-      fn.apply(this, args);
+      fn.apply(null, args);
     });
   }
 

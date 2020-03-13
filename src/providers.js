@@ -67,8 +67,7 @@ export class ProvidersHandler {
     return this._addListener("onceChild", eventName, fn);
   }
 
-  call() {
-    const args = Array.from(arguments);
+  call(...args) {
     const methodName = args[0];
     args.shift();
     return this.elements.map(provider => {
@@ -183,8 +182,7 @@ export class Providers {
     return this._allProviders.onceChild(eventName, fn);
   }
 
-  call() {
-    const args = Array.from(arguments);
+  call(...args) {
     return this._allProviders.call.apply(this._allProviders, args);
   }
 

@@ -119,11 +119,48 @@ describe("Provider events", () => {
   });
 
   describe("listener arguments", () => {
+    it("should pass child to child listener as first argument", async () => {
+      const spy = sandbox.spy();
+      provider.onChild("readStart", spy);
+      await childProvider.read();
+      expect(spy.getCall(0).args[0]).toEqual(childProvider);
+    });
+
+    it("should pass child to once child listener as first argument", async () => {
+      const spy = sandbox.spy();
+      provider.onceChild("readStart", spy);
+      await childProvider.read();
+      expect(spy.getCall(0).args[0]).toEqual(childProvider);
+    });
+
     it("should pass event name to child listener as first argument when child listener is added with wildcard", async () => {
       const spy = sandbox.spy();
       provider.onChild("*", spy);
       await childProvider.read();
       expect(spy.getCall(0).args[0]).toEqual("readStart");
+    });
+
+    it("should pass event name to once child listener as first argument when child listener is added with wildcard", async () => {
+      const spy = sandbox.spy();
+      provider.onceChild("*", spy);
+      await childProvider.read();
+      expect(spy.getCall(0).args[0]).toEqual("readStart");
+    });
+
+    it("should pass child to child listener as second argument when child listener is added with wildcard", async () => {
+      const spy = sandbox.spy();
+      provider.onChild("*", spy);
+      await childProvider.read();
+      expect(spy.getCall(0).args[0]).toEqual("readStart");
+      expect(spy.getCall(0).args[1]).toEqual(childProvider);
+    });
+
+    it("should pass child to once child listener as second argument when child listener is added with wildcard", async () => {
+      const spy = sandbox.spy();
+      provider.onceChild("*", spy);
+      await childProvider.read();
+      expect(spy.getCall(0).args[0]).toEqual("readStart");
+      expect(spy.getCall(0).args[1]).toEqual(childProvider);
     });
   });
 

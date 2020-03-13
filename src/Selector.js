@@ -179,8 +179,7 @@ class SelectorBase extends Provider {
 }
 
 class Selector extends SelectorBase {
-  constructor() {
-    const args = Array.from(arguments);
+  constructor(...args) {
     const lastIndex = args.length - 1;
     let selectorIndex = lastIndex;
     let options = {};

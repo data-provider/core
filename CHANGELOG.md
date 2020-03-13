@@ -12,17 +12,21 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [2.0.0] - 2020-03-14
 
-> DISCLAIMER: This major release still maintains the concept of the previous "data-provider" versions, but a lot of BREAKING CHANGES have been made to the interfaces in order to improve the usage experience, apart of performance improvements and fixes. A chapter "how to migrate from 1.x" will be added to the documentation website to facilitate the migration to this new version, as the maintenance of 1.X versions will be stopped soon.
+> DISCLAIMER: This major release still maintains the concept of the previous "data-provider" versions, but a lot of BREAKING CHANGES have been made to the interfaces in order to improve the usage experience, apart of performance improvements and fixes. A chapter "how to migrate from 1.x" will be added to the documentation website to facilitate the migration to this new version, as the maintenance of 1.X versions will be stopped soon. Read 2.0 pre-releases changelog and docs in https://www.data-provider.org for further info.
 
 ### Added
 - feat(events): Pass child causing an `onChild` event to the listener function.
 - feat(events): Export eventNames constants.
 - feat(selector): Accept promises or any other value as dependency. Accept dependencies returning any other type of dependendencies.
 - feat(selector): Export "catchDependencies" utility for catching dependencies errors, as defining dependencies as objects has been deprecated.
+- feat(providers): Avoid id duplications. Add suffix when conflict is detected.
 
 ### Removed
 - feat(events): Remove changeState events wildcard.
 - feat(selector): Deprecate defining dependencies as objects.
+
+### Fixed
+- fix(events): Fix once methods arguments. Use arguments spread to get original arguments.
 
 ## [2.0.0-alpha.6] - 2020-02-25
 ### Removed
