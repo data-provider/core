@@ -9,7 +9,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 */
 
-import { ensureArray, removeFalsy, warn } from "./helpers";
+import { ensureArray, removeFalsy, warn, getAutomaticId } from "./helpers";
 
 export class ProvidersHandler {
   constructor(baseTags) {
@@ -75,7 +75,7 @@ export class ProvidersHandler {
       if (provider[methodName] instanceof Function) {
         return provider[methodName].apply(provider, args);
       } else {
-        warn(`Provider with id "${provider._id}" has not method "${methodName}"`);
+        warn(`"${provider._id}" has not method "${methodName}"`);
       }
     });
   }
@@ -114,37 +114,44 @@ export class Providers {
     return providersHandler;
   }
 
+  _add(provider, id) {
+    let providerId = id || getAutomaticId();
+    const idGroup = this._allProvidersById.get(providerId);
+    if (idGroup) {
+      if (idGroup.size > 0) {
+        const originalId = providerId;
+        providerId = `${providerId}-${getAutomaticId()}`;
+        warn(`Duplicated id "${originalId}". Changed to "${providerId}"`);
+        this._createIdEmptyGroup(providerId)._add(provider);
+      } else {
+        idGroup._add(provider);
+      }
+    } else {
+      this._createIdEmptyGroup(providerId)._add(provider);
+    }
+    this._allProviders._add(provider);
+    provider._tags.forEach(tag => {
+      this.getByTag(tag)._add(provider);
+    });
+    return providerId;
+  }
+
+  // For internal usage
+
+  clear() {
+    this._allProvidersById.clear();
+    this._tags.clear();
+    return this._allProviders.clear();
+  }
+
+  // Public methods
+
   getByTag(tag) {
     return this._tags.get(tag) || this._createTagEmptyGroup(tag);
   }
 
   getById(id) {
     return this._allProvidersById.get(id) || this._createIdEmptyGroup(id);
-  }
-
-  _add(provider) {
-    const idGroup = this._allProvidersById.get(provider._id);
-    if (idGroup) {
-      if (idGroup.size > 0) {
-        warn(`Duplicated provider id "${provider._id}"`);
-        this._createIdEmptyGroup(provider._id)._add(provider);
-      } else {
-        idGroup._add(provider);
-      }
-    } else {
-      this._createIdEmptyGroup(provider._id)._add(provider);
-    }
-    this._allProviders._add(provider);
-    provider._tags.forEach(tag => {
-      this.getByTag(tag)._add(provider);
-    });
-    return this;
-  }
-
-  clear() {
-    this._allProvidersById.clear();
-    this._tags.clear();
-    return this._allProviders.clear();
   }
 
   // Expose methods of all providers

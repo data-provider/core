@@ -20,7 +20,6 @@ import {
   ANY,
   CLEAN_CACHE,
   childEventName,
-  getAutomaticId,
   isPromise,
   fromEntries,
   defaultOptions
@@ -32,7 +31,6 @@ import eventEmitter from "./eventEmitter";
 class Provider {
   constructor(id, options, query) {
     this._emitChild = this._emitChild.bind(this);
-    this._id = id || getAutomaticId();
     this._options = { ...defaultOptions, ...options };
     this._query = { ...query };
     this._tags = removeFalsy(ensureArray(this._options.tags));
@@ -40,7 +38,7 @@ class Provider {
     this._queryMethods = new Map();
     this._queryMethodsParsers = new Map();
 
-    providers._add(this); // initial configuration is made by providers handler
+    this._id = providers._add(this, id); // initial configuration is made by providers handler
 
     this._dispatch(init(this._id, this.initialState));
   }

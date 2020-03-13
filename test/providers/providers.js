@@ -117,11 +117,11 @@ describe("providers handler", () => {
       expect(providers.getById("foo-id").size).toEqual(0);
     });
 
-    it("should return last element created when there is an id conflict", () => {
+    it("should return element even when there was an id conflict", () => {
       new Provider("foo");
       new Provider("foo-id");
       const fooOrigin = new Provider("foo-id");
-      expect(providers.getById("foo-id").elements[0]).toEqual(fooOrigin);
+      expect(providers.getById(fooOrigin.id).elements[0]).toEqual(fooOrigin);
     });
   });
 
