@@ -62,12 +62,12 @@ describe("Axios configuration", () => {
     });
   });
 
-  describe("readMethod option", () => {
+  describe("readVerb option", () => {
     it("should set the read method for axios requests", async () => {
       expect.assertions(1);
       const books = new Axios(null, {
         url: "/books",
-        readMethod: "post"
+        readVerb: "post"
       });
       await books.read();
       expect(axios.stubs.instance.getCall(0).args[0].method).toEqual("post");
@@ -82,19 +82,19 @@ describe("Axios configuration", () => {
       expect(axios.stubs.instance.getCall(0).args[0].method).toEqual("get");
       books.cleanCache();
       books.config({
-        readMethod: "post"
+        readVerb: "post"
       });
       await books.read();
       expect(axios.stubs.instance.getCall(1).args[0].method).toEqual("post");
     });
   });
 
-  describe("updateMethod option", () => {
+  describe("updateVerb option", () => {
     it("should set the update method for axios requests", async () => {
       expect.assertions(1);
       const books = new Axios(null, {
         url: "/books",
-        updateMethod: "get"
+        updateVerb: "get"
       });
       await books.update();
       expect(axios.stubs.instance.getCall(0).args[0].method).toEqual("get");
@@ -108,19 +108,19 @@ describe("Axios configuration", () => {
       await books.update();
       expect(axios.stubs.instance.getCall(0).args[0].method).toEqual("patch");
       books.config({
-        updateMethod: "post"
+        updateVerb: "post"
       });
       await books.update();
       expect(axios.stubs.instance.getCall(1).args[0].method).toEqual("post");
     });
   });
 
-  describe("createMethod option", () => {
+  describe("createVerb option", () => {
     it("should set the create method for axios requests", async () => {
       expect.assertions(1);
       const books = new Axios(null, {
         url: "/books",
-        createMethod: "get"
+        createVerb: "get"
       });
       await books.create();
       expect(axios.stubs.instance.getCall(0).args[0].method).toEqual("get");
@@ -134,19 +134,19 @@ describe("Axios configuration", () => {
       await books.create();
       expect(axios.stubs.instance.getCall(0).args[0].method).toEqual("post");
       books.config({
-        createMethod: "put"
+        createVerb: "put"
       });
       await books.create();
       expect(axios.stubs.instance.getCall(1).args[0].method).toEqual("put");
     });
   });
 
-  describe("deleteMethod option", () => {
+  describe("deleteVerb option", () => {
     it("should set the delete method for axios requests", async () => {
       expect.assertions(1);
       const books = new Axios(null, {
         url: "/books",
-        deleteMethod: "get"
+        deleteVerb: "get"
       });
       await books.delete();
       expect(axios.stubs.instance.getCall(0).args[0].method).toEqual("get");
@@ -156,12 +156,12 @@ describe("Axios configuration", () => {
       expect.assertions(2);
       const books = new Axios(null, {
         url: "/books",
-        deleteMethod: "delete"
+        deleteVerb: "delete"
       });
       await books.delete();
       expect(axios.stubs.instance.getCall(0).args[0].method).toEqual("delete");
       books.config({
-        deleteMethod: "put"
+        deleteVerb: "put"
       });
       await books.delete();
       expect(axios.stubs.instance.getCall(1).args[0].method).toEqual("put");

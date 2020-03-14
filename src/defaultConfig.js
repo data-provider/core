@@ -10,10 +10,10 @@ Unless required by applicable law or agreed to in writing, software distributed 
 
 export const defaultConfig = {
   baseUrl: "",
-  readMethod: "get",
-  updateMethod: "patch",
-  createMethod: "post",
-  deleteMethod: "delete",
+  readVerb: "get",
+  updateVerb: "patch",
+  createVerb: "post",
+  deleteVerb: "delete",
   authErrorStatus: 401,
   authErrorHandler: null,
   onBeforeRequest: null,

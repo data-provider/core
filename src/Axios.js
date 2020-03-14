@@ -35,10 +35,10 @@ export class Axios extends Provider {
       this._addOnceBeforeRequest(configuration.onceBeforeRequest);
     }
     this._headers = this._headers || configuration.headers;
-    this._readMethod = configuration.readMethod;
-    this._updateMethod = configuration.updateMethod;
-    this._createMethod = configuration.createMethod;
-    this._deleteMethod = configuration.deleteMethod;
+    this._readVerb = configuration.readVerb;
+    this._updateVerb = configuration.updateVerb;
+    this._createVerb = configuration.createVerb;
+    this._deleteVerb = configuration.deleteVerb;
     this._authErrorStatus = configuration.authErrorStatus;
     this._authErrorHandler = configuration.authErrorHandler;
     this._useCache = configuration.cache;
@@ -158,7 +158,7 @@ export class Axios extends Provider {
     return this._doRequest({
       url,
       validateStatus: this._validateStatus,
-      method: this._readMethod,
+      method: this._readVerb,
       headers: this.headers
     });
   }
@@ -168,7 +168,7 @@ export class Axios extends Provider {
       url,
       data,
       validateStatus: this._validateStatus,
-      method: this._updateMethod,
+      method: this._updateVerb,
       headers: this.headers
     });
   }
@@ -178,7 +178,7 @@ export class Axios extends Provider {
       url,
       data,
       validateStatus: this._validateStatus,
-      method: this._createMethod,
+      method: this._createVerb,
       headers: this.headers
     });
   }
@@ -187,7 +187,7 @@ export class Axios extends Provider {
     return this._doRequest({
       url,
       validateStatus: this._validateStatus,
-      method: this._deleteMethod,
+      method: this._deleteVerb,
       headers: this.headers
     });
   }
