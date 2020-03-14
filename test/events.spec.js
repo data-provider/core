@@ -143,7 +143,7 @@ describe("Axios events", () => {
       let called = false;
       expect.assertions(1);
       const books = new Axios("/books");
-      books.on("changeState", () => {
+      books.on("*", () => {
         called = true;
       });
 
@@ -158,7 +158,7 @@ describe("Axios events", () => {
       const setCalled = () => {
         called = true;
       };
-      const removeListener = books.on("changeState", setCalled);
+      const removeListener = books.on("*", setCalled);
       removeListener();
 
       await books.read();
@@ -175,11 +175,11 @@ describe("Axios events", () => {
       const books = new Axios("/books");
       const queriedBooks = books.query("foo");
 
-      books.onChild("changeState", () => {
+      books.onChild("*", () => {
         calledAny = true;
       });
 
-      queriedBooks.on("changeState", () => {
+      queriedBooks.on("*", () => {
         called = true;
       });
 
@@ -204,10 +204,10 @@ describe("Axios events", () => {
         calledAny = true;
       };
 
-      const removeListener = books.onChild("changeState", setAnyCalled);
+      const removeListener = books.onChild("*", setAnyCalled);
       removeListener();
 
-      const removeListener2 = queriedBooks.on("changeState", setCalled);
+      const removeListener2 = queriedBooks.on("*", setCalled);
       removeListener2();
 
       await queriedBooks.read();

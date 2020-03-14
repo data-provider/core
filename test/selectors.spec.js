@@ -243,19 +243,16 @@ describe("Axios data providers", () => {
     });
 
     describe("When queried", () => {
-      let query;
       let selector;
 
       beforeEach(() => {
-        query = queryVal => ({
-          queryString: {
-            author: queryVal.author
-          }
-        });
         selector = new Selector(
-          {
-            provider: books,
-            query
+          query => {
+            return books.query({
+              queryString: {
+                author: query.author
+              }
+            });
           },
           booksResult => booksResult[0]
         );
@@ -290,14 +287,6 @@ describe("Axios data providers", () => {
         expect(queriedSelector.state.loading).toEqual(true);
         await queriedSelector.read();
         expect(axios.stubs.instance.callCount).toEqual(2);
-      });
-
-      describe("when developing tests", () => {
-        describe("the query function", () => {
-          it("should be available in the test object, ready for being tested", () => {
-            expect(selector.dependencies[0].query).toEqual(query);
-          });
-        });
       });
     });
   });
@@ -570,19 +559,16 @@ describe("Axios data providers", () => {
       beforeEach(() => {
         selector = new Selector(
           authors,
-          {
-            provider: booksSelector,
-            query: (query, previousResults) => {
-              let finalIndex = 0;
-              let hemingwayBookIndex = 0;
-              previousResults[0].forEach(book => {
-                if (book.author === "Hemingway") {
-                  hemingwayBookIndex = finalIndex;
-                }
-                finalIndex++;
-              });
-              return { index: hemingwayBookIndex };
-            }
+          (query, previousResults) => {
+            let finalIndex = 0;
+            let hemingwayBookIndex = 0;
+            previousResults[0].forEach(book => {
+              if (book.author === "Hemingway") {
+                hemingwayBookIndex = finalIndex;
+              }
+              finalIndex++;
+            });
+            return booksSelector.query({ index: hemingwayBookIndex });
           },
           (authorsResults, bookResult) => bookResult.title
         );
