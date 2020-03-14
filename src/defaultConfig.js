@@ -1,4 +1,5 @@
 /*
+Copyright 2020 Javier Brea
 Copyright 2019 XbyOrange
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
@@ -10,10 +11,10 @@ Unless required by applicable law or agreed to in writing, software distributed 
 
 export const defaultConfig = {
   baseUrl: "",
-  readMethod: "get",
-  updateMethod: "patch",
-  createMethod: "post",
-  deleteMethod: "delete",
+  readVerb: "get",
+  updateVerb: "patch",
+  createVerb: "post",
+  deleteVerb: "delete",
   authErrorStatus: 401,
   authErrorHandler: null,
   onBeforeRequest: null,

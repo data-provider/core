@@ -9,10 +9,35 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 ### Fixed
 ### Removed
-### BREAKING CHANGES
 
-## [TO BE DEPRECATED]
-- apis "config" and "clean" methods. Mercury "instances" methods should be used instead.
+## [2.0.0] - 2020-03-14
+
+> DISCLAIMER: This major release still maintains the concept of the previous "data-provider" versions, but a lot of BREAKING CHANGES have been made to the interfaces in order to improve the usage experience, apart of performance improvements and fixes. A chapter "how to migrate from 1.x" will be added to the documentation website to facilitate the migration to this new version, as the maintenance of 1.X versions will be stopped soon. Read Date Provider Changelog and docs in https://www.data-provider.org for further info.
+
+### Changed
+- chore(deps): [BREAKING CHANGE] Update @data-provider dependency to v2.0.0
+- feat(options): [BREAKING CHANGE] Rename `createMethod`, `readMethod`, `updateMethod` and `deleteMethod` options into `createVerb`, `readVerb`, `updateVerb` and `deleteVerb`.
+
+## [2.0.0.alpha-2] - 2020-02-26
+
+### Changed
+- chore(deps): update @data-provider dependency
+
+## [2.0.0-alpha.1] - 2020-02-23
+
+> DISCLAIMER: This major release adapts this origin to the @data-provider v2.x interface. Read @data-provider docs for further info.
+
+### Changed
+- feat(Axios): [BREAKING CHANGE] - Rename exported Class from Api to Axios
+- feat(Axios): [BREAKING CHANGE] - Use data-provider v2 standard arguments (id, options)
+- feat(Axios): [BREAKING CHANGE] - Url now has to be defined as "url" option in the second argument. First argument is the provider id.
+- feat(Axios): [BREAKING CHANGE] - Remove uuid option. Now id is required as first argument.
+- chore(umd distribution): [BREAKING CHANGE] - Rename umd dist file name to "index.umd.js"
+- feat(apis): [BREAKING CHANGE] - setHeaders and addHeaders method now has to be called through providers, and will not define headers for instances still not created.
+
+### Removed
+- feat(apis): [BREAKING CHANGE] - Remove apis handler. Use @data-provider/core providers instead.
+- feat(apis): To call "addHeaders" and "setHeaders" method, use providers.call("addHeaders");
 
 ## [1.6.1] - 2020-01-12
 ### Changed

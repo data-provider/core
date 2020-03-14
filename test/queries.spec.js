@@ -1,4 +1,5 @@
 /*
+Copyright 2020 Javier Brea
 Copyright 2019 XbyOrange
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
@@ -10,11 +11,12 @@ Unless required by applicable law or agreed to in writing, software distributed 
 
 const AxiosMock = require("./Axios.mock.js");
 
-const { Api, apis } = require("../src/index");
+const { providers } = require("@data-provider/core");
+const { Axios } = require("../src/index");
 
-describe("Api queries", () => {
+describe("Axios queries", () => {
   const fooQuery = {
-    params: {
+    urlParams: {
       foo: "foo"
     }
   };
@@ -23,17 +25,21 @@ describe("Api queries", () => {
 
   beforeAll(() => {
     axios = new AxiosMock();
-    apis.reset();
   });
 
   afterAll(() => {
     axios.restore();
-    apis.reset();
   });
 
-  describe("Queryed data-sources", () => {
+  afterEach(() => {
+    providers.clear();
+  });
+
+  describe("Queryed data-providers", () => {
     it("should have all crud methods", () => {
-      const books = new Api("/books").query(fooQuery);
+      const books = new Axios("/books", {
+        url: "/books"
+      }).query(fooQuery);
       expect(books.create).toBeDefined();
       expect(books.read).toBeDefined();
       expect(books.update).toBeDefined();
@@ -41,11 +47,13 @@ describe("Api queries", () => {
     });
   });
 
-  describe("Queryed sources", () => {
+  describe("Queried providers", () => {
     it("should add query params to axios request", async () => {
       axios.stubs.instance.resetHistory();
-      const books = new Api("/books").query({
-        query: {
+      const books = new Axios(null, {
+        url: "/books"
+      }).query({
+        queryString: {
           author: "foo"
         }
       });
@@ -55,8 +63,10 @@ describe("Api queries", () => {
 
     it("should add query params to axios request when url includes protocol", async () => {
       axios.stubs.instance.resetHistory();
-      const books = new Api("http://domain.com/books").query({
-        query: {
+      const books = new Axios(null, {
+        url: "http://domain.com/books"
+      }).query({
+        queryString: {
           author: "foo"
         }
       });
@@ -68,8 +78,8 @@ describe("Api queries", () => {
 
     it("should replace params in axios request", async () => {
       axios.stubs.instance.resetHistory();
-      const books = new Api("/books/:id").query({
-        params: {
+      const books = new Axios(null, { url: "/books/:id" }).query({
+        urlParams: {
           id: "foo"
         }
       });
@@ -79,8 +89,8 @@ describe("Api queries", () => {
 
     it("should replace params encoding them correctly", async () => {
       axios.stubs.instance.resetHistory();
-      const books = new Api("/books/:id").query({
-        params: {
+      const books = new Axios(null, { url: "/books/:id" }).query({
+        urlParams: {
           id: "café"
         }
       });
@@ -90,8 +100,8 @@ describe("Api queries", () => {
 
     it("should replace params in axios request maintaining trailing slash", async () => {
       axios.stubs.instance.resetHistory();
-      const books = new Api("/books/:id/").query({
-        params: {
+      const books = new Axios(null, { url: "/books/:id/" }).query({
+        urlParams: {
           id: "foo"
         }
       });
@@ -102,8 +112,8 @@ describe("Api queries", () => {
 
     it("should replace params in axios request when url includes protocol", async () => {
       axios.stubs.instance.resetHistory();
-      const books = new Api("http://localhost/books/:id").query({
-        params: {
+      const books = new Axios(null, { url: "http://localhost/books/:id" }).query({
+        urlParams: {
           id: "foo"
         }
       });
@@ -113,8 +123,8 @@ describe("Api queries", () => {
 
     it("should replace many params in axios request", async () => {
       axios.stubs.instance.resetHistory();
-      const books = new Api("/books/:id/:author").query({
-        params: {
+      const books = new Axios(null, { url: "/books/:id/:author" }).query({
+        urlParams: {
           id: "foo",
           author: "cervantes"
         }
@@ -125,8 +135,10 @@ describe("Api queries", () => {
 
     it("should replace many params in axios request when url includes protocol", async () => {
       axios.stubs.instance.resetHistory();
-      const books = new Api("https://www.domain.com:3000/books/:id/:author").query({
-        params: {
+      const books = new Axios(null, {
+        url: "https://www.domain.com:3000/books/:id/:author"
+      }).query({
+        urlParams: {
           id: "foo",
           author: "cervantes"
         }
@@ -139,12 +151,12 @@ describe("Api queries", () => {
 
     it("should replace many params and add query strings in axios request", async () => {
       axios.stubs.instance.resetHistory();
-      const books = new Api("/books/:id/:author").query({
-        params: {
+      const books = new Axios(null, { url: "/books/:id/:author" }).query({
+        urlParams: {
           id: "foo",
           author: "cervantes"
         },
-        query: {
+        queryString: {
           page: 2,
           order: "asc"
         }
@@ -157,12 +169,14 @@ describe("Api queries", () => {
 
     it("should replace many params and add query strings in axios request when url includes protocol", async () => {
       axios.stubs.instance.resetHistory();
-      const books = new Api("https://www.domain.com:3000/books/:id/:author").query({
-        params: {
+      const books = new Axios(null, {
+        url: "https://www.domain.com:3000/books/:id/:author"
+      }).query({
+        urlParams: {
           id: "foo",
           author: "cervantes"
         },
-        query: {
+        queryString: {
           page: 2,
           order: "asc"
         }
@@ -178,45 +192,38 @@ describe("Api queries", () => {
     let books;
 
     beforeAll(() => {
-      books = new Api("/books").query(fooQuery);
+      books = new Axios(null, { url: "/books" }).query(fooQuery);
     });
 
     it("should be true while resource is being loaded, false when finished", () => {
       expect.assertions(2);
       const promise = books.read();
-      expect(books.read.loading).toEqual(true);
+      expect(books.state.loading).toEqual(true);
       return promise.then(() => {
-        expect(books.read.loading).toEqual(false);
+        expect(books.state.loading).toEqual(false);
       });
     });
 
     it("should not be loading when request promise is cached", async () => {
       expect.assertions(3);
       await books.read();
-      expect(books.read.loading).toEqual(false);
+      expect(books.state.loading).toEqual(false);
       const secondRead = books.read();
-      expect(books.read.loading).toEqual(false);
+      expect(books.state.loading).toEqual(false);
       return secondRead.then(() => {
-        expect(books.read.loading).toEqual(false);
+        expect(books.state.loading).toEqual(false);
       });
     });
 
     it("should be loading again after cleaning cache", async () => {
       expect.assertions(3);
       await books.read();
-      expect(books.read.loading).toEqual(false);
-      books.clean();
+      expect(books.state.loading).toEqual(false);
+      books.cleanCache();
       const secondRead = books.read();
-      expect(books.read.loading).toEqual(true);
+      expect(books.state.loading).toEqual(true);
       return secondRead.then(() => {
-        expect(books.read.loading).toEqual(false);
-      });
-    });
-
-    it("should be accesible through getter", async () => {
-      expect.assertions(1);
-      return books.read().then(() => {
-        expect(books.read.getters.loading()).toEqual(false);
+        expect(books.state.loading).toEqual(false);
       });
     });
   });
@@ -225,40 +232,29 @@ describe("Api queries", () => {
     let books;
 
     beforeAll(() => {
-      books = new Api("/books").query(fooQuery);
+      books = new Axios(null, { url: "/books" }).query(fooQuery);
     });
 
     it("should be null while resource is being loaded, null when finished successfully", () => {
       expect.assertions(2);
       const promise = books.read();
-      expect(books.read.error).toEqual(null);
+      expect(books.state.error).toEqual(null);
       return promise.then(() => {
-        expect(books.read.error).toEqual(null);
+        expect(books.state.error).toEqual(null);
       });
     });
 
     it("should be null while resource is being loaded, error when finished with error", () => {
       const fooErrorMessage = "Foo error";
       const fooError = new Error(fooErrorMessage);
-      books.clean();
+      books.cleanCache();
       axios.stubs.instance.rejects(new Error(fooErrorMessage));
 
       expect.assertions(2);
       const promise = books.read();
-      expect(books.read.error).toEqual(null);
+      expect(books.state.error).toEqual(null);
       return promise.catch(() => {
-        expect(books.read.error).toEqual(fooError);
-      });
-    });
-
-    it("should be accesible through getter", async () => {
-      axios.stubs.instance.resolves({
-        data: ""
-      });
-      books.clean();
-      expect.assertions(1);
-      return books.read().then(() => {
-        expect(books.read.getters.error()).toEqual(null);
+        expect(books.state.error).toEqual(fooError);
       });
     });
   });
@@ -271,44 +267,38 @@ describe("Api queries", () => {
       axios.stubs.instance.resolves({
         data: "foo-data"
       });
-      books = new Api("/books").query(fooQuery);
+      books = new Axios(null, { url: "/books" }).query(fooQuery);
     });
 
     it("should be undefined while resource is being loaded, and returned value when finished successfully", () => {
       expect.assertions(2);
       const promise = books.read();
-      expect(books.read.value).toEqual(undefined);
+      expect(books.state.data).toEqual(undefined);
       return promise.then(() => {
-        expect(books.read.value).toEqual(fooData);
+        expect(books.state.data).toEqual(fooData);
       });
-    });
-
-    it("should be accesible through getter", async () => {
-      expect.assertions(1);
-      await books.read();
-      expect(books.read.getters.value()).toEqual(fooData);
     });
   });
 
-  describe("Queryed update method", () => {
+  describe("Queried update method", () => {
     let books;
     beforeEach(() => {
       axios.stubs.instance.resolves({
         data: ""
       });
-      books = new Api("/books").query(fooQuery);
+      books = new Axios(null, { url: "/books" }).query(fooQuery);
     });
 
     it("should clean the cache when finish successfully", async () => {
       expect.assertions(3);
       let promise = books.read();
-      expect(books.read.loading).toEqual(true);
+      expect(books.state.loading).toEqual(true);
       await promise;
       await books.update("");
       promise = books.read();
-      expect(books.read.loading).toEqual(true);
+      expect(books.state.loading).toEqual(true);
       return promise.then(() => {
-        expect(books.read.loading).toEqual(false);
+        expect(books.state.loading).toEqual(false);
       });
     });
   });
@@ -319,19 +309,19 @@ describe("Api queries", () => {
       axios.stubs.instance.resolves({
         data: ""
       });
-      books = new Api("/books").query(fooQuery);
+      books = new Axios(null, { url: "/books" }).query(fooQuery);
     });
 
     it("should clean the cache when finish successfully", async () => {
       expect.assertions(3);
       let promise = books.read();
-      expect(books.read.loading).toEqual(true);
+      expect(books.state.loading).toEqual(true);
       await promise;
       await books.create("");
       promise = books.read();
-      expect(books.read.loading).toEqual(true);
+      expect(books.state.loading).toEqual(true);
       return promise.then(() => {
-        expect(books.read.loading).toEqual(false);
+        expect(books.state.loading).toEqual(false);
       });
     });
   });
@@ -342,19 +332,19 @@ describe("Api queries", () => {
       axios.stubs.instance.resolves({
         data: ""
       });
-      books = new Api("/books").query(fooQuery);
+      books = new Axios(null, { url: "/books" }).query(fooQuery);
     });
 
     it("should clean the cache when finish successfully", async () => {
       expect.assertions(3);
       let promise = books.read();
-      expect(books.read.loading).toEqual(true);
+      expect(books.state.loading).toEqual(true);
       await promise;
       await books.delete();
       promise = books.read();
-      expect(books.read.loading).toEqual(true);
+      expect(books.state.loading).toEqual(true);
       return promise.then(() => {
-        expect(books.read.loading).toEqual(false);
+        expect(books.state.loading).toEqual(false);
       });
     });
   });
@@ -367,24 +357,24 @@ describe("Api queries", () => {
       axios.stubs.instance.resolves({
         data: ""
       });
-      books = new Api("/books");
+      books = new Axios(null, { url: "/books" });
       queriedBooks = books.query(fooQuery);
     });
 
-    it("should clean the cache of all queried resources when finish successfully", async () => {
+    it("should clean the cache of all queried providers when finish successfully", async () => {
       let cleanCalled = false;
       expect.assertions(4);
-      queriedBooks.onClean(() => {
+      queriedBooks.on("cleanCache", () => {
         cleanCalled = true;
       });
       let promise = queriedBooks.read();
-      expect(queriedBooks.read.loading).toEqual(true);
+      expect(queriedBooks.state.loading).toEqual(true);
       await promise;
       await books.delete();
       promise = queriedBooks.read();
-      expect(queriedBooks.read.loading).toEqual(true);
+      expect(queriedBooks.state.loading).toEqual(true);
       return promise.then(() => {
-        expect(queriedBooks.read.loading).toEqual(false);
+        expect(queriedBooks.state.loading).toEqual(false);
         expect(cleanCalled).toEqual(true);
       });
     });
@@ -399,7 +389,7 @@ describe("Api queries", () => {
       axios.stubs.instance.resolves({
         data: ""
       });
-      books = new Api("/books");
+      books = new Axios(null, { url: "/books" });
 
       booksQuery1 = books.query(fooQuery);
       booksQuery2 = books.query(fooQuery);
@@ -408,16 +398,16 @@ describe("Api queries", () => {
     it("should return the same query instance", async () => {
       expect.assertions(6);
       let promise = booksQuery1.read();
-      expect(booksQuery1.read.loading).toEqual(true);
-      expect(booksQuery2.read.loading).toEqual(true);
+      expect(booksQuery1.state.loading).toEqual(true);
+      expect(booksQuery2.state.loading).toEqual(true);
       await promise;
       await booksQuery1.update("");
       promise = booksQuery2.read();
-      expect(booksQuery1.read.loading).toEqual(true);
-      expect(booksQuery2.read.loading).toEqual(true);
+      expect(booksQuery1.state.loading).toEqual(true);
+      expect(booksQuery2.state.loading).toEqual(true);
       return promise.then(() => {
-        expect(booksQuery1.read.loading).toEqual(false);
-        expect(booksQuery2.read.loading).toEqual(false);
+        expect(booksQuery1.state.loading).toEqual(false);
+        expect(booksQuery2.state.loading).toEqual(false);
       });
     });
   });

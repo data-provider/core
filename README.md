@@ -1,242 +1,206 @@
 [![Build status][travisci-image]][travisci-url] [![Coverage Status][coveralls-image]][coveralls-url] [![Quality Gate][quality-gate-image]][quality-gate-url]
 
-[![NPM dependencies][npm-dependencies-image]][npm-dependencies-url] [![Greenkeeper badge](https://badges.greenkeeper.io/data-provider/axios.svg)](https://greenkeeper.io/) [![Last commit][last-commit-image]][last-commit-url] [![Last release][release-image]][release-url] 
+[![NPM dependencies][npm-dependencies-image]][npm-dependencies-url] [![Renovate](https://img.shields.io/badge/renovate-enabled-brightgreen.svg)](https://renovatebot.com) [![Last commit][last-commit-image]][last-commit-url] [![Last release][release-image]][release-url] 
 
 [![NPM downloads][npm-downloads-image]][npm-downloads-url] [![License][license-image]][license-url]
 
-## Overview
+# Data Provider Axios origin addon
 
-This package provides an Api [Data Provider][data-provider-url] using Axios.
+This [Data Provider][data-provider] addon provides an API REST data origin using [Axios][axios].
 
-* __Data Provider queries__ based on query strings and url parameters.
-* __Built-in cache__. Different caches are provided for different queryStrings and url parameters.
-* __Reactivity__ to CRUD actions. When a "create", "update" or "delete" method is called over an instance, the instance cache is cleaned.
+## Usage
 
-## Api
+Read the [Data Provider][data-provider] docs to learn how to use addons.
 
-`import { Api } from "@data-provider/axios"`
+* [Home][data-provider]
+* [Get started][get-started]
+* [Basic tutorial][basic-tutorial]
 
-`new Api(url, options)`
-* Arguments
-	* url - _`<String>`_. Api url. Parameters can be defined using ":parameterName". Please refer to the [path-to-regexp][path-to-regex-url] package for further info.
-	* options - _`<Object>`_ Containing options:
-		* tags - _`<String or Array of Strings>`_ - The api instance is added to correspondant groups using these tags. Afterwards, configuration, headers, etc. can be changed for certain groups using the [`instances` object methods described in the Data Provider docs][data-provider-instances-docs-url], or the `api` object methods described below. The "api" tag is added automatically to all Api instances.
-		* baseUrl - _`<String>`_ - Added as prefix to all requests.
-		* createMethod - _`<String>`_ - HTTP method to be used in axios requests for `create` method.
-		* readMethod - _`<String>`_ - HTTP method to be used in axios requests for `read` method.
-		* updateMethod - _`<String>`_ - HTTP method to be used in axios requests for `update` method.
-		* deleteMethod - _`<String>`_ - HTTP method to be used in axios requests for `delete` method.
-		* authErrorStatus -  _`<Number>`_ - Status code that will be considered as an authentication error. When detected, the `authErrorHandler` function will be executed instead of returning an error. See the authentication example below.
-		* authErrorHandler - _`<Function>`_ - Handler that will be executed when an authentication error is received.
-			* Arguments:
-				* provider - _`provider instance`_ As first argument, the function will receive the provider itself. This will allow to set custom authentication headers after executing login, as example.
-				* retry - _`<Function>` As second argument, a `retry` function is received, it has to be executed in order to retry the authentication failed request.
-			* Returns: This function should return a `Promise` rejected with an error, or the execution of the received `retry` method.
-		* onBeforeRequest - _`<Function>`_ - Handler that will be executed before any request method. Useful, for example, to set provider headers just before each request is executed.
-			* Arguments:
-				* provider - _`provider instance`_ As first argument, the function will receive the provider itself.
-		* onceBeforeRequest - _`<Function>`_ - Handler that will be executed once time just before the first request. Useful to set provider configuration, for example.
-			* Arguments:
-				* provider - _`provider instance`_ As first argument, the function will receive the provider itself.
-		* expirationTime - _`<Number>`_ - The cache will be automatically cleaned each `expirationTime` miliseconds.
-		* retries - _`<Number>`_ - Number of retries that will be executed when a request fails before definitively failing. Requests will be retried for network errors or a 5xx error on an idempotent request (GET, PUT, DELETE).
-		* cache - _`<Boolean>`_ - Defines whether the provider will use cache or not. If `false`, all "read" executions will be sent to the server.
-		* fullResponse - _`<Boolean>`_ - If `true`, the full response object will be used as value, so you can consult headers, etc. If `false`, only the `response.data` will be returned, which is the default behavior.
-		* validateStatus - _`<Function>`_ - Function that will be used to determine if response status has to be considered as `failed` or `success`.
-			* Arguments:
-				* status - _`<Number>`_ - Status code of the request.
-			* Returns: Should return `true` for `success` requests, and `false` for failed ones.
-		* validateResponse - _`<Function>`_ - Function that will be used to determine if response has to be considered as `failed` or `success`.
-			* Arguments:
-				* response - _`<Object>`_ - Response of the request.
-			* Returns: Should return a Promise resolves for `success` requests, and a Promise rejected with an error for failed ones.
-		* errorHandler - _`<Function>`_ - Function used to parse errors. The returned value will be setted as `error` in the provider `error` property.
-			* Arguments:
-				* error - _`<Error>`_ - Error object produced by a failed request.
-			* Returns: Should return a rejected Promise, containing the new Error.
-		* defaultValue - _`<Any>`_ - Default value of provider until real data is requested.
+## Options
 
-## Methods
+Apart of the common Data Provider options, next ones are available:
 
-### query
+* `url` _(String)_: Url of the API resource.
+* `baseUrl` _(String)_: Added as prefix to the `url` option.
+* `createVerb` _(String)_: HTTP verb to be used in axios requests for create method.
+* `readVerb` _(String)_: HTTP verb to be used in axios requests for read method.
+* `updateVerb` _(String)_: HTTP verb to be used in axios requests for update method.
+* `deleteVerb` _(String)_: HTTP verb to be used in axios requests for delete method.
+* `authErrorStatus` _(Number)_: Status code that will be considered as an authentication error. When detected, the authErrorHandler function will be executed instead of returning an error.
+* `authErrorHandler` _(Function)_: Handler that will be executed when an authentication error is received.
+	* Arguments:
+		* `provider` _(Object)_: provider instance As first argument, the function will receive the provider itself. This will allow to set custom authentication headers after executing login, as example.
+		* `retry` _(Function)_: As second argument, a retry function is received, it has to be executed in order to retry the authentication failed request.
+	* Returns: This function should return a Promise rejected with an error, or the execution of the received retry method.
+* `onBeforeRequest` _(Function)_: Handler that will be executed before any request method. Useful, for example, to set provider headers just before each request is executed.
+	* Arguments:
+		* `provider` _(Object)_: provider instance As first argument, the function will receive the provider itself.
+* `onceBeforeRequest` _(Function)_: Handler that will be executed once time just before the first request. Useful to set provider configuration, for example.
+	*	Arguments:
+		* `provider` _(Object)_: provider instance As first argument, the function will receive the provider itself.
+* `expirationTime` _(Number)_: The cache will be automatically cleaned each expirationTime miliseconds.
+* `retries` _(Number)_: Number of retries that will be executed when a request fails before definitively failing. Requests will be retried for network errors or a 5xx error on an idempotent request (GET, PUT, PATCH, DELETE).
+* `fullResponse` _(Boolean)_: If true, the full response object will be used as value, so you can consult headers, etc. If false, only the response.data will be returned, which is the default behavior.
+* `validateStatus` _(Function)_: Function that will be used to determine if response status has to be considered as failed or success.
+	* Arguments:
+		* `status` _(Number)_: Status code of the request.
+	* Returns: Should return true for success requests, and false for failed ones.
+* `validateResponse` _(Function)_: Function that will be used to determine if response has to be considered as failed or success.
+	* Arguments:
+		* `response` _(Object)_: Response of the request.
+	* Returns: Should return a Promise resolves for success requests, and a Promise rejected with an error for failed ones.
+* `errorHandler` _(Function)_: Function used to parse errors. The returned value will be setted as error in the provider error property.
+	* Arguments:
+		* `error` _(Error)_: Error object produced by a failed request.
+	* Returns: Should return a rejected Promise, containing the new Error.
 
-`api.query(queryObject)`
-* Arguments
-	* queryObject - `<Object>` containing properties:
-		* queryString - `<Object>` Keys of the object will be passed as query strings in the url of the request.
-		* urlParams - `<Object>` Keys of the object will be replaced by correspondant url parameters defined in the url as ":param". Please refer to the [path-to-regexp][path-to-regex-url] package for further info.
-* Returns - New queried api instance having all methods described in this chapter.
+## Queries
 
-### clean cache
+When querying providers created with this addon, the query object can have one of the next properties:
 
-`api.clean()`
+* `queryString` _(Object)_: Object containing all query string parameters to send in the request.
+* `urlParams` _(Object)_: Keys of the object will be replaced by correspondant url parameters defined in the url as ":param". Please refer to the [path-to-regexp][path-to-regex] package for further info.
 
-* The `cache` of a queried api resource will be automatically cleaned when the `update` or `delete` methods are executed for that query.
-* If `update` or `delete` methods are executed over the provider without query, cache of all queried instances will be cleaned too.
-* All `cache` will be cleaned if the `create` method is executed.
+> When chaining provider queries, the `queryString` and `urlParams` objects will be extended with the previous ones
 
-### setHeaders
+### Examples
 
-Define headers that will be applied to all subsequent requests.
+`urlParams` example:
 
-`api.setHeaders(headers)`
-* Arguments
-	* headers - _`<Object>`_ Each property in the object will be applied as a header.
+```javascript
+import { Axios } from "@data-provider/axios";
 
-```js
-booksCollection.setHeaders({
-  Authorization: `Bearer ${token}`
+const booksModel = new Axios("books-model", {
+  url: "/books/:id",
+  baseUrl: "http://foo.api.com"
+});
+
+// GET http://foo.api.com/books/2
+booksModel.query({
+  urlParams: {
+    id: 2
+  }
+}).read();
+```
+
+`queryString` example:
+```javascript
+import { Axios } from "@data-provider/axios";
+
+const booksCollection = new Axios("books-collection", {
+  url: "/books/:id",
+  baseUrl: "http://foo.api.com"
+});
+
+// GET http://foo.api.com/books/?author=2
+booksCollection.query({
+  queryString: {
+    author: 2
+  }
+}).read();
+```
+
+Chainability example:
+```javascript
+const author2Books = booksCollection.query({
+  queryString: {
+    author: 2
+  }
+});
+
+// GET http://foo.api.com/books/?author=2&page=1
+author2Books.query({
+  queryString: {
+    page: 1
+  }
+}).read();
+```
+
+## Custom methods
+
+Apart of the common Data Provider methods, next ones are available:
+
+### `create(data)`
+
+Sends a "create" request. By default, it will use the `POST` HTTP verb, but this behavior can be changed using the `createVerb` option. It emits a `createSuccess` event when the request finish successfully, and __automatically cleans the cache of the provider__.
+
+#### Arguments
+
+* `data` _(Object)_: Data to be sent as request body.
+
+#### Example
+
+```javascript
+booksCollection.create({
+  title: "1984"
 });
 ```
 
-### addHeaders
+### `update(data)`
 
-Add a new header. Current headers will be extended with received headers object, and applied to all subsequent requests:
+Sends an "update" request. By default, it will use the `PATCH` HTTP verb, but this behavior can be changed using the `updateVerb` option. It emits an `updateSuccess` event when the request finish successfully, and __automatically cleans the cache of the provider__.
 
-`api.addHeaders(headers)`
-* Arguments
-	* headers - _`<Object>`_ Each property in the object will be applied as a header.
+#### Arguments
 
-```js
-booksCollection.addHeaders({
+* `data` _(Object)_: Data to be sent as request body.
+
+#### Example
+
+```javascript
+booksCollection.query({
+  queryString: {
+    id: 2
+  }
+}).update({
+  title: "Fahrenheit 451"
+});
+```
+
+### `delete()`
+
+Sends a "delete" request. By default, it will use the `DELETE` HTTP verb, but this behavior can be changed using the `deleteVerb` option. It emits an `deleteSuccess` event when the request finish successfully, and __automatically cleans the cache of the provider__.
+
+#### Example
+
+```javascript
+booksCollection.query({
+  queryString: {
+    id: 2
+  }
+}).delete();
+```
+
+### `setHeaders(headers)`
+
+Defines headers that will be applied to all subsequent requests.
+
+#### Arguments
+
+* `headers` _(Object)_: Each property in the object will be applied as a request header.
+
+#### Example
+
+```javascript
+booksCollection.setHeaders({
   "Cache-Control": "no-cache"
 });
 ```
 
-### config
+### `addHeaders(headers)`
 
-Config method can be invoked at any time to change the configuration. The resultant configuration will be the extension of the current options with the provided ones.
+Add a new header. Current headers will be extended with received headers object, and applied to all subsequent requests:
 
-`api.config(options)`
-* Arguments
-	* options - _`<Object>`_ Options object as described above.
+#### Arguments
 
-## Handling many api instances at a time.
+* `headers` _(Object)_: Each property in the object will be applied as a request header.
 
-`apis` object methods allow to set headers of many instances at a time. Apis can be grouped and categorized using tags (through the `tags` option), and this methods will be applied only to apis matching provided tags.
+#### Example
 
-If no tags are provided when invoking methods, they will be applied to all api instances.
-
-> An [example of multiple configuration](docs/apis-config.md) is available in the docs.
-
-`import { apis } from "@data-provider/axios"`
-
-### clean cache
-
-Use the ["Data Provider" `instances` method][data-provider-instances-docs-url] for cleaning many instances at a time. Use the "api" tag to clean all "@data-provider/axios" instances:
-
-```js
-import { instances } from "@data-provider/core";
-
-instances.getByTag("api").clean();
-```
-
-### setHeaders
-
-It defines headers that will be applied to all subsequent requests of api instances matching provided tags.
-
-`apis.setHeaders(headers [,tags])`
-* Arguments
-	* headers - _`<Object>`_ Headers object to be applied as in `api.setHeaders` method described above.
-	* tags - _`<String or Array of Strings>`_ Tag/s of those apis in which the `setHeaders` method should be executed. If no defined, `setHeaders` method of all api instances will be called.
-
-```js
-apis.setHeaders({ Authorization: `Bearer ${token}` }, ["need-auth"]);
-```
-
-### addHeaders
-
-It adds a new header to all api instances matching provided tags. Current headers will be extended with received headers object, and applied to all subsequent requests:
-
-`apis.addHeaders(headers [,tags])`
-* Arguments
-	* headers - _`<Object>`_ Each property in the object will be applied as a header.
-	* tags - _`<String or Array of Strings>`_ Tag/s of those apis in which the `addHeaders` method should be executed. If no defined, `addHeaders` method of all api instances will be called.
-
-```js
-apis.addHeaders({ Authorization: `Bearer ${token}` }, ["need-auth"]);
-```
-
-### config
-
-Use the ["Data Provider" `instances` method][data-provider-instances-docs-url] for configuring many instances at a time. Use the "api" tag to configure all "@data-provider/axios" instances:
-
-```js
-import { instances } from "@data-provider/core";
-
-instances.getByTag("api").config({
-  retries: 0
+```javascript
+booksCollection.addHeaders({
+  Authorization: `Bearer ${token}`
 });
 ```
-
-## Examples
-
-Next example will be easier to understand if you are already familiarized with the [Data Provider][data-provider-url] syntax.
-
-```js
-import { Selector } from "@data-provider/core";
-import { Api } from "@data-provider/axios";
-
-const booksCollection = new Api("http://api.library.com/books");
-const authorsCollection = new Api("http://api.library.com/authors");
-
-const booksWithAuthors = new Selector(
-  {
-    provider: booksCollection,
-    query: author => ({
-      queryString: {
-        author
-      }
-    })
-  },
-  authorsCollection,
-  (booksResults, authorsResults) =>
-    booksResults.map(book => ({
-      ...book,
-      authorName: authorsResults.find(author => author.id === book.author)
-    }))
-);
-
-// Each book now includes an "authorName" property.
-booksWithAuthors.read();
-
-// Request is not dispatched again, now results are cached.
-booksWithAuthors.read();
-
-console.log(booksWithAuthors.read.value); //Value still remain the same
-
-booksCollection.create({
-  author: "George Orwell",
-  book: "1984"
-});
-
-// Request to books is dispatched again, as cache was cleaned. Authors are still cached.
-booksWithAuthors.read();
-
-// Request is dispatched, but passing "author" query string
-booksWithAuthors.query("George Orwell").read();
-
-// Request is already cached. It will not be repeated.
-booksWithAuthors.query("George Orwell").read();
-```
-
-### More examples
-
-The [Data Provider][data-provider-url] library uses this Provider in his examples, so you can refer to the [library documentation][data-provider-url] to found more examples.
-
-Specific Axios Provider examples:
-
-* [configuration](docs/config.md)
-* [configuring multiple instances at a time](docs/apis-config.md)
-* [authentication](docs/authentication.md)
-
-## Usage with frameworks
-
-### React
-
-Please refer to the [@data-provider/connector-react][data-provider-connector-react-url] documentation to see how simple is the data-binding between React Components and @data-provider/axios.
-
-Connect a provider to all components that need it. [Data Provider][data-provider-url] will fetch data only when needed, and will avoid making it more than once, no matter how many components need the data.
 
 ## Contributing
 
@@ -246,7 +210,12 @@ Please read the [contributing guidelines](.github/CONTRIBUTING.md) and [code of 
 [data-provider-url]: https://github.com/data-provider/core
 [data-provider-connector-react-url]: https://github.com/data-provider/connector-react
 [data-provider-instances-docs-url]: https://github.com/data-provider/core/blob/master/docs/instances/api.md
-[path-to-regex-url]: https://www.npmjs.com/package/path-to-regexp
+[path-to-regex]: https://www.npmjs.com/package/path-to-regexp
+
+[data-provider]: https://www.data-provider.org
+[axios]: https://github.com/axios/axios
+[get-started]: https://www.data-provider.org/docs/getting-started
+[basic-tutorial]: https://www.data-provider.org/docs/basics-intro
 
 [coveralls-image]: https://coveralls.io/repos/github/data-provider/axios/badge.svg
 [coveralls-url]: https://coveralls.io/github/data-provider/axios

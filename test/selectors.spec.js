@@ -9,12 +9,12 @@ http://www.apache.org/licenses/LICENSE-2.0
 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 */
 
-const { Selector } = require("@data-provider/core");
-
 const AxiosMock = require("./Axios.mock.js");
-const { Api, apis } = require("../src/index");
 
-describe("Api data sources", () => {
+const { Selector, providers } = require("@data-provider/core");
+const { Axios } = require("../src/index");
+
+describe("Axios data providers", () => {
   const fooBooks = [
     {
       title: "El quijote",
@@ -31,17 +31,19 @@ describe("Api data sources", () => {
 
   beforeAll(() => {
     axios = new AxiosMock();
-    apis.reset();
   });
 
   afterAll(() => {
     axios.restore();
-    apis.reset();
+  });
+
+  afterEach(() => {
+    providers.clear();
   });
 
   beforeEach(() => {
-    books = new Api("/books");
-    authors = new Api("/authors");
+    books = new Axios("books", { url: "/books" });
+    authors = new Axios("authors", { url: "/authors" });
     axios.stubs.instance.resolves({
       data: fooBooks
     });
@@ -50,12 +52,9 @@ describe("Api data sources", () => {
 
   describe("when querying an origin", () => {
     describe("Available methods", () => {
-      it("should have available all methods", () => {
+      it("should have read method", () => {
         const selector = new Selector(books, booksResult => booksResult[0]);
-        expect(selector.create).toBeDefined();
         expect(selector.read).toBeDefined();
-        expect(selector.update).toBeDefined();
-        expect(selector.delete).toBeDefined();
       });
     });
 
@@ -64,7 +63,7 @@ describe("Api data sources", () => {
         it("should be available in the test object, ready for being tested", () => {
           const selectorFunction = booksResult => booksResult[0];
           const selector = new Selector(books, selectorFunction);
-          expect(selector.test.selector).toEqual(selectorFunction);
+          expect(selector.selector).toEqual(selectorFunction);
         });
       });
     });
@@ -79,39 +78,32 @@ describe("Api data sources", () => {
       it("should be true while resource is being loaded, false when finished", () => {
         expect.assertions(2);
         const promise = selector.read();
-        expect(selector.read.loading).toEqual(true);
+        expect(selector.state.loading).toEqual(true);
         return promise.then(() => {
-          expect(selector.read.loading).toEqual(false);
+          expect(selector.state.loading).toEqual(false);
         });
       });
 
       it("should not be loading when request promise is cached", async () => {
         expect.assertions(3);
         await selector.read();
-        expect(selector.read.loading).toEqual(false);
+        expect(selector.state.loading).toEqual(false);
         const secondRead = selector.read();
-        expect(selector.read.loading).toEqual(false);
+        expect(selector.state.loading).toEqual(false);
         return secondRead.then(() => {
-          expect(selector.read.loading).toEqual(false);
+          expect(selector.state.loading).toEqual(false);
         });
       });
 
       it("should be loading again after cleaning cache", async () => {
         expect.assertions(3);
         await selector.read();
-        expect(selector.read.loading).toEqual(false);
-        selector.clean();
+        expect(selector.state.loading).toEqual(false);
+        selector.cleanCache();
         const secondRead = selector.read();
-        expect(selector.read.loading).toEqual(true);
+        expect(selector.state.loading).toEqual(true);
         return secondRead.then(() => {
-          expect(selector.read.loading).toEqual(false);
-        });
-      });
-
-      it("should be accesible through getter", async () => {
-        expect.assertions(1);
-        return selector.read().then(() => {
-          expect(selector.read.getters.loading()).toEqual(false);
+          expect(selector.state.loading).toEqual(false);
         });
       });
     });
@@ -126,57 +118,49 @@ describe("Api data sources", () => {
       it("should be null while resource is being loaded, null when finished successfully", () => {
         expect.assertions(2);
         const promise = selector.read();
-        expect(selector.read.error).toEqual(null);
+        expect(selector.state.error).toEqual(null);
         return promise.then(() => {
-          expect(selector.read.error).toEqual(null);
+          expect(selector.state.error).toEqual(null);
         });
       });
 
       it("should be null while resource is being loaded, error when finished with error", () => {
         const fooErrorMessage = "Foo error";
         const fooError = new Error(fooErrorMessage);
-        books.clean();
+        books.cleanCache();
         axios.stubs.instance.rejects(new Error(fooErrorMessage));
 
         expect.assertions(2);
         const promise = selector.read();
-        expect(selector.read.error).toEqual(null);
+        expect(selector.state.error).toEqual(null);
         return promise.catch(() => {
-          expect(selector.read.error).toEqual(fooError);
+          expect(selector.state.error).toEqual(fooError);
         });
       });
 
       it("should not be cached", () => {
         const fooErrorMessage = "Foo error";
         const fooError = new Error(fooErrorMessage);
-        books.clean();
+        books.cleanCache();
         axios.stubs.instance.rejects(new Error(fooErrorMessage));
 
         expect.assertions(5);
         const promise = selector.read();
-        expect(selector.read.error).toEqual(null);
+        expect(selector.state.error).toEqual(null);
         return promise.catch(async () => {
-          expect(selector.read.error).toEqual(fooError);
+          expect(selector.state.error).toEqual(fooError);
           axios.stubs.instance.resolves({
             data: fooBooks
           });
           await selector.read();
-          expect(selector.read.error).toEqual(null);
+          expect(selector.state.error).toEqual(null);
           expect(axios.stubs.instance.callCount).toEqual(2);
-          expect(selector.read.value).toEqual(fooBooks[0]);
-        });
-      });
-
-      it("should be accesible through getter", async () => {
-        books.clean();
-        expect.assertions(1);
-        return selector.read().then(() => {
-          expect(selector.read.getters.error()).toEqual(null);
+          expect(selector.state.data).toEqual(fooBooks[0]);
         });
       });
     });
 
-    describe("Value property of a method", () => {
+    describe("Data state", () => {
       let selector;
 
       beforeEach(() => {
@@ -186,26 +170,22 @@ describe("Api data sources", () => {
       it("should be undefined while resource is being loaded, and returned value when finished successfully", () => {
         expect.assertions(2);
         const promise = selector.read();
-        expect(selector.read.value).toEqual(undefined);
+        expect(selector.state.data).toEqual(undefined);
         return promise.then(() => {
-          expect(selector.read.value).toEqual(fooBooks[0]);
+          expect(selector.state.data).toEqual(fooBooks[0]);
         });
-      });
-
-      it("should be accesible through getter", async () => {
-        expect.assertions(1);
-        await selector.read();
-        expect(selector.read.getters.value()).toEqual(fooBooks[0]);
       });
 
       it("should return default value while resource is being loaded, and returned value when finished successfully", () => {
         expect.assertions(2);
         const defaultValue = { foo: "foo" };
-        selector = new Selector(books, booksResult => booksResult[0], defaultValue);
+        selector = new Selector(books, booksResult => booksResult[0], {
+          initialState: { data: defaultValue }
+        });
         const promise = selector.read();
-        expect(selector.read.value).toEqual(defaultValue);
+        expect(selector.state.data).toEqual(defaultValue);
         return promise.then(() => {
-          expect(selector.read.value).toEqual(fooBooks[0]);
+          expect(selector.state.data).toEqual(fooBooks[0]);
         });
       });
     });
@@ -241,90 +221,72 @@ describe("Api data sources", () => {
       it("should be undefined while resource is being loaded, and returned value when finished successfully", () => {
         expect.assertions(2);
         const promise = selector.read();
-        expect(selector.read.value).toEqual(undefined);
+        expect(selector.state.data).toEqual(undefined);
         return promise.then(() => {
-          expect(selector.read.value).toEqual(selectorResult);
+          expect(selector.state.data).toEqual(selectorResult);
         });
-      });
-
-      it("should be accesible through getter", async () => {
-        expect.assertions(1);
-        await selector.read();
-        expect(selector.read.getters.value()).toEqual(selectorResult);
       });
 
       it("should return default value while resource is being loaded, and returned value when finished successfully", () => {
         expect.assertions(2);
-        const defaultValue = { foo: "foo" };
-        selector = new Selector(
-          books,
-          booksResult => Promise.resolve(booksResult[0]),
-          defaultValue
-        );
+        selector = new Selector(books, booksResult => Promise.resolve(booksResult[0]), {
+          initialState: {
+            data: { foo: "foo" }
+          }
+        });
         const promise = selector.read();
-        expect(selector.read.value).toEqual(defaultValue);
+        expect(selector.state.data).toEqual({ foo: "foo" });
         return promise.then(() => {
-          expect(selector.read.value).toEqual(fooBooks[0]);
+          expect(selector.state.data).toEqual(fooBooks[0]);
         });
       });
     });
 
     describe("When queried", () => {
-      let query;
       let selector;
 
       beforeEach(() => {
-        query = queryValue => ({
-          query: {
-            author: queryValue
-          }
-        });
         selector = new Selector(
-          {
-            source: books,
-            query
+          query => {
+            return books.query({
+              queryString: {
+                author: query.author
+              }
+            });
           },
           booksResult => booksResult[0]
         );
       });
 
-      it("should have queried sources with received query", async () => {
+      it("should have queried providers with received query", async () => {
         expect.assertions(1);
-        const queriedSelector = selector.query("cervantes");
+        const queriedSelector = selector.query({ author: "cervantes" });
         await queriedSelector.read();
         expect(axios.stubs.instance.getCall(0).args[0].url).toEqual("/books?author=cervantes");
       });
 
       it("value should be undefined while resource is being loaded, and returned value when finished successfully", () => {
         expect.assertions(2);
-        const queriedSelector = selector.query("cervantes");
+        const queriedSelector = selector.query({ author: "cervantes" });
         const promise = queriedSelector.read();
-        expect(queriedSelector.read.value).toEqual(undefined);
+        expect(queriedSelector.state.data).toEqual(undefined);
         return promise.then(() => {
-          expect(queriedSelector.read.value).toEqual(fooBooks[0]);
+          expect(queriedSelector.state.data).toEqual(fooBooks[0]);
         });
       });
 
-      it("should clean cache when one of the resources is cleaned", async () => {
+      it("should clean cache when one of the reproviders is cleaned", async () => {
         expect.assertions(4);
-        const queriedSelector = selector.query("cervantes");
+        const queriedSelector = selector.query({ author: "cervantes" });
         queriedSelector.read();
-        expect(queriedSelector.read.value).toEqual(undefined);
+        expect(queriedSelector.state.data).toEqual(undefined);
         await queriedSelector.read();
-        expect(queriedSelector.read.value).toEqual(fooBooks[0]);
-        books.clean();
+        expect(queriedSelector.state.data).toEqual(fooBooks[0]);
+        books.cleanCache();
         queriedSelector.read();
-        expect(queriedSelector.read.loading).toEqual(true);
+        expect(queriedSelector.state.loading).toEqual(true);
         await queriedSelector.read();
         expect(axios.stubs.instance.callCount).toEqual(2);
-      });
-
-      describe("when developing tests", () => {
-        describe("the query function", () => {
-          it("should be available in the test object, ready for being tested", () => {
-            expect(selector.test.queries[0]).toEqual(query);
-          });
-        });
       });
     });
   });
@@ -333,52 +295,49 @@ describe("Api data sources", () => {
     let booksSelector;
 
     beforeEach(() => {
-      booksSelector = new Selector(books, (booksResult, index = 0) => booksResult[index]);
+      booksSelector = new Selector(books, (booksResult, { index = 0 }) => {
+        return booksResult[index];
+      });
     });
 
     describe("Loading property", () => {
       let selector;
 
       beforeEach(() => {
-        selector = new Selector(booksSelector, book => book.title);
+        selector = new Selector(booksSelector, book => {
+          return book.title;
+        });
       });
 
       it("should be true while resource is being loaded, false when finished", () => {
         expect.assertions(2);
         const promise = selector.read();
-        expect(selector.read.loading).toEqual(true);
+        expect(selector.state.loading).toEqual(true);
         return promise.then(() => {
-          expect(selector.read.loading).toEqual(false);
+          expect(selector.state.loading).toEqual(false);
         });
       });
 
       it("should not be loading when request promise is cached", async () => {
         expect.assertions(3);
         await selector.read();
-        expect(selector.read.loading).toEqual(false);
+        expect(selector.state.loading).toEqual(false);
         const secondRead = selector.read();
-        expect(selector.read.loading).toEqual(false);
+        expect(selector.state.loading).toEqual(false);
         return secondRead.then(() => {
-          expect(selector.read.loading).toEqual(false);
+          expect(selector.state.loading).toEqual(false);
         });
       });
 
       it("should be loading again after cleaning cache", async () => {
         expect.assertions(3);
         await selector.read();
-        expect(selector.read.loading).toEqual(false);
-        selector.clean();
+        expect(selector.state.loading).toEqual(false);
+        selector.cleanCache();
         const secondRead = selector.read();
-        expect(selector.read.loading).toEqual(true);
+        expect(selector.state.loading).toEqual(true);
         return secondRead.then(() => {
-          expect(selector.read.loading).toEqual(false);
-        });
-      });
-
-      it("should be accesible through getter", async () => {
-        expect.assertions(1);
-        return selector.read().then(() => {
-          expect(selector.read.getters.loading()).toEqual(false);
+          expect(selector.state.loading).toEqual(false);
         });
       });
     });
@@ -393,36 +352,28 @@ describe("Api data sources", () => {
       it("should be null while resource is being loaded, null when finished successfully", () => {
         expect.assertions(2);
         const promise = selector.read();
-        expect(selector.read.error).toEqual(null);
+        expect(selector.state.error).toEqual(null);
         return promise.then(() => {
-          expect(selector.read.error).toEqual(null);
+          expect(selector.state.error).toEqual(null);
         });
       });
 
       it("should be null while resource is being loaded, error when finished with error", () => {
         const fooErrorMessage = "Foo error";
         const fooError = new Error(fooErrorMessage);
-        books.clean();
+        books.cleanCache();
         axios.stubs.instance.rejects(new Error(fooErrorMessage));
 
         expect.assertions(2);
         const promise = selector.read();
-        expect(selector.read.error).toEqual(null);
+        expect(selector.state.error).toEqual(null);
         return promise.catch(() => {
-          expect(selector.read.error).toEqual(fooError);
-        });
-      });
-
-      it("should be accesible through getter", async () => {
-        books.clean();
-        expect.assertions(1);
-        return selector.read().then(() => {
-          expect(selector.read.getters.error()).toEqual(null);
+          expect(selector.state.error).toEqual(fooError);
         });
       });
     });
 
-    describe("Value property of a method", () => {
+    describe("Data state", () => {
       let selector;
 
       beforeEach(() => {
@@ -432,26 +383,24 @@ describe("Api data sources", () => {
       it("should be undefined while resource is being loaded, and returned value when finished successfully", () => {
         expect.assertions(2);
         const promise = selector.read();
-        expect(selector.read.value).toEqual(undefined);
+        expect(selector.state.data).toEqual(undefined);
         return promise.then(() => {
-          expect(selector.read.value).toEqual(fooBooks[0].title);
+          expect(selector.state.data).toEqual(fooBooks[0].title);
         });
-      });
-
-      it("should be accesible through getter", async () => {
-        expect.assertions(1);
-        await selector.read();
-        expect(selector.read.getters.value()).toEqual(fooBooks[0].title);
       });
 
       it("should return default value while resource is being loaded, and returned value when finished successfully", () => {
         expect.assertions(2);
         const defaultValue = { foo: "foo" };
-        selector = new Selector(booksSelector, book => book.title, defaultValue);
+        selector = new Selector(booksSelector, book => book.title, {
+          initialState: {
+            data: defaultValue
+          }
+        });
         const promise = selector.read();
-        expect(selector.read.value).toEqual(defaultValue);
+        expect(selector.state.data).toEqual(defaultValue);
         return promise.then(() => {
-          expect(selector.read.value).toEqual(fooBooks[0].title);
+          expect(selector.state.data).toEqual(fooBooks[0].title);
         });
       });
     });
@@ -461,41 +410,31 @@ describe("Api data sources", () => {
 
       beforeEach(() => {
         selector = new Selector(
-          {
-            source: booksSelector,
-            query: queryValue => queryValue
-          },
+          query => booksSelector.query(query),
           bookResult => bookResult.title
         );
       });
 
-      it("should have queried sources with received query", async () => {
-        expect.assertions(1);
-        const queriedSelector = selector.query(1);
-        await queriedSelector.read();
-        expect(axios.stubs.instance.getCall(0).args[0].url).toEqual("/books");
-      });
-
       it("value should be undefined while resource is being loaded, and returned value when finished successfully", () => {
         expect.assertions(2);
-        const queriedSelector = selector.query(1);
+        const queriedSelector = selector.query({ index: 1 });
         const promise = queriedSelector.read();
-        expect(queriedSelector.read.value).toEqual(undefined);
+        expect(queriedSelector.state.data).toEqual(undefined);
         return promise.then(() => {
-          expect(queriedSelector.read.value).toEqual(fooBooks[1].title);
+          expect(queriedSelector.state.data).toEqual(fooBooks[1].title);
         });
       });
 
-      it("should clean cache when one of the resources is cleaned", async () => {
+      it("should clean cache when one of the providers is cleaned", async () => {
         expect.assertions(4);
-        const queriedSelector = selector.query(1);
+        const queriedSelector = selector.query({ index: 1 });
         queriedSelector.read();
-        expect(queriedSelector.read.value).toEqual(undefined);
+        expect(queriedSelector.state.data).toEqual(undefined);
         await queriedSelector.read();
-        expect(queriedSelector.read.value).toEqual(fooBooks[1].title);
-        books.clean();
+        expect(queriedSelector.state.data).toEqual(fooBooks[1].title);
+        books.cleanCache();
         queriedSelector.read();
-        expect(queriedSelector.read.loading).toEqual(true);
+        expect(queriedSelector.state.loading).toEqual(true);
         await queriedSelector.read();
         await queriedSelector.read();
         await queriedSelector.read();
@@ -504,11 +443,11 @@ describe("Api data sources", () => {
     });
   });
 
-  describe("when querying from many sources", () => {
+  describe("when querying from many providers", () => {
     let booksSelector;
 
     beforeEach(() => {
-      booksSelector = new Selector(books, (booksResult, index = 0) => booksResult[index]);
+      booksSelector = new Selector(books, (booksResult, { index = 0 }) => booksResult[index]);
     });
 
     describe("Loading property", () => {
@@ -521,39 +460,32 @@ describe("Api data sources", () => {
       it("should be true while resource is being loaded, false when finished", () => {
         expect.assertions(2);
         const promise = selector.read();
-        expect(selector.read.loading).toEqual(true);
+        expect(selector.state.loading).toEqual(true);
         return promise.then(() => {
-          expect(selector.read.loading).toEqual(false);
+          expect(selector.state.loading).toEqual(false);
         });
       });
 
       it("should not be loading when request promise is cached", async () => {
         expect.assertions(3);
         await selector.read();
-        expect(selector.read.loading).toEqual(false);
+        expect(selector.state.loading).toEqual(false);
         const secondRead = selector.read();
-        expect(selector.read.loading).toEqual(false);
+        expect(selector.state.loading).toEqual(false);
         return secondRead.then(() => {
-          expect(selector.read.loading).toEqual(false);
+          expect(selector.state.loading).toEqual(false);
         });
       });
 
       it("should be loading again after cleaning cache", async () => {
         expect.assertions(3);
         await selector.read();
-        expect(selector.read.loading).toEqual(false);
-        selector.clean();
+        expect(selector.state.loading).toEqual(false);
+        selector.cleanCache();
         const secondRead = selector.read();
-        expect(selector.read.loading).toEqual(true);
+        expect(selector.state.loading).toEqual(true);
         return secondRead.then(() => {
-          expect(selector.read.loading).toEqual(false);
-        });
-      });
-
-      it("should be accesible through getter", async () => {
-        expect.assertions(1);
-        return selector.read().then(() => {
-          expect(selector.read.getters.loading()).toEqual(false);
+          expect(selector.state.loading).toEqual(false);
         });
       });
     });
@@ -568,36 +500,28 @@ describe("Api data sources", () => {
       it("should be null while resource is being loaded, null when finished successfully", () => {
         expect.assertions(2);
         const promise = selector.read();
-        expect(selector.read.error).toEqual(null);
+        expect(selector.state.error).toEqual(null);
         return promise.then(() => {
-          expect(selector.read.error).toEqual(null);
+          expect(selector.state.error).toEqual(null);
         });
       });
 
       it("should be null while resource is being loaded, error when finished with error", () => {
         const fooErrorMessage = "Foo error";
         const fooError = new Error(fooErrorMessage);
-        books.clean();
+        books.cleanCache();
         axios.stubs.instance.rejects(new Error(fooErrorMessage));
 
         expect.assertions(2);
         const promise = selector.read();
-        expect(selector.read.error).toEqual(null);
+        expect(selector.state.error).toEqual(null);
         return promise.catch(() => {
-          expect(selector.read.error).toEqual(fooError);
-        });
-      });
-
-      it("should be accesible through getter", async () => {
-        books.clean();
-        expect.assertions(1);
-        return selector.read().then(() => {
-          expect(selector.read.getters.error()).toEqual(null);
+          expect(selector.state.error).toEqual(fooError);
         });
       });
     });
 
-    describe("Value property of a method", () => {
+    describe("Data state", () => {
       let selector;
 
       beforeEach(() => {
@@ -607,31 +531,24 @@ describe("Api data sources", () => {
       it("should be undefined while resource is being loaded, and returned value when finished successfully", () => {
         expect.assertions(2);
         const promise = selector.read();
-        expect(selector.read.value).toEqual(undefined);
+        expect(selector.state.data).toEqual(undefined);
         return promise.then(() => {
-          expect(selector.read.value).toEqual(fooBooks[0].title);
+          expect(selector.state.data).toEqual(fooBooks[0].title);
         });
-      });
-
-      it("should be accesible through getter", async () => {
-        expect.assertions(1);
-        await selector.read();
-        expect(selector.read.getters.value()).toEqual(fooBooks[0].title);
       });
 
       it("should return default value while resource is being loaded, and returned value when finished successfully", () => {
         expect.assertions(2);
         const defaultValue = { foo: "foo" };
-        selector = new Selector(
-          authors,
-          booksSelector,
-          (authorsResults, book) => book.title,
-          defaultValue
-        );
+        selector = new Selector(authors, booksSelector, (authorsResults, book) => book.title, {
+          initialState: {
+            data: defaultValue
+          }
+        });
         const promise = selector.read();
-        expect(selector.read.value).toEqual(defaultValue);
+        expect(selector.state.data).toEqual(defaultValue);
         return promise.then(() => {
-          expect(selector.read.value).toEqual(fooBooks[0].title);
+          expect(selector.state.data).toEqual(fooBooks[0].title);
         });
       });
     });
@@ -642,27 +559,24 @@ describe("Api data sources", () => {
       beforeEach(() => {
         selector = new Selector(
           authors,
-          {
-            source: booksSelector,
-            query: (queryValue, previousResults) => {
-              let index = 0;
-              let hemingwayBookIndex = 0;
-              previousResults[0].forEach(book => {
-                if (book.author === "Hemingway") {
-                  hemingwayBookIndex = index;
-                }
-                index++;
-              });
-              return hemingwayBookIndex;
-            }
+          (query, previousResults) => {
+            let finalIndex = 0;
+            let hemingwayBookIndex = 0;
+            previousResults[0].forEach(book => {
+              if (book.author === "Hemingway") {
+                hemingwayBookIndex = finalIndex;
+              }
+              finalIndex++;
+            });
+            return booksSelector.query({ index: hemingwayBookIndex });
           },
           (authorsResults, bookResult) => bookResult.title
         );
       });
 
-      it("should have queried sources with received query", async () => {
+      it("should have queried providers with received query", async () => {
         expect.assertions(2);
-        const queriedSelector = selector.query(1);
+        const queriedSelector = selector.query({ index: 1 });
         await queriedSelector.read();
         expect(axios.stubs.instance.getCall(0).args[0].url).toEqual("/authors");
         expect(axios.stubs.instance.getCall(1).args[0].url).toEqual("/books");
@@ -670,57 +584,57 @@ describe("Api data sources", () => {
 
       it("value should be undefined while resource is being loaded, and returned value when finished successfully", () => {
         expect.assertions(2);
-        const queriedSelector = selector.query(1);
+        const queriedSelector = selector.query({ index: 1 });
         const promise = queriedSelector.read();
-        expect(queriedSelector.read.value).toEqual(undefined);
+        expect(queriedSelector.state.data).toEqual(undefined);
         return promise.then(() => {
-          expect(queriedSelector.read.value).toEqual(fooBooks[1].title);
+          expect(queriedSelector.state.data).toEqual(fooBooks[1].title);
         });
       });
 
-      it("should clean cache when one of the resources is cleaned", async () => {
+      it("should clean cache when one of the reproviders is cleaned", async () => {
         expect.assertions(4);
-        const queriedSelector = selector.query(1);
+        const queriedSelector = selector.query({ index: 1 });
         queriedSelector.read();
-        expect(queriedSelector.read.value).toEqual(undefined);
+        expect(queriedSelector.state.data).toEqual(undefined);
         await queriedSelector.read();
-        expect(queriedSelector.read.value).toEqual(fooBooks[1].title);
-        books.clean();
+        expect(queriedSelector.state.data).toEqual(fooBooks[1].title);
+        books.cleanCache();
         queriedSelector.read();
-        expect(queriedSelector.read.loading).toEqual(true);
+        expect(queriedSelector.state.loading).toEqual(true);
         await queriedSelector.read();
         await queriedSelector.read();
         await queriedSelector.read();
         expect(axios.stubs.instance.callCount).toEqual(3);
       });
 
-      it("should clean cache when any of the resources is cleaned", async () => {
+      it("should clean cache when any of the providers is cleaned", async () => {
         expect.assertions(4);
-        const queriedSelector = selector.query(1);
+        const queriedSelector = selector.query({ index: 1 });
         queriedSelector.read();
-        expect(queriedSelector.read.value).toEqual(undefined);
+        expect(queriedSelector.state.data).toEqual(undefined);
         await queriedSelector.read();
-        expect(queriedSelector.read.value).toEqual(fooBooks[1].title);
-        authors.clean();
+        expect(queriedSelector.state.data).toEqual(fooBooks[1].title);
+        authors.cleanCache();
         queriedSelector.read();
-        expect(queriedSelector.read.loading).toEqual(true);
+        expect(queriedSelector.state.loading).toEqual(true);
         await queriedSelector.read();
         await queriedSelector.read();
         await queriedSelector.read();
         expect(axios.stubs.instance.callCount).toEqual(3);
       });
 
-      it("should clean cache when all resources are cleaned", async () => {
+      it("should clean cache when all reproviders are cleaned", async () => {
         expect.assertions(4);
-        const queriedSelector = selector.query(1);
+        const queriedSelector = selector.query({ index: 1 });
         queriedSelector.read();
-        expect(queriedSelector.read.value).toEqual(undefined);
+        expect(queriedSelector.state.data).toEqual(undefined);
         await queriedSelector.read();
-        expect(queriedSelector.read.value).toEqual(fooBooks[1].title);
-        authors.clean();
-        books.clean();
+        expect(queriedSelector.state.data).toEqual(fooBooks[1].title);
+        authors.cleanCache();
+        books.cleanCache();
         queriedSelector.read();
-        expect(queriedSelector.read.loading).toEqual(true);
+        expect(queriedSelector.state.loading).toEqual(true);
         await queriedSelector.read();
         await queriedSelector.read();
         await queriedSelector.read();
