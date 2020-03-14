@@ -4,18 +4,196 @@
 
 [![NPM downloads][npm-downloads-image]][npm-downloads-url] [![License][license-image]][license-url]
 
-# Async Data Provider.
+# [![Data Provider][logo]][home]
+
+> Async Data Provider. Powered by Redux. Agnostic about data origins. Framework agnostic.
+
+Data Provider is a data provider _(surprise!)_ with states ands built-in cache for JavaScript apps.
+
+The main target of the library are front-end applications, but it could be used also in [Node.js][nodejs].
+
+It helps you __providing async data__ to your components informing them about __loading and error states__.
+It also provides a __cache layer__, so you don´t have to worry about when to read the data, and allows you to __combine the results of different data providers__ using a syntax very similar to the known [Reselect][reselect], recalculating them only when one of the dependencies cache is cleaned.
+
+As its states are managed with [Redux][redux], you can take advantage of his large ecosystem of addons, which will improve the developer experience. _(You don't need to use Redux directly in your application if you don't want, the library includes its own internal store for that purpose, which [can be migrated to your own store][api-store-manager])._
+
+You can use Data Provider with [React][react], or with any other view library. Separated addons are available for that purpose, as [@data-provider/react][data-provider-react].
+
+Data Provider is __agnostic about data origins__, so it can be used to read data from a REST API, from localStorage, or from any other origin. Choose one of the available plugins depending of the type of the origin you want to read from, as [@data-provider/axios][data-provider-axios], or [@data-provider/browser-storage][data-provider-browser-storage].
+
+It has a __light weight__, 4.2KB gzipped in UMD format _(you have to add the Redux weight to this)_, and addons usually are even lighter.
+
+## Docs
+
+We have a website available to help you to learn to use Data Provider. There are tutorials, examples and many other resources to guide you to understand from the basic concepts to the more advanced patterns:
+
+* [Home][home]
+* [Get started][get-started]
+* [Motivation][motivation]
+* [Installation][installation]
+* [Basic tutorial][basic-tutorial]
+* [Recipes][recipes]
+* [API reference][api-reference]
+
+## Main features
+
+### Agnostic about data origins
+
+The Provider class provides the cache, state handler, etc., but not the "read" method. The "read" behavior is implemented by __different Data Provider Origins addons__.
+
+There are different origins available, such as __[Axios][data-provider-axios], [LocalStorage][data-provider-browser-storage], [Memory][data-provider-memory], etc.__ and building your own is so easy as extending the Provider class with a custom "readMethod".
+
+Sharing the same interface for all origins, and being able to build Selectors combining all of them implies that your logic will be __completely isolated about WHERE the data is being retrieved.__
+
+```javascript
+import { Axios } from "@data-provider/axios";
+import { LocalStorage } from "@data-provider/browser-storage";
+
+export const books = new Axios("books", {
+  url: "/api/books"
+});
+
+export const favoriteBooks = new LocalStorage("favorite-books", {
+  initialState: {
+    data: []
+  }
+});
+```
+
+### Selectors inspired by Reselect
+
+Selectors cache is cleaned __whenever any dependency cache is cleaned.__
+
+Exposing the __same interface than providers__ make consumers agnostic about what type of Provider or Selector are they consuming.
+
+As in [Reselect][reselect], __Selectors are composable__. They can be used as input to other selectors.
+
+__Powerful [dependencies api][api-selector]__: Catch dependencies errors, retrieve them in parallel, declare them as functions returning other providers or selectors, etc.
+
+```javascript
+import { Selector } from "@data-provider/core";
+
+import { booksProvider } from "data/books";
+import { authorsProvider } from "data/authors";
+
+export const booksWithAuthor = new Selector(
+  booksProvider,
+  authorsProvider,
+  (books, authors) => {
+    return books.map(book => ({
+      ...book,
+      author: authors.find(
+        author => author.id === book.authorId
+      )
+    }))
+  }
+);
+```
+
+### Cache and memoization
+
+The built-in cache ensures that Providers are __computed only once__.
+
+Don't care about when a data has to be retrieved. Simply retrieve it always, Data Provider will do the optimization. __Avoid orchestrators and build fully modular pieces.__
+
+Cache can be cleaned on-demand, and some specific origins providers implementations __even do it automatically__ when needed.
+
+```jsx
+import Books from "views/books";
+
+const RenderBooksTwice = () => {
+  return (
+    <div>
+      <Books />
+      <Books />
+    </div>
+  );
+};
+
+export default RenderBooksTwice;
+```
+
+### Queryable
+
+Providers and selectors instances can be queried, which returns a new child instance with his own "query value".
+
+Each different child has a different cache, different state, etc.
+
+Different origins can use the "query" value for different purposes (API origins will normally use it for adding different params or query strings to the provider url)
+
+When the parent provider cache is clean, also the children is. _(For example, cleaning the cache of an API origin requesting to "/api/books", will also clean the cache for "/api/books?author=2")_
+
+```javascript
+import { useData, useLoading } from "@data-provider/react";
+
+import { bookProvider } from "data/books";
+import BookCard from "components/book-card";
+
+const Book = ({ id }) => {
+  const provider = bookProvider.query({ id });
+  const book = useData(provider);
+  const loading = useLoading(provider);
+
+  if (loading) {
+    return <Loading />;
+  }
+  return <BookCard title={book.title} author={book.author} />;
+};
+
+export default Book;
+```
+
+### UI binding addons
+
+Data Provider is not concerned about the views, but UI binding addons are available.
+
+For example, the [@data-provider/react][data-provider-react] package __gives you HOCs to connect providers to your components__, creating a wrapper component handling all the logic for you.
+
+It also provides __hooks like "useData", "useLoading", etc.__
+
+__Optimized__, it takes care of reading the data and re-renders the component only when your desired props have changed.
+
+```jsx
+import { withDataProvider } from "@data-provider/react";
+
+import { booksProvider } from "data/books";
+import ErrorComponent from "components/error";
+
+const Books = ({ data, loading, error }) => {
+  if (error) {
+    return <ErrorComponent error={error}/>
+  }
+  return <BooksList data={data} loading={loading} />;
+};
+
+export default withDataProvider(booksProvider)(Books);
+```
 
 ## Contributing
 
 Contributors are welcome.
 Please read the [contributing guidelines](.github/CONTRIBUTING.md) and [code of conduct](.github/CODE_OF_CONDUCT.md).
 
-[data-provider-axios-url]: https://github.com/data-provider/axios
-[data-provider-memory-url]: https://github.com/data-provider/memory
-[data-provider-browser-storage-url]: https://github.com/data-provider/browser-storage
-[data-provider-prismic-url]: https://github.com/data-provider/prismic
-[data-provider-connector-react-url]: https://github.com/data-provider/connector-react
+[nodejs]: https://nodejs.org/en/
+[redux]: https://redux.js.org/
+[redux-installation]: https://redux.js.org/introduction/installation
+[react]: https://reactjs.org/
+[data-provider-react]: https://www.npmjs.com/package/@data-provider/react
+[data-provider-axios]: https://www.npmjs.com/package/@data-provider/axios
+[data-provider-browser-storage]: https://www.npmjs.com/package/@data-provider/browser-storage
+[data-provider-memory]: https://www.npmjs.com/package/@data-provider/memory
+[reselect]: https://github.com/reduxjs/reselect
+
+[logo]: https://www.data-provider.org/img/npm-logo.png
+[home]: https://www.data-provider.org
+[get-started]: https://www.data-provider.org/docs/getting-started
+[motivation]: https://www.data-provider.org/docs/motivation
+[installation]: https://www.data-provider.org/docs/installation
+[basic-tutorial]: https://www.data-provider.org/docs/basics-intro
+[recipes]: https://www.data-provider.org/docs/recipes-index
+[api-reference]: https://www.data-provider.org/docs/api-reference
+[api-selector]: https://www.data-provider.org/docs/api-selector
+[api-store-manager]: https://www.data-provider.org/docs/api-store-manager
 
 [coveralls-image]: https://coveralls.io/repos/github/data-provider/core/badge.svg
 [coveralls-url]: https://coveralls.io/github/data-provider/core
