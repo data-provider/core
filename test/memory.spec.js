@@ -20,7 +20,6 @@ describe("Memory origin", () => {
   describe("Available methods", () => {
     it("should have all CRUD methods", () => {
       const userData = new Memory();
-      expect(userData.create).toBeDefined();
       expect(userData.read).toBeDefined();
       expect(userData.update).toBeDefined();
       expect(userData.delete).toBeDefined();
@@ -130,11 +129,13 @@ describe("Memory origin", () => {
 
   describe("Update method", () => {
     let userData;
-    const fooData = {
-      foo: "foo-value"
-    };
+    let fooData;
 
     beforeEach(() => {
+      fooData = {
+        foo: "foo-value"
+      };
+
       userData = new Memory("foo-id", {
         initialState: {
           data: fooData
@@ -194,6 +195,23 @@ describe("Memory origin", () => {
         });
       });
     });
+
+    describe("when property did not exist", () => {
+      it("should add the new prop in parent", async () => {
+        await userData.query({ prop: "foo2" }).update("foo-new");
+        const value = await userData.read();
+        expect(value).toEqual({
+          foo: "foo-value",
+          foo2: "foo-new"
+        });
+      });
+
+      it("should add the new prop", async () => {
+        await userData.query({ prop: "foo2" }).update("foo-new");
+        const value = await userData.query({ prop: "foo2" }).read();
+        expect(value).toEqual("foo-new");
+      });
+    });
   });
 
   describe("Delete method", () => {
@@ -238,49 +256,6 @@ describe("Memory origin", () => {
       return promise.then(() => {
         expect(userData.state.loading).toEqual(false);
       });
-    });
-  });
-
-  describe("Create method", () => {
-    let userData;
-    const fooData = {
-      foo: "foo-value"
-    };
-
-    beforeEach(() => {
-      userData = new Memory("foo-memory-create", {
-        initialState: {
-          data: fooData
-        }
-      });
-    });
-
-    it("should clean the cache when finish successfully", async () => {
-      expect.assertions(3);
-      let promise = userData.read();
-      expect(userData.state.loading).toEqual(true);
-      await promise;
-      await userData.create("foo-new");
-      promise = userData.read();
-      expect(userData.state.loading).toEqual(true);
-      return promise.then(() => {
-        expect(userData.state.loading).toEqual(false);
-      });
-    });
-
-    it("should add the new prop in parent", async () => {
-      await userData.query({ prop: "foo2" }).create("foo-new");
-      const value = await userData.read();
-      expect(value).toEqual({
-        foo: "foo-value",
-        foo2: "foo-new"
-      });
-    });
-
-    it("should add the new prop", async () => {
-      await userData.query({ prop: "foo2" }).create("foo-new");
-      const value = await userData.query({ prop: "foo2" }).read();
-      expect(value).toEqual("foo-new");
     });
   });
 

@@ -66,10 +66,6 @@ class Memory extends Provider {
     return Promise.resolve();
   }
 
-  create(data) {
-    return this.update(data);
-  }
-
   delete() {
     if (this._queriedProp) {
       delete this._options._data[this._queriedProp];
