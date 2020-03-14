@@ -4,13 +4,94 @@
 
 [![NPM downloads][npm-downloads-image]][npm-downloads-url] [![License][license-image]][license-url]
 
+# Memory origin addon for Data Provider
+
+It provides CRUD methods for objects saved in memory.
+
+## Usage
+
+Read the [Data Provider][data-provider] docs to learn how to use addons.
+
+* [Home][data-provider]
+* [Get started][get-started]
+* [Basic tutorial][basic-tutorial]
+
+## Queries
+
+When querying providers created with this addon, the query object can have one of the next properties:
+
+* `prop` _(String)_: Specific property of the object to be accessed.
+
+### Example
+
+```javascript
+import { Memory } from "@data-provider/memory";
+
+const sessionStatus = new Memory("session-status", {
+  initialState: {
+    data: {
+      loggedIn: false
+    }
+  }
+});
+
+sessionStatus.query({ prop: "loggedIn" }).update(true);
+sessionStatus.query({ prop: "loggedIn" }).read().then(result => {
+  console.log("Is logged in", result);
+  // true
+});
+```
+
+## Custom methods
+
+Apart of the common Data Provider methods, next ones are available:
+
+### `update(data)`
+
+Updates an specific property of the stored object when the provider is queried, or the full object when not. When the object is modified, it will __automatically cleans the cache of the provider__ and also the cache of the parent provider when it is queried _(as modifying a property also modifies the full object)_.
+
+#### Arguments
+
+* `data` _(Any)_: New data to be set.
+
+#### Examples
+
+```javascript
+// modifies an specific property
+sessionStatus.query({ prop: "loggedIn" }).update(true);
+```
+
+```javascript
+// Overwrites full object
+sessionStatus.update({
+  loggedIn: true
+});
+```
+
+### `delete()`
+
+Removes an specific property of the stored object when the provider is queried, or sets the full object as empty when not. When the object is modified, it will __automatically cleans the cache of the provider__ and also the cache of the parent provider when it is queried _(as deleting a property also modifies the full object)_.
+
+#### Examples
+
+```javascript
+// removes an specific property
+sessionStatus.query({ prop: "loggedIn" }).delete();
+```
+
+```javascript
+// Sets the full object as {}
+sessionStatus.delete();
+```
+
 ## Contributing
 
 Contributors are welcome.
 Please read the [contributing guidelines](.github/CONTRIBUTING.md) and [code of conduct](.github/CODE_OF_CONDUCT.md).
 
-[data-provider-url]: https://github.com/data-provider/core
-[data-provider-instances-docs-url]: https://github.com/data-provider/core/blob/master/docs/instances/api.md
+[data-provider]: https://www.data-provider.org
+[get-started]: https://www.data-provider.org/docs/getting-started
+[basic-tutorial]: https://www.data-provider.org/docs/basics-intro
 
 [coveralls-image]: https://coveralls.io/repos/github/data-provider/memory/badge.svg
 [coveralls-url]: https://coveralls.io/github/data-provider/memory
