@@ -106,10 +106,6 @@ export class Storage extends Provider {
     return Promise.resolve();
   }
 
-  create(data) {
-    return this.update(data);
-  }
-
   delete() {
     let rootValue = this._getRootValue();
     const queryProp = this._queriedProp;

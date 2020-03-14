@@ -29,7 +29,6 @@ describe("Local Storage", () => {
   describe("Available methods", () => {
     it("should have all CRUD methods", () => {
       const userData = new LocalStorage("userData", { root: storage.mock });
-      expect(userData.create).toBeDefined();
       expect(userData.read).toBeDefined();
       expect(userData.update).toBeDefined();
       expect(userData.delete).toBeDefined();
@@ -267,43 +266,6 @@ describe("Local Storage", () => {
         await queriedData.delete();
         expect(storage.stubs.setItem.getCall(0).args[1]).toEqual(JSON.stringify({}));
       });
-    });
-  });
-
-  describe("Create method", () => {
-    let userData;
-    const fooData = {
-      foo: "foo-value"
-    };
-
-    beforeEach(() => {
-      storage.stubs.getItem.returns(JSON.stringify(fooData));
-      userData = new LocalStorage("userData", {
-        root: storage.mock
-      });
-    });
-
-    it("should clean the cache when finish successfully", async () => {
-      expect.assertions(3);
-      let promise = userData.read();
-      expect(userData.state.loading).toEqual(true);
-      await promise;
-      await userData.create("foo-new");
-      promise = userData.read();
-      expect(userData.state.loading).toEqual(true);
-      return promise.then(() => {
-        expect(userData.state.loading).toEqual(false);
-      });
-    });
-
-    it("should add the new key", async () => {
-      await userData.query({ prop: "foo2" }).create("foo-new");
-      expect(storage.stubs.setItem.getCall(0).args[1]).toEqual(
-        JSON.stringify({
-          foo: "foo-value",
-          foo2: "foo-new"
-        })
-      );
     });
   });
 
