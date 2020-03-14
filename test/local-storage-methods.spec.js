@@ -128,6 +128,13 @@ describe("Local Storage", () => {
       });
     });
 
+    describe("localStorage key", () => {
+      it("should be the provider id", async () => {
+        await userData.read();
+        expect(storage.stubs.getItem.getCall(0).args[0]).toEqual("userData");
+      });
+    });
+
     describe("without query", () => {
       it("should be localStorage value while resource is being loaded", () => {
         expect.assertions(2);
@@ -171,6 +178,13 @@ describe("Local Storage", () => {
       storage.stubs.getItem.returns(JSON.stringify(fooData));
       userData = new LocalStorage("userData", {
         root: storage.mock
+      });
+    });
+
+    describe("localStorage key", () => {
+      it("should be the provider id", async () => {
+        await userData.update("");
+        expect(storage.stubs.setItem.getCall(0).args[0]).toEqual("userData");
       });
     });
 

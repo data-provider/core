@@ -63,7 +63,7 @@ export class Storage extends Provider {
 
   get initialState() {
     let initialState = this.initialStateFromOptions || {};
-    this._namespace = this.options.namespace;
+    this._namespace = this.id;
     this._storage = this._getStorage(this.options.storageKey, this.options.root);
     return {
       ...initialState,

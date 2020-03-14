@@ -128,6 +128,13 @@ describe("SessionStorage Storage", () => {
       });
     });
 
+    describe("browserStorage key", () => {
+      it("should be the provider id", async () => {
+        await userData.read();
+        expect(storage.stubs.getItem.getCall(0).args[0]).toEqual("userData");
+      });
+    });
+
     describe("without query", () => {
       it("should be sessionStorage value while resource is being loaded", () => {
         expect.assertions(2);
@@ -171,6 +178,13 @@ describe("SessionStorage Storage", () => {
       storage.stubs.getItem.returns(JSON.stringify(fooData));
       userData = new SessionStorage("userData", {
         root: storage.mock
+      });
+    });
+
+    describe("browserStorage key", () => {
+      it("should be the provider id", async () => {
+        await userData.update("");
+        expect(storage.stubs.setItem.getCall(0).args[0]).toEqual("userData");
       });
     });
 

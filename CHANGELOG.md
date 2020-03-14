@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 - chore(deps): [BREAKING CHANGE] Update @data-provider dependency to v2.0.0
+- feat(providers): [BREAKING CHANGE] Use provider id as item key for localStorage and browserStorage
 
 ## [2.0.0.alpha-2] - 2020-02-26
 
