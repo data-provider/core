@@ -1,13 +1,16 @@
 {
   "name": "@data-provider/memory",
-  "version": "1.4.2",
-  "description": "Memory Data Provider",
+  "version": "2.0.0",
+  "description": "Memory origin addon for Data Provider",
   "keywords": [
     "data-provider",
+    "addon",
+    "origin",
     "data",
     "crud",
     "memory",
-    "reactive"
+    "reactive",
+    "events"
   ],
   "author": "Javier Brea",
   "license": "Apache-2.0",
@@ -18,45 +21,44 @@
   "files": [
     "dist"
   ],
-  "main": "dist/data-provider-memory.cjs.js",
-  "module": "dist/data-provider-memory.esm.js",
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.esm.js",
   "scripts": {
     "lint": "eslint src test",
     "lint-staged": "lint-staged",
     "build": "rollup --config",
     "test": "jest",
-    "test-ci": "npm run test -- --coverage --ci --verbose=false --coverageReporters=lcov --coverageReporters=text-summary",
+    "test:ci": "npm run test -- --coverage --ci --verbose=false --coverageReporters=lcov --coverageReporters=text-summary",
+    "test:coverage": "npm run test:ci",
     "coveralls": "cat ./coverage/lcov.info | coveralls"
   },
   "peerDependencies": {
-    "@data-provider/core": "^1.7.0"
-  },
-  "dependencies": {
-    "lodash": "4.17.15"
+    "@data-provider/core": "2.x"
   },
   "devDependencies": {
-    "@babel/core": "7.8.0",
-    "@babel/preset-env": "7.8.0",
-    "@babel/preset-react": "7.8.0",
-    "@data-provider/core": "1.7.2",
+    "@babel/core": "7.8.4",
+    "@babel/preset-env": "7.8.4",
+    "@babel/preset-react": "7.8.3",
+    "@data-provider/core": "2.0.0",
+    "@rollup/plugin-commonjs": "11.0.2",
+    "@rollup/plugin-json": "4.0.2",
+    "@rollup/plugin-node-resolve": "7.1.1",
     "babel-core": "7.0.0-bridge.0",
     "babel-jest": "24.9.0",
     "babel-polyfill": "6.26.0",
-    "coveralls": "3.0.7",
+    "coveralls": "3.0.9",
     "eslint": "6.8.0",
-    "eslint-config-prettier": "6.4.0",
-    "eslint-plugin-prettier": "3.1.1",
-    "husky": "4.0.7",
+    "eslint-config-prettier": "6.10.0",
+    "eslint-plugin-prettier": "3.1.2",
+    "husky": "4.2.1",
     "jest": "24.9.0",
-    "lint-staged": "9.4.2",
-    "prettier": "1.18.2",
-    "rollup": "1.23.1",
+    "lint-staged": "9.5.0",
+    "prettier": "1.19.1",
+    "redux": "4.0.5",
+    "rollup": "1.30.1",
     "rollup-plugin-babel": "4.3.3",
-    "rollup-plugin-commonjs": "10.1.0",
-    "rollup-plugin-json": "4.0.0",
-    "rollup-plugin-node-resolve": "5.2.0",
-    "rollup-plugin-uglify": "6.0.3",
-    "sinon": "8.0.4"
+    "rollup-plugin-uglify": "6.0.4",
+    "sinon": "8.1.1"
   },
   "lint-staged": {
     "src/**/*.js": "eslint",
@@ -66,5 +68,8 @@
     "hooks": {
       "pre-commit": "npm run lint-staged"
     }
+  },
+  "engines": {
+    "node": "10.x || 12.x || 13.x"
   }
 }
