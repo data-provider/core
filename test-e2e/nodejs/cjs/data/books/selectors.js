@@ -1,4 +1,4 @@
-const { Selector } = require("../../../../../dist/core.cjs");
+const { Selector } = require("../../../../../dist/index.cjs");
 
 const { authorsProvider } = require("../authors");
 

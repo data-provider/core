@@ -5,7 +5,7 @@
       "root": ["."],
       "alias": {
         "data": "./src/data",
-        "@data-provider/core": "../../../dist/core.esm.js"
+        "@data-provider/core": "../../../dist/index.esm.js"
       }
     }]
   ]

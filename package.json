@@ -21,8 +21,8 @@
   "files": [
     "dist"
   ],
-  "main": "dist/core.cjs.js",
-  "module": "dist/core.esm.js",
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.esm.js",
   "scripts": {
     "build": "rollup --config",
     "test": "jest",

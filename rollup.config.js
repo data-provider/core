@@ -45,14 +45,14 @@ module.exports = [
   {
     ...BASE_CONFIG,
     output: {
-      file: "dist/core.cjs.js",
+      file: "dist/index.cjs.js",
       format: "cjs"
     }
   },
   {
     ...BASE_CONFIG,
     output: {
-      file: "dist/core.umd.js",
+      file: "dist/index.umd.js",
       format: "umd",
       name: "dataProvider",
       globals: GLOBALS
@@ -61,7 +61,7 @@ module.exports = [
   {
     ...BASE_CONFIG,
     output: {
-      file: "dist/core.esm.js",
+      file: "dist/index.esm.js",
       format: "esm",
       globals: GLOBALS
     },
