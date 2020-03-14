@@ -9,10 +9,35 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 ### Fixed
 ### Removed
-### BREAKING CHANGES
 
-## [TO BE DEPRECATED]
-- "queriesDefaultValue" option has to be removed.
+## [2.0.0] - 2020-03-14
+
+> DISCLAIMER: This major release still maintains the concept of the previous "data-provider" versions, but a lot of BREAKING CHANGES have been made to the interfaces in order to improve the usage experience, apart of performance improvements and fixes. A chapter "how to migrate from 1.x" will be added to the documentation website to facilitate the migration to this new version, as the maintenance of 1.X versions will be stopped soon. Read Date Provider Changelog and docs in https://www.data-provider.org for further info.
+
+### Changed
+- chore(deps): [BREAKING CHANGE] Update @data-provider dependency to v2.0.0
+- feat(providers): [BREAKING CHANGE] Use provider id as item key for localStorage and browserStorage
+- feat(providers): [BREAKING CHANGE] Remove create method. Update can be used instead.
+
+## [2.0.0.alpha-2] - 2020-02-26
+
+### Changed
+- chore(deps): update @data-provider dependency
+
+## [2.0.0.alpha-1] - 2020-02-23
+
+> DISCLAIMER: This major release adapts this origin to the @data-provider v2.x interface. Read @data-provider docs for further info.
+
+### Changed
+- feat(Memory): [BREAKING CHANGE] - Use data-provider v2 standard arguments (id, options)
+- feat(Memory): [BREAKING CHANGE] - Queries now has to be defined as an object: { prop: "foo-prop" }
+- feat(Memory): [BREAKING CHANGE] - Remove defaultValue argument, now "initialState" option has to be used instead.
+- feat(Memory): [BREAKING CHANGE] - Remove queriesDefaultValue option. Now this is the default behavior
+- chore(umd distribution): [BREAKING CHANGE] - Rename umd dist file name to "index.umd.js"
+
+## [1.4.3] - 2020-01-26
+### Changed
+- Update dependencies
 
 ## [1.4.2] - 2020-01-12
 ### Changed

@@ -1,131 +1,91 @@
 [![Build status][travisci-image]][travisci-url] [![Coverage Status][coveralls-image]][coveralls-url] [![Quality Gate][quality-gate-image]][quality-gate-url]
 
-[![NPM dependencies][npm-dependencies-image]][npm-dependencies-url] [![Greenkeeper badge](https://badges.greenkeeper.io/data-provider/browser-storage.svg)](https://greenkeeper.io/) [![Last commit][last-commit-image]][last-commit-url] [![Last release][release-image]][release-url] 
+[![NPM dependencies][npm-dependencies-image]][npm-dependencies-url] [![Renovate](https://img.shields.io/badge/renovate-enabled-brightgreen.svg)](https://renovatebot.com) [![Last commit][last-commit-image]][last-commit-url] [![Last release][release-image]][release-url] 
 
 [![NPM downloads][npm-downloads-image]][npm-downloads-url] [![License][license-image]][license-url]
 
-## Overview
+# Data Provider localStorage and sessionStorage origins addon
 
-This package provides browser localStorage and sessionStorage [Data Providers][data-provider-url].
+It provides CRUD methods for objects saved in `localStorage` or `sessionStorage`.
 
-* __Data Provider queries__ based on object keys.
-* __Reactivity__ to CRUD actions. When a "create", "update" or "delete" method is called over an instance, the cache clean events are dispatched.
+## Usage
 
-### Install
+Read the [Data Provider][data-provider] docs to learn how to use addons.
 
-```bash
-npm i @data-provider/browser-storage --save
-```
+* [Home][data-provider]
+* [Get started][get-started]
+* [Basic tutorial][basic-tutorial]
 
-## Api
+## Queries
 
-* SessionStorage - _`<Class>`_ `new SessionStorage(namespace[, defaultValue[, options]])` - Class for instancing Data Provider objects persisted in the browser sessionStorage.
-	* Arguments
-		* namespace - _`<String>`_. Namespace to be used in the sessionStorage object, in which the provider data will be persisted.
-		* defaultValue - _`<Any>`_ Default value until the first async read is resolved.
-		* options - `<Object>` containing properties:
-			* queriesDefaultValue - _`<Boolean>`_ If `true`, the default value of queried instances will be the value of the "key" in the query. If not defined, the default value of queried instances will be the full `defaultValue` object.
-			* tags - _`<String> or <Array of Strings>`_ Tags to assign to the instance. Useful when using [Data Provider `instances` handler][data-provider-instances-docs-url]. Tags "browser-storage" and "session-storage" will be always added to provided tags by default.
-* LocalStorage - _`<Class>`_ `new LocalStorage(namespace[, defaultValue[, options]])` - Class for instancing Data Provider objects persisted in the browser localStorage.
-	* Arguments
-		* namespace - _`<String>`_. Namespace to be used in the localStorage object, in which the provider data will be persisted.
-		* defaultValue - _`<Any>`_ Default value until the first async read is resolved.
-		* options - `<Object>` containing properties:
-			* queriesDefaultValue - _`<Boolean>`_ If `true`, the default value of queried instances will be the value of the "key" in the query. If not defined, the default value of queried instances will be the full `defaultValue` object.
-			* tags - _`<String> or <Array of Strings>`_ Tags to assign to the instance. Useful when using [Data Provider `instances` handler][data-provider-instances-docs-url]. Tags "browser-storage" and "local-storage" will be always added to provided tags by default.
+When querying providers created with this addon, the query object can have one of the next properties:
 
-## Common Methods
+* `prop` _(String)_: Specific property of the object from localStorage or sessionStorage to be accessed.
 
-### query
+### Example
 
-`dataProviderLocalStorage.query(key)`
-* Arguments
-  * key - `<String>` Key of the storage object to be read, updated, created or deleted.
-
-## Cache
-
-All cache will be cleaned when the `update`, `delete` or `create` methods are executed for any specific query.
-
-## Examples
-
-Next example will be easier to understand if you are already familiarized with the [Data Provider][data-provider-url] syntax.
-
-```js
-import { SessionStorage } from "@data-provider/browser-storage";
-
-const sessionDetails = new SessionStorage("user", {
-  id: null,
-  isLogedIn: false
-});
-
-sessionDetails.query("id").read();
-
-sessionDetails.query("isLogedIn").update(true);
-```
-
-Use Data Provider Browser Storage objects in combination with Axios Data Provider, and take advantage of the built-in reactivity. Use the storage objects to query the Axios providers, and, when you update the storage object, the API object caches will be cleaned as a consequence:
-
-
-```js
-import { Selector } from "@data-provider/core";
+```javascript
 import { LocalStorage } from "@data-provider/browser-storage";
-import { Api } from "@data-provider/axios";
 
-const currentAuthor = new LocalStorage("current-author", {
-  id: null
+const userPreferences = new LocalStorage("user-preferences");
+
+userPreferences.query({ prop: "cookiesAccepted" }).update(true);
+userPreferences.query({ prop: "cookiesAccepted" }).read().then(result => {
+  console.log("Cookies accepted", result);
+  // true
 });
-const booksCollection = new Api("http://api.library.com/books");
-
-const currentAuthorBooks = new Selector(
-  {
-    provider: currentAuthor,
-    query: () => "id"
-  },
-  {
-    provider: booksCollection,
-    query: (query, previousResults) => {
-      if (!previousResults[0]) {
-        return;
-      }
-      return {
-        queryString: {
-          authorId: previousResults[0]
-        }
-      };
-    }
-  },
-  (currentAuthorId, booksResults) => booksResults
-);
-
-// Api request to "http://api.library.com/books". Return all books
-currentAuthorBooks.read();
-
-// Api request is not repeated, as query has no changed.
-currentAuthorBooks.read();
-
-currentAuthor.query("id").update("foo-author-id");
-
-// Api request now is sent to "http://api.library.com/books?authorId=foo-author-id". Return author books
-// As current author is stored in localStorage, the next time the page is loaded, the queryString applied to the api will be the same
-currentAuthorBooks.read();
 ```
 
-## Usage with frameworks
+## Custom methods
 
-### React
+Apart of the common Data Provider methods, next ones are available:
 
-Please refer to the [@data-provider/connector-react][data-provider-connector-react-url] documentation to see how simple is the data-binding between React Components and Data Provider Browser Storage.
+### `update(data)`
 
-Connect a provider to all components that need it. Data Provider will rerender automatically connected components when data in providers are updated.
+Updates an specific property of the stored object when the provider is queried, or the full object when not. When the object is modified, it will __automatically cleans the cache of the provider__ and also the cache of the parent provider when it is queried _(as modifying a property also modifies the full object)_.
+
+#### Arguments
+
+* `data` _(Any)_: New data to be set. _(Take into account that provided data will be stringified when saved to localStorage)_
+
+#### Examples
+
+```javascript
+// modify an specific property
+userPreferences.query({ prop: "cookiesAccepted" }).update(true);
+```
+
+```javascript
+// Overwrite full object
+userPreferences.update({
+  cookiesAccepted: true
+});
+```
+
+### `delete()`
+
+Removes an specific property of the stored object when the provider is queried, or sets the full object as empty when not. When the object is modified, it will __automatically cleans the cache of the provider__ and also the cache of the parent provider when it is queried _(as deleting a property also modifies the full object)_.
+
+#### Examples
+
+```javascript
+// removes an specific property
+userPreferences.query({ prop: "cookiesAccepted" }).delete();
+```
+
+```javascript
+// Sets the full object as {}
+userPreferences.delete();
+```
 
 ## Contributing
 
 Contributors are welcome.
 Please read the [contributing guidelines](.github/CONTRIBUTING.md) and [code of conduct](.github/CODE_OF_CONDUCT.md).
 
-[data-provider-url]: https://github.com/data-provider/core
-[data-provider-instances-docs-url]: https://github.com/data-provider/core/blob/master/docs/instances/api.md
-[data-provider-connector-react-url]: https://github.com/data-provider/connector-react
+[data-provider]: https://www.data-provider.org
+[get-started]: https://www.data-provider.org/docs/getting-started
+[basic-tutorial]: https://www.data-provider.org/docs/basics-intro
 
 [coveralls-image]: https://coveralls.io/repos/github/data-provider/browser-storage/badge.svg
 [coveralls-url]: https://coveralls.io/github/data-provider/browser-storage
