@@ -1,0 +1,19 @@
+{
+  "name": "browser-tests",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "cypress:install": "cypress install",
+    "cypress:verify": "cypress verify",
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run",
+    "start:vanilla-app": "cd vanilla-app && npm run build-and-serve",
+    "start:react-app": "cd react-app && npm start",
+    "test:vanilla-app": "start-server-and-test start:vanilla-app http-get://localhost:3000 cypress:run",
+    "test:react-app": "start-server-and-test start:react-app http-get://localhost:3000 cypress:run"
+  },
+  "devDependencies": {
+    "cypress": "4.0.2",
+    "start-server-and-test": "1.10.6"
+  }
+}

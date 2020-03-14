@@ -1,14 +1,16 @@
 {
   "name": "@data-provider/core",
-  "version": "1.8.0",
-  "description": "Extensible Data Provider and Data Selectors",
+  "version": "2.0.0",
+  "description": "Async Data Provider agnostic about data origins",
   "keywords": [
     "data",
     "provider",
+    "redux",
     "selector",
     "cache",
     "reactive",
-    "extensible"
+    "state",
+    "agnostic"
   ],
   "author": "Javier Brea",
   "license": "Apache-2.0",
@@ -19,51 +21,69 @@
   "files": [
     "dist"
   ],
-  "main": "dist/core.cjs.js",
-  "module": "dist/core.esm.js",
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.esm.js",
   "scripts": {
     "build": "rollup --config",
-    "test": "nyc mocha --recursive test",
-    "lint": "eslint src test",
+    "test": "jest",
+    "test:coverage": "npm run test",
+    "test:e2e:browser:install": "cd test-e2e/browser && npm i && cd vanilla-app && npm i && cd ../react-app && npm i",
+    "test:e2e:browser": "cd test-e2e/browser && npm run test:vanilla-app && npm run test:react-app",
+    "test:e2e:node:install": "cd test-e2e/nodejs/esm && npm i",
+    "test:e2e:node": "cd test-e2e/nodejs/cjs && npm run test && cd ../esm && npm run test",
+    "test:e2e": "npm run test:e2e:browser && npm run test:e2e:node",
+    "test:e2e:ci": "npm run test:e2e:browser:install && npm run test:e2e:node:install && npm run test:e2e",
+    "test:ci": "npm run build && npm run test:coverage && npm run test:e2e:ci",
+    "lint": "eslint src test test-e2e/browser/vanilla-app/public/main.js test-e2e/browser/react-app/src test-e2e/nodejs/cjs test-e2e/nodejs/esm/src",
     "lint-staged": "lint-staged",
     "coveralls": "cat ./coverage/lcov.info | coveralls"
   },
+  "peerDependencies": {
+    "redux": "4.x"
+  },
   "dependencies": {
-    "is-promise": "2.1.0",
-    "lodash": "4.17.15"
+    "is-promise": "2.1.0"
   },
   "devDependencies": {
-    "@babel/core": "7.8.3",
-    "@babel/preset-env": "7.8.3",
-    "@babel/register": "7.8.3",
-    "@istanbuljs/nyc-config-babel": "3.0.0",
+    "@babel/core": "7.8.7",
+    "@babel/preset-env": "7.8.7",
+    "@babel/register": "7.8.6",
+    "@rollup/plugin-commonjs": "11.0.2",
+    "@rollup/plugin-json": "4.0.2",
+    "@rollup/plugin-node-resolve": "7.1.1",
     "babel-core": "7.0.0-bridge.0",
-    "babel-plugin-istanbul": "6.0.0",
+    "babel-eslint": "10.0.3",
     "babel-polyfill": "6.26.0",
     "coveralls": "3.0.9",
     "eslint": "6.8.0",
-    "eslint-config-prettier": "6.9.0",
+    "eslint-config-prettier": "6.10.0",
     "eslint-plugin-prettier": "3.1.2",
-    "husky": "4.0.10",
-    "lint-staged": "9.5.0",
-    "mocha": "7.0.0",
-    "mocha-sinon-chai": "3.0.0",
-    "nyc": "15.0.0",
+    "eslint-plugin-react": "7.17.0",
+    "eslint-plugin-react-hooks": "2.4.0",
+    "husky": "4.2.3",
+    "jest": "25.1.0",
+    "lint-staged": "10.0.8",
     "prettier": "1.19.1",
-    "rollup": "1.29.0",
+    "redux": "4.0.5",
+    "rollup": "1.32.1",
     "rollup-plugin-babel": "4.3.3",
-    "rollup-plugin-commonjs": "10.1.0",
-    "rollup-plugin-json": "4.0.0",
-    "rollup-plugin-node-resolve": "5.2.0",
-    "rollup-plugin-uglify": "6.0.4"
+    "rollup-plugin-uglify": "6.0.4",
+    "sinon": "8.1.1"
   },
   "lint-staged": {
     "src/**/*.js": "eslint",
-    "test/**/*.js": "eslint"
+    "test/**/*.js": "eslint",
+    "test-e2e/browser/vanilla-app/public/main.js": "eslint",
+    "test-e2e/browser/react-app/src/**/*.js": "eslint",
+    "test-e2e/nodejs/cjs/**/*.js": "eslint",
+    "test-e2e/nodejs/esm/src/**/*.js": "eslint"
   },
   "husky": {
     "hooks": {
       "pre-commit": "npm run lint-staged"
     }
+  },
+  "engines": {
+    "node": "10.x || 12.x || 13.x"
   }
 }

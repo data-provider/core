@@ -9,335 +9,216 @@ http://www.apache.org/licenses/LICENSE-2.0
 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 */
 
-import { isEqual, cloneDeep, merge, isFunction } from "lodash";
-
-import { Cache } from "./Cache";
-import { EventEmitter } from "./EventEmitter";
-import { instances as instancesHandler } from "./Instances";
+import { storeManager } from "./storeManager";
 import {
-  READ_METHOD,
-  VALID_METHODS,
-  CHANGE_ANY_EVENT_NAME,
-  CLEAN_ANY_EVENT_NAME,
-  cleanCacheEventName,
-  changeEventName,
-  uniqueId,
-  queryId,
-  actions,
-  ensureArray,
+  childId,
+  eventNamespace,
   removeFalsy,
-  queriedUniqueId,
+  ensureArray,
+  isFunction,
   isUndefined,
-  mergeCloned
+  ANY,
+  CLEAN_CACHE,
+  childEventName,
+  isPromise,
+  fromEntries,
+  defaultOptions
 } from "./helpers";
+import { providers } from "./providers";
+import { init, resetState, readStart, readSuccess, readError } from "./reducer";
+import eventEmitter from "./eventEmitter";
 
-let automaticIdCounter = 0;
+class Provider {
+  constructor(id, options, query) {
+    this._emitChild = this._emitChild.bind(this);
+    this._options = { ...defaultOptions, ...options };
+    this._query = { ...query };
+    this._tags = removeFalsy(ensureArray(this._options.tags));
+    this._children = new Map();
+    this._queryMethods = new Map();
+    this._queryMethodsParsers = new Map();
 
-const getAutomaticId = () => {
-  automaticIdCounter++;
-  return (Date.now() + automaticIdCounter).toString();
-};
+    this._id = providers._add(this, id); // initial configuration is made by providers handler
 
-export class Provider {
-  constructor(defaultId, defaultValue, options = {}) {
-    this._eventEmitter = new EventEmitter();
-    this._queries = {};
-
-    this._defaultValue =
-      !isUndefined(defaultValue) && !isFunction(defaultValue)
-        ? cloneDeep(defaultValue)
-        : defaultValue;
-    this._id = options.uuid || uniqueId(defaultId || getAutomaticId(), this._defaultValue);
-    this._cache = new Cache(this._eventEmitter, this._id);
-
-    this._customQueries = {};
-    this.customQueries = {};
-    this.test = {};
-    options.tags = removeFalsy(ensureArray(options.tags));
-    this._configuration = options;
-    this._tags = options.tags;
-
-    this._createBaseMethods();
-    instancesHandler._add(this);
+    this._dispatch(init(this._id, this.initialState));
   }
 
-  // EVENT HANDLERS
-
-  _emitChange(query, method) {
-    this._eventEmitter.emit(changeEventName(query), method);
+  _eventNamespace(eventName) {
+    return eventNamespace(eventName, this._id);
   }
 
-  _onChange(listener, query) {
-    this._eventEmitter.on(changeEventName(query), listener);
+  _emitChild(eventName, child) {
+    this.emit(childEventName(eventName), child);
+    eventEmitter.emit(this._eventNamespace(childEventName(ANY)), eventName, child);
   }
 
-  _removeChangeListener(listener, query) {
-    this._eventEmitter.removeListener(changeEventName(query), listener);
+  _dispatch(action) {
+    storeManager.store.dispatch(action);
+    this.emit(action.baseType);
   }
 
-  _emitChangeAny(details) {
-    this._eventEmitter.emit(CHANGE_ANY_EVENT_NAME, details);
-  }
-
-  _onChangeAny(listener) {
-    this._eventEmitter.on(CHANGE_ANY_EVENT_NAME, listener);
-  }
-
-  _removeChangeAnyListener(listener) {
-    this._eventEmitter.removeListener(CHANGE_ANY_EVENT_NAME, listener);
-  }
-
-  _onceClean(listener, query) {
-    this._eventEmitter.once(cleanCacheEventName(query), listener);
-  }
-
-  _onClean(listener, query) {
-    this._eventEmitter.on(cleanCacheEventName(query), listener);
-  }
-
-  _removeCleanListener(listener, query) {
-    this._eventEmitter.removeListener(cleanCacheEventName(query), listener);
-  }
-
-  _onCleanAny(listener) {
-    this._eventEmitter.on(CLEAN_ANY_EVENT_NAME, listener);
-  }
-
-  _removeCleanAnyListener(listener) {
-    this._eventEmitter.removeListener(CLEAN_ANY_EVENT_NAME, listener);
-  }
-
-  // PRIVATE METHODS
-
-  _hasToPublishMethod(methodName) {
-    return this[`_${methodName}`];
-  }
-
-  _clean(query) {
-    this._cache.clean(query, this);
-  }
-  _cleanAllStates() {
-    Object.entries(this._queries).forEach(([queriedInstanceId, queriedInstance]) => {
-      if (!isUndefined(queriedInstanceId) && queriedInstanceId !== "undefined") {
-        queriedInstance.cleanState();
-      }
-    });
-  }
-
-  _getDefaultValue(query) {
-    return isFunction(this._defaultValue) ? this._defaultValue(query) : this._defaultValue;
-  }
-
-  _createQueryMethods(query, id) {
-    const methods = {};
-
-    const updateData = (data, methodName, action, params) => {
-      const oldData = {
-        value: methods[methodName].value,
-        error: methods[methodName].error,
-        loading: methods[methodName].loading
-      };
-      const newData = {
-        value: methods[methodName].value,
-        error: methods[methodName].error,
-        loading: methods[methodName].loading,
-        ...data
-      };
-      const actionName = actions[methodName][action];
-      methods[methodName].stats = {
-        ...methods[methodName].stats,
-        [action]: methods[methodName].stats[action] + 1
-      };
-
-      if (!isEqual(oldData, newData)) {
-        methods[methodName].value = newData.value;
-        methods[methodName].loading = newData.loading;
-        methods[methodName].error = newData.error;
-        this._emitChange(query, methodName);
-        this._emitChangeAny({
-          source: this._queries[id], // TODO, deprecate
-          instance: this._queries[id],
-          method: methodName,
-          action: actionName,
-          params
-        });
-      }
-    };
-
-    VALID_METHODS.forEach(methodName => {
-      if (this._hasToPublishMethod(methodName)) {
-        const dispatchMethod = extraParams => {
-          const methodPromise = this[`_${methodName}`](query, extraParams);
-          if (!methodPromise.isFulfilled && !methodPromise.dispatchEmitted) {
-            methodPromise.dispatchEmitted = true;
-            updateData(
-              {
-                loading: true
-              },
-              methodName,
-              "dispatch",
-              extraParams
-            );
-          }
-          return methodPromise
-            .then(result => {
-              updateData(
-                {
-                  loading: false,
-                  error: null,
-                  value: result
-                },
-                methodName,
-                "success",
-                extraParams
-              );
-              methodPromise.isFulfilled = true;
-              return Promise.resolve(result);
-            })
-            .catch(error => {
-              updateData(
-                {
-                  loading: false,
-                  error
-                },
-                methodName,
-                "error",
-                extraParams
-              );
-              methodPromise.isFulfilled = true;
-              return Promise.reject(error);
-            });
-        };
-
-        methods[methodName] = dispatchMethod;
-        methods[methodName].dispatch = dispatchMethod;
-        methods[methodName].value =
-          methodName === READ_METHOD ? this._getDefaultValue(query) : undefined;
-        methods[methodName].error = null;
-        methods[methodName].loading = false;
-        methods[methodName].stats = {
-          dispatch: 0,
-          success: 0,
-          error: 0,
-          cleanState: 0
-        };
-        methods[methodName]._source = methods; // TODO, deprecate
-        methods[methodName]._instance = methods;
-        methods[methodName]._isDataProviderMethod = true;
-        methods[methodName]._isSourceMethod = true; // TODO, deprecate
-        methods[methodName]._methodName = methodName;
-        methods[methodName].cleanState = () => {
-          updateData(
-            {
-              error: null,
-              value: this._getDefaultValue(query)
-            },
-            methodName,
-            "cleanState"
-          );
-        };
-
-        const createGetter = prop => {
-          const getter = () => methods[methodName][prop];
-          getter.isGetter = true;
-          getter.prop = prop;
-          getter._isSourceMethod = true; // TODO, deprecate
-          getter._isDataProviderMethod = true;
-          getter._method = methods[methodName];
-          return getter;
-        };
-
-        methods[methodName].getters = {
-          error: createGetter("error"),
-          loading: createGetter("loading"),
-          value: createGetter("value"),
-          stats: createGetter("stats")
-        };
-      }
-    });
-    return methods;
-  }
-
-  _createBaseMethods() {
-    const baseMethods = this.query();
-
-    Object.keys(baseMethods).forEach(baseMethod => {
-      if (!this[baseMethod]) {
-        this[baseMethod] = baseMethods[baseMethod];
-      }
-    });
-  }
-
-  // PUBLIC METHODS
+  // Public methods
 
   config(options) {
-    this._configuration = mergeCloned(this._configuration, options);
-    if (this._config) {
-      this._config(this._configuration);
-    }
+    this._options = { ...this._options, ...options };
+    this.configMethod(this._options);
   }
 
-  query(originalQuery) {
-    const query = cloneDeep(originalQuery);
-    const queryUniqueId = queryId(query);
-    if (this._queries[queryUniqueId]) {
-      return this._queries[queryUniqueId];
-    }
-    const newQuery = this._createQueryMethods(query, queryUniqueId);
-    newQuery.onChange = listener => this._onChange(listener, query);
-    newQuery.removeChangeListener = listener => this._removeChangeListener(listener, query);
-    newQuery.onChangeAny = listener => this._onChangeAny(listener);
-    newQuery.removeChangeAnyListener = listener => this._removeChangeAnyListener(listener);
-    newQuery.clean = () => this._clean(query);
-    newQuery.cleanState = () => {
-      VALID_METHODS.forEach(methodName => {
-        newQuery[methodName] && newQuery[methodName].cleanState();
-      });
-      if (!query) {
-        this._cleanAllStates();
-      }
+  on(eventName, fn) {
+    return eventEmitter.on(this._eventNamespace(eventName), fn);
+  }
+
+  onChild(eventName, fn) {
+    return eventEmitter.on(this._eventNamespace(childEventName(eventName)), fn);
+  }
+
+  once(eventName, fn) {
+    return eventEmitter.once(this._eventNamespace(eventName), fn);
+  }
+
+  onceChild(eventName, fn) {
+    return eventEmitter.once(this._eventNamespace(childEventName(eventName)), fn);
+  }
+
+  addQuery(key, queryFunc) {
+    const returnQuery = query => {
+      return this.query(queryFunc(query));
     };
-    newQuery.onceClean = listener => this._onceClean(listener, query);
-    newQuery.onClean = listener => this._onClean(listener, query);
-    newQuery.removeCleanListener = listener => this._removeCleanListener(listener, query);
-    newQuery.onCleanAny = listener => this._onCleanAny(listener);
-    newQuery.removeCleanAnyListener = listener => this._removeCleanAnyListener(listener);
-    newQuery._queryId = queryUniqueId;
-    newQuery._id = queriedUniqueId(this._id, queryUniqueId);
-    newQuery.actions = actions;
-    newQuery._isSource = true; // TODO, deprecate
-    newQuery._isDataProvider = true;
-    newQuery._root = this;
-
-    newQuery.query = queryExtension => this.query(merge(query, queryExtension));
-    newQuery.customQueries = this._customQueries;
-
-    Object.keys(this._customQueries).forEach(queryKey => {
-      newQuery[queryKey] = queryExtension => {
-        return newQuery.query(this._customQueries[queryKey](queryExtension));
-      };
-    });
-
-    this._queries[queryUniqueId] = newQuery;
-
-    return this._queries[queryUniqueId];
+    this._queryMethodsParsers.set(key, queryFunc);
+    this._queryMethods.set(key, returnQuery);
   }
 
-  addCustomQueries(customQueries) {
-    Object.keys(customQueries).forEach(queryKey => {
-      this._customQueries[queryKey] = customQueries[queryKey];
-      this.customQueries[queryKey] = customQueries[queryKey];
-      this.test.customQueries = this.test.customQueries || {};
-      this.test.customQueries[queryKey] = customQueries[queryKey];
-      this[queryKey] = query => {
-        return this.query(customQueries[queryKey](query));
-      };
-    });
+  cleanCache() {
+    this._cache = null;
+    this.emit(CLEAN_CACHE);
+    this._children.forEach(child => child.cleanCache());
   }
 
-  addCustomQuery(customQuery) {
-    this.addCustomQueries(customQuery);
+  resetState() {
+    this._dispatch(resetState(this._id, this.initialState));
+    this._children.forEach(child => child.resetState());
+  }
+
+  read(...args) {
+    if (this._cache && this.options.cache) {
+      return this._cache;
+    }
+    this._dispatch(readStart(this._id, true));
+    let readPromise;
+    let error;
+    try {
+      readPromise = this.readMethod.apply(this, args);
+    } catch (err) {
+      error = err;
+    }
+
+    if (!isPromise(readPromise)) {
+      readPromise = error ? Promise.reject(error) : Promise.resolve(readPromise);
+    }
+
+    const resultPromise = readPromise
+      .then(result => {
+        this._dispatch(readSuccess(this._id, result));
+        return Promise.resolve(result);
+      })
+      .catch(resultError => {
+        this._dispatch(readError(this._id, resultError));
+        this._cache = null;
+        return Promise.reject(resultError);
+      });
+    this._cache = resultPromise;
+    return this._cache;
+  }
+
+  query(query) {
+    if (isUndefined(query)) {
+      return this;
+    }
+    const newQuery = this.getChildQueryMethod(query);
+    const id = childId(this._id, newQuery);
+    if (this._children.has(id)) {
+      return this._children.get(id);
+    }
+    const child = this.createChildMethod(id, this._options, newQuery);
+    this._queryMethodsParsers.forEach((queryMethodParser, queryMethodKey) =>
+      child.addQuery(queryMethodKey, queryMethodParser)
+    );
+    child.on(ANY, eventName => this._emitChild(eventName, child));
+    this._children.set(id, child);
+    child._parent = this;
+    return child;
+  }
+
+  get store() {
+    return storeManager.state[this._id];
+  }
+
+  get state() {
+    return this.store;
+  }
+
+  get id() {
+    return this._id;
+  }
+
+  get queryValue() {
+    return this._query;
+  }
+
+  get queries() {
+    return fromEntries(this._queryMethods);
+  }
+
+  get children() {
+    return Array.from(this._children.values());
+  }
+
+  get parent() {
+    return this._parent;
+  }
+
+  get options() {
+    return this._options;
+  }
+
+  // Methods to be used for testing
+
+  get queryMethods() {
+    return fromEntries(this._queryMethodsParsers);
+  }
+
+  // Methods to be used only by addons
+
+  get initialStateFromOptions() {
+    return isFunction(this._options.initialState)
+      ? this._options.initialState(this._query)
+      : this._options.initialState;
+  }
+
+  emit(eventName, child) {
+    eventEmitter.emit(this._eventNamespace(eventName), child);
+    eventEmitter.emit(this._eventNamespace(ANY), eventName, child);
+  }
+
+  // Methods that can be overwritten by addons
+
+  get initialState() {
+    return this.initialStateFromOptions;
+  }
+
+  getChildQueryMethod(query) {
+    return { ...this.queryValue, ...query };
+  }
+
+  createChildMethod(id, options, query) {
+    return new this.constructor(id, options, query);
+  }
+
+  configMethod() {}
+
+  readMethod() {
+    return Promise.resolve(this.state.data);
   }
 }
 
-export const instances = instancesHandler;
+export default Provider;
