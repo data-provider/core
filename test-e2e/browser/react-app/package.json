@@ -30,7 +30,7 @@
     ]
   },
   "devDependencies": {
-    "react-scripts": "3.3.0",
+    "react-scripts": "3.4.0",
     "react-app-rewired": "2.1.5",
     "serve": "11.3.0",
     "start-server-and-test": "1.10.6"
