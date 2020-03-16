@@ -11,6 +11,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Removed
 
 ## [1.0.0] - 2020-03-16
+### Added
+- docs(readme): Add docs
+
 ### Changed
 - chore(deps): Update @data-provider dependency to v2.0.0
 - feat(hooks): useRefresh in useData, useLoading and useError
