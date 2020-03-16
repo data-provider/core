@@ -10,3 +10,4 @@ Unless required by applicable law or agreed to in writing, software distributed 
 */
 
 export { Axios } from "./Axios";
+export { eventNames } from "./helpers";
