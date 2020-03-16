@@ -18,15 +18,18 @@ export const useRefresh = dataProvider => {
 };
 
 export const useData = (dataProvider, comparator) => {
+  useRefresh(dataProvider);
   return useSelector(() => dataProvider && dataProvider.state.data, comparator);
 };
 
-export const useLoading = (dataProvider, comparator) => {
-  return useSelector(() => dataProvider && dataProvider.state.loading, comparator);
+export const useLoading = dataProvider => {
+  useRefresh(dataProvider);
+  return useSelector(() => dataProvider && dataProvider.state.loading);
 };
 
-export const useError = (dataProvider, comparator) => {
-  return useSelector(() => dataProvider && dataProvider.state.error, comparator);
+export const useError = dataProvider => {
+  useRefresh(dataProvider);
+  return useSelector(() => dataProvider && dataProvider.state.error);
 };
 
 export const useDataProvider = (dataProvider, comparator) => {
