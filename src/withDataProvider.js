@@ -86,27 +86,24 @@ export const withDataProvider = (provider, keys) => Component => props => {
 
 export const withData = (provider, key) => Component => props => {
   const providerToRead = useProvider(provider, props);
-  useRefresh(providerToRead);
   const { dataProp } = useDataCustomProp(providerToRead, key);
   return <Component {...props} {...dataProp} />;
 };
 
 export const withLoading = (provider, key) => Component => props => {
   const providerToRead = useProvider(provider, props);
-  useRefresh(providerToRead);
   const { loadingProp } = useLoadingCustomProp(providerToRead, key);
   return <Component {...props} {...loadingProp} />;
 };
 
 export const withError = (provider, key) => Component => props => {
   const providerToRead = useProvider(provider, props);
-  useRefresh(providerToRead);
   const { errorProp } = useErrorCustomProp(providerToRead, key);
   return <Component {...props} {...errorProp} />;
 };
 
 export const withRefresh = provider => Component => props => {
-  const providerToRead = useProvider(provider, props.query);
+  const providerToRead = useProvider(provider, props);
   useRefresh(providerToRead);
   return <Component {...props} />;
 };

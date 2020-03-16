@@ -10,6 +10,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 ### Removed
 
+## [1.0.0] - 2020-03-16
+### Changed
+- chore(deps): Update @data-provider dependency to v2.0.0
+
 ## [1.0.0-alpha.2] - 2020-02-29
 ### Added
 - feat: Catch read errors

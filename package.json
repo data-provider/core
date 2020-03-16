@@ -1,9 +1,10 @@
 {
   "name": "@data-provider/react",
-  "version": "1.0.0-alpha.2",
+  "version": "1.0.0",
   "description": "React bindings for @data-provider",
   "keywords": [
     "data-provider",
+    "addon",
     "react",
     "hooks",
     "HOCs",
@@ -43,7 +44,7 @@
     "@babel/core": "7.8.4",
     "@babel/preset-env": "7.8.4",
     "@babel/preset-react": "7.8.3",
-    "@data-provider/core": "2.0.0-alpha.6",
+    "@data-provider/core": "2.0.0",
     "@rollup/plugin-commonjs": "11.0.2",
     "@rollup/plugin-json": "4.0.2",
     "@rollup/plugin-node-resolve": "7.1.1",
