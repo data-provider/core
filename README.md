@@ -204,23 +204,23 @@ booksCollection.addHeaders({
 
 ## Custom Events
 
-Apart of the common events emitted by any Data Provider origin, this addon emits events when some custom methods are executed successfully.
+Apart of the common events emitted by any Data Provider origin, this addon emits extra events when some custom methods are executed successfully.
 
 Event names are available at the top-level export `eventNames`:
 
-* CREATE_SUCCESS: Emitted when the `create` method finish successfully.
-* UPDATE_SUCCESS: Emitted when the `update` method finish successfully.
-* DELETE_SUCCESS: Emitted when the `delete` method finish successfully.
+* eventNames.CREATE_SUCCESS: Emitted when the `create` method finish successfully.
+* eventNames.UPDATE_SUCCESS: Emitted when the `update` method finish successfully.
+* eventNames.DELETE_SUCCESS: Emitted when the `delete` method finish successfully.
 
 #### Example
 
 ```javascript
 import { eventNames } from "@data-provider/axios";
 
-booksCollection.on(CREATE_SUCCESS, () => {
+booksCollection.on(eventNames.CREATE_SUCCESS, () => {
   console.log("A book was created!");
 });
-``
+```
 
 ## Contributing
 
