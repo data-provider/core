@@ -14,7 +14,15 @@ import { compile } from "path-to-regexp";
 import axios from "axios";
 import axiosRetry from "axios-retry";
 
-import { once, isEmpty, TAG, PATH_SEP } from "./helpers";
+import {
+  once,
+  isEmpty,
+  TAG,
+  PATH_SEP,
+  CREATE_SUCCESS,
+  UPDATE_SUCCESS,
+  DELETE_SUCCESS
+} from "./helpers";
 import { defaultConfig } from "./defaultConfig";
 
 export class Axios extends Provider {
@@ -224,7 +232,7 @@ export class Axios extends Provider {
     this._doBeforeRequest();
     return this._cleanAfterRequestAndDispatch(
       this._updateRequest(this._getUrl(), data),
-      "update",
+      UPDATE_SUCCESS,
       data
     );
   }
@@ -233,14 +241,14 @@ export class Axios extends Provider {
     this._doBeforeRequest();
     return this._cleanAfterRequestAndDispatch(
       this._createRequest(this._getUrl(), data),
-      "create",
+      CREATE_SUCCESS,
       data
     );
   }
 
   delete() {
     this._doBeforeRequest();
-    return this._cleanAfterRequestAndDispatch(this._deleteRequest(this._getUrl()), "delete");
+    return this._cleanAfterRequestAndDispatch(this._deleteRequest(this._getUrl()), DELETE_SUCCESS);
   }
 
   get headers() {

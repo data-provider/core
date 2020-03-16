@@ -15,4 +15,10 @@ describe("index", () => {
   it("should export Axios", () => {
     expect(index.Axios).toBeDefined();
   });
+
+  it("should export eventNames", () => {
+    expect(index.eventNames.CREATE_SUCCESS).toBeDefined();
+    expect(index.eventNames.DELETE_SUCCESS).toBeDefined();
+    expect(index.eventNames.UPDATE_SUCCESS).toBeDefined();
+  });
 });
