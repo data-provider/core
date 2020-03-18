@@ -35,10 +35,14 @@ class StorageMock {
 
 export class Storage extends Provider {
   constructor(id, options, query) {
-    const tags = options.tags || [];
+    const tags = options.tags ? [...options.tags] : [];
     tags.unshift(storageKeysTags[options.storageKey]);
     tags.unshift(TAG);
-    super(id, { ...options, tags }, query);
+    const extendedOptions = { ...options, tags };
+    if (!query) {
+      extendedOptions.parentId = id;
+    }
+    super(id, extendedOptions, query);
   }
 
   _getStorage(storageKey, root) {
@@ -63,7 +67,7 @@ export class Storage extends Provider {
 
   get initialState() {
     let initialState = this.initialStateFromOptions || {};
-    this._namespace = this.id;
+    this._namespace = this.options.parentId;
     this._storage = this._getStorage(this.options.storageKey, this.options.root);
     return {
       ...initialState,

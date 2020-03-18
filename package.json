@@ -1,6 +1,6 @@
 {
   "name": "@data-provider/browser-storage",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Data Provider addon providing localStorage and sessionStorage origins",
   "keywords": [
     "data-provider",
@@ -52,8 +52,8 @@
     "eslint-config-prettier": "6.10.0",
     "eslint-plugin-prettier": "3.1.2",
     "husky": "4.2.1",
-    "jest": "24.9.0",
-    "lint-staged": "9.5.0",
+    "jest": "25.1.0",
+    "lint-staged": "10.0.8",
     "prettier": "1.19.1",
     "redux": "4.0.5",
     "rollup": "1.30.1",
