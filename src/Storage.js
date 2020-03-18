@@ -122,8 +122,4 @@ export class Storage extends Provider {
     this._cleanParentCache();
     return Promise.resolve();
   }
-
-  createChildMethod(id, options, query) {
-    return new Storage(id, options, query);
-  }
 }
