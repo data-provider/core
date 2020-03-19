@@ -9,10 +9,12 @@ http://www.apache.org/licenses/LICENSE-2.0
 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 */
 
-import { ensureArray, removeFalsy, warn, getAutomaticId } from "./helpers";
+import { ensureArray, removeFalsy, warn, getAutomaticId, newProviderEventName } from "./helpers";
+import eventEmitter from "./eventEmitter";
 
 export class ProvidersHandler {
   constructor(baseTags) {
+    this._newProviderEventName = newProviderEventName(getAutomaticId());
     this._baseTags = removeFalsy(ensureArray(baseTags));
     this._config = {};
     this._providers = new Set();
@@ -21,6 +23,7 @@ export class ProvidersHandler {
   _add(provider) {
     this._providers.add(provider);
     provider.config(this._config);
+    eventEmitter.emit(this._newProviderEventName, provider);
     return this;
   }
 
@@ -35,6 +38,10 @@ export class ProvidersHandler {
       removeListenersFuncs.forEach(removeListener => removeListener());
     };
     return removeListeners;
+  }
+
+  onNewProvider(cb) {
+    return eventEmitter.on(this._newProviderEventName, cb);
   }
 
   config(options) {
@@ -144,6 +151,10 @@ export class Providers {
   }
 
   // Public methods
+
+  onNewProvider(cb) {
+    return this._allProviders.onNewProvider(cb);
+  }
 
   getByTag(tag) {
     return this._tags.get(tag) || this._createTagEmptyGroup(tag);

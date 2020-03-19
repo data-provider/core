@@ -14,6 +14,7 @@ export { default as isPromise } from "is-promise";
 let automaticIdCounter = 0;
 
 const CHILD_EVENT_PREFIX = "child-";
+const NEW_PROVIDER_PREFIX = "new-provider-";
 
 export const defaultOptions = {
   cache: true
@@ -38,8 +39,13 @@ export const eventNames = {
   ANY
 };
 
-export const childEventName = eventName =>
-  `${CHILD_EVENT_PREFIX}${eventName.replace(CHILD_EVENT_PREFIX, "")}`;
+export function newProviderEventName(groupId) {
+  return `${NEW_PROVIDER_PREFIX}${groupId}`;
+}
+
+export function childEventName(eventName) {
+  return `${CHILD_EVENT_PREFIX}${eventName.replace(CHILD_EVENT_PREFIX, "")}`;
+}
 
 export function isArray(obj) {
   return Array.isArray(obj);
