@@ -145,4 +145,57 @@ describe("providers handler", () => {
       });
     });
   });
+
+  describe("onNewProvider method", () => {
+    describe("when onNewProvider method is used in providers", () => {
+      it("should execute callback each time a new provider is added", () => {
+        const newProviders = [];
+        providers.onNewProvider(provider => {
+          newProviders.push(provider);
+        });
+        const provider1 = new Provider("foo", { tags: ["foo-tag"] });
+        const provider2 = new Provider("foo2", { tags: ["foo-tag"] });
+        expect(newProviders).toEqual([provider1, provider2]);
+      });
+
+      it("should execute callback each time a new child provider is added", () => {
+        const newProviders = [];
+        providers.onNewProvider(provider => {
+          newProviders.push(provider);
+        });
+        const provider1 = new Provider("foo", { tags: ["foo-tag"] });
+        const provider2 = provider1.query({ foo: "foo" });
+        expect(newProviders).toEqual([provider1, provider2]);
+      });
+    });
+
+    describe("when onNewProvider method is used in getByTag", () => {
+      it("should execute callback each time a new provider is added", () => {
+        const newProvidersTag1 = [];
+        const newProvidersTag2 = [];
+        providers.getByTag("foo-tag").onNewProvider(provider => {
+          newProvidersTag1.push(provider);
+        });
+        providers.getByTag("foo-tag2").onNewProvider(provider => {
+          newProvidersTag2.push(provider);
+        });
+        const provider1 = new Provider("foo", { tags: ["foo-tag"] });
+        const provider2 = new Provider("foo2", { tags: ["foo-tag2"] });
+        const provider3 = new Provider("foo2", { tags: ["foo-tag"] });
+        expect(newProvidersTag1).toEqual([provider1, provider3]);
+        expect(newProvidersTag2).toEqual([provider2]);
+      });
+    });
+
+    describe("when onNewProvider method is used in getById", () => {
+      it("should execute callback each time a new provider is added", () => {
+        const newProviders = [];
+        providers.getById("foo").onNewProvider(provider => {
+          newProviders.push(provider);
+        });
+        const provider1 = new Provider("foo", { tags: ["foo-tag"] });
+        expect(newProviders).toEqual([provider1]);
+      });
+    });
+  });
 });

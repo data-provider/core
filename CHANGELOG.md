@@ -10,6 +10,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 ### Removed
 
+## [2.1.0] - 2020-03-19
+
+### Added
+- feat(providers): Add `onNewProvider` method, which allows to execute a callback each time a new provider is created (also filtered by tag)
+
+### Changed
+- chore(deps): Update dependencies
+
 ## [2.0.0] - 2020-03-14
 
 > DISCLAIMER: This major release still maintains the concept of the previous "data-provider" versions, but a lot of BREAKING CHANGES have been made to the interfaces in order to improve the usage experience, apart of performance improvements and fixes. A chapter "how to migrate from 1.x" will be added to the documentation website to facilitate the migration to this new version, as the maintenance of 1.X versions will be stopped soon. Read 2.0 pre-releases changelog and docs in https://www.data-provider.org for further info.
