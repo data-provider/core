@@ -20,7 +20,8 @@ export class ProvidersHandler {
     this._providers = new Set();
   }
 
-  _add(provider) {
+  _add(provider, id) {
+    provider._id = id;
     this._providers.add(provider);
     provider.config(this._config);
     eventEmitter.emit(this._newProviderEventName, provider);
@@ -128,16 +129,16 @@ export class Providers {
         const originalId = providerId;
         providerId = `${providerId}-${getAutomaticId()}`;
         warn(`Duplicated id "${originalId}". Changed to "${providerId}"`);
-        this._createIdEmptyGroup(providerId)._add(provider);
+        this._createIdEmptyGroup(providerId)._add(provider, providerId);
       } else {
-        idGroup._add(provider);
+        idGroup._add(provider, providerId);
       }
     } else {
-      this._createIdEmptyGroup(providerId)._add(provider);
+      this._createIdEmptyGroup(providerId)._add(provider, providerId);
     }
-    this._allProviders._add(provider);
+    this._allProviders._add(provider, providerId);
     provider._tags.forEach(tag => {
-      this.getByTag(tag)._add(provider);
+      this.getByTag(tag)._add(provider, providerId);
     });
     return providerId;
   }

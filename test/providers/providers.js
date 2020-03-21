@@ -158,6 +158,16 @@ describe("providers handler", () => {
         expect(newProviders).toEqual([provider1, provider2]);
       });
 
+      it("should have provider id available when subscriber is executed", () => {
+        const newProviders = [];
+        providers.onNewProvider(provider => {
+          newProviders.push(provider.id);
+        });
+        new Provider("foo", { tags: ["foo-tag"] });
+        new Provider("foo2", { tags: ["foo-tag"] });
+        expect(newProviders).toEqual(["foo", "foo2"]);
+      });
+
       it("should execute callback each time a new child provider is added", () => {
         const newProviders = [];
         providers.onNewProvider(provider => {
@@ -166,6 +176,16 @@ describe("providers handler", () => {
         const provider1 = new Provider("foo", { tags: ["foo-tag"] });
         const provider2 = provider1.query({ foo: "foo" });
         expect(newProviders).toEqual([provider1, provider2]);
+      });
+
+      it("should have child provider id available when subscriber is executed", () => {
+        const newProviders = [];
+        providers.onNewProvider(provider => {
+          newProviders.push(provider.id);
+        });
+        const provider1 = new Provider("foo", { tags: ["foo-tag"] });
+        provider1.query({ foo: "foo" });
+        expect(newProviders).toEqual(["foo", 'foo({"foo":"foo"})']);
       });
     });
 
@@ -185,6 +205,22 @@ describe("providers handler", () => {
         expect(newProvidersTag1).toEqual([provider1, provider3]);
         expect(newProvidersTag2).toEqual([provider2]);
       });
+
+      it("should have provider id available when subscriber is executed", () => {
+        const newProvidersTag1 = [];
+        const newProvidersTag2 = [];
+        providers.getByTag("foo-tag").onNewProvider(provider => {
+          newProvidersTag1.push(provider.id);
+        });
+        providers.getByTag("foo-tag2").onNewProvider(provider => {
+          newProvidersTag2.push(provider.id);
+        });
+        new Provider("foo", { tags: ["foo-tag"] });
+        new Provider("foo2", { tags: ["foo-tag2"] });
+        new Provider("foo3", { tags: ["foo-tag"] });
+        expect(newProvidersTag1).toEqual(["foo", "foo3"]);
+        expect(newProvidersTag2).toEqual(["foo2"]);
+      });
     });
 
     describe("when onNewProvider method is used in getById", () => {
@@ -195,6 +231,15 @@ describe("providers handler", () => {
         });
         const provider1 = new Provider("foo", { tags: ["foo-tag"] });
         expect(newProviders).toEqual([provider1]);
+      });
+
+      it("should have provider id available when subscriber is executed", () => {
+        const newProviders = [];
+        providers.getById("foo").onNewProvider(provider => {
+          newProviders.push(provider.id);
+        });
+        new Provider("foo", { tags: ["foo-tag"] });
+        expect(newProviders).toEqual(["foo"]);
       });
     });
   });
