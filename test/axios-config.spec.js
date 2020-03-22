@@ -23,21 +23,21 @@ describe("axios config", () => {
     await fetch(mocksSettingsUrl, {
       method: "PATCH",
       body: JSON.stringify({
-        delay: 3000
+        delay: 3000,
       }),
       headers: {
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
     books = new Axios("books", {
       url: "/api/books/success",
       baseUrl: "http://localhost:3100",
       axiosConfig: {
-        timeout: 1000
+        timeout: 1000,
       },
       initialState: {
-        data: []
-      }
+        data: [],
+      },
     });
   });
 
@@ -46,11 +46,11 @@ describe("axios config", () => {
     await fetch(mocksSettingsUrl, {
       method: "PATCH",
       body: JSON.stringify({
-        delay: 0
+        delay: 0,
       }),
       headers: {
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   });
 

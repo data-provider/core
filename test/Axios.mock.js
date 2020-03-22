@@ -20,7 +20,7 @@ const Mock = class Mock {
     this._sandbox = sinon.createSandbox();
 
     this._stub = this._sandbox.stub().resolves({
-      data: {}
+      data: {},
     });
 
     this._sandbox.stub(axios, "create").returns(this._stub);
@@ -28,7 +28,7 @@ const Mock = class Mock {
 
   get stubs() {
     return {
-      instance: this._stub
+      instance: this._stub,
     };
   }
 

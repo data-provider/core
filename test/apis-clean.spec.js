@@ -27,10 +27,10 @@ describe("providers clean method", () => {
     allAxiosSources = providers.getByTag(TAG);
     api_1 = new Axios("foo-1");
     api_2 = new Axios("foo-2", {
-      tags: ["tag-1"]
+      tags: ["tag-1"],
     });
     api_3 = new Axios("foo-3", {
-      tags: ["tag-1", "tag-2"]
+      tags: ["tag-1", "tag-2"],
     });
   });
 

@@ -21,7 +21,7 @@ import {
   PATH_SEP,
   CREATE_SUCCESS,
   UPDATE_SUCCESS,
-  DELETE_SUCCESS
+  DELETE_SUCCESS,
 } from "./helpers";
 import { defaultConfig } from "./defaultConfig";
 
@@ -64,7 +64,7 @@ export class Axios extends Provider {
       this.client = axios.create();
 
       axiosRetry(this.client, {
-        retries: configuration.retries
+        retries: configuration.retries,
       });
     }
 
@@ -88,7 +88,7 @@ export class Axios extends Provider {
     return (
       "?" +
       Object.keys(queryString)
-        .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(queryString[key])}`)
+        .map((key) => `${encodeURIComponent(key)}=${encodeURIComponent(queryString[key])}`)
         .join("&")
     );
   }
@@ -105,7 +105,7 @@ export class Axios extends Provider {
   }
 
   _setUrl(fullUrl) {
-    const splittedUrl = fullUrl.split(PATH_SEP).filter(pathPortion => pathPortion !== "");
+    const splittedUrl = fullUrl.split(PATH_SEP).filter((pathPortion) => pathPortion !== "");
     const hasProtocol = splittedUrl[0].indexOf("http") > -1;
 
     this.url = {
@@ -117,7 +117,7 @@ export class Axios extends Provider {
           ? splittedUrl.slice(2, splittedUrl.length).join(PATH_SEP)
           : splittedUrl.join(PATH_SEP),
         { encode: encodeURIComponent }
-      )
+      ),
     };
   }
 
@@ -128,21 +128,21 @@ export class Axios extends Provider {
         {
           ...this._axiosConfig,
           ...requestOptions,
-          headers: this.headers
+          headers: this.headers,
         },
         true
       );
     };
 
     return this.client({ ...this._axiosConfig, ...requestOptions })
-      .then(response => (this._fullResponse ? response : response.data))
-      .then(customResponse => {
+      .then((response) => (this._fullResponse ? response : response.data))
+      .then((customResponse) => {
         if (this._validateResponse) {
           return this._validateResponse(customResponse);
         }
         return Promise.resolve(customResponse);
       })
-      .catch(error => {
+      .catch((error) => {
         if (
           !isAuthRetry &&
           this._authErrorHandler &&
@@ -169,7 +169,7 @@ export class Axios extends Provider {
       url,
       validateStatus: this._validateStatus,
       method: this._readVerb,
-      headers: this.headers
+      headers: this.headers,
     });
   }
 
@@ -179,7 +179,7 @@ export class Axios extends Provider {
       data,
       validateStatus: this._validateStatus,
       method: this._updateVerb,
-      headers: this.headers
+      headers: this.headers,
     });
   }
 
@@ -189,7 +189,7 @@ export class Axios extends Provider {
       data,
       validateStatus: this._validateStatus,
       method: this._createVerb,
-      headers: this.headers
+      headers: this.headers,
     });
   }
 
@@ -198,12 +198,12 @@ export class Axios extends Provider {
       url,
       validateStatus: this._validateStatus,
       method: this._deleteVerb,
-      headers: this.headers
+      headers: this.headers,
     });
   }
 
   _cleanAfterRequestAndDispatch(request, eventName, data) {
-    return request.then(responseData => {
+    return request.then((responseData) => {
       this.emit(eventName, data);
       this.cleanCache();
       return Promise.resolve(responseData);
@@ -221,12 +221,12 @@ export class Axios extends Provider {
       ...query,
       queryString: {
         ...this.queryValue.queryString,
-        ...query.queryString
+        ...query.queryString,
       },
       urlParams: {
         ...this.queryValue.urlParams,
-        ...query.urlParams
-      }
+        ...query.urlParams,
+      },
     };
   }
 
@@ -264,7 +264,7 @@ export class Axios extends Provider {
   addHeaders(headers) {
     this._headers = {
       ...this._headers,
-      ...headers
+      ...headers,
     };
   }
 }

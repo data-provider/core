@@ -30,7 +30,7 @@ describe("Axios configuration", () => {
 
   beforeEach(() => {
     axios.stubs.instance.resolves({
-      data: "foo"
+      data: "foo",
     });
     axios.stubs.instance.resetHistory();
   });
@@ -40,7 +40,7 @@ describe("Axios configuration", () => {
       expect.assertions(1);
       const books = new Axios(null, {
         url: "/books",
-        baseUrl: "http://localhost:3000"
+        baseUrl: "http://localhost:3000",
       });
       await books.read();
       expect(axios.stubs.instance.getCall(0).args[0].url).toEqual("http://localhost:3000/books");
@@ -49,13 +49,13 @@ describe("Axios configuration", () => {
     it("should work with config method", async () => {
       expect.assertions(2);
       const books = new Axios(null, {
-        url: "/books"
+        url: "/books",
       });
       await books.read();
       expect(axios.stubs.instance.getCall(0).args[0].url).toEqual("/books");
       books.cleanCache();
       books.config({
-        baseUrl: "http://localhost:3000"
+        baseUrl: "http://localhost:3000",
       });
       await books.read();
       expect(axios.stubs.instance.getCall(1).args[0].url).toEqual("http://localhost:3000/books");
@@ -67,7 +67,7 @@ describe("Axios configuration", () => {
       expect.assertions(1);
       const books = new Axios(null, {
         url: "/books",
-        readVerb: "post"
+        readVerb: "post",
       });
       await books.read();
       expect(axios.stubs.instance.getCall(0).args[0].method).toEqual("post");
@@ -76,13 +76,13 @@ describe("Axios configuration", () => {
     it("should work with config method", async () => {
       expect.assertions(2);
       const books = new Axios(null, {
-        url: "/books"
+        url: "/books",
       });
       await books.read();
       expect(axios.stubs.instance.getCall(0).args[0].method).toEqual("get");
       books.cleanCache();
       books.config({
-        readVerb: "post"
+        readVerb: "post",
       });
       await books.read();
       expect(axios.stubs.instance.getCall(1).args[0].method).toEqual("post");
@@ -94,7 +94,7 @@ describe("Axios configuration", () => {
       expect.assertions(1);
       const books = new Axios(null, {
         url: "/books",
-        updateVerb: "get"
+        updateVerb: "get",
       });
       await books.update();
       expect(axios.stubs.instance.getCall(0).args[0].method).toEqual("get");
@@ -103,12 +103,12 @@ describe("Axios configuration", () => {
     it("should work with config method", async () => {
       expect.assertions(2);
       const books = new Axios(null, {
-        url: "/books"
+        url: "/books",
       });
       await books.update();
       expect(axios.stubs.instance.getCall(0).args[0].method).toEqual("patch");
       books.config({
-        updateVerb: "post"
+        updateVerb: "post",
       });
       await books.update();
       expect(axios.stubs.instance.getCall(1).args[0].method).toEqual("post");
@@ -120,7 +120,7 @@ describe("Axios configuration", () => {
       expect.assertions(1);
       const books = new Axios(null, {
         url: "/books",
-        createVerb: "get"
+        createVerb: "get",
       });
       await books.create();
       expect(axios.stubs.instance.getCall(0).args[0].method).toEqual("get");
@@ -129,12 +129,12 @@ describe("Axios configuration", () => {
     it("should work with config method", async () => {
       expect.assertions(2);
       const books = new Axios(null, {
-        url: "/books"
+        url: "/books",
       });
       await books.create();
       expect(axios.stubs.instance.getCall(0).args[0].method).toEqual("post");
       books.config({
-        createVerb: "put"
+        createVerb: "put",
       });
       await books.create();
       expect(axios.stubs.instance.getCall(1).args[0].method).toEqual("put");
@@ -146,7 +146,7 @@ describe("Axios configuration", () => {
       expect.assertions(1);
       const books = new Axios(null, {
         url: "/books",
-        deleteVerb: "get"
+        deleteVerb: "get",
       });
       await books.delete();
       expect(axios.stubs.instance.getCall(0).args[0].method).toEqual("get");
@@ -156,12 +156,12 @@ describe("Axios configuration", () => {
       expect.assertions(2);
       const books = new Axios(null, {
         url: "/books",
-        deleteVerb: "delete"
+        deleteVerb: "delete",
       });
       await books.delete();
       expect(axios.stubs.instance.getCall(0).args[0].method).toEqual("delete");
       books.config({
-        deleteVerb: "put"
+        deleteVerb: "put",
       });
       await books.delete();
       expect(axios.stubs.instance.getCall(1).args[0].method).toEqual("put");
@@ -174,7 +174,7 @@ describe("Axios configuration", () => {
       const error = new Error();
       let authError = false;
       error.response = {
-        status: 1240
+        status: 1240,
       };
       axios.stubs.instance.rejects(error);
       const books = new Axios(null, {
@@ -183,7 +183,7 @@ describe("Axios configuration", () => {
         authErrorHandler: () => {
           authError = true;
           return Promise.reject(error);
-        }
+        },
       });
       try {
         await books.read();
@@ -198,24 +198,24 @@ describe("Axios configuration", () => {
       expect.assertions(2);
       const error = new Error();
       error.response = {
-        status: 401
+        status: 401,
       };
       axios.stubs.instance.rejects(error);
       const books = new Axios(null, {
         url: "/books",
         authErrorHandler: (dataSource, retry) => {
           dataSource.setHeaders({
-            foo: "foo"
+            foo: "foo",
           });
           return retry();
-        }
+        },
       });
       try {
         await books.read();
       } catch (err) {
         expect(axios.stubs.instance.callCount).toEqual(2);
         expect(axios.stubs.instance.getCall(1).args[0].headers).toEqual({
-          foo: "foo"
+          foo: "foo",
         });
       }
     });
@@ -225,16 +225,16 @@ describe("Axios configuration", () => {
     it("should be executed before all requests are made", async () => {
       expect.assertions(4);
       let dataSource;
-      const stub = sinon.stub().callsFake(source => {
+      const stub = sinon.stub().callsFake((source) => {
         source.config({
-          baseUrl: "/foo-base-url"
+          baseUrl: "/foo-base-url",
         });
         dataSource = source;
       });
 
       const books = new Axios(null, {
         url: "/books",
-        onBeforeRequest: stub
+        onBeforeRequest: stub,
       });
       await books.read();
       await books.create();
@@ -249,16 +249,16 @@ describe("Axios configuration", () => {
     it("should be executed before first requests is made", async () => {
       expect.assertions(5);
       let dataSource;
-      const stub = sinon.stub().callsFake(source => {
+      const stub = sinon.stub().callsFake((source) => {
         source.config({
-          baseUrl: "/foo-base-url"
+          baseUrl: "/foo-base-url",
         });
         dataSource = source;
       });
 
       const books = new Axios(null, {
         url: "/books",
-        onceBeforeRequest: stub
+        onceBeforeRequest: stub,
       });
       await books.read();
       await books.create();
@@ -278,24 +278,24 @@ describe("Axios configuration", () => {
       const books = new Axios(null, {
         url: "/books",
         baseUrl: "/foo-base-url",
-        onceBeforeRequest: source => {
+        onceBeforeRequest: (source) => {
           dataSource = source;
           stub();
-        }
+        },
       });
       await books.read();
       books.config({
-        onceBeforeRequest: source => {
+        onceBeforeRequest: (source) => {
           dataSource = source;
           stub();
-        }
+        },
       });
       await books.create();
       books.config({
-        onceBeforeRequest: source => {
+        onceBeforeRequest: (source) => {
           dataSource = source;
           stub();
-        }
+        },
       });
       await books.read();
       expect(dataSource).toEqual(books);
@@ -312,19 +312,19 @@ describe("Axios configuration", () => {
     beforeAll(() => {
       books = new Axios(null, {
         url: "/books",
-        expirationTime: 100
+        expirationTime: 100,
       });
     });
 
     afterAll(() => {
       books.config({
-        expirationTime: 0
+        expirationTime: 0,
       });
     });
 
     it("should clean the cache at defined intervals", async () => {
       expect.assertions(1);
-      return new Promise(resolve => {
+      return new Promise((resolve) => {
         const interval = setInterval(() => {
           books.read();
         }, 150);
@@ -340,10 +340,10 @@ describe("Axios configuration", () => {
     it("should set the interval again when using config method", async () => {
       expect.assertions(1);
       books.config({
-        expirationTime: 0
+        expirationTime: 0,
       });
       books.cleanCache();
-      return new Promise(resolve => {
+      return new Promise((resolve) => {
         const interval = setInterval(() => {
           books.read();
         }, 150);
@@ -362,7 +362,7 @@ describe("Axios configuration", () => {
       expect.assertions(1);
       const books = new Axios(null, {
         url: "/books",
-        cache: false
+        cache: false,
       });
       await books.read();
       await books.read();
@@ -375,8 +375,8 @@ describe("Axios configuration", () => {
     const axiosResponse = {
       data: "foo",
       headers: {
-        foo: "foo"
-      }
+        foo: "foo",
+      },
     };
 
     it("should set value with full axios response when true", async () => {
@@ -384,7 +384,7 @@ describe("Axios configuration", () => {
       expect.assertions(1);
       const books = new Axios(null, {
         url: "/books",
-        fullResponse: true
+        fullResponse: true,
       });
       await books.read();
       expect(books.state.data).toEqual(axiosResponse);
@@ -394,7 +394,7 @@ describe("Axios configuration", () => {
       axios.stubs.instance.resolves(axiosResponse);
       expect.assertions(1);
       const books = new Axios(null, {
-        url: "/books"
+        url: "/books",
       });
       await books.read();
       expect(books.state.data).toEqual(axiosResponse.data);
@@ -404,10 +404,10 @@ describe("Axios configuration", () => {
   describe("validateStatus option", () => {
     it("should be used as axios validateStatus callback", async () => {
       expect.assertions(2);
-      const validateStatus = status => status !== 200;
+      const validateStatus = (status) => status !== 200;
       const books = new Axios(null, {
         url: "/books",
-        validateStatus
+        validateStatus,
       });
       await books.read();
       expect(books._validateStatus(200)).toEqual(false);
@@ -416,21 +416,21 @@ describe("Axios configuration", () => {
 
     it("should consider error responses with status lower than 200 by default", () => {
       const books = new Axios(null, {
-        url: "/books"
+        url: "/books",
       });
       expect(books._validateStatus(140)).toEqual(false);
     });
 
     it("should consider error responses with status upper than 300 by default", () => {
       const books = new Axios(null, {
-        url: "/books"
+        url: "/books",
       });
       expect(books._validateStatus(320)).toEqual(false);
     });
 
     it("should consider valid responses with status between 200 and 300", () => {
       const books = new Axios(null, {
-        url: "/books"
+        url: "/books",
       });
       expect(books._validateStatus(200)).toEqual(true);
     });
@@ -445,7 +445,7 @@ describe("Axios configuration", () => {
         url: "/books",
         validateResponse: () => {
           return Promise.reject(fooError);
-        }
+        },
       });
       try {
         await books.read();
@@ -462,7 +462,7 @@ describe("Axios configuration", () => {
         validateResponse: () => {
           called = true;
           return Promise.resolve();
-        }
+        },
       });
       await books.read();
       expect(called).toBe(true);
@@ -475,15 +475,15 @@ describe("Axios configuration", () => {
       const error = new Error();
       const newError = new Error("Foo new error");
       error.response = {
-        status: 401
+        status: 401,
       };
       axios.stubs.instance.rejects(error);
       const books = new Axios(null, {
         url: "/books",
-        errorHandler: err => {
+        errorHandler: (err) => {
           expect(err).toBe(error);
           return Promise.reject(newError);
-        }
+        },
       });
       try {
         await books.read();
@@ -496,11 +496,11 @@ describe("Axios configuration", () => {
       expect.assertions(1);
       const error = new Error("Foo error");
       error.response = {
-        statusText: "Foo new error"
+        statusText: "Foo new error",
       };
       axios.stubs.instance.rejects(error);
       const books = new Axios(null, {
-        url: "/books"
+        url: "/books",
       });
       try {
         await books.read();
@@ -515,18 +515,18 @@ describe("Axios configuration", () => {
       error.response = {
         statusText: "Foo new error",
         data: {
-          status: 401
-        }
+          status: 401,
+        },
       };
       axios.stubs.instance.rejects(error);
       const books = new Axios(null, {
-        url: "/books"
+        url: "/books",
       });
       try {
         await books.read();
       } catch (err) {
         expect(books.state.error.data).toEqual({
-          status: 401
+          status: 401,
         });
       }
     });
@@ -536,7 +536,7 @@ describe("Axios configuration", () => {
       const error = new Error("Foo error");
       axios.stubs.instance.rejects(error);
       const books = new Axios(null, {
-        url: "/books"
+        url: "/books",
       });
       try {
         await books.read();
@@ -550,7 +550,7 @@ describe("Axios configuration", () => {
       const error = new Error();
       axios.stubs.instance.rejects(error);
       const books = new Axios(null, {
-        url: "/books"
+        url: "/books",
       });
       try {
         await books.read();

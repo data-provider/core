@@ -16,8 +16,8 @@ describe("axios requests", () => {
   const BOOKS_RESULT = [
     {
       author: "Ray Bradbury",
-      title: "Fahrenheit 451"
-    }
+      title: "Fahrenheit 451",
+    },
   ];
   let apiStatsReset;
   let apiStatsCallCount;
@@ -25,27 +25,27 @@ describe("axios requests", () => {
 
   beforeAll(async () => {
     providers.getByTag("mocks").config({
-      baseUrl: "http://localhost:3100"
+      baseUrl: "http://localhost:3100",
     });
 
     apiStatsReset = new Axios("reset-stats", {
       url: "/api/stats/reset",
-      tags: ["mocks"]
+      tags: ["mocks"],
     });
     await apiStatsReset.create();
 
     apiStatsCallCount = new Axios("call-count", {
       url: "/api/stats/call-count",
       cache: false,
-      tags: ["mocks"]
+      tags: ["mocks"],
     });
 
     booksSuccess = new Axios("books-success", {
       url: "/api/books/success",
       tags: ["mocks"],
       initialState: {
-        data: []
-      }
+        data: [],
+      },
     });
   });
 
@@ -82,7 +82,7 @@ describe("axios requests", () => {
     it("should repeat request if cache is disabled", async () => {
       expect.assertions(2);
       booksSuccess.config({
-        cache: false
+        cache: false,
       });
       await booksSuccess.read();
       await booksSuccess.read();

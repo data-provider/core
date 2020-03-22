@@ -18,12 +18,12 @@ describe("Axios data providers", () => {
   const fooBooks = [
     {
       title: "El quijote",
-      author: "Cervantes"
+      author: "Cervantes",
     },
     {
       title: "El viejo y el mar",
-      author: "Hemingway"
-    }
+      author: "Hemingway",
+    },
   ];
   let axios;
   let books;
@@ -45,7 +45,7 @@ describe("Axios data providers", () => {
     books = new Axios("books", { url: "/books" });
     authors = new Axios("authors", { url: "/authors" });
     axios.stubs.instance.resolves({
-      data: fooBooks
+      data: fooBooks,
     });
     axios.stubs.instance.resetHistory();
   });
@@ -53,7 +53,7 @@ describe("Axios data providers", () => {
   describe("when querying an origin", () => {
     describe("Available methods", () => {
       it("should have read method", () => {
-        const selector = new Selector(books, booksResult => booksResult[0]);
+        const selector = new Selector(books, (booksResult) => booksResult[0]);
         expect(selector.read).toBeDefined();
       });
     });
@@ -61,7 +61,7 @@ describe("Axios data providers", () => {
     describe("when developing tests", () => {
       describe("the selector function", () => {
         it("should be available in the test object, ready for being tested", () => {
-          const selectorFunction = booksResult => booksResult[0];
+          const selectorFunction = (booksResult) => booksResult[0];
           const selector = new Selector(books, selectorFunction);
           expect(selector.selector).toEqual(selectorFunction);
         });
@@ -72,7 +72,7 @@ describe("Axios data providers", () => {
       let selector;
 
       beforeEach(() => {
-        selector = new Selector(books, booksResult => booksResult[0]);
+        selector = new Selector(books, (booksResult) => booksResult[0]);
       });
 
       it("should be true while resource is being loaded, false when finished", () => {
@@ -112,7 +112,7 @@ describe("Axios data providers", () => {
       let selector;
 
       beforeEach(() => {
-        selector = new Selector(books, booksResult => booksResult[0]);
+        selector = new Selector(books, (booksResult) => booksResult[0]);
       });
 
       it("should be null while resource is being loaded, null when finished successfully", () => {
@@ -150,7 +150,7 @@ describe("Axios data providers", () => {
         return promise.catch(async () => {
           expect(selector.state.error).toEqual(fooError);
           axios.stubs.instance.resolves({
-            data: fooBooks
+            data: fooBooks,
           });
           await selector.read();
           expect(selector.state.error).toEqual(null);
@@ -164,7 +164,7 @@ describe("Axios data providers", () => {
       let selector;
 
       beforeEach(() => {
-        selector = new Selector(books, booksResult => booksResult[0]);
+        selector = new Selector(books, (booksResult) => booksResult[0]);
       });
 
       it("should be undefined while resource is being loaded, and returned value when finished successfully", () => {
@@ -179,8 +179,8 @@ describe("Axios data providers", () => {
       it("should return default value while resource is being loaded, and returned value when finished successfully", () => {
         expect.assertions(2);
         const defaultValue = { foo: "foo" };
-        selector = new Selector(books, booksResult => booksResult[0], {
-          initialState: { data: defaultValue }
+        selector = new Selector(books, (booksResult) => booksResult[0], {
+          initialState: { data: defaultValue },
         });
         const promise = selector.read();
         expect(selector.state.data).toEqual(defaultValue);
@@ -195,23 +195,23 @@ describe("Axios data providers", () => {
         {
           title: "El quijote",
           author: "Cervantes",
-          fooKey: "foo"
+          fooKey: "foo",
         },
         {
           title: "El viejo y el mar",
           author: "Hemingway",
-          fooKey: "foo"
-        }
+          fooKey: "foo",
+        },
       ];
       let selector;
 
       beforeEach(() => {
-        selector = new Selector(books, booksResults =>
+        selector = new Selector(books, (booksResults) =>
           Promise.all(
-            booksResults.map(book =>
+            booksResults.map((book) =>
               Promise.resolve({
                 ...book,
-                fooKey: "foo"
+                fooKey: "foo",
               })
             )
           )
@@ -229,10 +229,10 @@ describe("Axios data providers", () => {
 
       it("should return default value while resource is being loaded, and returned value when finished successfully", () => {
         expect.assertions(2);
-        selector = new Selector(books, booksResult => Promise.resolve(booksResult[0]), {
+        selector = new Selector(books, (booksResult) => Promise.resolve(booksResult[0]), {
           initialState: {
-            data: { foo: "foo" }
-          }
+            data: { foo: "foo" },
+          },
         });
         const promise = selector.read();
         expect(selector.state.data).toEqual({ foo: "foo" });
@@ -247,14 +247,14 @@ describe("Axios data providers", () => {
 
       beforeEach(() => {
         selector = new Selector(
-          query => {
+          (query) => {
             return books.query({
               queryString: {
-                author: query.author
-              }
+                author: query.author,
+              },
             });
           },
-          booksResult => booksResult[0]
+          (booksResult) => booksResult[0]
         );
       });
 
@@ -304,7 +304,7 @@ describe("Axios data providers", () => {
       let selector;
 
       beforeEach(() => {
-        selector = new Selector(booksSelector, book => {
+        selector = new Selector(booksSelector, (book) => {
           return book.title;
         });
       });
@@ -346,7 +346,7 @@ describe("Axios data providers", () => {
       let selector;
 
       beforeEach(() => {
-        selector = new Selector(booksSelector, book => book.title);
+        selector = new Selector(booksSelector, (book) => book.title);
       });
 
       it("should be null while resource is being loaded, null when finished successfully", () => {
@@ -377,7 +377,7 @@ describe("Axios data providers", () => {
       let selector;
 
       beforeEach(() => {
-        selector = new Selector(booksSelector, book => book.title);
+        selector = new Selector(booksSelector, (book) => book.title);
       });
 
       it("should be undefined while resource is being loaded, and returned value when finished successfully", () => {
@@ -392,10 +392,10 @@ describe("Axios data providers", () => {
       it("should return default value while resource is being loaded, and returned value when finished successfully", () => {
         expect.assertions(2);
         const defaultValue = { foo: "foo" };
-        selector = new Selector(booksSelector, book => book.title, {
+        selector = new Selector(booksSelector, (book) => book.title, {
           initialState: {
-            data: defaultValue
-          }
+            data: defaultValue,
+          },
         });
         const promise = selector.read();
         expect(selector.state.data).toEqual(defaultValue);
@@ -410,8 +410,8 @@ describe("Axios data providers", () => {
 
       beforeEach(() => {
         selector = new Selector(
-          query => booksSelector.query(query),
-          bookResult => bookResult.title
+          (query) => booksSelector.query(query),
+          (bookResult) => bookResult.title
         );
       });
 
@@ -542,8 +542,8 @@ describe("Axios data providers", () => {
         const defaultValue = { foo: "foo" };
         selector = new Selector(authors, booksSelector, (authorsResults, book) => book.title, {
           initialState: {
-            data: defaultValue
-          }
+            data: defaultValue,
+          },
         });
         const promise = selector.read();
         expect(selector.state.data).toEqual(defaultValue);
@@ -562,7 +562,7 @@ describe("Axios data providers", () => {
           (query, previousResults) => {
             let finalIndex = 0;
             let hemingwayBookIndex = 0;
-            previousResults[0].forEach(book => {
+            previousResults[0].forEach((book) => {
               if (book.author === "Hemingway") {
                 hemingwayBookIndex = finalIndex;
               }

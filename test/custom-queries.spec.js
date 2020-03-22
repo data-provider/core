@@ -31,22 +31,22 @@ describe("Axios queries", () => {
   });
 
   describe("Custom queried providers", () => {
-    const byAuthor = author => ({
+    const byAuthor = (author) => ({
       queryString: {
-        author
-      }
+        author,
+      },
     });
 
-    const byAuthorParam = author => ({
+    const byAuthorParam = (author) => ({
       urlParams: {
-        author
-      }
+        author,
+      },
     });
 
-    const byId = id => ({
+    const byId = (id) => ({
       urlParams: {
-        id
-      }
+        id,
+      },
     });
 
     describe("when developing tests", () => {
@@ -61,7 +61,7 @@ describe("Axios queries", () => {
 
     it("should add query params to axios request", async () => {
       const books = new Axios("/books", {
-        url: "/books"
+        url: "/books",
       });
       books.addQuery("byAuthor", byAuthor);
 
@@ -73,7 +73,7 @@ describe("Axios queries", () => {
     it("should add query params to axios request when url includes protocol", async () => {
       axios.stubs.instance.resetHistory();
       const books = new Axios(null, {
-        url: "http://domain.com/books"
+        url: "http://domain.com/books",
       });
       books.addQuery("byAuthor", byAuthor);
       const queriedBooks = books.queries.byAuthor("foo");
@@ -86,7 +86,7 @@ describe("Axios queries", () => {
     it("should replace params in axios request", async () => {
       axios.stubs.instance.resetHistory();
       const books = new Axios(null, {
-        url: "/books/:id"
+        url: "/books/:id",
       });
       books.addQuery("byId", byId);
 
@@ -98,7 +98,7 @@ describe("Axios queries", () => {
     it("should replace params in axios request maintaining trailing slash", async () => {
       axios.stubs.instance.resetHistory();
       const books = new Axios(null, {
-        url: "/books/:id/"
+        url: "/books/:id/",
       });
       books.addQuery("byId", byId);
 
@@ -110,7 +110,7 @@ describe("Axios queries", () => {
     it("should replace params in axios request when url includes protocol", async () => {
       axios.stubs.instance.resetHistory();
       const books = new Axios(null, {
-        url: "http://localhost/books/:id"
+        url: "http://localhost/books/:id",
       });
       books.addQuery("byId", byId);
 
@@ -123,7 +123,7 @@ describe("Axios queries", () => {
     it("should replace many params in axios request when chaining custom queries", async () => {
       axios.stubs.instance.resetHistory();
       const books = new Axios(null, {
-        url: "/books/:id/:author"
+        url: "/books/:id/:author",
       });
       books.addQuery("byId", byId);
       books.addQuery("byAuthorParam", byAuthorParam);
@@ -135,7 +135,7 @@ describe("Axios queries", () => {
     it("should replace many params in axios request when url includes protocol and custom queries are being chained", async () => {
       axios.stubs.instance.resetHistory();
       const books = new Axios(null, {
-        url: "https://www.domain.com:3000/books/:id/:author"
+        url: "https://www.domain.com:3000/books/:id/:author",
       });
       books.addQuery("byId", byId);
       books.addQuery("byAuthorParam", byAuthorParam);
@@ -156,13 +156,13 @@ describe("Axios queries", () => {
         .queries.byAuthorParam("cervantes")
         .query({
           queryString: {
-            page: 2
-          }
+            page: 2,
+          },
         })
         .query({
           queryString: {
-            order: "asc"
-          }
+            order: "asc",
+          },
         });
       await queriedBooks.read();
       expect(axios.stubs.instance.getCall(0).args[0].url).toEqual(
@@ -180,13 +180,13 @@ describe("Axios queries", () => {
         .queries.byAuthorParam("cervantes")
         .query({
           queryString: {
-            page: 2
-          }
+            page: 2,
+          },
         })
         .query({
           queryString: {
-            order: "asc"
-          }
+            order: "asc",
+          },
         });
       await queriedBooks.read();
       expect(axios.stubs.instance.getCall(0).args[0].url).toEqual(
@@ -201,10 +201,10 @@ describe("Axios queries", () => {
 
     beforeAll(() => {
       booksSource = new Axios(null, { url: "/books" });
-      booksSource.addQuery("byFoo", foo => ({
+      booksSource.addQuery("byFoo", (foo) => ({
         urlParams: {
-          foo
-        }
+          foo,
+        },
       }));
 
       books = booksSource.queries.byFoo("foo");
@@ -249,10 +249,10 @@ describe("Axios queries", () => {
 
     beforeAll(() => {
       booksSource = new Axios("/books");
-      booksSource.addQuery("byFoo", foo => ({
+      booksSource.addQuery("byFoo", (foo) => ({
         urlParams: {
-          foo
-        }
+          foo,
+        },
       }));
 
       books = booksSource.queries.byFoo("foo");
@@ -289,13 +289,13 @@ describe("Axios queries", () => {
 
     beforeEach(() => {
       axios.stubs.instance.resolves({
-        data: "foo-data"
+        data: "foo-data",
       });
       booksSource = new Axios("/books");
-      booksSource.addQuery("byFoo", foo => ({
+      booksSource.addQuery("byFoo", (foo) => ({
         urlParams: {
-          foo
-        }
+          foo,
+        },
       }));
 
       books = booksSource.queries.byFoo("foo");
@@ -317,10 +317,10 @@ describe("Axios queries", () => {
 
     beforeEach(() => {
       booksSource = new Axios("/books");
-      booksSource.addQuery("byFoo", foo => ({
+      booksSource.addQuery("byFoo", (foo) => ({
         urlParams: {
-          foo
-        }
+          foo,
+        },
       }));
 
       books = booksSource.queries.byFoo("foo");
@@ -346,10 +346,10 @@ describe("Axios queries", () => {
 
     beforeEach(() => {
       booksSource = new Axios("/books");
-      booksSource.addQuery("byFoo", foo => ({
+      booksSource.addQuery("byFoo", (foo) => ({
         urlParams: {
-          foo
-        }
+          foo,
+        },
       }));
 
       books = booksSource.queries.byFoo("foo");
@@ -375,10 +375,10 @@ describe("Axios queries", () => {
 
     beforeEach(() => {
       booksSource = new Axios("/books");
-      booksSource.addQuery("byFoo", foo => ({
+      booksSource.addQuery("byFoo", (foo) => ({
         urlParams: {
-          foo
-        }
+          foo,
+        },
       }));
 
       books = booksSource.queries.byFoo("foo");
@@ -404,10 +404,10 @@ describe("Axios queries", () => {
 
     beforeEach(() => {
       books = new Axios("/books");
-      books.addQuery("byFoo", foo => ({
+      books.addQuery("byFoo", (foo) => ({
         urlParams: {
-          foo
-        }
+          foo,
+        },
       }));
 
       queriedBooks = books.queries.byFoo("foo");
@@ -439,13 +439,13 @@ describe("Axios queries", () => {
 
     beforeEach(() => {
       axios.stubs.instance.resolves({
-        data: ""
+        data: "",
       });
       books = new Axios("/books");
-      books.addQuery("byFoo", foo => ({
+      books.addQuery("byFoo", (foo) => ({
         urlParams: {
-          foo
-        }
+          foo,
+        },
       }));
 
       booksQuery1 = books.queries.byFoo("foo");
