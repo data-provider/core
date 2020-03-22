@@ -12,6 +12,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [2.0.1] - 2020-03-22
 
+### Changed
+- chore(deps): update dependencies
+
 ### Fixed
 - fix(tags): Clone tags option before adding origin tag.
 
