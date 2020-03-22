@@ -8,7 +8,7 @@ import {
   withDataProviderBranch,
   withDataProvider,
   withData,
-  withLoading
+  withLoading,
 } from "helpers/data-provider";
 
 import Loading from "./Loading";
@@ -27,7 +27,7 @@ const WrapperConnectedToDataAndLoading = withLoading(
 
 const BooksSearchRerendered = () => {
   const [currentRenders, changeCurrentRenders] = useState(0);
-  const rerender = useCallback(() => changeCurrentRenders(state => state + 1), []);
+  const rerender = useCallback(() => changeCurrentRenders((state) => state + 1), []);
 
   console.log("Rerendering");
 

@@ -13,7 +13,7 @@ const Wrapper = ({ isLoading, ...rest }) => {
 };
 
 Wrapper.propTypes = {
-  isLoading: PropTypes.bool
+  isLoading: PropTypes.bool,
 };
 
 export default Wrapper;

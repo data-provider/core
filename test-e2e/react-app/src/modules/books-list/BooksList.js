@@ -8,7 +8,7 @@ const BooksList = ({ books }) => {
   console.log("Rendering books list");
   return (
     <Fragment>
-      {books.map(book => {
+      {books.map((book) => {
         return (
           <Book
             id={book.id}
@@ -24,7 +24,7 @@ const BooksList = ({ books }) => {
 };
 
 BooksList.propTypes = {
-  books: PropTypes.array
+  books: PropTypes.array,
 };
 
 export default memo(BooksList);

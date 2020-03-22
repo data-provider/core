@@ -3,22 +3,22 @@ import MockProvider from "data/mock-provider";
 const AUTHORS = [
   {
     id: 1,
-    name: "George Orwell"
+    name: "George Orwell",
   },
   {
     id: 2,
-    name: "Ray Bradbury"
+    name: "Ray Bradbury",
   },
   {
     id: 3,
-    name: "Aldous Huxley"
+    name: "Aldous Huxley",
   },
   {
     id: 4,
-    name: "Ernest Hemingway"
-  }
+    name: "Ernest Hemingway",
+  },
 ];
 
 export const authorsProvider = new MockProvider("authors", {
-  data: AUTHORS
+  data: AUTHORS,
 });

@@ -6,7 +6,7 @@ const SearchTitle = ({ title }) => {
 };
 
 SearchTitle.propTypes = {
-  title: Proptypes.string.isRequired
+  title: Proptypes.string.isRequired,
 };
 
 export default SearchTitle;

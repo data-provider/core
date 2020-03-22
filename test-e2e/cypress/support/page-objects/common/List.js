@@ -28,9 +28,7 @@ class List {
   }
 
   getDelete(index) {
-    return this.getItem(index)
-      .find("span")
-      .eq(0);
+    return this.getItem(index).find("span").eq(0);
   }
 
   shouldDisplayItems(number) {

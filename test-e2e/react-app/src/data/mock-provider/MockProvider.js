@@ -5,8 +5,8 @@ import { debounce } from "helpers/debounce";
 class MockProvider extends Provider {
   readMethod() {
     var that = this;
-    return new Promise(function(resolve) {
-      setTimeout(function() {
+    return new Promise(function (resolve) {
+      setTimeout(function () {
         resolve([...that.options.data]);
       }, 1000);
     });
@@ -34,7 +34,7 @@ class MockProvider extends Provider {
   }
 
   delete(id) {
-    this.options.data = this.options.data.filter(function(item) {
+    this.options.data = this.options.data.filter(function (item) {
       return item.id !== id;
     });
     this._debouncedCleanCache();
@@ -43,7 +43,7 @@ class MockProvider extends Provider {
   create(item) {
     this.options.data.push({
       id: this._getLastIndex(),
-      ...item
+      ...item,
     });
     this._debouncedCleanCache();
   }

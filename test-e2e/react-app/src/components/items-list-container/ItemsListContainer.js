@@ -7,7 +7,7 @@ const ItemsListContainer = ({ children, id }) => {
 
 ItemsListContainer.propTypes = {
   id: Proptypes.string.isRequired,
-  children: Proptypes.node.isRequired
+  children: Proptypes.node.isRequired,
 };
 
 export default ItemsListContainer;

@@ -2,7 +2,7 @@ import React, { useMemo } from "react";
 
 import { useRefresh, useDataProvider, useData, useLoading, useError } from "./useDataProvider";
 
-const isFunction = provider => {
+const isFunction = (provider) => {
   return typeof provider === "function";
 };
 
@@ -57,7 +57,7 @@ export const withDataProviderBranch = (provider, keys) => (
   Component,
   LoadingComponent,
   ErrorComponent
-) => props => {
+) => (props) => {
   const providerToRead = useProvider(provider, props);
   const { dataProp, loadingProp, errorProp, loading, error } = useDataProviderCustomProps(
     providerToRead,
@@ -78,31 +78,31 @@ export const withDataProviderBranch = (provider, keys) => (
   return <Component {...props} {...dataProp} />;
 };
 
-export const withDataProvider = (provider, keys) => Component => props => {
+export const withDataProvider = (provider, keys) => (Component) => (props) => {
   const providerToRead = useProvider(provider, props);
   const { dataProp, loadingProp, errorProp } = useDataProviderCustomProps(providerToRead, keys);
   return <Component {...props} {...dataProp} {...loadingProp} {...errorProp} />;
 };
 
-export const withData = (provider, key) => Component => props => {
+export const withData = (provider, key) => (Component) => (props) => {
   const providerToRead = useProvider(provider, props);
   const { dataProp } = useDataCustomProp(providerToRead, key);
   return <Component {...props} {...dataProp} />;
 };
 
-export const withLoading = (provider, key) => Component => props => {
+export const withLoading = (provider, key) => (Component) => (props) => {
   const providerToRead = useProvider(provider, props);
   const { loadingProp } = useLoadingCustomProp(providerToRead, key);
   return <Component {...props} {...loadingProp} />;
 };
 
-export const withError = (provider, key) => Component => props => {
+export const withError = (provider, key) => (Component) => (props) => {
   const providerToRead = useProvider(provider, props);
   const { errorProp } = useErrorCustomProp(providerToRead, key);
   return <Component {...props} {...errorProp} />;
 };
 
-export const withRefresh = provider => Component => props => {
+export const withRefresh = (provider) => (Component) => (props) => {
   const providerToRead = useProvider(provider, props);
   useRefresh(providerToRead);
   return <Component {...props} />;

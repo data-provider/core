@@ -1,10 +1,10 @@
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 
-export const useRefresh = dataProvider => {
+export const useRefresh = (dataProvider) => {
   useEffect(() => {
     if (dataProvider) {
-      const catchError = err => {
+      const catchError = (err) => {
         console.error(
           `@data-provider/react: Error "${err.message}" in provider "${dataProvider.id}"`
         );
@@ -22,12 +22,12 @@ export const useData = (dataProvider, comparator) => {
   return useSelector(() => dataProvider && dataProvider.state.data, comparator);
 };
 
-export const useLoading = dataProvider => {
+export const useLoading = (dataProvider) => {
   useRefresh(dataProvider);
   return useSelector(() => dataProvider && dataProvider.state.loading);
 };
 
-export const useError = dataProvider => {
+export const useError = (dataProvider) => {
   useRefresh(dataProvider);
   return useSelector(() => dataProvider && dataProvider.state.error);
 };
@@ -37,6 +37,6 @@ export const useDataProvider = (dataProvider, comparator) => {
   return [
     useData(dataProvider, comparator),
     useLoading(dataProvider, comparator),
-    useError(dataProvider, comparator)
+    useError(dataProvider, comparator),
   ];
 };
