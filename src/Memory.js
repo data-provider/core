@@ -31,7 +31,7 @@ class Memory extends Provider {
     if (this._queriedProp) {
       return {
         ...initialState,
-        data: initialState.data[this._queriedProp]
+        data: initialState.data[this._queriedProp],
       };
     }
     return initialState;
