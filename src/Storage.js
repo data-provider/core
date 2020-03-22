@@ -16,7 +16,7 @@ import { Provider } from "@data-provider/core";
 const TAG = "browser-storage";
 const storageKeysTags = {
   localStorage: "local-storage",
-  sessionStorage: "session-storage"
+  sessionStorage: "session-storage",
 };
 
 class StorageMock {
@@ -71,7 +71,7 @@ export class Storage extends Provider {
     this._storage = this._getStorage(this.options.storageKey, this.options.root);
     return {
       ...initialState,
-      data: this.readMethod()
+      data: this.readMethod(),
     };
   }
 
