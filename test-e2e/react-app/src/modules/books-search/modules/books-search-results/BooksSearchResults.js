@@ -1,7 +1,7 @@
 import React, { memo } from "react";
 import Proptypes from "prop-types";
 
-import { withData, withLoading, withRefresh } from "@data-provider/react";
+import { withData, withLoading } from "@data-provider/react";
 
 import { booksSearch } from "data/books";
 import BooksList from "modules/books-list";
@@ -9,9 +9,9 @@ import ItemsListContainer from "components/items-list-container";
 import Loading from "components/loading";
 import NoResults from "components/no-results";
 
-const queryBooks = search => booksSearch.query({ search });
+const queryBooks = ({ search }) => booksSearch.query({ search });
 
-const ConnectedBooks = withRefresh(queryBooks)(withData(queryBooks, "books")(BooksList));
+const ConnectedBooks = withData(queryBooks, "books")(BooksList);
 
 const BooksSearchResults = ({ search, books, loading }) => {
   console.log("Rendering books search results", loading, books);
@@ -21,7 +21,7 @@ const BooksSearchResults = ({ search, books, loading }) => {
     <ItemsListContainer id="books-search-container">
       {loading && <Loading />}
       {hasNotResults && <NoResults />}
-      <ConnectedBooks query={search} />
+      <ConnectedBooks search={search} />
     </ItemsListContainer>
   );
 };
@@ -32,8 +32,8 @@ BooksSearchResults.propTypes = {
   loading: Proptypes.bool
 };
 
-const BooksSearchResultsConnected = withRefresh(queryBooks)(
-  withLoading(queryBooks)(withData(queryBooks, "books")(BooksSearchResults))
+const BooksSearchResultsConnected = withLoading(queryBooks)(
+  withData(queryBooks, "books")(BooksSearchResults)
 );
 
 export default memo(BooksSearchResultsConnected);
