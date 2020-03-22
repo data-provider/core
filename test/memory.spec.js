@@ -69,14 +69,14 @@ describe("Memory origin", () => {
   describe("Value property of a method", () => {
     let userData;
     const fooData = {
-      foo: "foo-value"
+      foo: "foo-value",
     };
 
     beforeEach(() => {
       userData = new Memory("foo-id", {
         initialState: {
-          data: fooData
-        }
+          data: fooData,
+        },
       });
     });
 
@@ -108,13 +108,13 @@ describe("Memory origin", () => {
         expect.assertions(2);
         userData = new Memory("foo-id-2", {
           initialState: {
-            data: fooData
-          }
+            data: fooData,
+          },
         });
         let queriedData = userData.query({ prop: "foo" });
         const promise = queriedData.read();
         expect(queriedData.state.data).toEqual(fooData.foo);
-        return promise.then(value => {
+        return promise.then((value) => {
           expect(value).toEqual(fooData.foo);
         });
       });
@@ -133,13 +133,13 @@ describe("Memory origin", () => {
 
     beforeEach(() => {
       fooData = {
-        foo: "foo-value"
+        foo: "foo-value",
       };
 
       userData = new Memory("foo-id", {
         initialState: {
-          data: fooData
-        }
+          data: fooData,
+        },
       });
     });
 
@@ -171,7 +171,7 @@ describe("Memory origin", () => {
         await queriedData.update("foo-updated-value");
         const value = await userData.read();
         expect(value).toEqual({
-          foo: "foo-updated-value"
+          foo: "foo-updated-value",
         });
       });
 
@@ -202,7 +202,7 @@ describe("Memory origin", () => {
         const value = await userData.read();
         expect(value).toEqual({
           foo: "foo-value",
-          foo2: "foo-new"
+          foo2: "foo-new",
         });
       });
 
@@ -218,14 +218,14 @@ describe("Memory origin", () => {
     let userData;
     const fooData = {
       foo: "foo-value",
-      foo2: "foo-value-2"
+      foo2: "foo-value-2",
     };
 
     beforeEach(() => {
       userData = new Memory("foo-id-2", {
         initialState: {
-          data: fooData
-        }
+          data: fooData,
+        },
       });
     });
 
@@ -234,7 +234,7 @@ describe("Memory origin", () => {
       await queriedData.delete();
       await userData.read();
       expect(userData.state.data).toEqual({
-        foo2: "foo-value-2"
+        foo2: "foo-value-2",
       });
     });
 
@@ -278,14 +278,14 @@ describe("Memory origin", () => {
     describe("when passing options as second argument", () => {
       it("should contain the memory tag even when a custom tag is received", () => {
         const fooData = new Memory("foo", {
-          tags: ["foo-tag"]
+          tags: ["foo-tag"],
         });
         expect(providers.getByTag("memory").elements[0]).toEqual(fooData);
       });
 
       it("should contain the memory tag even when an array of custom tags is received", () => {
         const fooData = new Memory("foo", {
-          tags: ["foo-tag", "foo-tag-2"]
+          tags: ["foo-tag", "foo-tag-2"],
         });
         expect(providers.getByTag("memory").elements[0]).toEqual(fooData);
       });
@@ -293,7 +293,7 @@ describe("Memory origin", () => {
       it("should contain defined custom tag if received", () => {
         const FOO_TAG = "foo-tag";
         const fooData = new Memory("foo", {
-          tags: [FOO_TAG]
+          tags: [FOO_TAG],
         });
         expect(providers.getByTag(FOO_TAG).elements[0]).toEqual(fooData);
       });
@@ -303,7 +303,7 @@ describe("Memory origin", () => {
         const FOO_TAG = "foo-tag";
         const FOO_TAG_2 = "foo-tag-2";
         const fooData = new Memory("foo", {
-          tags: [FOO_TAG, FOO_TAG_2]
+          tags: [FOO_TAG, FOO_TAG_2],
         });
         expect(providers.getByTag(FOO_TAG).elements[0]).toEqual(fooData);
         expect(providers.getByTag(FOO_TAG_2).elements[0]).toEqual(fooData);
