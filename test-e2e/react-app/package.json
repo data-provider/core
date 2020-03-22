@@ -34,6 +34,6 @@
     "react-scripts": "3.4.1",
     "react-app-rewired": "2.1.5",
     "serve": "11.3.0",
-    "start-server-and-test": "1.10.9"
+    "start-server-and-test": "1.10.11"
   }
 }
