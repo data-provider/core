@@ -10,6 +10,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 ### Removed
 
+## [2.0.1] - 2020-03-22
+
+### Fixed
+- fix(tags): Clone tags option before adding origin tag.
+
 ## [2.0.0] - 2020-03-14
 
 > DISCLAIMER: This major release still maintains the concept of the previous "data-provider" versions, but a lot of BREAKING CHANGES have been made to the interfaces in order to improve the usage experience, apart of performance improvements and fixes. A chapter "how to migrate from 1.x" will be added to the documentation website to facilitate the migration to this new version, as the maintenance of 1.X versions will be stopped soon. Read Date Provider Changelog and docs in https://www.data-provider.org for further info.
