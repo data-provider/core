@@ -16,11 +16,11 @@ const Mock = class Mock {
 
     this._stubs = {
       getItem: this._sandbox.stub().returns(""),
-      setItem: this._sandbox.stub().returns("")
+      setItem: this._sandbox.stub().returns(""),
     };
 
     this._mock = {
-      [storageKey]: this._stubs
+      [storageKey]: this._stubs,
     };
   }
 

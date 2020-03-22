@@ -44,7 +44,7 @@ describe("Local Storage", () => {
   describe("When window is not available and it uses storage mock", () => {
     let userData;
     const fooData = {
-      foo: "foo-value"
+      foo: "foo-value",
     };
 
     beforeEach(() => {
@@ -77,7 +77,7 @@ describe("Local Storage", () => {
 
     beforeAll(() => {
       userData = new LocalStorage("userData", {
-        root: storage.mock
+        root: storage.mock,
       });
     });
 
@@ -117,13 +117,13 @@ describe("Local Storage", () => {
   describe("Data property of a method", () => {
     let userData;
     const fooData = {
-      foo: "foo-value"
+      foo: "foo-value",
     };
 
     beforeEach(() => {
       storage.stubs.getItem.returns(JSON.stringify(fooData));
       userData = new LocalStorage("userData", {
-        root: storage.mock
+        root: storage.mock,
       });
     });
 
@@ -155,7 +155,7 @@ describe("Local Storage", () => {
       it("should return default value correspondent to query while resource is being loaded", () => {
         expect.assertions(2);
         userData = new LocalStorage("userData", {
-          root: storage.mock
+          root: storage.mock,
         });
         let queriedData = userData.query({ prop: "foo" });
         const promise = queriedData.read();
@@ -170,13 +170,13 @@ describe("Local Storage", () => {
   describe("Update method", () => {
     let userData;
     const fooData = {
-      foo: "foo-value"
+      foo: "foo-value",
     };
 
     beforeEach(() => {
       storage.stubs.getItem.returns(JSON.stringify(fooData));
       userData = new LocalStorage("userData", {
-        root: storage.mock
+        root: storage.mock,
       });
     });
 
@@ -214,7 +214,7 @@ describe("Local Storage", () => {
         await queriedData.update("foo-updated-value");
         expect(storage.stubs.setItem.getCall(0).args[1]).toEqual(
           JSON.stringify({
-            foo: "foo-updated-value"
+            foo: "foo-updated-value",
           })
         );
       });
@@ -237,13 +237,13 @@ describe("Local Storage", () => {
   describe("Delete method", () => {
     let userData;
     const fooData = {
-      foo: "foo-value"
+      foo: "foo-value",
     };
 
     beforeEach(() => {
       storage.stubs.getItem.returns(JSON.stringify(fooData));
       userData = new LocalStorage("userData", {
-        root: storage.mock
+        root: storage.mock,
       });
     });
 
@@ -289,14 +289,14 @@ describe("Local Storage", () => {
     describe("when passing tags", () => {
       it("should contain the local-storage tag even when a custom tag is received", () => {
         fooData = new LocalStorage("fooData", {
-          tags: ["foo-tag"]
+          tags: ["foo-tag"],
         });
         expect(providers.getByTag("local-storage").elements[0]).toEqual(fooData);
       });
 
       it("should contain the ocal-storage tag even when an array of custom tags is received", () => {
         fooData = new LocalStorage("fooData", {
-          tags: ["foo-tag", "foo-tag-2"]
+          tags: ["foo-tag", "foo-tag-2"],
         });
         expect(providers.getByTag("local-storage").elements[0]).toEqual(fooData);
       });
@@ -304,7 +304,7 @@ describe("Local Storage", () => {
       it("should contain defined custom tag if received", () => {
         const FOO_TAG = "foo-tag";
         fooData = new LocalStorage("fooData", {
-          tags: [FOO_TAG]
+          tags: [FOO_TAG],
         });
         expect(providers.getByTag(FOO_TAG).elements[0]).toEqual(fooData);
       });
@@ -314,7 +314,7 @@ describe("Local Storage", () => {
         const FOO_TAG = "foo-tag";
         const FOO_TAG_2 = "foo-tag-2";
         fooData = new LocalStorage("fooData", {
-          tags: [FOO_TAG, FOO_TAG_2]
+          tags: [FOO_TAG, FOO_TAG_2],
         });
         expect(providers.getByTag(FOO_TAG).elements[0]).toEqual(fooData);
         expect(providers.getByTag(FOO_TAG_2).elements[0]).toEqual(fooData);
