@@ -29,7 +29,7 @@ const BooksSearchResults = ({ search, books, loading }) => {
 BooksSearchResults.propTypes = {
   search: Proptypes.string,
   books: Proptypes.array,
-  loading: Proptypes.bool
+  loading: Proptypes.bool,
 };
 
 const BooksSearchResultsConnected = withLoading(queryBooks)(

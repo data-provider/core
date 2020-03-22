@@ -6,7 +6,7 @@ import SaveButton from "components/save-button";
 const AuthorNew = () => {
   const [currentName, changeCurrentName] = useState("");
 
-  const handleChange = useCallback(e => {
+  const handleChange = useCallback((e) => {
     changeCurrentName(e.target.value);
   }, []);
   const save = useCallback(() => {

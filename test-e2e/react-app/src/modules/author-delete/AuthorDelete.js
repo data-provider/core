@@ -13,7 +13,7 @@ const AuthorDelete = ({ id }) => {
 };
 
 AuthorDelete.propTypes = {
-  id: Proptypes.number
+  id: Proptypes.number,
 };
 
 export default AuthorDelete;

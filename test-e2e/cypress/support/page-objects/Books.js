@@ -8,12 +8,12 @@ class Books extends List {
       CONTAINER: "#books-container",
       INPUT: "#book-new",
       SUBMIT: "#book-submit",
-      SELECT: "#book-author-select"
+      SELECT: "#book-author-select",
     });
 
     this._search = new Search({
       CONTAINER: "#books-search-container",
-      SEARCH: "#search-book"
+      SEARCH: "#search-book",
     });
   }
 

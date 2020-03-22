@@ -2,22 +2,22 @@ import { deleteAuthor } from "data/authors";
 import { booksProvider } from "./providers";
 import { authorBooks } from "./selectors";
 
-export const deleteBook = bookId => {
+export const deleteBook = (bookId) => {
   return booksProvider.delete(bookId);
 };
 
-export const deleteAuthorAndBooks = authorId => {
+export const deleteAuthorAndBooks = (authorId) => {
   authorBooks
     .query({
-      author: authorId
+      author: authorId,
     })
     .read()
-    .then(results => {
+    .then((results) => {
       if (!results.length) {
         deleteAuthor(authorId);
       } else {
         if (window.confirm("Deleting author will delete also related books. Are you sure?")) {
-          results.forEach(book => {
+          results.forEach((book) => {
             deleteBook(book.id);
           });
           deleteAuthor(authorId);
@@ -30,6 +30,6 @@ export const createBook = ({ title, author }) => {
   console.log(title, author);
   return booksProvider.create({
     title,
-    author: Number(author)
+    author: Number(author),
   });
 };

@@ -13,7 +13,7 @@ const BooksSearch = () => {
     return debounce(changeCurrentSearch, 50);
   }, []);
   const handleChange = useCallback(
-    e => {
+    (e) => {
       changeSearch(e.target.value);
       triggerChangeCurrentSearch(e.target.value);
     },

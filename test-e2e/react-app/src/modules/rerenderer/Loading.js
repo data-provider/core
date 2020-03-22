@@ -9,7 +9,7 @@ const Loading = ({ isLoading }) => {
 };
 
 Loading.propTypes = {
-  isLoading: PropTypes.bool
+  isLoading: PropTypes.bool,
 };
 
 export default memo(Loading);

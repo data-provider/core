@@ -13,7 +13,7 @@ const BookDelete = ({ id }) => {
 };
 
 BookDelete.propTypes = {
-  id: Proptypes.number
+  id: Proptypes.number,
 };
 
 export default BookDelete;
