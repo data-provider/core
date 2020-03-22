@@ -44,7 +44,7 @@ describe("Axios data providers", () => {
 
     beforeAll(() => {
       books = new Axios("/books", {
-        delete: true
+        delete: true,
       });
     });
 
@@ -118,7 +118,7 @@ describe("Axios data providers", () => {
 
     beforeEach(() => {
       axios.stubs.instance.resolves({
-        data: "foo-data"
+        data: "foo-data",
       });
       books = new Axios("/books");
     });
@@ -137,7 +137,7 @@ describe("Axios data providers", () => {
     let books;
     beforeEach(() => {
       axios.stubs.instance.resolves({
-        data: ""
+        data: "",
       });
       books = new Axios("/books");
     });
@@ -160,7 +160,7 @@ describe("Axios data providers", () => {
     let books;
     beforeEach(() => {
       axios.stubs.instance.resolves({
-        data: ""
+        data: "",
       });
       books = new Axios("/books");
     });
@@ -183,7 +183,7 @@ describe("Axios data providers", () => {
     let books;
     beforeEach(() => {
       axios.stubs.instance.resolves({
-        data: ""
+        data: "",
       });
       books = new Axios("/books");
     });

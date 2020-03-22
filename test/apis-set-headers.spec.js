@@ -27,7 +27,7 @@ describe("apis setHeaders method", () => {
     describe("if apis setHeaders method was not called previously", () => {
       it("should not set any header", () => {
         const api = new Axios("foo-1", {
-          url: "/foo-1"
+          url: "/foo-1",
         });
         testsAxios.push(api);
         expect(api.headers).toEqual({});
@@ -38,26 +38,26 @@ describe("apis setHeaders method", () => {
       it("should inherit common headers previously defined", () => {
         providers.config({
           headers: {
-            foo: "foo"
-          }
+            foo: "foo",
+          },
         });
         const api = new Axios("foo-2", {
-          url: "/foo-2"
+          url: "/foo-2",
         });
         testsAxios.push(api);
         expect(api.headers).toEqual({
-          foo: "foo"
+          foo: "foo",
         });
       });
 
       it("should inherit common headers previously defined even when api is tagged", () => {
         const api = new Axios("foo-3", {
           url: "/foo-3",
-          tags: ["foo-tag-1"]
+          tags: ["foo-tag-1"],
         });
         testsAxios.push(api);
         expect(api.headers).toEqual({
-          foo: "foo"
+          foo: "foo",
         });
       });
     });
@@ -66,12 +66,12 @@ describe("apis setHeaders method", () => {
       it("should have no effect", () => {
         providers.getByTag("foo-tag-1").config({
           headers: {
-            foo2: "foo2"
-          }
+            foo2: "foo2",
+          },
         });
         const api = new Axios("foo-4", {
           url: "/foo-4",
-          tags: ["foo-tag-1"]
+          tags: ["foo-tag-1"],
         });
         testsAxios.push(api);
         expect(api.headers.foo).toEqual("foo");
@@ -84,9 +84,9 @@ describe("apis setHeaders method", () => {
     describe("if no tags are defined", () => {
       it("should set headers for all existant apis, removing all previously defined headers", () => {
         providers.call("setHeaders", {
-          foo: "new-foo"
+          foo: "new-foo",
         });
-        testsAxios.forEach(testAxios => {
+        testsAxios.forEach((testAxios) => {
           expect(testAxios.headers.foo).toEqual("new-foo");
           expect(testAxios.headers.foo2).toEqual(undefined);
           expect(testAxios.headers.foo3).toEqual(undefined);
@@ -97,9 +97,9 @@ describe("apis setHeaders method", () => {
     describe("if tag is defined as string", () => {
       it("should set headers for all existant apis having a tag matching with it", () => {
         providers.getByTag("foo-tag-3").call("setHeaders", {
-          foo: "another-foo"
+          foo: "another-foo",
         });
-        testsAxios.forEach(testAxios => {
+        testsAxios.forEach((testAxios) => {
           if (testAxios._url === "/foo-6" || testAxios._url === "/foo-7") {
             expect(testAxios.headers.foo).toEqual("another-foo");
           } else {
@@ -110,9 +110,9 @@ describe("apis setHeaders method", () => {
 
       it("should not set configuration for any api if any have a matching tag", () => {
         providers.getByTag("foo-tag-4").call("setHeaders", {
-          foo: "fake-foo"
+          foo: "fake-foo",
         });
-        testsAxios.forEach(testAxios => {
+        testsAxios.forEach((testAxios) => {
           if (testAxios._url === "/foo-6" || testAxios._url === "/foo-7") {
             expect(testAxios.headers.foo).toEqual("another-foo");
           } else {
@@ -125,9 +125,9 @@ describe("apis setHeaders method", () => {
     describe("if tag is an array", () => {
       it("should set configuration for all existant apis having a tag matching with it", () => {
         providers.getByTag("foo-tag-3").call("setHeaders", {
-          foo: "another-new-foo"
+          foo: "another-new-foo",
         });
-        testsAxios.forEach(testAxios => {
+        testsAxios.forEach((testAxios) => {
           if (testAxios._url === "/foo-6" || testAxios._url === "/foo-7") {
             expect(testAxios.headers.foo).toEqual("another-new-foo");
           } else {
@@ -138,9 +138,9 @@ describe("apis setHeaders method", () => {
 
       it("should not set configuration for any existant apis if any has a tag matching with it", () => {
         providers.getByTag("foo-unexistant").call("setHeaders", {
-          foo: "fake-foo"
+          foo: "fake-foo",
         });
-        testsAxios.forEach(testAxios => {
+        testsAxios.forEach((testAxios) => {
           if (testAxios._url === "/foo-6" || testAxios._url === "/foo-7") {
             expect(testAxios.headers.foo).toEqual("another-new-foo");
           } else {

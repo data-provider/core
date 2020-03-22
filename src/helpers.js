@@ -15,17 +15,17 @@ export const CREATE_SUCCESS = "createSucess";
 export const eventNames = {
   UPDATE_SUCCESS,
   DELETE_SUCCESS,
-  CREATE_SUCCESS
+  CREATE_SUCCESS,
 };
 
 export const TAG = "axios";
 
 export const PATH_SEP = "/";
 
-export const once = func => {
+export const once = (func) => {
   var executed = false;
   let result;
-  return function() {
+  return function () {
     if (!executed) {
       result = func.apply(this, arguments);
       executed = true;
@@ -36,6 +36,6 @@ export const once = func => {
   };
 };
 
-export const isEmpty = obj => {
+export const isEmpty = (obj) => {
   return Object.keys(obj).length === 0;
 };

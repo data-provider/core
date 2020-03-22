@@ -19,7 +19,7 @@ describe("retry config", () => {
 
   beforeAll(async () => {
     providers.getByTag("mocks").config({
-      baseUrl: "http://localhost:3100"
+      baseUrl: "http://localhost:3100",
     });
 
     apiStatsReset = new Axios(null, { url: "/api/stats/reset", tags: ["mocks"] });
@@ -28,15 +28,15 @@ describe("retry config", () => {
     apiStatsCallCount = new Axios(null, {
       url: "/api/stats/call-count",
       cache: false,
-      tags: ["mocks"]
+      tags: ["mocks"],
     });
 
     booksServerError = new Axios(null, {
       url: "/api/books/server-error",
       tags: ["mocks"],
       initialState: {
-        data: []
-      }
+        data: [],
+      },
     });
   });
 
@@ -62,7 +62,7 @@ describe("retry config", () => {
     it("should retry 10 times if config is changed", async () => {
       expect.assertions(1);
       booksServerError.config({
-        retries: 10
+        retries: 10,
       });
       try {
         await booksServerError.read();
@@ -75,7 +75,7 @@ describe("retry config", () => {
     it("should retry 5 times if config is changed using tag method", async () => {
       expect.assertions(1);
       providers.getByTag("mocks").config({
-        retries: 5
+        retries: 5,
       });
       try {
         await booksServerError.read();
@@ -88,7 +88,7 @@ describe("retry config", () => {
     it("should not retry if config is set to 0", async () => {
       expect.assertions(1);
       booksServerError.config({
-        retries: 0
+        retries: 0,
       });
       try {
         await booksServerError.read();
@@ -101,7 +101,7 @@ describe("retry config", () => {
     it("should not retry if config is set to 0 using tag method for all apis", async () => {
       expect.assertions(1);
       providers.getByTag("api").config({
-        retries: 0
+        retries: 0,
       });
       try {
         await booksServerError.read();
@@ -117,7 +117,7 @@ describe("retry config", () => {
       const booksNotFoundError = new Axios(null, {
         url: "/api/books/not-found-error",
         retries: 3,
-        tags: ["mocks"]
+        tags: ["mocks"],
       });
       expect.assertions(1);
       try {

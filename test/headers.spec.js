@@ -31,7 +31,7 @@ describe("Axios configuration", () => {
 
   beforeEach(() => {
     axios.stubs.instance.resolves({
-      data: "foo"
+      data: "foo",
     });
     axios.stubs.instance.resetHistory();
   });
@@ -39,7 +39,7 @@ describe("Axios configuration", () => {
   describe("setHeaders method", () => {
     const headers = {
       foo: "foo-1",
-      foo2: "foo-2"
+      foo2: "foo-2",
     };
     it("should set the requests headers", async () => {
       expect.assertions(1);
@@ -66,12 +66,12 @@ describe("Axios configuration", () => {
   describe("addHeaders method", () => {
     const headers = {
       foo: "foo-1",
-      foo2: "foo-2"
+      foo2: "foo-2",
     };
     it("should add new headers to requests headers", async () => {
       expect.assertions(2);
       const newHeaders = {
-        foo3: "foo-3"
+        foo3: "foo-3",
       };
       const books = new Axios("/books");
       books.setHeaders(headers);
@@ -83,7 +83,7 @@ describe("Axios configuration", () => {
       expect(axios.stubs.instance.getCall(1).args[0].headers).toEqual({
         foo: "foo-1",
         foo2: "foo-2",
-        foo3: "foo-3"
+        foo3: "foo-3",
       });
     });
 
@@ -91,7 +91,7 @@ describe("Axios configuration", () => {
       expect.assertions(2);
       const newHeaders = {
         foo2: "foo-4",
-        foo3: "foo-3"
+        foo3: "foo-3",
       };
       const books = new Axios("/books");
       books.setHeaders(headers);
@@ -103,7 +103,7 @@ describe("Axios configuration", () => {
       expect(axios.stubs.instance.getCall(1).args[0].headers).toEqual({
         foo: "foo-1",
         foo2: "foo-4",
-        foo3: "foo-3"
+        foo3: "foo-3",
       });
     });
   });
