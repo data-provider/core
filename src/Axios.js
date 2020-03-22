@@ -28,7 +28,7 @@ import { defaultConfig } from "./defaultConfig";
 export class Axios extends Provider {
   constructor(id, options, query) {
     const opts = options || {};
-    const tags = opts.tags || [];
+    const tags = opts.tags ? [...opts.tags] : [];
     tags.unshift(TAG);
     super(id, { ...defaultConfig, ...opts, tags }, query);
   }
@@ -57,6 +57,7 @@ export class Axios extends Provider {
     this._baseUrl = configuration.baseUrl;
     this._onBeforeRequest = configuration.onBeforeRequest;
     this._url = configuration.url;
+    this._axiosConfig = configuration.axiosConfig || {};
 
     if (configuration.retries !== this._retries) {
       this._retries = configuration.retries;
@@ -125,6 +126,7 @@ export class Axios extends Provider {
       this._doBeforeRequest();
       return this._doRequest(
         {
+          ...this._axiosConfig,
           ...requestOptions,
           headers: this.headers
         },
@@ -132,7 +134,7 @@ export class Axios extends Provider {
       );
     };
 
-    return this.client(requestOptions)
+    return this.client({ ...this._axiosConfig, ...requestOptions })
       .then(response => (this._fullResponse ? response : response.data))
       .then(customResponse => {
         if (this._validateResponse) {

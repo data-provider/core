@@ -1,6 +1,6 @@
 {
   "name": "@data-provider/axios",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "description": "REST API Data Provider origin addon using Axios",
   "keywords": [
     "data-provider",
@@ -49,6 +49,7 @@
     "@babel/preset-env": "7.8.4",
     "@babel/preset-react": "7.8.3",
     "@data-provider/core": "2.0.0",
+    "@mocks-server/admin-api-paths": "1.0.4",
     "@mocks-server/main": "1.8.2",
     "@rollup/plugin-commonjs": "11.0.2",
     "@rollup/plugin-json": "4.0.2",
@@ -57,6 +58,7 @@
     "babel-jest": "24.9.0",
     "babel-polyfill": "6.26.0",
     "coveralls": "3.0.9",
+    "cross-fetch": "3.0.4",
     "eslint": "6.8.0",
     "eslint-config-prettier": "6.10.0",
     "eslint-plugin-prettier": "3.1.2",

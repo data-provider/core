@@ -10,6 +10,17 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 ### Removed
 
+## [2.1.0] - 2020-03-22
+
+### Added
+- feat(options): Add "axiosConfig" option. This configuration object will be passed directly to requests. Read the [Axios docs](https://github.com/axios/axios) for further info about available options.
+
+### Changed
+- chore(deps): update dependencies
+
+### Fixed
+- fix(tags): Clone tags option before adding origin tag.
+
 ## [2.0.1] - 2020-03-16
 
 ### Fixed
