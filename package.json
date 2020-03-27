@@ -47,7 +47,7 @@
   "devDependencies": {
     "@babel/core": "7.9.0",
     "@babel/preset-env": "7.9.0",
-    "@babel/preset-react": "7.9.1",
+    "@babel/preset-react": "7.9.4",
     "@data-provider/core": "2.1.1",
     "@mocks-server/admin-api-paths": "1.0.5",
     "@mocks-server/main": "1.8.3",
