@@ -16,6 +16,7 @@
   ],
   "author": "Javier Brea",
   "license": "Apache-2.0",
+  "homepage": "https://www.data-provider.org",
   "repository": "https://github.com/data-provider/axios",
   "publishConfig": {
     "access": "public"
