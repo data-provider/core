@@ -23,7 +23,7 @@ describe("Provider cache", () => {
     sandbox = sinon.createSandbox();
 
     spies = {
-      read: sinon.spy()
+      read: sinon.spy(),
     };
 
     TestProvider = class extends Provider {
@@ -85,7 +85,7 @@ describe("Provider cache", () => {
   describe("with cache disables", () => {
     it("should execute read all time it is called", async () => {
       provider = new TestProvider(null, {
-        cache: false
+        cache: false,
       });
       await provider.read();
       await provider.read();
@@ -136,24 +136,12 @@ describe("Provider cache", () => {
 
     it("should execute read method again when parent cache is a query, and it is clean", async () => {
       expect.assertions(2);
-      provider
-        .query({ var: "var" })
-        .query({ foo: "foo" })
-        .read();
-      await provider
-        .query({ var: "var" })
-        .query({ foo: "foo" })
-        .read();
+      provider.query({ var: "var" }).query({ foo: "foo" }).read();
+      await provider.query({ var: "var" }).query({ foo: "foo" }).read();
       expect(spies.read.callCount).toEqual(1);
       provider.query({ var: "var" }).cleanCache();
-      provider
-        .query({ var: "var" })
-        .query({ foo: "foo" })
-        .read();
-      await provider
-        .query({ var: "var" })
-        .query({ foo: "foo" })
-        .read();
+      provider.query({ var: "var" }).query({ foo: "foo" }).read();
+      await provider.query({ var: "var" }).query({ foo: "foo" }).read();
       expect(spies.read.callCount).toEqual(2);
     });
   });

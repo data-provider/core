@@ -38,7 +38,7 @@ export class EventEmitter {
   }
 
   emit(eventName, ...args) {
-    this._getEventListByName(eventName).forEach(fn => {
+    this._getEventListByName(eventName).forEach((fn) => {
       fn.apply(null, args);
     });
   }

@@ -9,5 +9,5 @@ module.exports = {
   booksProvider,
   booksWithAuthorName,
   booksSearch,
-  authorBooks
+  authorBooks,
 };

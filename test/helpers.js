@@ -25,7 +25,7 @@ const {
   message,
   warn,
   fromEntries,
-  fromEntriesPolyfill
+  fromEntriesPolyfill,
 } = require("../src/helpers");
 
 describe("helpers", () => {
@@ -169,7 +169,7 @@ describe("helpers", () => {
       const map = new Map();
       map.set("fooKey", "fooValue");
       expect(fromEntries(map)).toEqual({
-        fooKey: "fooValue"
+        fooKey: "fooValue",
       });
     });
   });
@@ -188,7 +188,7 @@ describe("helpers", () => {
         const map = new Map();
         map.set("fooKey", "fooValue");
         expect(fromEntries(map)).toEqual({
-          fooKey: "fooValue"
+          fooKey: "fooValue",
         });
       });
     });

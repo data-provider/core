@@ -11,7 +11,7 @@ const DeleteIcon = ({ onClick }) => {
 };
 
 DeleteIcon.propTypes = {
-  onClick: Proptypes.func.isRequired
+  onClick: Proptypes.func.isRequired,
 };
 
 export default DeleteIcon;

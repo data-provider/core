@@ -31,7 +31,7 @@ describe("providers handler call method", () => {
     fooProvider3 = new FooProvider("foo-3", { tags: "tag-3" });
     new Selector(fooProvider, fooProvider2, () => {}, {
       id: "foo-4",
-      tags: "tag-2"
+      tags: "tag-2",
     });
 
     sandbox.spy(fooProvider, "fooMethod");

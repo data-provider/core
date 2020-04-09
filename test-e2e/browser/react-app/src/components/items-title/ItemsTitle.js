@@ -12,7 +12,7 @@ const ItemsTitle = ({ title, loading }) => {
 
 ItemsTitle.propTypes = {
   loading: Proptypes.bool,
-  title: Proptypes.string.isRequired
+  title: Proptypes.string.isRequired,
 };
 
 export default ItemsTitle;

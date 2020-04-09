@@ -38,21 +38,21 @@ describe("Selector id", () => {
 
   it("should be provided id", () => {
     const selector = new Selector(provider, () => {}, {
-      id: "foo-id"
+      id: "foo-id",
     });
     expect(selector.id).toEqual("foo-id");
   });
 
   it("should be provided id adding query id", () => {
     const selector = new Selector(provider, () => {}, {
-      id: "foo-id"
+      id: "foo-id",
     });
     expect(selector.query({ foo: "foo" }).id).toEqual('foo-id({"foo":"foo"})');
   });
 
   it("should be provided id adding all childs query ids", () => {
     const selector = new Selector(provider, () => {}, {
-      id: "foo-id"
+      id: "foo-id",
     });
     expect(selector.query({ foo: "foo" }).query({ var: "var" }).id).toEqual(
       'foo-id({"foo":"foo"})({"foo":"foo","var":"var"})'

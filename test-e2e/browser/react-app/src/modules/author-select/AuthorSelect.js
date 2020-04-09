@@ -13,7 +13,7 @@ const AuthorSelect = ({ onChange }) => {
   return (
     <select id="book-author-select" onChange={onChange}>
       <option value="-">-</option>
-      {authors.map(author => {
+      {authors.map((author) => {
         return (
           <option value={author.id} key={author.id}>
             {author.name}
@@ -25,7 +25,7 @@ const AuthorSelect = ({ onChange }) => {
 };
 
 AuthorSelect.propTypes = {
-  onChange: PropTypes.func
+  onChange: PropTypes.func,
 };
 
 export default memo(AuthorSelect);

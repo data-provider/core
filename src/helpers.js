@@ -17,7 +17,7 @@ const CHILD_EVENT_PREFIX = "child-";
 const NEW_PROVIDER_PREFIX = "new-provider-";
 
 export const defaultOptions = {
-  cache: true
+  cache: true,
 };
 
 export const INIT = "init";
@@ -36,7 +36,7 @@ export const eventNames = {
   READ_START,
   READ_SUCCESS,
   READ_ERROR,
-  ANY
+  ANY,
 };
 
 export function newProviderEventName(groupId) {
@@ -81,7 +81,7 @@ export function ensureArray(els) {
 }
 
 export function removeFalsy(array) {
-  return array.filter(el => !!el);
+  return array.filter((el) => !!el);
 }
 
 export function message(text) {

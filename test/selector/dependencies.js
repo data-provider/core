@@ -29,12 +29,12 @@ describe("Selector dependencies", () => {
     spies = {
       dependency1Read: sinon.spy(),
       dependency2Read: sinon.spy(),
-      selectorRead: sinon.spy()
+      selectorRead: sinon.spy(),
     };
 
     TestProvider = class extends Provider {
       readMethod() {
-        return new Promise(resolve => {
+        return new Promise((resolve) => {
           this.options.spy(this.queryValue);
           setTimeout(() => {
             resolve(this.options.return);
@@ -45,11 +45,11 @@ describe("Selector dependencies", () => {
 
     dependency1 = new TestProvider("dependency-1", {
       spy: spies.dependency1Read,
-      return: DEPENDENCY_1_RESULT
+      return: DEPENDENCY_1_RESULT,
     });
     dependency2 = new TestProvider("dependency-2", {
       spy: spies.dependency2Read,
-      return: DEPENDENCY_2_RESULT
+      return: DEPENDENCY_2_RESULT,
     });
   });
 
@@ -60,7 +60,7 @@ describe("Selector dependencies", () => {
 
   describe("when defined as data provider instance", () => {
     beforeEach(() => {
-      selector = new Selector(dependency1, dependencyResult => {
+      selector = new Selector(dependency1, (dependencyResult) => {
         spies.selectorRead();
         return dependencyResult;
       });
@@ -91,7 +91,7 @@ describe("Selector dependencies", () => {
 
   describe("when defined with an invalid data provider", () => {
     beforeEach(() => {
-      selector = new Selector("foo", dependencyResult => {
+      selector = new Selector("foo", (dependencyResult) => {
         return dependencyResult;
       });
     });
@@ -108,11 +108,11 @@ describe("Selector dependencies", () => {
       selector = new Selector(dependency1, dependency2, (dependency1Result, dependency2Result) => {
         spies.selectorRead({
           dependency1Result,
-          dependency2Result
+          dependency2Result,
         });
         return {
           dependency1Result,
-          dependency2Result
+          dependency2Result,
         };
       });
     });
@@ -121,7 +121,7 @@ describe("Selector dependencies", () => {
       const result = await selector.read();
       expect(result).toEqual({
         dependency1Result: DEPENDENCY_1_RESULT,
-        dependency2Result: DEPENDENCY_2_RESULT
+        dependency2Result: DEPENDENCY_2_RESULT,
       });
     });
 
@@ -170,11 +170,11 @@ describe("Selector dependencies", () => {
         ([dependency1Result, dependency2Result]) => {
           spies.selectorRead({
             dependency1Result,
-            dependency2Result
+            dependency2Result,
           });
           return {
             dependency1Result,
-            dependency2Result
+            dependency2Result,
           };
         }
       );
@@ -184,7 +184,7 @@ describe("Selector dependencies", () => {
       const result = await selector.read();
       expect(result).toEqual({
         dependency1Result: DEPENDENCY_1_RESULT,
-        dependency2Result: DEPENDENCY_2_RESULT
+        dependency2Result: DEPENDENCY_2_RESULT,
       });
     });
 
@@ -220,11 +220,11 @@ describe("Selector dependencies", () => {
     beforeEach(() => {
       querySpy = sandbox.spy();
       selector = new Selector(
-        query => {
+        (query) => {
           querySpy(query);
           return dependency1;
         },
-        dependencyResult => {
+        (dependencyResult) => {
           spies.selectorRead();
           return dependencyResult;
         }
@@ -268,14 +268,14 @@ describe("Selector dependencies", () => {
       querySpy = sandbox.spy();
       querySpy2 = sandbox.spy();
       selector = new Selector(
-        query => {
+        (query) => {
           querySpy(query);
           return dependency1.query(query);
         },
         (query, previousResults) => {
           querySpy2({
             query,
-            previousResults
+            previousResults,
           });
           return dependency2.query(query);
         },
@@ -283,7 +283,7 @@ describe("Selector dependencies", () => {
           spies.selectorRead();
           return {
             dependency1Result,
-            dependency2Result
+            dependency2Result,
           };
         }
       );
@@ -304,7 +304,7 @@ describe("Selector dependencies", () => {
       const result = await selector.read();
       expect(result).toEqual({
         dependency1Result: DEPENDENCY_1_RESULT,
-        dependency2Result: DEPENDENCY_2_RESULT
+        dependency2Result: DEPENDENCY_2_RESULT,
       });
     });
 

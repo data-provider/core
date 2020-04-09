@@ -11,7 +11,7 @@ const SaveButton = ({ id, onClick }) => {
 
 SaveButton.propTypes = {
   id: Proptypes.string.isRequired,
-  onClick: Proptypes.func
+  onClick: Proptypes.func,
 };
 
 export default SaveButton;

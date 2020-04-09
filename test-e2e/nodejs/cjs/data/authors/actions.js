@@ -1,16 +1,16 @@
 const { authorsProvider } = require("./providers");
 
-const deleteAuthor = authorId => {
+const deleteAuthor = (authorId) => {
   return authorsProvider.delete(authorId);
 };
 
-const createAuthor = name => {
+const createAuthor = (name) => {
   return authorsProvider.create({
-    name
+    name,
   });
 };
 
 module.exports = {
   deleteAuthor,
-  createAuthor
+  createAuthor,
 };

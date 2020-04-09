@@ -14,7 +14,7 @@ import { INIT, RESET_STATE, READ_START, READ_SUCCESS, READ_ERROR, MIGRATE_STORE 
 const DEFAULT_INITAL_STATE = {
   loading: false,
   error: null,
-  data: undefined
+  data: undefined,
 };
 
 const merge = (state, actionIdState, action) => {
@@ -22,8 +22,8 @@ const merge = (state, actionIdState, action) => {
     ...state,
     [action.id]: {
       ...state[action.id],
-      ...actionIdState
-    }
+      ...actionIdState,
+    },
   };
 };
 
@@ -33,7 +33,7 @@ export default function reducer(state = {}, action = {}) {
       return merge(
         state,
         {
-          loading: true
+          loading: true,
         },
         action
       );
@@ -43,7 +43,7 @@ export default function reducer(state = {}, action = {}) {
         {
           loading: false,
           data: action.data,
-          error: null
+          error: null,
         },
         action
       );
@@ -52,7 +52,7 @@ export default function reducer(state = {}, action = {}) {
         state,
         {
           loading: false,
-          error: action.error
+          error: action.error,
         },
         action
       );
@@ -61,22 +61,22 @@ export default function reducer(state = {}, action = {}) {
         state,
         {
           ...DEFAULT_INITAL_STATE,
-          ...action.initialState
+          ...action.initialState,
         },
         action
       );
     case storeNamespace.add(MIGRATE_STORE):
       return {
         ...state,
-        ...action.state[storeNamespace.get()]
+        ...action.state[storeNamespace.get()],
       };
     case storeNamespace.add(INIT):
       return {
         ...state,
         [action.id]: {
           ...DEFAULT_INITAL_STATE,
-          ...action.initialState
-        }
+          ...action.initialState,
+        },
       };
     default:
       return state;
@@ -96,7 +96,7 @@ export function resetState(id, initialState) {
     baseType: RESET_STATE,
     type: storeNamespace.add(RESET_STATE),
     id,
-    initialState
+    initialState,
   };
 }
 
@@ -109,7 +109,7 @@ export function readSuccess(id, data) {
     baseType: READ_SUCCESS,
     type: storeNamespace.add(READ_SUCCESS),
     id,
-    data
+    data,
   };
 }
 

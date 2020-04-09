@@ -8,7 +8,7 @@ const AuthorsList = ({ authors }) => {
   console.log("Rendering authors list");
   return (
     <Fragment>
-      {authors.map(author => {
+      {authors.map((author) => {
         return (
           <Author
             id={author.id}
@@ -23,7 +23,7 @@ const AuthorsList = ({ authors }) => {
 };
 
 AuthorsList.propTypes = {
-  authors: PropTypes.array
+  authors: PropTypes.array,
 };
 
 export default memo(AuthorsList);

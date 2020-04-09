@@ -12,7 +12,7 @@ const Author = ({ id, name, deleteIcon }) => {
 Author.propTypes = {
   deleteIcon: Proptypes.node.isRequired,
   id: Proptypes.number.isRequired,
-  name: Proptypes.string.isRequired
+  name: Proptypes.string.isRequired,
 };
 
 export default Author;

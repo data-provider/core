@@ -9,10 +9,10 @@ const BookNew = () => {
   const [currentTitle, changeCurrentTitle] = useState("");
   const [currentAuthor, changeCurrentAuthor] = useState("-");
 
-  const handleTitleChange = useCallback(e => {
+  const handleTitleChange = useCallback((e) => {
     changeCurrentTitle(e.target.value);
   }, []);
-  const handleAuthorChange = useCallback(e => {
+  const handleAuthorChange = useCallback((e) => {
     console.log(e.target.value);
     changeCurrentAuthor(e.target.value);
   }, []);
@@ -23,7 +23,7 @@ const BookNew = () => {
     } else {
       createBook({
         title: currentTitle,
-        author: currentAuthor
+        author: currentAuthor,
       });
       changeCurrentTitle("");
     }

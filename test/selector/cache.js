@@ -25,7 +25,7 @@ describe("Selector cache", () => {
 
     spies = {
       dependencyRead: sinon.spy(),
-      selectorRead: sinon.spy()
+      selectorRead: sinon.spy(),
     };
 
     TestProvider = class extends Provider {
@@ -44,7 +44,7 @@ describe("Selector cache", () => {
     };
 
     provider = new TestProvider();
-    selector = new Selector(provider, testResult => {
+    selector = new Selector(provider, (testResult) => {
       spies.selectorRead();
       return testResult;
     });
@@ -156,24 +156,12 @@ describe("Selector cache", () => {
 
     it("should execute read method again when parent cache is a query, and it is clean", async () => {
       expect.assertions(2);
-      selector
-        .query({ var: "var" })
-        .query({ foo: "foo" })
-        .read();
-      await selector
-        .query({ var: "var" })
-        .query({ foo: "foo" })
-        .read();
+      selector.query({ var: "var" }).query({ foo: "foo" }).read();
+      await selector.query({ var: "var" }).query({ foo: "foo" }).read();
       expect(spies.selectorRead.callCount).toEqual(1);
       selector.query({ var: "var" }).cleanCache();
-      selector
-        .query({ var: "var" })
-        .query({ foo: "foo" })
-        .read();
-      await selector
-        .query({ var: "var" })
-        .query({ foo: "foo" })
-        .read();
+      selector.query({ var: "var" }).query({ foo: "foo" }).read();
+      await selector.query({ var: "var" }).query({ foo: "foo" }).read();
       expect(spies.selectorRead.callCount).toEqual(2);
     });
   });
@@ -182,8 +170,8 @@ describe("Selector cache", () => {
     beforeEach(() => {
       providers.clear();
       selector = new Selector(
-        query => provider.query(query),
-        testResult => {
+        (query) => provider.query(query),
+        (testResult) => {
           spies.selectorRead();
           return testResult;
         }

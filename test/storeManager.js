@@ -20,8 +20,8 @@ describe("storeManager", () => {
     sandbox = sinon.createSandbox();
     new Provider("foo", {
       initialState: {
-        data: "foo-data"
-      }
+        data: "foo-data",
+      },
     });
   });
 
@@ -41,7 +41,7 @@ describe("storeManager", () => {
     it("should store state in new store", async () => {
       const store = createStore(
         combineReducers({
-          newNamespace: storeManager.reducer
+          newNamespace: storeManager.reducer,
         })
       );
 

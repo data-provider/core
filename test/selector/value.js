@@ -40,13 +40,13 @@ describe("Selector value", () => {
     };
 
     dependency1 = new TestProvider("dependency-1", {
-      return: DEPENDENCY_1_RESULT
+      return: DEPENDENCY_1_RESULT,
     });
     dependency2 = new TestProvider("dependency-2", {
-      return: DEPENDENCY_2_RESULT
+      return: DEPENDENCY_2_RESULT,
     });
     dependency3 = new TestProvider("dependency-3", {
-      return: DEPENDENCY_3_RESULT
+      return: DEPENDENCY_3_RESULT,
     });
   });
 
@@ -65,8 +65,8 @@ describe("Selector value", () => {
         },
         {
           initialState: {
-            data: "foo"
-          }
+            data: "foo",
+          },
         }
       );
     });
@@ -107,7 +107,7 @@ describe("Selector value", () => {
     const RESULT = "foo";
     beforeEach(() => {
       selector = new Selector(dependency1, () => {
-        return new Promise(resolve => {
+        return new Promise((resolve) => {
           setTimeout(() => {
             resolve(RESULT);
           }, 20);
@@ -153,7 +153,7 @@ describe("Selector value", () => {
       beforeEach(() => {
         querySpy = sandbox.spy();
         selector = new Selector(dependency1, () => {
-          return query => {
+          return (query) => {
             querySpy(query);
             return dependency2;
           };
@@ -180,14 +180,14 @@ describe("Selector value", () => {
         query2Spy = sandbox.spy();
         selector = new Selector(dependency1, () => {
           return [
-            query => {
+            (query) => {
               query1Spy(query);
               return dependency2;
             },
-            query => {
+            (query) => {
               query2Spy(query);
               return dependency3;
-            }
+            },
           ];
         });
       });
@@ -241,7 +241,7 @@ describe("Selector value", () => {
 
     it("should be able to catch error in promise", async () => {
       expect.assertions(1);
-      await selector.read().catch(error => {
+      await selector.read().catch((error) => {
         expect(error).toEqual(FOO_ERROR);
       });
     });

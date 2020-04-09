@@ -17,15 +17,15 @@ export function catchDependency(dependency, catchMethod) {
   return new CatchDependency(dependency, catchMethod);
 }
 
-const isDataProvider = objectToCheck => {
+const isDataProvider = (objectToCheck) => {
   return objectToCheck && objectToCheck instanceof Provider;
 };
 
-const isCatchedDependency = objectToCheck => {
+const isCatchedDependency = (objectToCheck) => {
   return objectToCheck && objectToCheck instanceof CatchDependency;
 };
 
-const isDependency = objectToCheck => {
+const isDependency = (objectToCheck) => {
   if (!objectToCheck) {
     return false;
   }
@@ -36,7 +36,7 @@ const isDependency = objectToCheck => {
   );
 };
 
-const isDependencyExpression = arrayToCheck => {
+const isDependencyExpression = (arrayToCheck) => {
   return ensureArray(arrayToCheck).reduce((allAreDataProviders, arrayElement) => {
     if (!allAreDataProviders || !isDependency(arrayElement)) {
       return false;
@@ -45,7 +45,7 @@ const isDependencyExpression = arrayToCheck => {
   }, true);
 };
 
-const resolveResult = result => {
+const resolveResult = (result) => {
   return isPromise(result) ? result : Promise.resolve(result);
 };
 
@@ -69,11 +69,11 @@ class SelectorBase extends Provider {
     };
 
     const removeInProgressListenerFuncs = () => {
-      inProgressListeners.forEach(removeListener => removeListener());
+      inProgressListeners.forEach((removeListener) => removeListener());
     };
 
     const cleanCache = () => {
-      dependenciesListeners.forEach(removeListener => removeListener());
+      dependenciesListeners.forEach((removeListener) => removeListener());
       this.cleanCache();
     };
 
@@ -82,7 +82,7 @@ class SelectorBase extends Provider {
         return Promise.resolve();
       }
       if (isArray(dependencyToRead)) {
-        return Promise.all(dependencyToRead.map(dep => readDependency(dep, catchMethod)));
+        return Promise.all(dependencyToRead.map((dep) => readDependency(dep, catchMethod)));
       }
       if (isFunction(dependencyToRead)) {
         return readDependency(dependencyToRead(this._query, dependenciesResults), catchMethod);
@@ -99,7 +99,7 @@ class SelectorBase extends Provider {
         inProgressListeners.push(dependencyToRead.on(CLEAN_CACHE, markToReadAgain));
       }
 
-      return dependencyToRead.read().catch(error => {
+      return dependencyToRead.read().catch((error) => {
         if (catchMethod) {
           const catchResult = catchMethod(error, this._query, dependenciesResults);
           if (isDependencyExpression(catchResult)) {
@@ -119,7 +119,7 @@ class SelectorBase extends Provider {
         dependenciesResults = [];
         dependencies = [];
       }
-      return readDependency(this._dependencies[dependencyIndex]).then(dependencyResult => {
+      return readDependency(this._dependencies[dependencyIndex]).then((dependencyResult) => {
         dependenciesResults.push(dependencyResult);
         if (dependencyIndex < this._dependencies.length - 1) {
           return readDependencies(dependencyIndex + 1);
@@ -130,20 +130,20 @@ class SelectorBase extends Provider {
     };
 
     const addCleanListeners = () => {
-      dependenciesListeners = dependencies.map(dependency => {
+      dependenciesListeners = dependencies.map((dependency) => {
         return dependency.once(CLEAN_CACHE, cleanCache);
       });
     };
 
     const readAndReturn = () => {
       return readDependencies()
-        .then(result => {
+        .then((result) => {
           if (isDependencyExpression(result)) {
             return readDependency(result);
           }
           return Promise.resolve(result);
         })
-        .then(result => {
+        .then((result) => {
           if (hasToReadAgain) {
             hasToReadAgain = false;
             return readAndReturn();
@@ -152,7 +152,7 @@ class SelectorBase extends Provider {
           addCleanListeners();
           return Promise.resolve(result);
         })
-        .catch(error => {
+        .catch((error) => {
           if (hasToReadAgain) {
             hasToReadAgain = false;
             return readAndReturn();

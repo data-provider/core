@@ -4,11 +4,11 @@ import {
   booksSearch,
   deleteAuthorAndBooks,
   deleteBook,
-  createBook
+  createBook,
 } from "./data/books";
 
 const wait = (time = 1000) => {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     setTimeout(() => {
       resolve();
     }, time);
@@ -149,7 +149,7 @@ const runTests = async () => {
 
   createBook({
     title: "Geo",
-    author: 4
+    author: 4,
   });
 
   await wait(1500);
