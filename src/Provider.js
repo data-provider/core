@@ -22,7 +22,7 @@ import {
   childEventName,
   isPromise,
   fromEntries,
-  defaultOptions
+  defaultOptions,
 } from "./helpers";
 import { providers } from "./providers";
 import { init, resetState, readStart, readSuccess, readError } from "./reducer";
@@ -81,7 +81,7 @@ class Provider {
   }
 
   addQuery(key, queryFunc) {
-    const returnQuery = query => {
+    const returnQuery = (query) => {
       return this.query(queryFunc(query));
     };
     this._queryMethodsParsers.set(key, queryFunc);
@@ -91,12 +91,12 @@ class Provider {
   cleanCache() {
     this._cache = null;
     this.emit(CLEAN_CACHE);
-    this._children.forEach(child => child.cleanCache());
+    this._children.forEach((child) => child.cleanCache());
   }
 
   resetState() {
     this._dispatch(resetState(this._id, this.initialState));
-    this._children.forEach(child => child.resetState());
+    this._children.forEach((child) => child.resetState());
   }
 
   read(...args) {
@@ -117,11 +117,11 @@ class Provider {
     }
 
     const resultPromise = readPromise
-      .then(result => {
+      .then((result) => {
         this._dispatch(readSuccess(this._id, result));
         return Promise.resolve(result);
       })
-      .catch(resultError => {
+      .catch((resultError) => {
         this._dispatch(readError(this._id, resultError));
         this._cache = null;
         return Promise.reject(resultError);
@@ -143,7 +143,7 @@ class Provider {
     this._queryMethodsParsers.forEach((queryMethodParser, queryMethodKey) =>
       child.addQuery(queryMethodKey, queryMethodParser)
     );
-    child.on(ANY, eventName => this._emitChild(eventName, child));
+    child.on(ANY, (eventName) => this._emitChild(eventName, child));
     this._children.set(id, child);
     child._parent = this;
     return child;

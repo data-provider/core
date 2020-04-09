@@ -27,7 +27,7 @@ describe("providers handler resetState method", () => {
     fooProvider3 = new Provider("foo-3", { tags: "tag-3" });
     fooProvider4 = new Selector(fooProvider, fooProvider2, () => {}, {
       id: "foo-4",
-      tags: "tag-2"
+      tags: "tag-2",
     });
 
     sandbox.spy(fooProvider, "resetState");

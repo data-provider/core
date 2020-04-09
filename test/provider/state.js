@@ -23,11 +23,11 @@ describe("Provider state", () => {
     sandbox = sinon.createSandbox();
 
     spies = {
-      read: sinon.spy()
+      read: sinon.spy(),
     };
     results = {
       throwError: null,
-      returnData: null
+      returnData: null,
     };
 
     TestProvider = class extends Provider {
@@ -47,8 +47,8 @@ describe("Provider state", () => {
 
     provider = new TestProvider("foo-id", {
       initialState: {
-        data: "foo"
-      }
+        data: "foo",
+      },
     });
   });
 
@@ -105,7 +105,7 @@ describe("Provider state", () => {
       expect.assertions(2);
       results.returnData = "foo2";
       const testProvider = provider.query({
-        foo: "foo"
+        foo: "foo",
       });
       await testProvider.read();
       expect(testProvider.state.data).toEqual("foo2");
@@ -195,8 +195,8 @@ describe("Provider state", () => {
         initialState: {
           data: "foo",
           error,
-          loading: true
-        }
+          loading: true,
+        },
       });
     });
 
@@ -218,7 +218,7 @@ describe("Provider state", () => {
     it("should return initialState result based in current query value", () => {
       expect.assertions(2);
       provider = new TestProvider("foo-id-2", {
-        initialState: query => ({ data: query })
+        initialState: (query) => ({ data: query }),
       });
       expect(provider.state.data).toEqual({});
       expect(provider.query({ foo: "foo" }).state.data).toEqual({ foo: "foo" });
@@ -227,7 +227,7 @@ describe("Provider state", () => {
     it("should return undefined in state when function returns undefined", () => {
       expect.assertions(2);
       provider = new TestProvider("foo-id-2", {
-        initialState: () => {}
+        initialState: () => {},
       });
       expect(provider.state.data).toEqual(undefined);
       expect(provider.query({ foo: "foo" }).state.data).toEqual(undefined);
@@ -249,7 +249,7 @@ describe("Provider state", () => {
           if (this.queryValue) {
             return {
               ...this.initialStateFromOptions,
-              data: this.initialStateFromOptions.data[this.queryValue.key]
+              data: this.initialStateFromOptions.data[this.queryValue.key],
             };
           }
           return this.initialStateFromOptions;
@@ -261,9 +261,9 @@ describe("Provider state", () => {
       provider = new TestProvider2("foo-id-2", {
         initialState: {
           data: {
-            foo: "foo"
-          }
-        }
+            foo: "foo",
+          },
+        },
       });
       const child = provider.query({ key: "foo" });
       expect(child.state.data).toEqual("foo");

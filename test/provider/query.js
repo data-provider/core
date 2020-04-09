@@ -92,13 +92,13 @@ describe("Provider query", () => {
     });
 
     it("should apply the value returned by queryMethod as query", () => {
-      const byIdMethod = foo => ({ foo });
+      const byIdMethod = (foo) => ({ foo });
       provider.addQuery("byId", byIdMethod);
       expect(provider.queries.byId("foo").queryValue).toEqual({ foo: "foo" });
     });
 
     it("should apply also the current query", () => {
-      const byIdMethod = foo => ({ foo });
+      const byIdMethod = (foo) => ({ foo });
       provider.addQuery("byId", byIdMethod);
       const queried = provider.query({ var: "var" });
       expect(queried.queries.byId("foo").queryValue).toEqual({ var: "var", foo: "foo" });
@@ -114,8 +114,8 @@ describe("Provider query", () => {
             ...query,
             foo: {
               ...this.queryValue.foo,
-              ...query.foo
-            }
+              ...query.foo,
+            },
           };
         }
       }
@@ -123,15 +123,15 @@ describe("Provider query", () => {
     });
 
     it("should use defined method to calculate child query", () => {
-      const byIdMethod = foo => ({ foo });
+      const byIdMethod = (foo) => ({ foo });
       provider.addQuery("byId", byIdMethod);
       expect(
         provider.queries
           .byId({
-            var: "var"
+            var: "var",
           })
           .queries.byId({
-            var2: "var2"
+            var2: "var2",
           }).queryValue
       ).toEqual({ foo: { var: "var", var2: "var2" } });
     });

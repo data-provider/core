@@ -3,21 +3,21 @@ const { deleteAuthor } = require("../authors");
 const { booksProvider } = require("./providers");
 const { authorBooks } = require("./selectors");
 
-const deleteBook = bookId => {
+const deleteBook = (bookId) => {
   return booksProvider.delete(bookId);
 };
 
-const deleteAuthorAndBooks = authorId => {
+const deleteAuthorAndBooks = (authorId) => {
   authorBooks
     .query({
-      author: authorId
+      author: authorId,
     })
     .read()
-    .then(results => {
+    .then((results) => {
       if (!results.length) {
         deleteAuthor(authorId);
       } else {
-        results.forEach(book => {
+        results.forEach((book) => {
           deleteBook(book.id);
         });
         deleteAuthor(authorId);
@@ -28,12 +28,12 @@ const deleteAuthorAndBooks = authorId => {
 const createBook = ({ title, author }) => {
   return booksProvider.create({
     title,
-    author: Number(author)
+    author: Number(author),
   });
 };
 
 module.exports = {
   deleteBook,
   deleteAuthorAndBooks,
-  createBook
+  createBook,
 };

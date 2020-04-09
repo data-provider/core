@@ -26,7 +26,7 @@ describe("Selector test methods", () => {
     spies = {
       query: sandbox.spy(),
       catch: sandbox.spy(),
-      selector: sandbox.stub().callsFake(result => result)
+      selector: sandbox.stub().callsFake((result) => result),
     };
     TestProvider = class extends Provider {
       _readMethod() {
@@ -36,11 +36,11 @@ describe("Selector test methods", () => {
     testProvider = new TestProvider();
     testSelector = new Selector(
       catchDependency(
-        query => {
+        (query) => {
           spies.query();
           return testProvider.query(query);
         },
-        err => {
+        (err) => {
           spies.catch();
           return err;
         }
@@ -90,14 +90,14 @@ describe("Selector test methods", () => {
         const testProvider2 = new TestProvider();
         testSelector = new Selector(
           [
-            catchDependency(testProvider, err => {
+            catchDependency(testProvider, (err) => {
               spies.catch();
               return `${err}-a`;
             }),
-            catchDependency(testProvider2, err => {
+            catchDependency(testProvider2, (err) => {
               spies.catch();
               return `${err}-b`;
-            })
+            }),
           ],
           spies.selector
         );
@@ -111,20 +111,20 @@ describe("Selector test methods", () => {
         const testProvider3 = new TestProvider();
         testSelector = new Selector(
           [
-            catchDependency(testProvider, err => {
+            catchDependency(testProvider, (err) => {
               spies.catch();
               return `${err}-a`;
             }),
             [
-              catchDependency(testProvider2, err => {
+              catchDependency(testProvider2, (err) => {
                 spies.catch();
                 return `${err}-b`;
               }),
-              catchDependency(testProvider3, err => {
+              catchDependency(testProvider3, (err) => {
                 spies.catch();
                 return `${err}-c`;
-              })
-            ]
+              }),
+            ],
           ],
           spies.selector
         );

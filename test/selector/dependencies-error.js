@@ -47,7 +47,7 @@ describe("Selector dependencies errors", () => {
 
     TestProvider2 = class extends Provider {
       readMethod() {
-        return new Promise(resolve => {
+        return new Promise((resolve) => {
           setTimeout(() => {
             resolve(this.options.return);
           }, 50);
@@ -56,10 +56,10 @@ describe("Selector dependencies errors", () => {
     };
 
     dependency1 = new TestProvider("dependency-1", {
-      return: DEPENDENCY_1_RESULT
+      return: DEPENDENCY_1_RESULT,
     });
     dependency2 = new TestProvider2("dependency-2", {
-      return: DEPENDENCY_2_RESULT
+      return: DEPENDENCY_2_RESULT,
     });
   });
 
@@ -74,7 +74,7 @@ describe("Selector dependencies errors", () => {
       selectorSpy = sandbox.spy();
       sandbox.spy(dependency1, "read");
       sandbox.spy(dependency2, "read");
-      selector = new Selector(dependency1, dependency2, dependencyResult => {
+      selector = new Selector(dependency1, dependency2, (dependencyResult) => {
         selectorSpy();
         return dependencyResult;
       });
@@ -103,7 +103,7 @@ describe("Selector dependencies errors", () => {
     it("should be able to catch error in promise", async () => {
       expect.assertions(1);
       hasToThrow = FOO_ERROR;
-      await selector.read().catch(error => {
+      await selector.read().catch((error) => {
         expect(error).toEqual(FOO_ERROR);
       });
     });
@@ -130,11 +130,11 @@ describe("Selector dependencies errors", () => {
       dependency1Timeout = 2000;
       hasToThrow = FOO_ERROR;
       let eventReceived;
-      const promiseResolver = new Promise(resolve => {
+      const promiseResolver = new Promise((resolve) => {
         eventReceived = resolve;
       });
       selector.once("cleanCache", () => {
-        selector.read().then(result => {
+        selector.read().then((result) => {
           expect(result).toEqual(DEPENDENCY_1_RESULT);
           expect(selectorSpy.callCount).toEqual(1);
           eventReceived();
@@ -158,11 +158,11 @@ describe("Selector dependencies errors", () => {
       catchSpy = sandbox.spy();
       sandbox.spy(dependency1, "read");
       selector = new Selector(
-        catchDependency(dependency1, err => {
+        catchDependency(dependency1, (err) => {
           catchSpy(err);
           return catchReturns;
         }),
-        dependencyResult => {
+        (dependencyResult) => {
           selectorSpy();
           return dependencyResult;
         }

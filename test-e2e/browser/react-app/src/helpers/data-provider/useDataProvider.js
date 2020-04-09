@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 
-export const useRefresh = dataProvider => {
+export const useRefresh = (dataProvider) => {
   useEffect(() => {
     dataProvider.read();
     return dataProvider.on("cleanCache", () => {
@@ -27,7 +27,7 @@ export const useDataProvider = (dataProvider, comparator) => {
   return [
     useData(dataProvider, comparator),
     useLoading(dataProvider, comparator),
-    useError(dataProvider, comparator)
+    useError(dataProvider, comparator),
   ];
 };
 

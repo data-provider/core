@@ -28,49 +28,49 @@ describe("Provider config", () => {
     const provider = new Provider("foo-id");
 
     expect(provider.options).toEqual({
-      cache: true
+      cache: true,
     });
   });
 
   it("should define cache option if received", () => {
     const provider = new Provider("foo-id", {
-      cache: false
+      cache: false,
     });
 
     expect(provider.options).toEqual({
-      cache: false
+      cache: false,
     });
   });
 
   it("should be created from options", () => {
     const provider = new Provider("foo-id", {
       option1: "foo",
-      option2: "foo2"
+      option2: "foo2",
     });
 
     expect(provider.options).toEqual({
       cache: true,
       option1: "foo",
-      option2: "foo2"
+      option2: "foo2",
     });
   });
 
   it("method should extend current options", () => {
     const provider = new Provider("foo-id", {
       option1: "foo",
-      option2: "foo2"
+      option2: "foo2",
     });
 
     provider.config({
       option2: "foo-2",
-      option3: "foo3"
+      option3: "foo3",
     });
 
     expect(provider.options).toEqual({
       cache: true,
       option1: "foo",
       option2: "foo-2",
-      option3: "foo3"
+      option3: "foo3",
     });
   });
 });

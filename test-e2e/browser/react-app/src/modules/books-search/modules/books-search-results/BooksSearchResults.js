@@ -9,7 +9,7 @@ import Loading from "components/loading";
 import NoResults from "components/no-results";
 import { withData, withLoading, withRefresh } from "helpers/data-provider";
 
-const queryBooks = search => booksSearch.query({ search });
+const queryBooks = (search) => booksSearch.query({ search });
 
 const ConnectedBooks = withRefresh(queryBooks)(withData(queryBooks, "books")(BooksList));
 
@@ -29,7 +29,7 @@ const BooksSearchResults = ({ search, books, loading }) => {
 BooksSearchResults.propTypes = {
   search: Proptypes.string,
   books: Proptypes.array,
-  loading: Proptypes.bool
+  loading: Proptypes.bool,
 };
 
 const BooksSearchResultsConnected = withRefresh(queryBooks)(

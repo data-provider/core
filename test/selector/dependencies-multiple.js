@@ -55,7 +55,7 @@ describe("Selector with multiple dependencies", () => {
       dependency14Read: sinon.spy(),
       dependency15Read: sinon.spy(),
       dependency16Read: sinon.spy(),
-      selectorRead: sinon.spy()
+      selectorRead: sinon.spy(),
     };
 
     TestProvider = class extends Provider {
@@ -74,20 +74,20 @@ describe("Selector with multiple dependencies", () => {
     };
 
     dependency1 = new TestProvider("dependency-1", {
-      spy: spies.dependency1Read
+      spy: spies.dependency1Read,
     });
     dependency2 = new TestProvider("dependency-2", {
-      spy: spies.dependency2Read
+      spy: spies.dependency2Read,
     });
 
     dependency3 = new Selector(
       dependency1,
-      testResult => {
+      (testResult) => {
         spies.dependency3Read();
         return testResult;
       },
       {
-        id: "dependency-3"
+        id: "dependency-3",
       }
     );
 
@@ -97,49 +97,49 @@ describe("Selector with multiple dependencies", () => {
         spies.dependency4Read();
         return Promise.resolve({
           provider2Results,
-          selectorResults
+          selectorResults,
         });
       },
       {
-        id: "dependency-4"
+        id: "dependency-4",
       }
     );
 
     dependency5 = new Selector(
-      query => dependency4.query(query),
-      dependency4Results => {
+      (query) => dependency4.query(query),
+      (dependency4Results) => {
         spies.dependency5Read();
         return {
-          dependency4Results
+          dependency4Results,
         };
       },
       {
-        id: "dependency-5"
+        id: "dependency-5",
       }
     );
 
     dependency6 = new TestProvider("dependency-6", {
-      spy: spies.dependency6Read
+      spy: spies.dependency6Read,
     });
 
     dependency7 = new TestProvider("dependency-7", {
-      spy: spies.dependency7Read
+      spy: spies.dependency7Read,
     });
 
     dependency8 = new Selector(
       dependency6,
-      query => dependency5.query(query),
+      (query) => dependency5.query(query),
       () => {
         spies.dependency8Read();
         return dependency7;
       },
       {
-        id: "dependency-8"
+        id: "dependency-8",
       }
     );
 
     dependency9 = new TestProvider("dependency-9", {
-      spy: spies.dependency9Read
+      spy: spies.dependency9Read,
     });
 
     dependency10 = new Selector(
@@ -149,20 +149,20 @@ describe("Selector with multiple dependencies", () => {
         return () => dependency9;
       },
       {
-        id: "dependency-10"
+        id: "dependency-10",
       }
     );
 
     dependency11 = new TestProvider("dependency-11", {
-      spy: spies.dependency11Read
+      spy: spies.dependency11Read,
     });
 
     dependency12 = new TestProvider("dependency-12", {
-      spy: spies.dependency12Read
+      spy: spies.dependency12Read,
     });
 
     dependency13 = new TestProvider("dependency-13", {
-      spy: spies.dependency13Read
+      spy: spies.dependency13Read,
     });
 
     dependency14 = new Selector(
@@ -170,19 +170,19 @@ describe("Selector with multiple dependencies", () => {
         dependency10,
         catchDependency(dependency11.query({ hasToThrow: new Error() }), () => {
           return dependency12;
-        })
+        }),
       ],
       () => {
         spies.dependency14Read();
         return () => dependency13;
       },
       {
-        id: "dependency-14"
+        id: "dependency-14",
       }
     );
 
     dependency15 = new TestProvider("dependency-15", {
-      spy: spies.dependency15Read
+      spy: spies.dependency15Read,
     });
 
     dependency16 = new Selector(
@@ -195,18 +195,18 @@ describe("Selector with multiple dependencies", () => {
         return () => dependency13;
       },
       {
-        id: "dependency-16"
+        id: "dependency-16",
       }
     );
 
     selector = new Selector(
-      query => dependency16.query(query),
-      selector2Results => {
+      (query) => dependency16.query(query),
+      (selector2Results) => {
         spies.selectorRead();
         return selector2Results;
       },
       {
-        id: "selector"
+        id: "selector",
       }
     );
   });

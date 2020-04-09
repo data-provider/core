@@ -29,7 +29,7 @@ const AuthorsSearchResults = ({ search }) => {
 };
 
 AuthorsSearchResults.propTypes = {
-  search: Proptypes.string
+  search: Proptypes.string,
 };
 
 export default memo(AuthorsSearchResults);

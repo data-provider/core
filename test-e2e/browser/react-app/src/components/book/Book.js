@@ -13,7 +13,7 @@ Book.propTypes = {
   id: Proptypes.number.isRequired,
   title: Proptypes.string.isRequired,
   authorName: Proptypes.string.isRequired,
-  deleteIcon: Proptypes.node.isRequired
+  deleteIcon: Proptypes.node.isRequired,
 };
 
 export default Book;

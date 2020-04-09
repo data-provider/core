@@ -57,7 +57,7 @@ describe("providers handler", () => {
     it("should contain as much elements as providers have been created", () => {
       const fooOrigin = new Provider("foo-id");
       new Selector(fooOrigin, () => {}, {
-        id: "foo-id-2"
+        id: "foo-id-2",
       });
       expect(providers.elements[0]._id).toEqual("foo-id");
       expect(providers.elements[1]._id).toEqual("foo-id-2");
@@ -150,7 +150,7 @@ describe("providers handler", () => {
     describe("when onNewProvider method is used in providers", () => {
       it("should execute callback each time a new provider is added", () => {
         const newProviders = [];
-        providers.onNewProvider(provider => {
+        providers.onNewProvider((provider) => {
           newProviders.push(provider);
         });
         const provider1 = new Provider("foo", { tags: ["foo-tag"] });
@@ -160,7 +160,7 @@ describe("providers handler", () => {
 
       it("should have provider id available when subscriber is executed", () => {
         const newProviders = [];
-        providers.onNewProvider(provider => {
+        providers.onNewProvider((provider) => {
           newProviders.push(provider.id);
         });
         new Provider("foo", { tags: ["foo-tag"] });
@@ -170,7 +170,7 @@ describe("providers handler", () => {
 
       it("should execute callback each time a new child provider is added", () => {
         const newProviders = [];
-        providers.onNewProvider(provider => {
+        providers.onNewProvider((provider) => {
           newProviders.push(provider);
         });
         const provider1 = new Provider("foo", { tags: ["foo-tag"] });
@@ -180,7 +180,7 @@ describe("providers handler", () => {
 
       it("should have child provider id available when subscriber is executed", () => {
         const newProviders = [];
-        providers.onNewProvider(provider => {
+        providers.onNewProvider((provider) => {
           newProviders.push(provider.id);
         });
         const provider1 = new Provider("foo", { tags: ["foo-tag"] });
@@ -193,10 +193,10 @@ describe("providers handler", () => {
       it("should execute callback each time a new provider is added", () => {
         const newProvidersTag1 = [];
         const newProvidersTag2 = [];
-        providers.getByTag("foo-tag").onNewProvider(provider => {
+        providers.getByTag("foo-tag").onNewProvider((provider) => {
           newProvidersTag1.push(provider);
         });
-        providers.getByTag("foo-tag2").onNewProvider(provider => {
+        providers.getByTag("foo-tag2").onNewProvider((provider) => {
           newProvidersTag2.push(provider);
         });
         const provider1 = new Provider("foo", { tags: ["foo-tag"] });
@@ -209,10 +209,10 @@ describe("providers handler", () => {
       it("should have provider id available when subscriber is executed", () => {
         const newProvidersTag1 = [];
         const newProvidersTag2 = [];
-        providers.getByTag("foo-tag").onNewProvider(provider => {
+        providers.getByTag("foo-tag").onNewProvider((provider) => {
           newProvidersTag1.push(provider.id);
         });
-        providers.getByTag("foo-tag2").onNewProvider(provider => {
+        providers.getByTag("foo-tag2").onNewProvider((provider) => {
           newProvidersTag2.push(provider.id);
         });
         new Provider("foo", { tags: ["foo-tag"] });
@@ -226,7 +226,7 @@ describe("providers handler", () => {
     describe("when onNewProvider method is used in getById", () => {
       it("should execute callback each time a new provider is added", () => {
         const newProviders = [];
-        providers.getById("foo").onNewProvider(provider => {
+        providers.getById("foo").onNewProvider((provider) => {
           newProviders.push(provider);
         });
         const provider1 = new Provider("foo", { tags: ["foo-tag"] });
@@ -235,7 +235,7 @@ describe("providers handler", () => {
 
       it("should have provider id available when subscriber is executed", () => {
         const newProviders = [];
-        providers.getById("foo").onNewProvider(provider => {
+        providers.getById("foo").onNewProvider((provider) => {
           newProviders.push(provider.id);
         });
         new Provider("foo", { tags: ["foo-tag"] });

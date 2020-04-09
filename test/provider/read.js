@@ -28,8 +28,8 @@ describe("Provider read method", () => {
     it("should resolve data state", async () => {
       const provider = new Provider("foo-id", {
         initialState: {
-          data: "foo"
-        }
+          data: "foo",
+        },
       });
       const data = await provider.read();
       expect(data).toEqual("foo");
@@ -44,12 +44,12 @@ describe("Provider read method", () => {
 
     beforeEach(() => {
       spies = {
-        read: sinon.spy()
+        read: sinon.spy(),
       };
 
       results = {
         throwError: null,
-        returnData: null
+        returnData: null,
       };
 
       TestProvider = class extends Provider {

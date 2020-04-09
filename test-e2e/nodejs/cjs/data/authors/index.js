@@ -6,5 +6,5 @@ module.exports = {
   deleteAuthor,
   createAuthor,
   authorsProvider,
-  authorsSearch
+  authorsSearch,
 };

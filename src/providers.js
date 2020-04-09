@@ -29,14 +29,14 @@ export class ProvidersHandler {
   }
 
   _run(method) {
-    this._providers.forEach(provider => provider[method]());
+    this._providers.forEach((provider) => provider[method]());
     return this;
   }
 
   _addListener(method, eventName, fn) {
     const removeListenersFuncs = this.call.apply(this, [method, eventName, fn]);
     const removeListeners = () => {
-      removeListenersFuncs.forEach(removeListener => removeListener());
+      removeListenersFuncs.forEach((removeListener) => removeListener());
     };
     return removeListeners;
   }
@@ -47,7 +47,7 @@ export class ProvidersHandler {
 
   config(options) {
     this._config = { ...this._config, ...options };
-    this._providers.forEach(provider => provider.config(this._config));
+    this._providers.forEach((provider) => provider.config(this._config));
     return this;
   }
 
@@ -78,7 +78,7 @@ export class ProvidersHandler {
   call(...args) {
     const methodName = args[0];
     args.shift();
-    return this.elements.map(provider => {
+    return this.elements.map((provider) => {
       if (provider[methodName] instanceof Function) {
         return provider[methodName].apply(provider, args);
       } else {
@@ -137,7 +137,7 @@ export class Providers {
       this._createIdEmptyGroup(providerId)._add(provider, providerId);
     }
     this._allProviders._add(provider, providerId);
-    provider._tags.forEach(tag => {
+    provider._tags.forEach((tag) => {
       this.getByTag(tag)._add(provider, providerId);
     });
     return providerId;

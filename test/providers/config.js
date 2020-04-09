@@ -34,7 +34,7 @@ describe("providers handler config method", () => {
   describe("when applied to all providers", () => {
     it("should apply config to all providers", () => {
       providers.config({
-        foo: "foo"
+        foo: "foo",
       });
 
       expect(fooProvider.options.foo).toEqual("foo");
@@ -44,23 +44,23 @@ describe("providers handler config method", () => {
 
     it("should extend current configuration of all providers", () => {
       providers.config({
-        foo: "foo"
+        foo: "foo",
       });
 
       expect(fooProvider.options).toEqual({
         cache: true,
         foo: "foo",
-        tags: "tag-1"
+        tags: "tag-1",
       });
       expect(fooProvider2.options).toEqual({
         cache: true,
         foo: "foo",
-        tags: ["tag-2", "tag-3"]
+        tags: ["tag-2", "tag-3"],
       });
       expect(fooProvider3.options).toEqual({
         cache: true,
         foo: "foo",
-        tags: "tag-3"
+        tags: "tag-3",
       });
     });
 
@@ -69,28 +69,28 @@ describe("providers handler config method", () => {
 
     it("should be applied to new created providers", () => {
       providers.config({
-        foo: "foo"
+        foo: "foo",
       });
 
       const fooProvider4 = new Provider("foo-4");
 
       expect(fooProvider4.options).toEqual({
         cache: true,
-        foo: "foo"
+        foo: "foo",
       });
     });
 
     it("should extend previously defined configuration", () => {
       providers.config({
         foo: "foo",
-        foo2: "foo2"
+        foo2: "foo2",
       });
 
       const fooProvider4 = new Provider("foo-4");
 
       providers.config({
         foo2: "new-foo2",
-        foo3: "foo3"
+        foo3: "foo3",
       });
 
       expect(fooProvider.options).toEqual({
@@ -98,13 +98,13 @@ describe("providers handler config method", () => {
         foo: "foo",
         foo2: "new-foo2",
         foo3: "foo3",
-        tags: "tag-1"
+        tags: "tag-1",
       });
       expect(fooProvider4.options).toEqual({
         cache: true,
         foo: "foo",
         foo2: "new-foo2",
-        foo3: "foo3"
+        foo3: "foo3",
       });
     });
   });
@@ -112,7 +112,7 @@ describe("providers handler config method", () => {
   describe("when applied to groups of providers using getByTag method", () => {
     it("should apply config to all providers in group", () => {
       providers.getByTag("tag-3").config({
-        foo: "foo"
+        foo: "foo",
       });
 
       expect(fooProvider2.options.foo).toEqual("foo");
@@ -121,7 +121,7 @@ describe("providers handler config method", () => {
 
     it("should not apply config to non-belonging providers", () => {
       providers.getByTag("tag-3").config({
-        foo: "foo"
+        foo: "foo",
       });
 
       expect(fooProvider.options.foo).toEqual(undefined);
@@ -129,28 +129,28 @@ describe("providers handler config method", () => {
 
     it("should extend current configuration of all providers belonging to group", () => {
       providers.getByTag("tag-3").config({
-        foo: "foo"
+        foo: "foo",
       });
 
       expect(fooProvider.options).toEqual({
         cache: true,
-        tags: "tag-1"
+        tags: "tag-1",
       });
       expect(fooProvider2.options).toEqual({
         cache: true,
         foo: "foo",
-        tags: ["tag-2", "tag-3"]
+        tags: ["tag-2", "tag-3"],
       });
       expect(fooProvider3.options).toEqual({
         cache: true,
         foo: "foo",
-        tags: "tag-3"
+        tags: "tag-3",
       });
     });
 
     it("should be applied to new created providers", () => {
       providers.getByTag("tag-4").config({
-        foo: "foo"
+        foo: "foo",
       });
 
       const fooProvider4 = new Provider("foo-4", { tags: "tag-4" });
@@ -158,13 +158,13 @@ describe("providers handler config method", () => {
       expect(fooProvider4.options).toEqual({
         cache: true,
         foo: "foo",
-        tags: "tag-4"
+        tags: "tag-4",
       });
     });
 
     it("should be applied to new created providers containing tag", () => {
       providers.getByTag("tag-4").config({
-        foo: "foo"
+        foo: "foo",
       });
 
       const fooProvider4 = new Provider("foo-4", { tags: ["tag-4", "tag-2"] });
@@ -172,61 +172,61 @@ describe("providers handler config method", () => {
       expect(fooProvider4.options).toEqual({
         cache: true,
         foo: "foo",
-        tags: ["tag-4", "tag-2"]
+        tags: ["tag-4", "tag-2"],
       });
     });
 
     it("should extend previously defined configuration", () => {
       providers.getByTag("tag-3").config({
         foo: "foo",
-        foo2: "foo2"
+        foo2: "foo2",
       });
 
       const fooProvider4 = new Provider("foo-4", { tags: "tag-3" });
 
       providers.getByTag("tag-3").config({
         foo2: "new-foo2",
-        foo3: "foo3"
+        foo3: "foo3",
       });
 
       expect(fooProvider.options).toEqual({
         cache: true,
-        tags: "tag-1"
+        tags: "tag-1",
       });
       expect(fooProvider2.options).toEqual({
         cache: true,
         foo: "foo",
         foo2: "new-foo2",
         foo3: "foo3",
-        tags: ["tag-2", "tag-3"]
+        tags: ["tag-2", "tag-3"],
       });
       expect(fooProvider3.options).toEqual({
         cache: true,
         foo: "foo",
         foo2: "new-foo2",
         foo3: "foo3",
-        tags: "tag-3"
+        tags: "tag-3",
       });
       expect(fooProvider4.options).toEqual({
         cache: true,
         foo: "foo",
         foo2: "new-foo2",
         foo3: "foo3",
-        tags: "tag-3"
+        tags: "tag-3",
       });
     });
 
     it("should extend previously defined configuration when creating source containing tag", () => {
       providers.getByTag("tag-3").config({
         foo: "foo",
-        foo2: "foo2"
+        foo2: "foo2",
       });
 
       const fooProvider4 = new Provider("foo-4", { tags: ["tag-3", "tag-5"] });
 
       providers.getByTag("tag-3").config({
         foo2: "new-foo2",
-        foo3: "foo3"
+        foo3: "foo3",
       });
 
       expect(fooProvider4.options).toEqual({
@@ -234,7 +234,7 @@ describe("providers handler config method", () => {
         foo: "foo",
         foo2: "new-foo2",
         foo3: "foo3",
-        tags: ["tag-3", "tag-5"]
+        tags: ["tag-3", "tag-5"],
       });
     });
   });
@@ -242,7 +242,7 @@ describe("providers handler config method", () => {
   describe("when applied to groups of providers using getById method", () => {
     it("should apply config to source with id", () => {
       providers.getById("foo-2").config({
-        foo: "foo"
+        foo: "foo",
       });
 
       expect(fooProvider2.options.foo).toEqual("foo");
@@ -250,7 +250,7 @@ describe("providers handler config method", () => {
 
     it("should not apply config to non-belonging providers", () => {
       providers.getById("foo-2").config({
-        foo: "foo"
+        foo: "foo",
       });
 
       expect(fooProvider.options.foo).toEqual(undefined);
@@ -258,47 +258,47 @@ describe("providers handler config method", () => {
 
     it("should extend current configuration of instance with provided id", () => {
       providers.getById("foo-3").config({
-        foo: "foo"
+        foo: "foo",
       });
 
       expect(fooProvider3.options).toEqual({
         cache: true,
         foo: "foo",
-        tags: "tag-3"
+        tags: "tag-3",
       });
     });
 
     it("should be applied to new created providers with same id", () => {
       providers.getById("foo-4").config({
-        foo: "foo"
+        foo: "foo",
       });
 
       const fooProvider4 = new Provider("foo-4");
 
       expect(fooProvider4.options).toEqual({
         cache: true,
-        foo: "foo"
+        foo: "foo",
       });
     });
 
     it("should extend previously defined configuration", () => {
       providers.getById("foo-4").config({
         foo: "foo",
-        foo2: "foo2"
+        foo2: "foo2",
       });
 
       const fooProvider4 = new Provider("foo-4");
 
       providers.getById("foo-4").config({
         foo2: "new-foo2",
-        foo3: "foo3"
+        foo3: "foo3",
       });
 
       expect(fooProvider4.options).toEqual({
         cache: true,
         foo: "foo",
         foo2: "new-foo2",
-        foo3: "foo3"
+        foo3: "foo3",
       });
     });
   });

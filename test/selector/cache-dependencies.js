@@ -30,18 +30,18 @@ describe("Selector dependencies cache", () => {
     sandbox = sinon.createSandbox();
     results = {
       dependency1: [],
-      dependency2: []
+      dependency2: [],
     };
     resolved = {
       dependency1: -1,
-      dependency2: -1
+      dependency2: -1,
     };
     timeouts = {
       dependency1: 200,
-      dependency2: 1000
+      dependency2: 1000,
     };
 
-    getProviderResult = dependencyId => {
+    getProviderResult = (dependencyId) => {
       resolved[dependencyId]++;
       return results[dependencyId][resolved[dependencyId]];
     };
@@ -49,9 +49,9 @@ describe("Selector dependencies cache", () => {
     spies = {
       dependenciesRead: {
         dependency1: sandbox.spy(),
-        dependency2: sandbox.spy()
+        dependency2: sandbox.spy(),
       },
-      selectorRead: sinon.spy()
+      selectorRead: sinon.spy(),
     };
 
     TestProvider = class extends Provider {
@@ -88,10 +88,10 @@ describe("Selector dependencies cache", () => {
   it("should return last data returned by all dependencies, even when a dependency cache is clean while reading", () => {
     results = {
       dependency1: ["foo", "foo2"],
-      dependency2: ["foo3"]
+      dependency2: ["foo3"],
     };
     expect.assertions(1);
-    const promise = selector.read().then(result => {
+    const promise = selector.read().then((result) => {
       expect(result).toEqual(["foo2", "foo3"]);
     });
     setTimeout(() => {
@@ -103,11 +103,11 @@ describe("Selector dependencies cache", () => {
   it("should return last data returned by all dependencies, even when a dependency cache which throwed an error is clean while reading", async () => {
     results = {
       dependency1: ["foo"],
-      dependency2: ["foo3", "foo4"]
+      dependency2: ["foo3", "foo4"],
     };
     const error = new Error();
     expect.assertions(1);
-    const promise = selector.read().catch(err => {
+    const promise = selector.read().catch((err) => {
       expect(err).toBe(error);
     });
     setTimeout(() => {
@@ -156,7 +156,7 @@ describe("Selector dependencies cache", () => {
     let dependency3HasToThrow = true;
     timeouts = {
       dependency1: 200,
-      dependency2: 200
+      dependency2: 200,
     };
     const TestProvider2 = class extends Provider {
       readMethod() {
@@ -176,7 +176,7 @@ describe("Selector dependencies cache", () => {
       catchDependency(dependency3, () => {
         return [dependency1, dependency2];
       }),
-      result => {
+      (result) => {
         spies.selectorRead();
         return result;
       }
@@ -195,7 +195,7 @@ describe("Selector dependencies cache", () => {
     sandbox.spy(dependency2, "read");
     timeouts = {
       dependency1: 1000,
-      dependency2: 200
+      dependency2: 200,
     };
     let promise = selector.read().then(() => {
       expect(dependency2.read.callCount).toEqual(1);
@@ -209,7 +209,7 @@ describe("Selector dependencies cache", () => {
   it("should return last data returned by all dependencies, even when a dependency cache is clean while reading and dependencies are parallel", async () => {
     expect.assertions(3);
     let resolveTest;
-    let testPromise = new Promise(resolve => {
+    let testPromise = new Promise((resolve) => {
       resolveTest = resolve;
     });
     selector = new Selector(
@@ -221,16 +221,16 @@ describe("Selector dependencies cache", () => {
     );
     results = {
       dependency1: ["foo", "foo2"],
-      dependency2: ["foo3", "foo4"]
+      dependency2: ["foo3", "foo4"],
     };
     const result = await selector.read();
     expect(result).toEqual(["foo", "foo3"]);
     selector.on("cleanCache", () => {
-      selector.read().then(selectorResult => {
+      selector.read().then((selectorResult) => {
         expect(selectorResult).toEqual(["foo2", "foo4"]);
       });
       setTimeout(() => {
-        selector.read().then(selectorResult => {
+        selector.read().then((selectorResult) => {
           expect(selectorResult).toEqual(["foo2", "foo4"]);
           resolveTest();
         });
