@@ -3,11 +3,11 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
-    "@data-provider/core": "2.0.0-alpha.6",
+    "@data-provider/core": "2.1.2",
     "is-promise": "2.1.0",
     "prop-types": "15.7.2",
-    "react": "16.13.0",
-    "react-dom": "16.13.0",
+    "react": "16.13.1",
+    "react-dom": "16.13.1",
     "react-redux": "7.2.0",
     "redux": "4.0.5"
   },
@@ -34,6 +34,6 @@
     "react-scripts": "3.4.1",
     "react-app-rewired": "2.1.5",
     "serve": "11.3.0",
-    "start-server-and-test": "1.10.9"
+    "start-server-and-test": "1.10.11"
   }
 }
