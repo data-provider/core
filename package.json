@@ -50,7 +50,7 @@
     "@babel/preset-env": "7.9.5",
     "@babel/preset-react": "7.9.4",
     "@data-provider/core": "2.1.2",
-    "@mocks-server/admin-api-paths": "1.0.5",
+    "@mocks-server/admin-api-paths": "1.0.6",
     "@mocks-server/main": "1.8.3",
     "@rollup/plugin-commonjs": "11.0.2",
     "@rollup/plugin-json": "4.0.2",
