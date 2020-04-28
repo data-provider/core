@@ -43,7 +43,7 @@
     "redux": "4.x"
   },
   "dependencies": {
-    "is-promise": "2.1.0"
+    "is-promise": "2.2.2"
   },
   "devDependencies": {
     "@babel/core": "7.9.0",
