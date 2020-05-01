@@ -20,7 +20,7 @@ const wait = (time) => {
   });
 };
 
-describe("Provider cacheTime option", () => {
+describe("Provider cleanCacheInterval option", () => {
   let sandbox;
   let spies;
   let TestProvider;
@@ -56,7 +56,7 @@ describe("Provider cacheTime option", () => {
     providers.clear();
   });
 
-  describe("without cacheTime", () => {
+  describe("without cleanCacheInterval", () => {
     it("should not execute read method more than once", async () => {
       provider.read();
       provider.read();
@@ -66,10 +66,10 @@ describe("Provider cacheTime option", () => {
     });
   });
 
-  describe("reading many times before cacheTime", () => {
+  describe("reading many times before cleanCacheInterval", () => {
     it("should not execute read method more than once", async () => {
       provider.config({
-        cacheTime: 1000,
+        cleanCacheInterval: 1000,
       });
       provider.read();
       provider.read();
@@ -79,10 +79,10 @@ describe("Provider cacheTime option", () => {
     });
   });
 
-  describe("reading many times after cacheTime", () => {
+  describe("reading many times after cleanCacheInterval", () => {
     it("should execute read every times", async () => {
       provider.config({
-        cacheTime: 200,
+        cleanCacheInterval: 200,
       });
       provider.read();
       await wait(300);
@@ -96,9 +96,9 @@ describe("Provider cacheTime option", () => {
   });
 
   describe("when cleanCache is called manually", () => {
-    it("should not clean cache automatically", async () => {
+    it("should reset cleanCacheInterval", async () => {
       provider.config({
-        cacheTime: 500,
+        cleanCacheInterval: 500,
       });
       provider.read();
       await wait(400);
@@ -106,6 +106,51 @@ describe("Provider cacheTime option", () => {
       provider.read();
       await wait(400);
       expect(provider._cache).not.toEqual(null);
+    });
+  });
+
+  describe("when config method is called multiple times", () => {
+    it("should not reset interval in no cleanCacheInterval is defined", async () => {
+      provider.config({
+        cleanCacheInterval: 500,
+      });
+      await wait(300);
+      provider.config({});
+      provider.read();
+      await wait(300);
+      provider.read();
+      expect(spies.read.callCount).toEqual(2);
+    });
+
+    it("should reset interval in cleanCacheInterval is defined again", async () => {
+      provider.config({
+        cleanCacheInterval: 500,
+      });
+      await wait(300);
+      provider.read();
+      provider.config({
+        cleanCacheInterval: 1000,
+      });
+      await wait(300);
+      provider.read();
+      expect(spies.read.callCount).toEqual(1);
+    });
+
+    it("should clean interval if it is set to null", async () => {
+      provider.config({
+        cleanCacheInterval: 200,
+      });
+      provider.read();
+      await wait(300);
+      provider.read();
+      provider.config({
+        cleanCacheInterval: null,
+      });
+      await wait(300);
+      provider.read();
+      await wait(300);
+      await provider.read();
+      expect(spies.read.callCount).toEqual(2);
     });
   });
 });
