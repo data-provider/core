@@ -10,6 +10,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 ### Removed
 
+## [2.2.0] - 2020-05-01
+
+### Added
+- feat(Provider): Add `cacheTime` and `cleanCacheInterval` options. Described in [issue 80](https://github.com/data-provider/core/issues/80)
+- feat(Selector): Add `getChildQueryMethod` option. Described in [issue 78](https://github.com/data-provider/core/issues/78)
+
+### Changed
+- chore(deps): Update dependencies
+
 ## [2.1.2] - 2020-04-09
 
 ### Changed

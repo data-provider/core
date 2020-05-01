@@ -57,10 +57,31 @@ class Provider {
     this.emit(action.baseType);
   }
 
+  _cleanCacheInterval() {
+    if (this._cleanCacheIntervalRef) {
+      clearInterval(this._cleanCacheIntervalRef);
+    }
+  }
+
+  _setCleanCacheInterval(interval, force) {
+    if (interval) {
+      if (interval !== this._previousCleanCacheInterval || force) {
+        this._previousCleanCacheInterval = interval;
+        this._cleanCacheInterval();
+        this._cleanCacheIntervalRef = setInterval(() => {
+          this.cleanCache();
+        }, interval);
+      }
+    } else {
+      this._cleanCacheInterval();
+    }
+  }
+
   // Public methods
 
   config(options) {
     this._options = { ...this._options, ...options };
+    this._setCleanCacheInterval(this._options.cleanCacheInterval);
     this.configMethod(this._options);
   }
 
@@ -89,6 +110,11 @@ class Provider {
   }
 
   cleanCache() {
+    if (this._cacheTimeOut) {
+      clearTimeout(this._cacheTimeOut);
+      this._cacheTimeOut = null;
+    }
+    this._setCleanCacheInterval(this._previousCleanCacheInterval, true);
     this._cache = null;
     this.emit(CLEAN_CACHE);
     this._children.forEach((child) => child.cleanCache());
@@ -119,6 +145,11 @@ class Provider {
     const resultPromise = readPromise
       .then((result) => {
         this._dispatch(readSuccess(this._id, result));
+        if (this.options.cacheTime && this.options.cacheTime > 0) {
+          this._cacheTimeOut = setTimeout(() => {
+            this._cache = null;
+          }, this.options.cacheTime);
+        }
         return Promise.resolve(result);
       })
       .catch((resultError) => {
