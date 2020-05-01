@@ -119,6 +119,11 @@ class Provider {
     const resultPromise = readPromise
       .then((result) => {
         this._dispatch(readSuccess(this._id, result));
+        if (this.options.cacheTime && this.options.cacheTime > 0) {
+          setTimeout(() => {
+            this._cache = null;
+          }, this.options.cacheTime);
+        }
         return Promise.resolve(result);
       })
       .catch((resultError) => {
