@@ -53,6 +53,9 @@ describe("Provider cleanCacheInterval option", () => {
 
   afterEach(() => {
     sandbox.restore();
+    provider.config({
+      cleanCacheInterval: null,
+    });
     providers.clear();
   });
 
