@@ -169,6 +169,14 @@ class SelectorBase extends Provider {
     return this._readAllDependenciesAndSelect();
   }
 
+  configMethod(options) {
+    if (options.getChildQueryMethod) {
+      this.getChildQueryMethod = (query) => {
+        return options.getChildQueryMethod(query, this.queryValue);
+      };
+    }
+  }
+
   get dependencies() {
     return this._dependencies;
   }
