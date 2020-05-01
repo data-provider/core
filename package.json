@@ -46,8 +46,8 @@
     "is-promise": "4.0.0"
   },
   "devDependencies": {
-    "@babel/core": "7.9.0",
-    "@babel/preset-env": "7.9.5",
+    "@babel/core": "7.9.6",
+    "@babel/preset-env": "7.9.6",
     "@babel/register": "7.9.0",
     "@rollup/plugin-commonjs": "11.1.0",
     "@rollup/plugin-json": "4.0.3",
@@ -62,11 +62,11 @@
     "eslint-plugin-react": "7.19.0",
     "eslint-plugin-react-hooks": "3.0.0",
     "husky": "4.2.5",
-    "jest": "25.4.0",
-    "lint-staged": "10.1.7",
+    "jest": "25.5.3",
+    "lint-staged": "10.2.2",
     "prettier": "2.0.5",
     "redux": "4.0.5",
-    "rollup": "2.7.2",
+    "rollup": "2.7.6",
     "rollup-plugin-babel": "4.4.0",
     "rollup-plugin-uglify": "6.0.4",
     "sinon": "9.0.2"
