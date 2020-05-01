@@ -89,6 +89,10 @@ class Provider {
   }
 
   cleanCache() {
+    if (this._cacheTimeOut) {
+      clearTimeout(this._cacheTimeOut);
+      this._cacheTimeOut = null;
+    }
     this._cache = null;
     this.emit(CLEAN_CACHE);
     this._children.forEach((child) => child.cleanCache());
@@ -120,7 +124,7 @@ class Provider {
       .then((result) => {
         this._dispatch(readSuccess(this._id, result));
         if (this.options.cacheTime && this.options.cacheTime > 0) {
-          setTimeout(() => {
+          this._cacheTimeOut = setTimeout(() => {
             this._cache = null;
           }, this.options.cacheTime);
         }

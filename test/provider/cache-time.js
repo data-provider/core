@@ -94,4 +94,18 @@ describe("Provider cacheTime option", () => {
       expect(spies.read.callCount).toEqual(4);
     });
   });
+
+  describe("should not clean cache automatically if cleanCache is called manually before", () => {
+    it("should execute read every times", async () => {
+      provider.config({
+        cacheTime: 500,
+      });
+      provider.read();
+      await wait(400);
+      provider.cleanCache();
+      provider.read();
+      await wait(400);
+      expect(provider._cache).not.toEqual(null);
+    });
+  });
 });
