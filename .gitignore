@@ -5,6 +5,7 @@
 
 # testing
 /coverage
+/reports
 
 # misc
 .DS_Store
@@ -32,3 +33,6 @@ yarn-error.log*
 
 # Vscode config
 jsconfig.json
+
+# stryker temp files
+.stryker-tmp
