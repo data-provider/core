@@ -73,7 +73,7 @@ export function eventNamespace(eventName, id) {
 
 export function getAutomaticId() {
   automaticIdCounter++;
-  return (Date.now() + automaticIdCounter).toString();
+  return `${Date.now()}_${automaticIdCounter}`;
 }
 
 export function ensureArray(els) {

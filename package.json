@@ -37,7 +37,10 @@
     "test:ci": "npm run build && npm run test:coverage && npm run test:e2e:ci",
     "lint": "eslint src test test-e2e/browser/vanilla-app/public/main.js test-e2e/browser/react-app/src test-e2e/nodejs/cjs test-e2e/nodejs/esm/src",
     "lint-staged": "lint-staged",
-    "coveralls": "cat ./coverage/lcov.info | coveralls"
+    "coveralls": "cat ./coverage/lcov.info | coveralls",
+    "stryker:dev": "stryker run stryker.conf.local.js",
+    "stryker": "stryker run",
+    "stryker:ci": "npx stryker run"
   },
   "peerDependencies": {
     "redux": "4.x"

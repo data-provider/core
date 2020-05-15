@@ -206,6 +206,12 @@ describe("providers handler", () => {
         expect(newProvidersTag2).toEqual([provider2]);
       });
 
+      it("should have onNewProvider event name prefixed for debugging purposes", () => {
+        expect(
+          providers.getByTag("foo-tag")._newProviderEventName.indexOf("new-provider-")
+        ).toEqual(0);
+      });
+
       it("should have provider id available when subscriber is executed", () => {
         const newProvidersTag1 = [];
         const newProvidersTag2 = [];

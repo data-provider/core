@@ -34,6 +34,14 @@ describe("Provider id", () => {
     expect(provider3.id).not.toEqual(provider.id);
   });
 
+  it("should add an incremental unique suffix to each id", () => {
+    const provider = new Provider();
+    const provider2 = new Provider();
+    expect(Number(provider.id.split("_").pop())).toBeLessThan(
+      Number(provider2.id.split("_").pop())
+    );
+  });
+
   it("should be provided id", () => {
     const provider = new Provider("foo-id");
     expect(provider.id).toEqual("foo-id");

@@ -35,6 +35,10 @@ describe("storeManager", () => {
     it("should store state in own store, available through storeManager", async () => {
       expect(storeManager.state.foo.data).toEqual("foo-data");
     });
+
+    it("should be under dataProvider default namespace", async () => {
+      expect(storeManager.namespace).toEqual("dataProvider");
+    });
   });
 
   describe("after migrate", () => {

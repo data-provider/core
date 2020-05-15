@@ -40,7 +40,7 @@ class Provider {
 
     this._id = providers._add(this, id); // initial configuration is made by providers handler
 
-    this._dispatch(init(this._id, this.initialState));
+    storeManager.store.dispatch(init(this._id, this.initialState));
   }
 
   _eventNamespace(eventName) {

@@ -1,6 +1,3 @@
-/**
- * @type {import('@stryker-mutator/api/core').StrykerOptions}
- */
 module.exports = {
   mutator: "javascript",
   files: ["*.js", "src/**/*.js", "test/**/*.js"],

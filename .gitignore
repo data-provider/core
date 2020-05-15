@@ -36,3 +36,4 @@ jsconfig.json
 
 # stryker temp files
 .stryker-tmp
+stryker.conf.local.js

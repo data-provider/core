@@ -20,15 +20,15 @@ module.exports = {
       branches: 100,
       functions: 100,
       lines: 100,
-      statements: 100
-    }
+      statements: 100,
+    },
   },
 
   // The glob patterns Jest uses to detect test files
   testMatch: ["<rootDir>/test/**/*.js"],
-  // testMatch: ["**/test/provider/events.js"],
+  // testMatch: ["**/test/storeManager.js"],
 
   // The test environment that will be used for testing
   testEnvironment: "node",
-  setupFiles: ["<rootDir>/jest.init.js"]
+  setupFiles: ["<rootDir>/jest.init.js"],
 };
