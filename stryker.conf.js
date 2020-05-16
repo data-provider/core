@@ -5,10 +5,6 @@ const BASE_CONFIG = {
   mutator: "javascript",
   files: ["*.js", "src/**/*.js", "test/**/*.js"],
   packageManager: "npm",
-  dashboard: {
-    project: "github.com/data-provider/memory",
-    version: "release",
-  },
   thresholds: {
     high: 80,
     low: 60,
