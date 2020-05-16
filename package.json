@@ -38,8 +38,7 @@
     "test:coverage": "npm run test:ci",
     "coveralls": "cat ./coverage/lcov.info | coveralls",
     "stryker:dev": "stryker run stryker.conf.local.js",
-    "stryker": "stryker run",
-    "stryker:ci": "npx stryker run"
+    "stryker": "stryker run"
   },
   "peerDependencies": {
     "@data-provider/core": "2.x"
