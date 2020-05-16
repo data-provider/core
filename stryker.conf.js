@@ -1,5 +1,5 @@
-const BRANCH_NAME = process.env.TRAVIS_CURRENT_BRANCH;
-const STRYKER_API_KEY = process.env.STRYKER_API_KEY;
+const BRANCH_NAME = process.env.TRAVIS_CURRENT_BRANCH || process.env.BRANCH_NAME;
+const STRYKER_DASHBOARD_API_KEY = process.env.STRYKER_DASHBOARD_API_KEY;
 
 const BASE_CONFIG = {
   mutator: "javascript",
@@ -26,7 +26,7 @@ const BASE_CONFIG = {
 const config = {
   ...BASE_CONFIG,
   dashboard:
-    BRANCH_NAME && STRYKER_API_KEY
+    BRANCH_NAME && STRYKER_DASHBOARD_API_KEY
       ? {
           project: "github.com/data-provider/memory",
           version: BRANCH_NAME,
