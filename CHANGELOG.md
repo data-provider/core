@@ -12,6 +12,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [2.0.4] - 2020-05-16
 
+### Added
+- test(stryker): Add stryker tests
+
 ### Changed
 - chore(deps): Update dependencies
 
