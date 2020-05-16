@@ -1,4 +1,4 @@
-[![Build status][travisci-image]][travisci-url] [![Coverage Status][coveralls-image]][coveralls-url] [![Quality Gate][quality-gate-image]][quality-gate-url]
+[![Build status][travisci-image]][travisci-url] [![Coverage Status][coveralls-image]][coveralls-url] [![Quality Gate][quality-gate-image]][quality-gate-url] [![Mutation testing badge][stryker-image]][stryker-url]
 
 [![NPM dependencies][npm-dependencies-image]][npm-dependencies-url] [![Renovate](https://img.shields.io/badge/renovate-enabled-brightgreen.svg)](https://renovatebot.com) [![Last commit][last-commit-image]][last-commit-url] [![Last release][release-image]][release-url] 
 
@@ -211,3 +211,5 @@ Please read the [contributing guidelines](.github/CONTRIBUTING.md) and [code of 
 [quality-gate-url]: https://sonarcloud.io/dashboard?id=data-provider-core
 [release-image]: https://img.shields.io/github/release-date/data-provider/core.svg
 [release-url]: https://github.com/data-provider/core/releases
+[stryker-image]: https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2Fdata-provider%2Fcore%2Fmaster
+[stryker-url]: https://dashboard.stryker-mutator.io/reports/github.com/data-provider/core/master

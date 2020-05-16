@@ -25,7 +25,6 @@ const {
   message,
   warn,
   fromEntries,
-  fromEntriesPolyfill,
 } = require("../src/helpers");
 
 describe("helpers", () => {
@@ -156,41 +155,52 @@ describe("helpers", () => {
 
   describe("fromEntries method polyfill", () => {
     let originalFromEntries;
+    let sandbox;
+
     beforeEach(() => {
+      sandbox = sinon.createSandbox();
       originalFromEntries = Object.fromEntries;
       Object.fromEntries = null;
     });
 
     afterEach(() => {
+      sandbox.restore();
       Object.fromEntries = originalFromEntries;
     });
 
-    it("should work even when no Object.fromEntries method is available", () => {
+    it("should work when no Object.fromEntries method is available", () => {
+      expect.assertions(2);
       const map = new Map();
+      sandbox.spy(map, "entries");
       map.set("fooKey", "fooValue");
       expect(fromEntries(map)).toEqual({
         fooKey: "fooValue",
       });
+      expect(map.entries.called).toEqual(true);
     });
   });
 
-  if (!Object.fromEntries) {
-    describe("fromEntries method", () => {
-      beforeEach(() => {
-        Object.fromEntries = fromEntriesPolyfill;
-      });
+  describe("fromEntries method", () => {
+    let originalFromEntries;
+    let sandbox;
 
-      afterEach(() => {
-        delete Object.fromEntries;
-      });
-
-      it("should work", () => {
-        const map = new Map();
-        map.set("fooKey", "fooValue");
-        expect(fromEntries(map)).toEqual({
-          fooKey: "fooValue",
-        });
-      });
+    beforeEach(() => {
+      sandbox = sinon.createSandbox();
+      originalFromEntries = Object.fromEntries;
+      Object.fromEntries = sandbox.spy();
     });
-  }
+
+    afterEach(() => {
+      sandbox.restore();
+      Object.fromEntries = originalFromEntries;
+    });
+
+    it("should not call to polyfill when Object.fromEntries method is available", () => {
+      const map = new Map();
+      sandbox.spy(map, "entries");
+      map.set("fooKey", "fooValue");
+      fromEntries(map);
+      expect(Object.fromEntries.called).toEqual(true);
+    });
+  });
 });
