@@ -33,9 +33,12 @@
     "lint-staged": "lint-staged",
     "build": "rollup --config",
     "test": "jest",
-    "test:ci": "npm run test -- --coverage --ci --verbose=false --coverageReporters=lcov --coverageReporters=text-summary",
+    "test:ci": "npm run test -- --coverage --ci --verbose=false --coverageReporters=lcov --coverageReporters=text-summary && npm run stryker",
     "test:coverage": "npm run test:ci",
-    "coveralls": "cat ./coverage/lcov.info | coveralls"
+    "coveralls": "cat ./coverage/lcov.info | coveralls",
+    "stryker:dev": "stryker run stryker.conf.local.js",
+    "stryker": "stryker run",
+    "stryker:ci": "npx stryker run"
   },
   "peerDependencies": {
     "@data-provider/core": "2.x"
@@ -48,6 +51,10 @@
     "@rollup/plugin-commonjs": "11.1.0",
     "@rollup/plugin-json": "4.0.3",
     "@rollup/plugin-node-resolve": "7.1.3",
+    "@stryker-mutator/babel-transpiler": "3.2.3",
+    "@stryker-mutator/core": "3.2.3",
+    "@stryker-mutator/javascript-mutator": "3.2.3",
+    "@stryker-mutator/jest-runner": "3.2.3",
     "babel-core": "7.0.0-bridge.0",
     "babel-jest": "26.0.1",
     "babel-polyfill": "6.26.0",

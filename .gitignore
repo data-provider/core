@@ -33,3 +33,8 @@ yarn-error.log*
 
 # Vscode config
 jsconfig.json
+
+# stryker temp files
+/reports
+.stryker-tmp
+stryker.conf.local.js
