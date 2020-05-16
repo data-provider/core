@@ -16,8 +16,8 @@
   "homepage": "https://www.data-provider.org",
   "repository": "https://github.com/data-provider/react",
   "funding": {
-    "type" : "opencollective",
-    "url" : "https://opencollective.com/data-provider"
+    "type": "opencollective",
+    "url": "https://opencollective.com/data-provider"
   },
   "publishConfig": {
     "access": "public"
@@ -58,11 +58,11 @@
     "babel-jest": "26.0.1",
     "babel-polyfill": "6.26.0",
     "coveralls": "3.0.9",
-    "eslint": "6.8.0",
+    "eslint": "7.0.0",
     "eslint-config-prettier": "6.11.0",
     "eslint-plugin-prettier": "3.1.3",
     "eslint-plugin-react": "7.20.0",
-    "eslint-plugin-react-hooks": "3.0.0",
+    "eslint-plugin-react-hooks": "4.0.2",
     "husky": "4.2.5",
     "jest": "26.0.1",
     "lint-staged": "10.2.2",
