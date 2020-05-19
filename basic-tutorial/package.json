@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@data-provider/axios": "2.1.1",
+    "@data-provider/axios": "2.1.2",
     "@data-provider/core": "2.1.2",
-    "@data-provider/react": "1.0.2",
+    "@data-provider/react": "1.0.3",
     "@testing-library/jest-dom": "4.2.4",
     "@testing-library/react": "9.5.0",
     "@testing-library/user-event": "7.2.1",
