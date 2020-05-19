@@ -10,6 +10,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 ### Removed
 
+## [unreleased]
+
+- fix(useDataProvider): Removed unused arguments
+
 ## [1.0.3] - 2020-05-16
 
 ### Changed

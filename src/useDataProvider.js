@@ -34,9 +34,5 @@ export const useError = (dataProvider) => {
 
 export const useDataProvider = (dataProvider, comparator) => {
   useRefresh(dataProvider);
-  return [
-    useData(dataProvider, comparator),
-    useLoading(dataProvider, comparator),
-    useError(dataProvider, comparator),
-  ];
+  return [useData(dataProvider, comparator), useLoading(dataProvider), useError(dataProvider)];
 };
