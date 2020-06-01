@@ -74,7 +74,7 @@
     "eslint-plugin-react-hooks": "4.0.4",
     "husky": "4.2.5",
     "jest": "26.0.1",
-    "lint-staged": "10.2.6",
+    "lint-staged": "10.2.7",
     "prettier": "2.0.5",
     "redux": "4.0.5",
     "rollup": "2.10.9",
