@@ -53,7 +53,6 @@ export default function reducer(state = {}, action = {}) {
       return merge(
         state,
         {
-          loaded: false,
           loading: false,
           error: action.error,
         },

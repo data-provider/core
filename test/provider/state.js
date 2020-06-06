@@ -80,6 +80,27 @@ describe("Provider state", () => {
       expect(provider.state.loading).toEqual(false);
     });
 
+    it("should return false in loaded property until it finish loading", async () => {
+      expect.assertions(2);
+      provider.read();
+      expect(provider.state.loaded).toEqual(false);
+      await provider.read();
+      expect(provider.state.loaded).toEqual(true);
+    });
+
+    it("should return true in loaded property when loading again", async () => {
+      expect.assertions(4);
+      provider.read();
+      expect(provider.state.loaded).toEqual(false);
+      await provider.read();
+      expect(provider.state.loaded).toEqual(true);
+      provider.cleanCache();
+      provider.read();
+      expect(provider.state.loaded).toEqual(true);
+      await provider.read();
+      expect(provider.state.loaded).toEqual(true);
+    });
+
     it("should return data in read promise", async () => {
       results.returnData = "foo2";
       const data = await provider.read();
@@ -168,6 +189,17 @@ describe("Provider state", () => {
       expect(provider.state.loading).toEqual(false);
       await provider.read();
       expect(provider.state.loading).toEqual(false);
+    });
+
+    it("should reset loaded state to false", async () => {
+      expect.assertions(3);
+      results.returnData = "foo2";
+      provider.read();
+      expect(provider.state.loaded).toEqual(false);
+      await provider.read();
+      expect(provider.state.loaded).toEqual(true);
+      provider.resetState();
+      expect(provider.state.loaded).toEqual(false);
     });
 
     it("should reset data to initialState of all childs providers", async () => {
