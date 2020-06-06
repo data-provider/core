@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 - chore(deps): Update dependencies
+- style(lint): Lint cypress tests and root js files
 
 ## [2.2.1] - 2020-05-15
 
