@@ -9,7 +9,7 @@ import Loading from "components/loading";
 import NoResults from "components/no-results";
 import { withData, withLoading, withRefresh } from "helpers/data-provider";
 
-const queryBooks = (search) => booksSearch.query({ search });
+const queryBooks = ({ search }) => booksSearch.query({ search });
 
 const ConnectedBooks = withRefresh(queryBooks)(withData(queryBooks, "books")(BooksList));
 
@@ -21,7 +21,7 @@ const BooksSearchResults = ({ search, books, loading }) => {
     <ItemsListContainer id="books-search-container">
       {loading && <Loading />}
       {hasNotResults && <NoResults />}
-      <ConnectedBooks query={search} />
+      <ConnectedBooks search={search} />
     </ItemsListContainer>
   );
 };

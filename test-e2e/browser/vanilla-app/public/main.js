@@ -32,6 +32,12 @@ var isChangeStateEvent = function (eventName) {
   return CHANGE_STATE_EVENTS.indexOf(eventName) > -1;
 };
 
+var PLACEHOLDER_SUFFIX = "-placeholder";
+
+var placeholderId = function (id) {
+  return `${id}${PLACEHOLDER_SUFFIX}`;
+};
+
 // INITAL COLLECTIONS
 
 var AUTHORS = [
@@ -199,6 +205,12 @@ var authorsOptionsAppender = function ($container, authors) {
   });
 };
 
+var appendPlaceholder = function ($container, placeholderId) {
+  $(
+    `<ul class="placeholders" id="${placeholderId}"><li class="placeholder"></li><li class="placeholder"></li><li class="placeholder"></li></ul>`
+  ).insertAfter($container);
+};
+
 var authorsAppender = function ($container, authors, idSuffix = "") {
   authors.forEach(function (author) {
     $container.append(`<li id="author-${author.id}${idSuffix}"> ${author.name}</li>`);
@@ -248,19 +260,25 @@ var booksSearchAppender = function ($container, books) {
   booksAppender($container, books, "-search");
 };
 
-var renderItems = function ($column, $container, provider, appender) {
+var renderItems = function ($column, $container, provider, appender, id) {
   const items = provider.state.data;
   const loading = provider.state.loading;
+  const loaded = provider.state.loaded;
   $container.empty();
   if (loading) {
     setLoading($column);
   } else {
     unsetLoading($column);
   }
-  if (!items.length) {
-    appendNoResults($container);
+  if (loaded) {
+    $(`#${placeholderId(id)}`).remove();
+    if (!items.length) {
+      appendNoResults($container);
+    } else {
+      appender($container, items);
+    }
   } else {
-    appender($container, items);
+    appendPlaceholder($container, placeholderId(id));
   }
 };
 
@@ -365,7 +383,7 @@ $.when($.ready).then(function () {
 
   authorsProvider.on("*", function (eventName) {
     if (isChangeStateEvent(eventName)) {
-      renderItems($authorsColumn, $authorsContainer, authorsProvider, authorsAppender);
+      renderItems($authorsColumn, $authorsContainer, authorsProvider, authorsAppender, "authors");
       renderOptions($bookAuthorSelect, authorsProvider, authorsOptionsAppender);
     }
   });
@@ -402,7 +420,7 @@ $.when($.ready).then(function () {
 
   booksWithAuthorName.on("*", function (eventName) {
     if (isChangeStateEvent(eventName)) {
-      renderItems($booksColumn, $booksContainer, booksWithAuthorName, booksAppender);
+      renderItems($booksColumn, $booksContainer, booksWithAuthorName, booksAppender, "books");
     }
   });
   booksWithAuthorName.on("cleanCache", function () {

@@ -12,6 +12,7 @@ import { storeNamespace } from "./storeNamespace";
 import { INIT, RESET_STATE, READ_START, READ_SUCCESS, READ_ERROR, MIGRATE_STORE } from "./helpers";
 
 const DEFAULT_INITAL_STATE = {
+  loaded: false,
   loading: false,
   error: null,
   data: undefined,
@@ -41,6 +42,7 @@ export default function reducer(state = {}, action = {}) {
       return merge(
         state,
         {
+          loaded: true,
           loading: false,
           data: action.data,
           error: null,

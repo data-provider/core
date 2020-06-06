@@ -43,6 +43,8 @@ class Provider {
     storeManager.store.dispatch(init(this._id, this.initialState));
   }
 
+  // Private methods
+
   _eventNamespace(eventName) {
     return eventNamespace(eventName, this._id);
   }

@@ -17,11 +17,19 @@ describe("Demo page", () => {
 
   describe("loaders", () => {
     it("should display books loading", () => {
-      authors.shouldBeLoading();
+      books.shouldBeLoading();
+    });
+
+    it("should display books placeholder", () => {
+      books.shouldDisplayPlaceholder();
     });
 
     it("should display authors loading", () => {
-      books.shouldBeLoading();
+      authors.shouldBeLoading();
+    });
+
+    it("should display authors placeholder", () => {
+      authors.shouldDisplayPlaceholder();
     });
   });
 
@@ -32,7 +40,9 @@ describe("Demo page", () => {
 
     it("should display 5 results after adding a new book", () => {
       authors.add(NEW_AUTHOR);
+      authors.shouldNotDisplayPlaceholder();
       authors.shouldBeLoading();
+      books.shouldNotDisplayPlaceholder();
       books.shouldBeLoading();
       authors.shouldDisplayItems(5);
     });
@@ -48,7 +58,9 @@ describe("Demo page", () => {
       authors.shouldDisplayItems(6);
       authors.delete(6);
       authors.shouldBeLoading();
+      authors.shouldNotDisplayPlaceholder();
       books.shouldBeLoading();
+      books.shouldNotDisplayPlaceholder();
       authors.shouldDisplayItems(5);
     });
   });

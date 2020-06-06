@@ -32,7 +32,7 @@ const BooksSearch = () => {
         placeholder="Type to search"
         onChange={handleChange}
       />
-      <BooksSearchResults search={currentSearch} query={currentSearch} />
+      <BooksSearchResults search={currentSearch} />
     </SectionContainer>
   );
 };

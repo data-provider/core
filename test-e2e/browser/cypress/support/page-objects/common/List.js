@@ -1,6 +1,6 @@
 class List {
   constructor(selectors) {
-    this.SELECTORS = selectors
+    this.SELECTORS = selectors;
   }
 
   getColumn() {
@@ -9,6 +9,10 @@ class List {
 
   getContainer() {
     return cy.get(this.SELECTORS.CONTAINER);
+  }
+
+  getPlaceholder() {
+    return cy.get(this.SELECTORS.PLACEHOLDER);
   }
 
   getInput() {
@@ -29,6 +33,14 @@ class List {
 
   getDelete(index) {
     return this.getItem(index).find("span").eq(0);
+  }
+
+  shouldDisplayPlaceholder() {
+    this.getPlaceholder().should("be.visible");
+  }
+
+  shouldNotDisplayPlaceholder() {
+    this.getPlaceholder().should("not.be.visible");
   }
 
   shouldDisplayItems(number) {

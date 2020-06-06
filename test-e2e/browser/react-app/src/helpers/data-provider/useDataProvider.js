@@ -3,41 +3,41 @@ import { useSelector } from "react-redux";
 
 export const useRefresh = (dataProvider) => {
   useEffect(() => {
-    dataProvider.read();
-    return dataProvider.on("cleanCache", () => {
-      dataProvider.read();
-    });
+    if (dataProvider) {
+      const catchError = (err) => {
+        console.error(
+          `@data-provider/react: Error "${err.message}" in provider "${dataProvider.id}"`
+        );
+      };
+      dataProvider.read().catch(catchError);
+      return dataProvider.on("cleanCache", () => {
+        dataProvider.read().catch(catchError);
+      });
+    }
   }, [dataProvider]);
 };
 
 export const useData = (dataProvider, comparator) => {
-  return useSelector(() => dataProvider.state.data, comparator);
+  useRefresh(dataProvider);
+  return useSelector(() => dataProvider && dataProvider.state.data, comparator);
 };
 
-export const useLoading = (dataProvider, comparator) => {
-  return useSelector(() => dataProvider.state.loading, comparator);
+export const useLoading = (dataProvider) => {
+  useRefresh(dataProvider);
+  return useSelector(() => dataProvider && dataProvider.state.loading);
 };
 
-export const useError = (dataProvider, comparator) => {
-  return useSelector(() => dataProvider.state.error, comparator);
+export const useLoaded = (dataProvider) => {
+  useRefresh(dataProvider);
+  return useSelector(() => dataProvider && dataProvider.state.loaded);
+};
+
+export const useError = (dataProvider) => {
+  useRefresh(dataProvider);
+  return useSelector(() => dataProvider && dataProvider.state.error);
 };
 
 export const useDataProvider = (dataProvider, comparator) => {
   useRefresh(dataProvider);
-  return [
-    useData(dataProvider, comparator),
-    useLoading(dataProvider, comparator),
-    useError(dataProvider, comparator),
-  ];
+  return [useData(dataProvider, comparator), useLoading(dataProvider), useError(dataProvider)];
 };
-
-/*
-Using connect:
-
-const mapStateToProps = () => ({
-  loading: authorsProvider.state.loading,
-  authors: authorsProvider.state.data
-});
-
-export default connect(mapStateToProps)(Authors);
-*/

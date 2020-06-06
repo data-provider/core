@@ -10,6 +10,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 ### Removed
 
+## [2.3.0] - 2020-06-06
+
+### Added
+- feat(state): Add loaded state property. [Issue #81](https://github.com/data-provider/core/issues/81)
+
+### Changed
+- chore(deps): Update dependencies
+- style(lint): Lint cypress tests and root js files
+
 ## [2.2.1] - 2020-05-15
 
 ### Added
