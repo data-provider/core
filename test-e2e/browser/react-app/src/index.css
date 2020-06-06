@@ -52,6 +52,20 @@ header {
   font-size: 1.2em;
 }
 
+.placeholders {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.placeholder {
+  background-color: #fff;
+  width: 40%;
+  height: 16px;
+  opacity: 0.2;
+  margin: 4px;
+}
+
 .content {
   font-size: 1.1em;
 }

@@ -7,12 +7,13 @@ class Authors extends List {
       COLUMN: "#authors-column",
       CONTAINER: "#authors-container",
       INPUT: "#author-new",
-      SUBMIT: "#author-submit"
+      SUBMIT: "#author-submit",
+      PLACEHOLDER: "#authors-placeholder",
     });
 
     this._search = new Search({
       CONTAINER: "#authors-search-container",
-      SEARCH: "#search-author"
+      SEARCH: "#search-author",
     });
   }
 
