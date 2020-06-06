@@ -18,27 +18,27 @@ const uglifier = require("rollup-plugin-uglify");
 const BASE_PLUGINS = [
   resolve({
     mainFields: ["module", "main"],
-    preferBuiltins: true
+    preferBuiltins: true,
   }),
   commonjs({
-    include: "node_modules/**"
+    include: "node_modules/**",
   }),
   json(),
   babel({
     babelrc: false,
-    presets: ["@babel/env"]
-  })
+    presets: ["@babel/env"],
+  }),
 ];
 
 const BASE_CONFIG = {
   input: "src/index.js",
   external: ["redux", "is-promise"],
-  plugins: [...BASE_PLUGINS, uglifier.uglify()]
+  plugins: [...BASE_PLUGINS, uglifier.uglify()],
 };
 
 const GLOBALS = {
   redux: "Redux",
-  "is-promise": "isPromise"
+  "is-promise": "isPromise",
 };
 
 module.exports = [
@@ -46,8 +46,8 @@ module.exports = [
     ...BASE_CONFIG,
     output: {
       file: "dist/index.cjs.js",
-      format: "cjs"
-    }
+      format: "cjs",
+    },
   },
   {
     ...BASE_CONFIG,
@@ -55,16 +55,16 @@ module.exports = [
       file: "dist/index.umd.js",
       format: "umd",
       name: "dataProvider",
-      globals: GLOBALS
-    }
+      globals: GLOBALS,
+    },
   },
   {
     ...BASE_CONFIG,
     output: {
       file: "dist/index.esm.js",
       format: "esm",
-      globals: GLOBALS
+      globals: GLOBALS,
     },
-    plugins: BASE_PLUGINS
-  }
+    plugins: BASE_PLUGINS,
+  },
 ];

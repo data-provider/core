@@ -39,7 +39,7 @@
     "test:e2e": "npm run test:e2e:browser && npm run test:e2e:node",
     "test:e2e:ci": "npm run test:e2e:browser:install && npm run test:e2e:node:install && npm run test:e2e",
     "test:ci": "npm run build && npm run test:coverage && npm run test:e2e:ci",
-    "lint": "eslint src test test-e2e/browser/vanilla-app/public/main.js test-e2e/browser/react-app/src test-e2e/browser/cypress test-e2e/nodejs/cjs test-e2e/nodejs/esm/src",
+    "lint": "eslint src test test-e2e/browser/vanilla-app/public/main.js test-e2e/browser/react-app/src test-e2e/browser/cypress test-e2e/nodejs/cjs test-e2e/nodejs/esm/src *.js",
     "lint-staged": "lint-staged",
     "coveralls": "cat ./coverage/lcov.info | coveralls",
     "stryker:dev": "stryker run stryker.conf.local.js",
@@ -83,6 +83,7 @@
     "sinon": "9.0.2"
   },
   "lint-staged": {
+    "*.js": "eslint",
     "src/**/*.js": "eslint",
     "test/**/*.js": "eslint",
     "test-e2e/browser/cypress/**/*.js": "eslint",
