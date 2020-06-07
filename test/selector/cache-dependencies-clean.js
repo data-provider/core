@@ -272,9 +272,9 @@ describe("Selector when cleanDependenciesCache method is called", () => {
         });
       }
     };
-    const dependency4 = new TestProvider2("dependency-4");
+    const dependency5 = new TestProvider2("dependency-5");
     selector = new Selector(
-      catchDependency(dependency4, () => {
+      catchDependency(dependency5, () => {
         return [dependency1, dependency2, dependency3];
       }),
       (result) => {
@@ -322,9 +322,9 @@ describe("Selector when cleanDependenciesCache method is called", () => {
     });
     selector = new Selector(
       [dependency1, dependency2, dependency3],
-      ([dependency1Result, dependency2Result, dependency3]) => {
+      ([dependency1Result, dependency2Result, dependency3Result]) => {
         spies.selectorRead();
-        return [dependency1Result, dependency2Result, dependency3];
+        return [dependency1Result, dependency2Result, dependency3Result];
       }
     );
     results = {
