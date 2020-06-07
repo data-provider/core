@@ -17,6 +17,10 @@ export function catchDependency(dependency, catchMethod) {
   return new CatchDependency(dependency, catchMethod);
 }
 
+const isSelector = (objectToCheck) => {
+  return objectToCheck && objectToCheck instanceof SelectorBase;
+};
+
 const isDataProvider = (objectToCheck) => {
   return objectToCheck && objectToCheck instanceof Provider;
 };
@@ -53,15 +57,19 @@ class SelectorBase extends Provider {
   constructor(id, options, query) {
     super(id, options, query);
     this._dependencies = options._dependencies;
+    this._resolvedDependencies = [];
     this._selector = options._selector;
+    this._inProgressDependencies = null;
   }
+
+  // Private methods
 
   _readAllDependenciesAndSelect() {
     let dependenciesResults;
     let dependencies;
     let dependenciesListeners;
     let hasToReadAgain = false;
-    const inProgressDependencies = new Set();
+    this._inProgressDependencies = new Set();
     const inProgressListeners = [];
 
     const markToReadAgain = () => {
@@ -70,6 +78,8 @@ class SelectorBase extends Provider {
 
     const removeInProgressListenerFuncs = () => {
       inProgressListeners.forEach((removeListener) => removeListener());
+      this._resolvedDependencies = Array.from(this._inProgressDependencies);
+      this._inProgressDependencies = null;
     };
 
     const cleanCache = () => {
@@ -94,8 +104,8 @@ class SelectorBase extends Provider {
         return resolveResult(dependencyToRead);
       }
       dependencies.push(dependencyToRead);
-      if (!inProgressDependencies.has(dependencyToRead)) {
-        inProgressDependencies.add(dependencyToRead);
+      if (!this._inProgressDependencies.has(dependencyToRead)) {
+        this._inProgressDependencies.add(dependencyToRead);
         inProgressListeners.push(dependencyToRead.on(CLEAN_CACHE, markToReadAgain));
       }
 
@@ -165,6 +175,8 @@ class SelectorBase extends Provider {
     return readAndReturn();
   }
 
+  // Overwrite Provider methods
+
   readMethod() {
     return this._readAllDependenciesAndSelect();
   }
@@ -177,6 +189,28 @@ class SelectorBase extends Provider {
     }
   }
 
+  // Public methods
+
+  _cleanCaches(dependencies) {
+    dependencies.forEach((dependency) => {
+      if (isSelector(dependency)) {
+        dependency.cleanDependenciesCache();
+      } else {
+        dependency.cleanCache();
+      }
+    });
+  }
+
+  cleanDependenciesCache() {
+    if (this._inProgressDependencies) {
+      this._cleanCaches(Array.from(this._inProgressDependencies));
+    } else {
+      this._cleanCaches(this._resolvedDependencies);
+    }
+  }
+
+  // Methods to be used for testing
+
   get dependencies() {
     return this._dependencies;
   }
@@ -185,6 +219,8 @@ class SelectorBase extends Provider {
     return this._selector;
   }
 }
+
+// Expose a different interface for Selectors the first time, but children are built with the same interface than providers internally
 
 class Selector extends SelectorBase {
   constructor(...args) {
@@ -201,6 +237,8 @@ class Selector extends SelectorBase {
     options._selector = args[selectorIndex];
     super(options.id, options, undefined);
   }
+
+  // Overwrite Provider methods
 
   createChildMethod(id, options, query) {
     return new SelectorBase(id, options, query);
