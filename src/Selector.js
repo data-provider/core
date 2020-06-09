@@ -170,6 +170,12 @@ class SelectorBase extends Provider {
     return readAndReturn();
   }
 
+  _cleanCaches(dependencies) {
+    dependencies.forEach((dependency) => {
+      dependency.cleanDependenciesCache();
+    });
+  }
+
   // Overwrite Provider methods
 
   readMethod() {
@@ -182,14 +188,6 @@ class SelectorBase extends Provider {
         return options.getChildQueryMethod(query, this.queryValue);
       };
     }
-  }
-
-  // Public methods
-
-  _cleanCaches(dependencies) {
-    dependencies.forEach((dependency) => {
-      dependency.cleanDependenciesCache();
-    });
   }
 
   cleanDependenciesCache() {
