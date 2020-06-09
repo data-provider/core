@@ -10,6 +10,17 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 ### Removed
 
+## [2.5.0] - 2020-06-09
+
+### Added
+- feat(Selector): Add cleanDependenciesCache method to Provider in order to expose same interface than in Selectors.
+
+### Fixed
+- fix(Selector): Avoid setting inProgressDependencies to null
+
+### Changed
+- chore(deps): Update dependencies
+
 ## [2.4.0] - 2020-06-07
 
 ### Added

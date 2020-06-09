@@ -122,6 +122,10 @@ class Provider {
     this._children.forEach((child) => child.cleanCache());
   }
 
+  cleanDependenciesCache() {
+    this.cleanCache();
+  }
+
   resetState() {
     this._dispatch(resetState(this._id, this.initialState));
     this._children.forEach((child) => child.resetState());
