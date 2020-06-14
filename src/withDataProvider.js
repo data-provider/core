@@ -111,8 +111,8 @@ export const withLoading = (provider, key) => (Component) => (props) => {
 
 export const withLoaded = (provider, key) => (Component) => (props) => {
   const providerToRead = useProvider(provider, props);
-  const { loadingProp } = useLoadedCustomProp(providerToRead, key);
-  return <Component {...props} {...loadingProp} />;
+  const { loadedProp } = useLoadedCustomProp(providerToRead, key);
+  return <Component {...props} {...loadedProp} />;
 };
 
 export const withError = (provider, key) => (Component) => (props) => {
