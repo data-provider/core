@@ -1,3 +1,5 @@
+/* eslint-disable react/prop-types, react/display-name */
+
 import React from "react";
 import "@testing-library/jest-dom";
 import { render, screen } from "@testing-library/react";
@@ -11,6 +13,7 @@ import {
   withError,
   withDataProvider,
   withRefresh,
+  withDataProviderBranch,
 } from "../src";
 
 import MockProvider from "./MockProvider";
@@ -41,14 +44,12 @@ describe("HOCs", () => {
 
   describe("withData", () => {
     beforeEach(() => {
-      // eslint-disable-next-line
       BooksComponent = ({ data }) => {
         return <Books books={data} />;
       };
 
       BooksConnectedComponent = withData(provider)(BooksComponent);
 
-      // eslint-disable-next-line
       Component = () => (
         <ReduxProvider>
           <BooksConnectedComponent />
@@ -74,14 +75,12 @@ describe("HOCs", () => {
     });
 
     it("should do nothing if no provider is provided", async () => {
-      // eslint-disable-next-line
       BooksComponent = ({ data }) => {
         return <Books books={data} />;
       };
 
       BooksConnectedComponent = withData()(BooksComponent);
 
-      // eslint-disable-next-line
       Component = () => (
         <ReduxProvider>
           <BooksConnectedComponent />
@@ -94,14 +93,12 @@ describe("HOCs", () => {
 
   describe("withLoading", () => {
     beforeEach(() => {
-      // eslint-disable-next-line
       BooksComponent = ({ loading }) => {
         return <Books loading={loading} />;
       };
 
       BooksConnectedComponent = withLoading(provider)(BooksComponent);
 
-      // eslint-disable-next-line
       Component = () => (
         <ReduxProvider>
           <BooksConnectedComponent />
@@ -129,14 +126,12 @@ describe("HOCs", () => {
 
   describe("withLoaded", () => {
     beforeEach(() => {
-      // eslint-disable-next-line
       BooksComponent = ({ loaded }) => {
         return <Books loading={loaded} />;
       };
 
       BooksConnectedComponent = withLoaded(provider)(BooksComponent);
 
-      // eslint-disable-next-line
       Component = () => (
         <ReduxProvider>
           <BooksConnectedComponent />
@@ -175,14 +170,12 @@ describe("HOCs", () => {
 
   describe("withError", () => {
     beforeEach(() => {
-      // eslint-disable-next-line
       BooksComponent = ({ error }) => {
         return <Books error={error} />;
       };
 
       BooksConnectedComponent = withError(provider)(BooksComponent);
 
-      // eslint-disable-next-line
       Component = () => (
         <ReduxProvider>
           <BooksConnectedComponent />
@@ -209,14 +202,12 @@ describe("HOCs", () => {
   describe("withRefresh", () => {
     beforeEach(() => {
       sandbox.spy(provider, "read");
-      // eslint-disable-next-line
       BooksComponent = () => {
         return <Books books={provider.state.data} />;
       };
 
       BooksConnectedComponent = withRefresh(provider)(BooksComponent);
 
-      // eslint-disable-next-line
       Component = () => (
         <ReduxProvider>
           <BooksConnectedComponent />
@@ -236,14 +227,12 @@ describe("HOCs", () => {
 
   describe("withDataProvider", () => {
     beforeEach(() => {
-      // eslint-disable-next-line
       BooksComponent = ({ data, loading, error }) => {
         return <Books error={error} books={data} loading={loading} />;
       };
 
       BooksConnectedComponent = withDataProvider(provider)(BooksComponent);
 
-      // eslint-disable-next-line
       Component = () => (
         <ReduxProvider>
           <BooksConnectedComponent />
@@ -290,6 +279,90 @@ describe("HOCs", () => {
       expect(screen.queryByTestId(ERROR_ID)).not.toBeInTheDocument();
       await wait();
       expect(screen.queryByTestId(ERROR_ID)).not.toBeInTheDocument();
+    });
+
+    it("should return error when provider throws error", async () => {
+      const ERROR_MESSAGE = "Foo error";
+      provider.error = new Error(ERROR_MESSAGE);
+      render(<Component />);
+      await wait();
+      expect(screen.getByText(ERROR_MESSAGE)).toBeInTheDocument();
+    });
+  });
+
+  describe("withDataProviderBranch", () => {
+    const CUSTOM_LOADING_ID = `${LOADING_ID}-custom`;
+    const CUSTOM_ERROR_ID = `${ERROR_ID}-custom`;
+    let CustomLoadingComponent, CustomErrorComponent;
+
+    beforeEach(() => {
+      CustomLoadingComponent = ({ loading }) => {
+        if (!loading) {
+          return null;
+        }
+        return <div data-testid={CUSTOM_LOADING_ID}>Loading</div>;
+      };
+
+      CustomErrorComponent = ({ error = {} }) => {
+        return <div data-testid={CUSTOM_ERROR_ID}>{error.message}</div>;
+      };
+
+      BooksComponent = ({ data, loading, error }) => {
+        return <Books error={error} books={data} loading={loading} />;
+      };
+
+      BooksConnectedComponent = withDataProviderBranch(provider)(
+        BooksComponent,
+        CustomLoadingComponent,
+        CustomErrorComponent
+      );
+
+      Component = () => (
+        <ReduxProvider>
+          <BooksConnectedComponent />
+        </ReduxProvider>
+      );
+    });
+
+    it("loading should be true when provider is loading and false when finish", async () => {
+      render(<Component />);
+      expect(screen.queryByTestId(CUSTOM_LOADING_ID)).toBeInTheDocument();
+      await wait();
+      expect(screen.queryByTestId(CUSTOM_LOADING_ID)).not.toBeInTheDocument();
+    });
+
+    it("loading should change when provider cache is cleaned", async () => {
+      render(<Component />);
+      await wait();
+      expect(screen.queryByTestId(CUSTOM_LOADING_ID)).not.toBeInTheDocument();
+      provider.cleanCache();
+      expect(screen.queryByTestId(CUSTOM_LOADING_ID)).toBeInTheDocument();
+      await wait();
+      expect(screen.queryByTestId(CUSTOM_LOADING_ID)).not.toBeInTheDocument();
+    });
+
+    it("should pass data to the component", async () => {
+      const bookTitle = "Animal Farm";
+      render(<Component />);
+      await wait();
+      expect(screen.getByText(bookTitle)).toBeInTheDocument();
+    });
+
+    it("should refresh data", async () => {
+      const TEST_ID = "book-2";
+      render(<Component />);
+      await wait();
+      expect(screen.queryByTestId(TEST_ID)).toBeInTheDocument();
+      provider.delete(2);
+      await wait();
+      expect(screen.queryByTestId(TEST_ID)).not.toBeInTheDocument();
+    });
+
+    it("error should be null when provider does not throw error", async () => {
+      render(<Component />);
+      expect(screen.queryByTestId(CUSTOM_ERROR_ID)).not.toBeInTheDocument();
+      await wait();
+      expect(screen.queryByTestId(CUSTOM_ERROR_ID)).not.toBeInTheDocument();
     });
 
     it("should return error when provider throws error", async () => {

@@ -1,3 +1,5 @@
+/* eslint-disable react/prop-types, react/display-name */
+
 import React from "react";
 import "@testing-library/jest-dom";
 import { render, screen } from "@testing-library/react";
@@ -31,13 +33,11 @@ describe("hooks", () => {
 
   describe("useData", () => {
     beforeEach(() => {
-      // eslint-disable-next-line
       BooksComponent = () => {
         const books = useData(provider);
         return <Books books={books} />;
       };
 
-      // eslint-disable-next-line
       Component = () => (
         <ReduxProvider>
           <BooksComponent />
@@ -63,13 +63,11 @@ describe("hooks", () => {
     });
 
     it("should do nothing if no provider is provided", async () => {
-      // eslint-disable-next-line
       BooksComponent = () => {
         const books = useData();
         return <Books books={books} />;
       };
 
-      // eslint-disable-next-line
       Component = () => (
         <ReduxProvider>
           <BooksComponent />
@@ -82,13 +80,11 @@ describe("hooks", () => {
 
   describe("useLoading", () => {
     beforeEach(() => {
-      // eslint-disable-next-line
       BooksComponent = () => {
         const loading = useLoading(provider);
         return <Books loading={loading} />;
       };
 
-      // eslint-disable-next-line
       Component = () => (
         <ReduxProvider>
           <BooksComponent />
@@ -116,13 +112,11 @@ describe("hooks", () => {
 
   describe("useLoaded", () => {
     beforeEach(() => {
-      // eslint-disable-next-line
       BooksComponent = () => {
         const loaded = useLoaded(provider);
         return <Books loading={loaded} />;
       };
 
-      // eslint-disable-next-line
       Component = () => (
         <ReduxProvider>
           <BooksComponent />
@@ -161,13 +155,11 @@ describe("hooks", () => {
 
   describe("useError", () => {
     beforeEach(() => {
-      // eslint-disable-next-line
       BooksComponent = () => {
         const error = useError(provider);
         return <Books error={error} />;
       };
 
-      // eslint-disable-next-line
       Component = () => (
         <ReduxProvider>
           <BooksComponent />
@@ -193,13 +185,11 @@ describe("hooks", () => {
 
   describe("useDataProvider", () => {
     beforeEach(() => {
-      // eslint-disable-next-line
       BooksComponent = () => {
         const [books, loading, error] = useDataProvider(provider);
         return <Books error={error} books={books} loading={loading} />;
       };
 
-      // eslint-disable-next-line
       Component = () => (
         <ReduxProvider>
           <BooksComponent />
