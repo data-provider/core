@@ -10,8 +10,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 ### Removed
 
-## [unreleased]
+## [1.1.0] - 2020-06-14
 
+### Added
+- feat(loaded): Add useLoaded hook and withLoaded HOC
+
+### Changed
+- chore(deps): Update dependencies
+
+### Fixed
 - fix(useDataProvider): Removed unused arguments
 
 ## [1.0.3] - 2020-05-16
