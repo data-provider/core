@@ -7,6 +7,7 @@
     "afterAll": true,
     "describe": true,
     "expect": true,
-    "it": true
+    "it": true,
+    "test": true
   }
 }
