@@ -91,13 +91,28 @@ describe("HOCs", () => {
     });
   });
 
+  describe("withData using custom prop", () => {
+    beforeEach(() => {
+      BooksConnectedComponent = withData(provider, "books")(Books);
+
+      Component = () => (
+        <ReduxProvider>
+          <BooksConnectedComponent />
+        </ReduxProvider>
+      );
+    });
+
+    it("should pass data to the component", async () => {
+      const bookTitle = "Animal Farm";
+      render(<Component />);
+      await wait();
+      expect(screen.getByText(bookTitle)).toBeInTheDocument();
+    });
+  });
+
   describe("withLoading", () => {
     beforeEach(() => {
-      BooksComponent = ({ loading }) => {
-        return <Books loading={loading} />;
-      };
-
-      BooksConnectedComponent = withLoading(provider)(BooksComponent);
+      BooksConnectedComponent = withLoading(provider)(Books);
 
       Component = () => (
         <ReduxProvider>
@@ -118,6 +133,29 @@ describe("HOCs", () => {
       await wait();
       expect(screen.queryByTestId(LOADING_ID)).not.toBeInTheDocument();
       provider.cleanCache();
+      expect(screen.queryByTestId(LOADING_ID)).toBeInTheDocument();
+      await wait();
+      expect(screen.queryByTestId(LOADING_ID)).not.toBeInTheDocument();
+    });
+  });
+
+  describe("withLoading using custom prop", () => {
+    beforeEach(() => {
+      BooksComponent = ({ isLoading }) => {
+        return <Books loading={isLoading} />;
+      };
+
+      BooksConnectedComponent = withLoading(provider, "isLoading")(BooksComponent);
+
+      Component = () => (
+        <ReduxProvider>
+          <BooksConnectedComponent />
+        </ReduxProvider>
+      );
+    });
+
+    it("should be true when provider is loading and false when finish", async () => {
+      render(<Component />);
       expect(screen.queryByTestId(LOADING_ID)).toBeInTheDocument();
       await wait();
       expect(screen.queryByTestId(LOADING_ID)).not.toBeInTheDocument();
@@ -168,13 +206,63 @@ describe("HOCs", () => {
     });
   });
 
-  describe("withError", () => {
+  describe("withLoaded using custom prop", () => {
     beforeEach(() => {
-      BooksComponent = ({ error }) => {
-        return <Books error={error} />;
+      BooksComponent = ({ hasLoaded }) => {
+        return <Books loading={hasLoaded} />;
       };
 
-      BooksConnectedComponent = withError(provider)(BooksComponent);
+      BooksConnectedComponent = withLoaded(provider, "hasLoaded")(BooksComponent);
+
+      Component = () => (
+        <ReduxProvider>
+          <BooksConnectedComponent />
+        </ReduxProvider>
+      );
+    });
+
+    it("should be false when provider is loading and true when finish", async () => {
+      render(<Component />);
+      expect(screen.queryByTestId(LOADING_ID)).not.toBeInTheDocument();
+      await wait();
+      expect(screen.queryByTestId(LOADING_ID)).toBeInTheDocument();
+    });
+  });
+
+  describe("withError", () => {
+    beforeEach(() => {
+      BooksConnectedComponent = withError(provider)(Books);
+
+      Component = () => (
+        <ReduxProvider>
+          <BooksConnectedComponent />
+        </ReduxProvider>
+      );
+    });
+
+    it("should be null when provider does not throw error", async () => {
+      render(<Component />);
+      expect(screen.queryByTestId(ERROR_ID)).not.toBeInTheDocument();
+      await wait();
+      expect(screen.queryByTestId(ERROR_ID)).not.toBeInTheDocument();
+    });
+
+    it("should return error when provider throws error", async () => {
+      const ERROR_MESSAGE = "Foo error";
+      provider.error = new Error(ERROR_MESSAGE);
+      render(<Component />);
+      await wait();
+      expect(screen.getByText(ERROR_MESSAGE)).toBeInTheDocument();
+    });
+  });
+
+  describe("withError using custom prop", () => {
+    beforeEach(() => {
+      BooksComponent = ({ booksError }) => {
+        return <Books error={booksError} />;
+      };
+
+      BooksConnectedComponent = withError(provider, "booksError")(BooksComponent);
 
       Component = () => (
         <ReduxProvider>
@@ -290,6 +378,100 @@ describe("HOCs", () => {
     });
   });
 
+  describe("withDataProvider using custom props", () => {
+    beforeEach(() => {
+      BooksComponent = ({ books, booksAreLoading, booksError }) => {
+        return <Books error={booksError} books={books} loading={booksAreLoading} />;
+      };
+
+      BooksConnectedComponent = withDataProvider(provider, [
+        "books",
+        "booksAreLoading",
+        "booksError",
+      ])(BooksComponent);
+
+      Component = () => (
+        <ReduxProvider>
+          <BooksConnectedComponent />
+        </ReduxProvider>
+      );
+    });
+
+    it("loading should be true when provider is loading and false when finish", async () => {
+      render(<Component />);
+      expect(screen.queryByTestId(LOADING_ID)).toBeInTheDocument();
+      await wait();
+      expect(screen.queryByTestId(LOADING_ID)).not.toBeInTheDocument();
+    });
+
+    it("should pass data to the component", async () => {
+      const bookTitle = "Animal Farm";
+      render(<Component />);
+      await wait();
+      expect(screen.getByText(bookTitle)).toBeInTheDocument();
+    });
+
+    it("error should be null when provider does not throw error", async () => {
+      render(<Component />);
+      expect(screen.queryByTestId(ERROR_ID)).not.toBeInTheDocument();
+      await wait();
+      expect(screen.queryByTestId(ERROR_ID)).not.toBeInTheDocument();
+    });
+
+    it("should return error when provider throws error", async () => {
+      const ERROR_MESSAGE = "Foo error";
+      provider.error = new Error(ERROR_MESSAGE);
+      render(<Component />);
+      await wait();
+      expect(screen.getByText(ERROR_MESSAGE)).toBeInTheDocument();
+    });
+  });
+
+  describe("withDataProvider using data custom prop", () => {
+    beforeEach(() => {
+      BooksComponent = ({ books, loading, error }) => {
+        return <Books error={error} books={books} loading={loading} />;
+      };
+
+      BooksConnectedComponent = withDataProvider(provider, ["books"])(BooksComponent);
+
+      Component = () => (
+        <ReduxProvider>
+          <BooksConnectedComponent />
+        </ReduxProvider>
+      );
+    });
+
+    it("loading should be true when provider is loading and false when finish", async () => {
+      render(<Component />);
+      expect(screen.queryByTestId(LOADING_ID)).toBeInTheDocument();
+      await wait();
+      expect(screen.queryByTestId(LOADING_ID)).not.toBeInTheDocument();
+    });
+
+    it("should pass data to the component", async () => {
+      const bookTitle = "Animal Farm";
+      render(<Component />);
+      await wait();
+      expect(screen.getByText(bookTitle)).toBeInTheDocument();
+    });
+
+    it("error should be null when provider does not throw error", async () => {
+      render(<Component />);
+      expect(screen.queryByTestId(ERROR_ID)).not.toBeInTheDocument();
+      await wait();
+      expect(screen.queryByTestId(ERROR_ID)).not.toBeInTheDocument();
+    });
+
+    it("should return error when provider throws error", async () => {
+      const ERROR_MESSAGE = "Foo error";
+      provider.error = new Error(ERROR_MESSAGE);
+      render(<Component />);
+      await wait();
+      expect(screen.getByText(ERROR_MESSAGE)).toBeInTheDocument();
+    });
+  });
+
   describe("withDataProviderBranch", () => {
     const CUSTOM_LOADING_ID = `${LOADING_ID}-custom`;
     const CUSTOM_ERROR_ID = `${ERROR_ID}-custom`;
@@ -307,8 +489,8 @@ describe("HOCs", () => {
         return <div data-testid={CUSTOM_ERROR_ID}>{error.message}</div>;
       };
 
-      BooksComponent = ({ data, loading, error }) => {
-        return <Books error={error} books={data} loading={loading} />;
+      BooksComponent = ({ data }) => {
+        return <Books books={data} />;
       };
 
       BooksConnectedComponent = withDataProviderBranch(provider)(
@@ -341,6 +523,20 @@ describe("HOCs", () => {
       expect(screen.queryByTestId(CUSTOM_LOADING_ID)).not.toBeInTheDocument();
     });
 
+    it("should return null when provider is loading and no loading component is provided", async () => {
+      BooksConnectedComponent = withDataProviderBranch(provider)(BooksComponent);
+
+      Component = () => (
+        <ReduxProvider>
+          <BooksConnectedComponent />
+        </ReduxProvider>
+      );
+      render(<Component />);
+      expect(screen.queryByTestId(CUSTOM_LOADING_ID)).not.toBeInTheDocument();
+      expect(screen.queryByTestId(CUSTOM_ERROR_ID)).not.toBeInTheDocument();
+      expect(screen.queryByTestId(BOOKS_ID)).not.toBeInTheDocument();
+    });
+
     it("should pass data to the component", async () => {
       const bookTitle = "Animal Farm";
       render(<Component />);
@@ -371,6 +567,138 @@ describe("HOCs", () => {
       render(<Component />);
       await wait();
       expect(screen.getByText(ERROR_MESSAGE)).toBeInTheDocument();
+    });
+
+    it("should return null when provider throws an error and no error component is provided", async () => {
+      BooksConnectedComponent = withDataProviderBranch(provider)(
+        BooksComponent,
+        CustomLoadingComponent
+      );
+
+      Component = () => (
+        <ReduxProvider>
+          <BooksConnectedComponent />
+        </ReduxProvider>
+      );
+      provider.error = new Error();
+      render(<Component />);
+      await wait();
+      expect(screen.queryByTestId(CUSTOM_LOADING_ID)).not.toBeInTheDocument();
+      expect(screen.queryByTestId(CUSTOM_ERROR_ID)).not.toBeInTheDocument();
+      expect(screen.queryByTestId(BOOKS_ID)).not.toBeInTheDocument();
+    });
+  });
+
+  describe("withDataProviderBranch using custom prop", () => {
+    const CUSTOM_LOADING_ID = `${LOADING_ID}-custom`;
+    const CUSTOM_ERROR_ID = `${ERROR_ID}-custom`;
+    let CustomLoadingComponent, CustomErrorComponent;
+
+    beforeEach(() => {
+      CustomLoadingComponent = ({ booksAreLoading }) => {
+        if (!booksAreLoading) {
+          return null;
+        }
+        return <div data-testid={CUSTOM_LOADING_ID}>Loading</div>;
+      };
+
+      CustomErrorComponent = ({ booksError = {} }) => {
+        return <div data-testid={CUSTOM_ERROR_ID}>{booksError.message}</div>;
+      };
+
+      BooksConnectedComponent = withDataProviderBranch(provider, [
+        "books",
+        "booksAreLoading",
+        "booksError",
+      ])(Books, CustomLoadingComponent, CustomErrorComponent);
+
+      Component = () => (
+        <ReduxProvider>
+          <BooksConnectedComponent />
+        </ReduxProvider>
+      );
+    });
+
+    it("loading should be true when provider is loading and false when finish", async () => {
+      render(<Component />);
+      expect(screen.queryByTestId(CUSTOM_LOADING_ID)).toBeInTheDocument();
+      await wait();
+      expect(screen.queryByTestId(CUSTOM_LOADING_ID)).not.toBeInTheDocument();
+    });
+
+    it("loading should change when provider cache is cleaned", async () => {
+      render(<Component />);
+      await wait();
+      expect(screen.queryByTestId(CUSTOM_LOADING_ID)).not.toBeInTheDocument();
+      provider.cleanCache();
+      expect(screen.queryByTestId(CUSTOM_LOADING_ID)).toBeInTheDocument();
+      await wait();
+      expect(screen.queryByTestId(CUSTOM_LOADING_ID)).not.toBeInTheDocument();
+    });
+
+    it("should return null when provider is loading and no loading component is provided", async () => {
+      BooksConnectedComponent = withDataProviderBranch(provider)(BooksComponent);
+
+      Component = () => (
+        <ReduxProvider>
+          <BooksConnectedComponent />
+        </ReduxProvider>
+      );
+      render(<Component />);
+      expect(screen.queryByTestId(CUSTOM_LOADING_ID)).not.toBeInTheDocument();
+      expect(screen.queryByTestId(CUSTOM_ERROR_ID)).not.toBeInTheDocument();
+      expect(screen.queryByTestId(BOOKS_ID)).not.toBeInTheDocument();
+    });
+
+    it("should pass data to the component", async () => {
+      const bookTitle = "Animal Farm";
+      render(<Component />);
+      await wait();
+      expect(screen.getByText(bookTitle)).toBeInTheDocument();
+    });
+
+    it("should refresh data", async () => {
+      const TEST_ID = "book-2";
+      render(<Component />);
+      await wait();
+      expect(screen.queryByTestId(TEST_ID)).toBeInTheDocument();
+      provider.delete(2);
+      await wait();
+      expect(screen.queryByTestId(TEST_ID)).not.toBeInTheDocument();
+    });
+
+    it("error should be null when provider does not throw error", async () => {
+      render(<Component />);
+      expect(screen.queryByTestId(CUSTOM_ERROR_ID)).not.toBeInTheDocument();
+      await wait();
+      expect(screen.queryByTestId(CUSTOM_ERROR_ID)).not.toBeInTheDocument();
+    });
+
+    it("should return error when provider throws error", async () => {
+      const ERROR_MESSAGE = "Foo error";
+      provider.error = new Error(ERROR_MESSAGE);
+      render(<Component />);
+      await wait();
+      expect(screen.getByText(ERROR_MESSAGE)).toBeInTheDocument();
+    });
+
+    it("should return null when provider throws an error and no error component is provided", async () => {
+      BooksConnectedComponent = withDataProviderBranch(provider)(
+        BooksComponent,
+        CustomLoadingComponent
+      );
+
+      Component = () => (
+        <ReduxProvider>
+          <BooksConnectedComponent />
+        </ReduxProvider>
+      );
+      provider.error = new Error();
+      render(<Component />);
+      await wait();
+      expect(screen.queryByTestId(CUSTOM_LOADING_ID)).not.toBeInTheDocument();
+      expect(screen.queryByTestId(CUSTOM_ERROR_ID)).not.toBeInTheDocument();
+      expect(screen.queryByTestId(BOOKS_ID)).not.toBeInTheDocument();
     });
   });
 });
