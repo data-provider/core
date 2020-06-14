@@ -27,6 +27,11 @@ export const useLoading = (dataProvider) => {
   return useSelector(() => dataProvider && dataProvider.state.loading);
 };
 
+export const useLoaded = (dataProvider) => {
+  useRefresh(dataProvider);
+  return useSelector(() => dataProvider && dataProvider.state.loaded);
+};
+
 export const useError = (dataProvider) => {
   useRefresh(dataProvider);
   return useSelector(() => dataProvider && dataProvider.state.error);
