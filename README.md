@@ -1,4 +1,4 @@
-[![Build status][travisci-image]][travisci-url]
+[![Build status][travisci-image]][travisci-url] [![Coverage Status][coveralls-image]][coveralls-url] [![Quality Gate][quality-gate-image]][quality-gate-url]
 
 [![NPM dependencies][npm-dependencies-image]][npm-dependencies-url] [![Renovate](https://img.shields.io/badge/renovate-enabled-brightgreen.svg)](https://renovatebot.com) [![Last commit][last-commit-image]][last-commit-url] [![Last release][release-image]][release-url] 
 
@@ -89,6 +89,31 @@ import { books } from "../data/books";
 
 const BooksList = () => {
   const loading = useLoading(books);
+  // Do your stuff here
+};
+```
+
+### `useLoaded(provider)`
+
+Triggers `read` and gives you only the `loaded` property from the state of the provider or selector. When the provider cache is cleaned, it automatically triggers `read` again.
+
+#### Arguments
+
+* `provider` _(Object)_: [Data Provider][data-provider] provider or selector instance.
+
+#### Returns
+
+* _(Boolean)_ - Value of the `loaded` property from the provider state.
+
+#### Example
+
+```jsx
+import { useLoaded } from "@data-provider/react";
+
+import { books } from "../data/books";
+
+const BooksList = () => {
+  const loaded = useLoaded(books);
   // Do your stuff here
 };
 ```
@@ -235,6 +260,39 @@ const BooksList = ({ booksLoading }) => {
 };
 
 export default withLoading(books, "booksLoading")(BooksList);
+```
+
+### `withLoaded(provider, customPropName)(Component)`
+
+This High Order Component triggers the read method of the provider and gives to the component only the `loaded` property from its state.
+
+#### Arguments
+
+* `provider` _(Object)_: [Data Provider][data-provider] provider or selector instance, or a function as described in the [withDataProvider HOC docs](#withdataproviderprovider-custompropertiesnamescomponent)
+* `customPropName` _(String)_: By default, the HOC will pass to the component a `loaded` property. You can change that prop passing a new property name as second argument.
+
+#### Examples
+
+```jsx
+import { withLoaded } from "@data-provider/react";
+
+import { books } from "../data/books";
+
+const BooksList = ({ loaded }) => {
+  // Do your stuff here
+};
+
+export default withLoaded(books)(BooksList);
+```
+
+Using custom property:
+
+```jsx
+const BooksList = ({ booksLoaded }) => {
+  // Do your stuff here
+};
+
+export default withLoaded(books, "booksLoaded")(BooksList);
 ```
 
 ### `withError(provider, customPropName)(Component)`

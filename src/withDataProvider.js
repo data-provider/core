@@ -1,12 +1,19 @@
 import React, { useMemo } from "react";
 
-import { useRefresh, useDataProvider, useData, useLoading, useError } from "./useDataProvider";
+import {
+  useRefresh,
+  useDataProvider,
+  useData,
+  useLoading,
+  useLoaded,
+  useError,
+} from "./useDataProvider";
 
 const isFunction = (provider) => {
   return typeof provider === "function";
 };
 
-const defaultKeys = ["data", "loading", "error"];
+const defaultKeys = ["data", "loading", "error", "loaded"];
 
 const useProvider = (provider, props) => {
   return useMemo(() => {
@@ -45,6 +52,12 @@ const useLoadingCustomProp = (provider, key = defaultKeys[1]) => {
   const loading = useLoading(provider);
   const loadingProp = useProp(loading, key);
   return { loading, loadingProp };
+};
+
+const useLoadedCustomProp = (provider, key = defaultKeys[3]) => {
+  const loaded = useLoaded(provider);
+  const loadedProp = useProp(loaded, key);
+  return { loaded, loadedProp };
 };
 
 const useErrorCustomProp = (provider, key = defaultKeys[2]) => {
@@ -94,6 +107,12 @@ export const withLoading = (provider, key) => (Component) => (props) => {
   const providerToRead = useProvider(provider, props);
   const { loadingProp } = useLoadingCustomProp(providerToRead, key);
   return <Component {...props} {...loadingProp} />;
+};
+
+export const withLoaded = (provider, key) => (Component) => (props) => {
+  const providerToRead = useProvider(provider, props);
+  const { loadedProp } = useLoadedCustomProp(providerToRead, key);
+  return <Component {...props} {...loadedProp} />;
 };
 
 export const withError = (provider, key) => (Component) => (props) => {
