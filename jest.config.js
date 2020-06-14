@@ -31,8 +31,8 @@ module.exports = {
   testMatch: ["**/test/**/?(*.)+(spec|test).js?(x)"],
 
   transform: {
-    ".js$": "babel-jest"
+    ".js$": "babel-jest",
   },
 
-  setupFiles: ["<rootDir>/jest.init.js"]
+  setupFiles: ["<rootDir>/jest.init.js"],
 };
