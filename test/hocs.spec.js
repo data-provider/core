@@ -2,8 +2,16 @@ import React from "react";
 import "@testing-library/jest-dom";
 import { render, screen } from "@testing-library/react";
 import { providers } from "@data-provider/core";
+import sinon from "sinon";
 
-import { withData, withLoading, withLoaded, withError, withDataProvider } from "../src";
+import {
+  withData,
+  withLoading,
+  withLoaded,
+  withError,
+  withDataProvider,
+  withRefresh,
+} from "../src";
 
 import MockProvider from "./MockProvider";
 import { BOOKS, BOOKS_ID, LOADING_ID, ERROR_ID } from "./constants";
@@ -17,9 +25,10 @@ const wait = (time = 600) => {
 };
 
 describe("HOCs", () => {
-  let provider, BooksComponent, BooksConnectedComponent, Component;
+  let provider, BooksComponent, BooksConnectedComponent, Component, sandbox;
 
   beforeEach(() => {
+    sandbox = sinon.createSandbox();
     provider = new MockProvider(BOOKS_ID, {
       data: BOOKS,
     });
@@ -27,6 +36,7 @@ describe("HOCs", () => {
 
   afterEach(() => {
     providers.clear();
+    sandbox.restore();
   });
 
   describe("withData", () => {
@@ -196,7 +206,35 @@ describe("HOCs", () => {
     });
   });
 
-  describe("useDataProvider", () => {
+  describe("withRefresh", () => {
+    beforeEach(() => {
+      sandbox.spy(provider, "read");
+      // eslint-disable-next-line
+      BooksComponent = () => {
+        return <Books books={provider.state.data} />;
+      };
+
+      BooksConnectedComponent = withRefresh(provider)(BooksComponent);
+
+      // eslint-disable-next-line
+      Component = () => (
+        <ReduxProvider>
+          <BooksConnectedComponent />
+        </ReduxProvider>
+      );
+    });
+
+    it("should call to read the provider each time the cache is cleaned", async () => {
+      render(<Component />);
+      await wait();
+      expect(provider.read.callCount).toEqual(1);
+      provider.delete(2);
+      await wait();
+      expect(provider.read.callCount).toEqual(2);
+    });
+  });
+
+  describe("withDataProvider", () => {
     beforeEach(() => {
       // eslint-disable-next-line
       BooksComponent = ({ data, loading, error }) => {
