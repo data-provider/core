@@ -110,6 +110,35 @@ describe("HOCs", () => {
     });
   });
 
+  describe("withData using function", () => {
+    let componentProps;
+    beforeEach(() => {
+      BooksConnectedComponent = withData((props) => {
+        componentProps = props;
+        return provider;
+      }, "books")(Books);
+
+      Component = () => (
+        <ReduxProvider>
+          <BooksConnectedComponent foo="foo" />
+        </ReduxProvider>
+      );
+    });
+
+    it("should pass data to the component", async () => {
+      const bookTitle = "Animal Farm";
+      render(<Component />);
+      await wait();
+      expect(screen.getByText(bookTitle)).toBeInTheDocument();
+    });
+
+    it("should pass component properties to the function", async () => {
+      render(<Component />);
+      await wait();
+      expect(componentProps.foo).toEqual("foo");
+    });
+  });
+
   describe("withLoading", () => {
     beforeEach(() => {
       BooksConnectedComponent = withLoading(provider)(Books);
