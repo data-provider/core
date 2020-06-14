@@ -12,9 +12,13 @@ export const debounce = function (func, wait = 100) {
 class MockProvider extends Provider {
   readMethod() {
     var that = this;
-    return new Promise(function (resolve) {
+    return new Promise(function (resolve, reject) {
       setTimeout(function () {
-        resolve([...that.options.data]);
+        if (!that._errorToThrow) {
+          resolve([...that.options.data]);
+        } else {
+          reject(that._errorToThrow);
+        }
       }, 300);
     });
   }
@@ -53,6 +57,10 @@ class MockProvider extends Provider {
       ...item,
     });
     this._debouncedCleanCache();
+  }
+
+  set error(error) {
+    this._errorToThrow = error;
   }
 }
 

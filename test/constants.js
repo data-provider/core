@@ -20,3 +20,7 @@ export const BOOKS = [
     title: "The Old Man and the Sea",
   },
 ];
+
+export const LOADING_ID = "loading";
+export const ERROR_ID = "error";
+export const BOOKS_ID = "books";
