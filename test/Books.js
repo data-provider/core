@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 
 import { BOOKS_ID, ERROR_ID, LOADING_ID } from "./constants";
 
-const BooksList = ({ books = [], loading, error }) => {
+const Books = ({ books = [], loading, error }) => {
   if (error) {
     return <div data-testid={ERROR_ID}>{error.message}</div>;
   }
@@ -23,10 +23,10 @@ const BooksList = ({ books = [], loading, error }) => {
   );
 };
 
-BooksList.propTypes = {
+Books.propTypes = {
   books: PropTypes.array,
   loading: PropTypes.bool,
   error: PropTypes.instanceOf(Error),
 };
 
-export default BooksList;
+export default Books;
