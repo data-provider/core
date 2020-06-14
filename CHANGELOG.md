@@ -14,9 +14,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 - feat(loaded): Add useLoaded hook and withLoaded HOC
+- test(unit): Add unit tests full coverage
 
 ### Changed
 - chore(deps): Update dependencies
+- refactor(useDataProvider): Improve useDataProvider hook performance
 
 ### Fixed
 - fix(useDataProvider): Removed unused arguments
