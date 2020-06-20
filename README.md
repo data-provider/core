@@ -14,6 +14,25 @@
 npm i --save @data-provider/react
 ```
 
+## Available hooks
+
+* [useDataProvider](#usedataproviderprovider-equalityfn)
+* [useData](#usedataprovider-equalityfn)
+* [useLoading](#useloadingprovider)
+* [useLoaded](#useloadedprovider)
+* [useError](#useerrorprovider)
+* [usePolling](#usepollingprovider-interval)
+
+## Available HOCs
+
+* [withDataProvider](#withdataproviderprovider-custompropertiesnamescomponent)
+* [withData](#withdataprovider-custompropnamecomponent)
+* [withLoading](#withloadingprovider-custompropnamecomponent)
+* [withLoaded](#withloadedprovider-custompropnamecomponent)
+* [withError](#witherrorprovider-custompropnamecomponent)
+* [withPolling](#withpollingprovider-intervalcomponent)
+* [withDataProviderBranch](#withdataproviderbranchprovider-custompropertiesnamescomponent-loadingcomponent-errorcomponent)
+
 ## Hooks
 
 ### `useDataProvider(provider, [equalityFn])`
@@ -167,10 +186,6 @@ const BooksList = () => {
   // Do your stuff here. Books will fetched again from server every 3 seconds
 };
 ```
-
-### `useRefresh(provider)`
-
-Triggers `read` method of the `provider` first time the component is rendered, and each time its cache is cleaned. This hook is used internally by the other ones, but you could also use it separatelly.
 
 ## HOCs
 
@@ -375,10 +390,6 @@ const BooksList = ({ data }) => {
 
 export default withPolling(books, 3000)(withData(books)(BooksList));
 ```
-
-### `withRefresh(provider)(Component)`
-
-This High Order Component triggers the `read` method of the provider each time the provider cache is cleaned. It is used internally by the rest of HOCs, but you could also use it separately.
 
 #### Arguments
 
