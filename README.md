@@ -353,6 +353,29 @@ const BooksList = ({ booksError }) => {
 export default withError(books, "booksError")(BooksList);
 ```
 
+### `withPolling(provider, [interval])(Component)`
+
+This High Order Component works as the hook `usePolling` described above.
+
+#### Arguments
+
+* `provider` _(Object)_: [Data Provider][data-provider] provider or selector instance, or a function as described in the [withDataProvider HOC docs](#withdataproviderprovider-custompropertiesnamescomponent)
+* `interval` _(Object)_: Interval in miliseconds to clean the provider dependencies cache. Default is 5000.
+
+#### Example
+
+```jsx
+import { withData, withPolling } from "@data-provider/react";
+
+import { books } from "../data/books";
+
+const BooksList = ({ data }) => {
+  // Do your stuff here. Books data will fetched again from server every 3 seconds
+};
+
+export default withPolling(books, 3000)(withData(books)(BooksList));
+```
+
 ### `withRefresh(provider)(Component)`
 
 This High Order Component triggers the `read` method of the provider each time the provider cache is cleaned. It is used internally by the rest of HOCs, but you could also use it separately.
