@@ -10,6 +10,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 ### Removed
 
+## [2.5.2] - 2020-06-20
+
+### Fixed
+
+- fix(Selector): Mark selector dependencies to be read again and return same promise if selector read is still in progress when read is called again (Probable scenario when cleanCache and read are called while previous selector read method is still in progress)
+
 ## [2.5.1] - 2020-06-20
 
 ### Changed
