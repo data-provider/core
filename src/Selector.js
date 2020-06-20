@@ -17,10 +17,6 @@ export function catchDependency(dependency, catchMethod) {
   return new CatchDependency(dependency, catchMethod);
 }
 
-const isSelector = (objectToCheck) => {
-  return objectToCheck && objectToCheck instanceof SelectorBase;
-};
-
 const isDataProvider = (objectToCheck) => {
   return objectToCheck && objectToCheck instanceof Provider;
 };
@@ -59,7 +55,7 @@ class SelectorBase extends Provider {
     this._dependencies = options._dependencies;
     this._resolvedDependencies = [];
     this._selector = options._selector;
-    this._inProgressDependencies = null;
+    this._inProgressDependencies = new Set();
   }
 
   // Private methods
@@ -69,7 +65,6 @@ class SelectorBase extends Provider {
     let dependencies;
     let dependenciesListeners;
     let hasToReadAgain = false;
-    this._inProgressDependencies = new Set();
     const inProgressListeners = [];
 
     const markToReadAgain = () => {
@@ -79,7 +74,7 @@ class SelectorBase extends Provider {
     const removeInProgressListenerFuncs = () => {
       inProgressListeners.forEach((removeListener) => removeListener());
       this._resolvedDependencies = Array.from(this._inProgressDependencies);
-      this._inProgressDependencies = null;
+      this._inProgressDependencies.clear();
     };
 
     const cleanCache = () => {
@@ -175,6 +170,12 @@ class SelectorBase extends Provider {
     return readAndReturn();
   }
 
+  _cleanCaches(dependencies) {
+    dependencies.forEach((dependency) => {
+      dependency.cleanDependenciesCache();
+    });
+  }
+
   // Overwrite Provider methods
 
   readMethod() {
@@ -189,20 +190,8 @@ class SelectorBase extends Provider {
     }
   }
 
-  // Public methods
-
-  _cleanCaches(dependencies) {
-    dependencies.forEach((dependency) => {
-      if (isSelector(dependency)) {
-        dependency.cleanDependenciesCache();
-      } else {
-        dependency.cleanCache();
-      }
-    });
-  }
-
   cleanDependenciesCache() {
-    if (this._inProgressDependencies) {
+    if (this._inProgressDependencies.size > 0) {
       this._cleanCaches(Array.from(this._inProgressDependencies));
     } else {
       this._cleanCaches(this._resolvedDependencies);
