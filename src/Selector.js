@@ -167,7 +167,21 @@ class SelectorBase extends Provider {
           return Promise.reject(error);
         });
     };
-    return readAndReturn();
+    if (this._readInProgress) {
+      hasToReadAgain = true;
+      return this._readInProgress;
+    }
+
+    this._readInProgress = readAndReturn()
+      .then((result) => {
+        this._readInProgress = null;
+        return Promise.resolve(result);
+      })
+      .catch((error) => {
+        this._readInProgress = null;
+        return Promise.reject(error);
+      });
+    return this._readInProgress;
   }
 
   _cleanCaches(dependencies) {

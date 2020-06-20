@@ -38,7 +38,7 @@ describe("Selector cache", () => {
             } else {
               reject(new Error());
             }
-          }, 50);
+          }, 100);
         });
       }
     };
@@ -53,6 +53,20 @@ describe("Selector cache", () => {
   afterEach(() => {
     sandbox.restore();
     providers.clear();
+  });
+
+  describe("selector cache", () => {
+    it("should not execute read method more than once if cache is cleaned while it is already reading", async () => {
+      selector.read();
+      selector.cleanCache();
+      selector.read();
+      selector.cleanCache();
+      selector.read();
+      selector.cleanCache();
+      selector.read();
+      await selector.read();
+      expect(spies.selectorRead.callCount).toEqual(1);
+    });
   });
 
   describe("without query", () => {
