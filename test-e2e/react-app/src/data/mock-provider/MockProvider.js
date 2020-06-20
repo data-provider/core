@@ -16,6 +16,11 @@ class MockProvider extends Provider {
     this.cleanCache();
   }
 
+  cleanDependenciesCache() {
+    console.log("Cleaning cache");
+    this.cleanCache();
+  }
+
   _debouncedCleanCache() {}
 
   configMethod(options) {

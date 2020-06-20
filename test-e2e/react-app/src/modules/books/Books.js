@@ -1,6 +1,6 @@
 import React from "react";
 
-import { useRefresh, useData, useLoading } from "@data-provider/react";
+import { useData, useLoading, usePolling } from "@data-provider/react";
 
 import { booksWithAuthorName } from "data/books";
 import BooksList from "modules/books-list";
@@ -11,9 +11,9 @@ import ItemsListContainer from "components/items-list-container";
 import BookNew from "./modules/book-new";
 
 const Books = () => {
-  useRefresh(booksWithAuthorName);
   const books = useData(booksWithAuthorName);
   const loading = useLoading(booksWithAuthorName);
+  usePolling(booksWithAuthorName, 10000);
 
   console.log("Rendering books", loading, books);
 
