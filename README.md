@@ -143,6 +143,31 @@ const BooksList = () => {
 };
 ```
 
+### `usePolling(provider, [interval])`
+
+Triggers `cleanDependenciesCache` method of the provider each `interval` miliseconds while the component is "alive". It can be used in multiple components at the same time for the same provider. In that case, the used interval will be the lower one, and it will be recalculated each time a component is added or removed.
+
+This hook can also be used with [Data Provider selectors][data-provider-selectors], as it will clean the cache of all selector dependencies. So, if you are using a selector combining data from two axios providers, for example, it will result in repeating both provider http requests and recalculating the selector result every defined interval.
+
+#### Arguments
+
+* `provider` _(Object)_: [Data Provider][data-provider] provider or selector instance.
+* `interval` _(Object)_: Interval in miliseconds to clean the provider dependencies cache. Default is 5000.
+
+#### Example
+
+```jsx
+import { useData, usePolling } from "@data-provider/react";
+
+import { books } from "../data/books";
+
+const BooksList = () => {
+  const data = useData(books);
+  usePolling(books, 3000);
+  // Do your stuff here. Books will fetched again from server every 3 seconds
+};
+```
+
 ### `useRefresh(provider)`
 
 Triggers `read` method of the `provider` first time the component is rendered, and each time its cache is cleaned. This hook is used internally by the other ones, but you could also use it separatelly.
@@ -366,6 +391,7 @@ Contributors are welcome.
 Please read the [contributing guidelines](.github/CONTRIBUTING.md) and [code of conduct](.github/CODE_OF_CONDUCT.md).
 
 [data-provider]: https://www.data-provider.org
+[data-provider-selectors]: https://www.data-provider.org/docs/api-selector
 [axios]: https://github.com/axios/axios
 [get-started]: https://www.data-provider.org/docs/getting-started
 [basic-tutorial]: https://www.data-provider.org/docs/basics-intro
