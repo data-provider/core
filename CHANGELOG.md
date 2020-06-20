@@ -10,6 +10,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 ### Removed
 
+## [2.5.1] - 2020-06-20
+
+### Changed
+- chore(deps): Update dependencies
+
 ## [2.5.0] - 2020-06-09
 
 ### Added
@@ -17,9 +22,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 - fix(Selector): Avoid setting inProgressDependencies to null
-
-### Changed
-- chore(deps): Update dependencies
 
 ## [2.4.0] - 2020-06-07
 
