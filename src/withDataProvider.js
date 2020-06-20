@@ -9,6 +9,8 @@ import {
   useError,
 } from "./useDataProvider";
 
+import { usePolling } from "./usePolling";
+
 const isFunction = (provider) => {
   return typeof provider === "function";
 };
@@ -119,6 +121,12 @@ export const withError = (provider, key) => (Component) => (props) => {
   const providerToRead = useProvider(provider, props);
   const { errorProp } = useErrorCustomProp(providerToRead, key);
   return <Component {...props} {...errorProp} />;
+};
+
+export const withPolling = (provider, interval) => (Component) => (props) => {
+  const providerToRead = useProvider(provider, props);
+  usePolling(providerToRead, interval);
+  return <Component {...props} />;
 };
 
 export const withRefresh = (provider) => (Component) => (props) => {
