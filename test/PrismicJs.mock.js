@@ -19,7 +19,7 @@ const Mock = class Mock {
     this._apiQueryStub = this._sandbox.stub().resolves({});
 
     this._apiStub = this._sandbox.stub(PrismicJs, "api").resolves({
-      query: this._apiQueryStub
+      query: this._apiQueryStub,
     });
     this._predicatesAtStub = this._sandbox.stub(PrismicJs.Predicates, "at").returns("");
   }
@@ -27,10 +27,10 @@ const Mock = class Mock {
   get stubs() {
     return {
       predicates: {
-        at: this._predicatesAtStub
+        at: this._predicatesAtStub,
       },
       api: this._apiStub,
-      apiQuery: this._apiQueryStub
+      apiQuery: this._apiQueryStub,
     };
   }
 
