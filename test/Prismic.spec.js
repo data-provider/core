@@ -12,7 +12,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 /* global describe, beforeEach, afterEach, it, expect  */
 
 const sinon = require("sinon");
-const { sources } = require("@data-provider/core");
+const { providers } = require("@data-provider/core");
 
 const PrismicMock = require("./PrismicJs.mock");
 
@@ -28,11 +28,11 @@ describe("Prismic", () => {
     sandbox = sinon.createSandbox();
     mock = new PrismicMock();
     prismic = new Prismic(fooPrismicUrl);
-    sandbox.spy(prismic, "clean");
+    sandbox.spy(prismic, "cleanCache");
   });
 
   afterEach(() => {
-    sources.clear();
+    providers.clear();
     mock.restore();
     sandbox.restore();
   });
@@ -46,7 +46,7 @@ describe("Prismic", () => {
       await prismic.read();
       await prismic
         .query({
-          documentType: "foo"
+          documentType: "foo",
         })
         .read();
       expect(mock.stubs.api.callCount).toEqual(1);
@@ -61,11 +61,11 @@ describe("Prismic", () => {
   describe("when read is dispatched", () => {
     it("should pass release config as ref parameter to prismic client", async () => {
       prismic = new Prismic(fooPrismicUrl, {
-        release: "foo-release"
+        release: "foo-release",
       });
       await prismic.read();
       expect(mock.stubs.apiQuery.getCall(0).args[1]).toEqual({
-        ref: "foo-release"
+        ref: "foo-release",
       });
     });
 
@@ -73,7 +73,7 @@ describe("Prismic", () => {
       mock.stubs.predicates.at.returns("foo-client-query");
       await prismic
         .query({
-          documentType: "foo"
+          documentType: "foo",
         })
         .read();
       expect(mock.stubs.predicates.at.getCall(0).args[1]).toEqual("foo");
@@ -82,11 +82,11 @@ describe("Prismic", () => {
 
     it("should resolve with query full response if fullResponse option is true", async () => {
       const fooResponse = {
-        results: "foo"
+        results: "foo",
       };
       mock.stubs.apiQuery.resolves(fooResponse);
       prismic.config({
-        fullResponse: true
+        fullResponse: true,
       });
       const result = await prismic.read();
       expect(result).toEqual(fooResponse);
@@ -94,7 +94,7 @@ describe("Prismic", () => {
 
     it("should resolve with query response result property by default", async () => {
       const fooResponse = {
-        results: "foo"
+        results: "foo",
       };
       mock.stubs.apiQuery.resolves(fooResponse);
       const result = await prismic.read();
@@ -103,10 +103,10 @@ describe("Prismic", () => {
 
     it("should resolve with query response result if fullResponse option is false", async () => {
       const fooResponse = {
-        results: "foo"
+        results: "foo",
       };
       prismic.config({
-        fullResponse: false
+        fullResponse: false,
       });
       mock.stubs.apiQuery.resolves(fooResponse);
       const result = await prismic.read();
@@ -150,17 +150,17 @@ describe("Prismic", () => {
       expect.assertions(6);
       prismic.config({
         fullResponse: false,
-        release: "foo"
+        release: "foo",
       });
       expect(prismic._release).toEqual("foo");
       expect(prismic._fullResponse).toEqual(false);
       prismic.config({
-        fullResponse: true
+        fullResponse: true,
       });
       expect(prismic._release).toEqual("foo");
       expect(prismic._fullResponse).toEqual(true);
       prismic.config({
-        release: "foo-release"
+        release: "foo-release",
       });
       expect(prismic._release).toEqual("foo-release");
       expect(prismic._fullResponse).toEqual(true);
@@ -170,82 +170,82 @@ describe("Prismic", () => {
       expect.assertions(1);
       const FOO_NEW_URL = "foo-prismic-url-2";
       prismic.config({
-        url: FOO_NEW_URL
+        url: FOO_NEW_URL,
       });
       await prismic.read();
       expect(mock.stubs.api.getCall(0).args[0]).toEqual(FOO_NEW_URL);
     });
 
-    it("should override previously defined url when using mercury sources handler", async () => {
+    it("should override previously defined url when using providers handler", async () => {
       expect.assertions(1);
       const FOO_NEW_URL = "foo-prismic-url-2";
-      sources.getByTag("prismic").config({
-        url: FOO_NEW_URL
+      providers.getByTag("prismic").config({
+        url: FOO_NEW_URL,
       });
       await prismic.read();
       expect(mock.stubs.api.getCall(0).args[0]).toEqual(FOO_NEW_URL);
     });
 
-    it("should override previously defined url when using mercury sources handler even when source has its own tag defined", async () => {
+    it("should override previously defined url when using providers handler even when provider has its own tag defined", async () => {
       expect.assertions(1);
       prismic = new Prismic(fooPrismicUrl, {
-        tags: "foo-tag"
+        tags: ["foo-tag"],
       });
       const FOO_NEW_URL = "foo-prismic-url-3";
-      sources.getByTag("prismic").config({
-        url: FOO_NEW_URL
+      providers.getByTag("prismic").config({
+        url: FOO_NEW_URL,
       });
       await prismic.read();
       expect(mock.stubs.api.getCall(0).args[0]).toEqual(FOO_NEW_URL);
     });
 
-    it("should override previously defined url when using mercury sources handler even when source has its own prismic tag defined", async () => {
+    it("should override previously defined url when using providers handler even when provider has its own prismic tag defined", async () => {
       expect.assertions(1);
       prismic = new Prismic(fooPrismicUrl, {
-        tags: "prismic"
+        tags: ["prismic"],
       });
       const FOO_NEW_URL = "foo-prismic-url-3";
-      sources.getByTag("prismic").config({
-        url: FOO_NEW_URL
+      providers.getByTag("prismic").config({
+        url: FOO_NEW_URL,
       });
       await prismic.read();
       expect(mock.stubs.api.getCall(0).args[0]).toEqual(FOO_NEW_URL);
     });
 
-    it("should work when using mercury sources handler even when source has its own tags defined", async () => {
+    it("should work when using providers handler even when provider has its own tags defined", async () => {
       expect.assertions(1);
       prismic = new Prismic(fooPrismicUrl, {
-        tags: ["foo-tag", "foo-tag-2"]
+        tags: ["foo-tag", "foo-tag-2"],
       });
       const FOO_NEW_URL = "foo-prismic-url-4";
-      sources.getByTag("prismic").config({
-        url: FOO_NEW_URL
+      providers.getByTag("prismic").config({
+        url: FOO_NEW_URL,
       });
       await prismic.read();
       expect(mock.stubs.api.getCall(0).args[0]).toEqual(FOO_NEW_URL);
     });
 
-    it("should work when using mercury sources handler and specific tags", async () => {
+    it("should work when using providers handler and specific tags", async () => {
       expect.assertions(1);
       prismic = new Prismic(fooPrismicUrl, {
-        tags: "foo-tag"
+        tags: ["foo-tag"],
       });
       const FOO_NEW_URL = "foo-prismic-url-5";
-      sources.getByTag("foo-tag").config({
-        url: FOO_NEW_URL
+      providers.getByTag("foo-tag").config({
+        url: FOO_NEW_URL,
       });
       await prismic.read();
       expect(mock.stubs.api.getCall(0).args[0]).toEqual(FOO_NEW_URL);
     });
 
-    it("should work when using mercury sources handler and an specific tag that is present in defined tags", async () => {
+    it("should work when using providers handler and an specific tag that is present in defined tags", async () => {
       expect.assertions(1);
       prismic = new Prismic(fooPrismicUrl, {
-        tags: ["foo-tag", "foo-tag-3"]
+        tags: ["foo-tag", "foo-tag-3"],
       });
       const FOO_NEW_URL = "foo-prismic-url-5";
-      sources.getByTag("foo-tag-3").config({
-        url: FOO_NEW_URL
+      providers.getByTag("foo-tag-3").config({
+        url: FOO_NEW_URL,
       });
       await prismic.read();
       expect(mock.stubs.api.getCall(0).args[0]).toEqual(FOO_NEW_URL);
@@ -257,17 +257,17 @@ describe("Prismic", () => {
       expect.assertions(3);
       const FOO_URL = "foo-prismic-url-2";
       const FOO_NEW_URL = "foo-prismic-url-3";
-      sources.getByTag("prismic").config({
-        url: FOO_URL
+      providers.getByTag("prismic").config({
+        url: FOO_URL,
       });
       await prismic.read();
       expect(mock.stubs.api.getCall(0).args[0]).toEqual(FOO_URL);
-      sources.getByTag("prismic").config({
-        url: FOO_NEW_URL
+      providers.getByTag("prismic").config({
+        url: FOO_NEW_URL,
       });
       await prismic.read();
       expect(mock.stubs.api.getCall(1).args[0]).toEqual(FOO_NEW_URL);
-      expect(sources.getByTag("prismic").elements[0].clean.callCount).toEqual(2);
+      expect(providers.getByTag("prismic").elements[0].cleanCache.callCount).toEqual(2);
     });
   });
 });

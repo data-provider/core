@@ -1,6 +1,6 @@
 {
   "name": "@data-provider/prismic",
-  "version": "1.5.2",
+  "version": "2.0.0",
   "description": "Data Provider for reading data from Prismic CMS API",
   "keywords": [
     "data-provider",
@@ -20,47 +20,49 @@
   "files": [
     "dist"
   ],
-  "main": "dist/data-provider-prismic.cjs.js",
-  "module": "dist/data-provider-prismic.esm.js",
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.esm.js",
   "scripts": {
-    "lint": "eslint src test",
+    "lint": "eslint src test *.js",
     "lint-staged": "lint-staged",
     "build": "rollup --config",
     "test": "jest",
-    "test-ci": "npm run test -- --coverage --ci --verbose=false --coverageReporters=lcov --coverageReporters=text-summary",
+    "test:ci": "npm run test -- --coverage --ci --verbose=false --coverageReporters=lcov --coverageReporters=text-summary",
+    "test:coverage": "npm run test:ci",
     "coveralls": "cat ./coverage/lcov.info | coveralls"
   },
   "peerDependencies": {
-    "@data-provider/core": "^1.7.0"
+    "@data-provider/core": "2.x"
   },
   "dependencies": {
-    "prismic-javascript": "2.0.3"
+    "prismic-javascript": "2.1.5"
   },
   "devDependencies": {
-    "@babel/core": "7.8.0",
-    "@babel/preset-env": "7.8.0",
-    "@babel/preset-react": "7.8.0",
-    "@data-provider/core": "1.7.2",
+    "@babel/core": "7.10.3",
+    "@babel/preset-env": "7.10.3",
+    "@data-provider/core": "2.5.2",
+    "@rollup/plugin-babel": "5.0.3",
+    "@rollup/plugin-commonjs": "13.0.0",
+    "@rollup/plugin-json": "4.1.0",
+    "@rollup/plugin-node-resolve": "8.0.1",
     "babel-core": "7.0.0-bridge.0",
     "babel-jest": "24.9.0",
     "babel-polyfill": "6.26.0",
-    "coveralls": "3.0.7",
-    "eslint": "6.8.0",
-    "eslint-config-prettier": "6.4.0",
-    "eslint-plugin-prettier": "3.1.1",
-    "husky": "4.0.7",
-    "jest": "24.9.0",
-    "lint-staged": "9.4.2",
-    "prettier": "1.18.2",
-    "rollup": "1.23.1",
-    "rollup-plugin-babel": "4.3.3",
-    "rollup-plugin-commonjs": "10.1.0",
-    "rollup-plugin-json": "4.0.0",
-    "rollup-plugin-node-resolve": "5.2.0",
-    "rollup-plugin-uglify": "6.0.3",
-    "sinon": "8.0.4"
+    "coveralls": "3.0.9",
+    "eslint": "7.3.0",
+    "eslint-config-prettier": "6.11.0",
+    "eslint-plugin-prettier": "3.1.4",
+    "husky": "4.2.5",
+    "jest": "26.0.1",
+    "lint-staged": "10.2.11",
+    "prettier": "2.0.5",
+    "redux": "4.0.5",
+    "rollup": "2.17.1",
+    "rollup-plugin-terser": "6.1.0",
+    "sinon": "9.0.2"
   },
   "lint-staged": {
+    "*.js": "eslint",
     "src/**/*.js": "eslint",
     "test/**/*.js": "eslint"
   },
@@ -68,5 +70,8 @@
     "hooks": {
       "pre-commit": "npm run lint-staged"
     }
+  },
+  "engines": {
+    "node": "12.x || 14.x"
   }
 }

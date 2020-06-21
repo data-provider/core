@@ -11,6 +11,20 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Removed
 ### BREAKING CHANGES
 
+## [2.0.0] - 2020-06-21
+
+### BREAKING CHANGES
+- chore(deps): Update @data-provider/core to v2
+- chore(build): Rename exported files to index.[format].js
+- feat(options): tags option has to be an array.
+
+### Changed
+- chore(deps): Update dependencies
+
+## [1.5.3] - 2019-01-26
+### Changed
+- Update dependencies
+
 ## [1.5.2] - 2019-01-12
 ### Changed
 - Update dependencies

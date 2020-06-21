@@ -16,26 +16,22 @@ const PRISMIC_TAG = "prismic";
 const defaultConfig = {
   release: null,
   fullResponse: false,
-  url: ""
+  url: "",
 };
 
 export class Prismic extends Provider {
-  constructor(url, options = {}) {
-    const tags = Array.isArray(options.tags) ? options.tags : [options.tags];
-    tags.push(PRISMIC_TAG);
-    super(`prismic-${url}`, options.defaultValue, {
-      ...defaultConfig,
-      ...{ url },
-      ...options,
-      tags
-    });
+  constructor(url, options, query) {
+    const opts = options || {};
+    const tags = opts.tags ? [...opts.tags] : [];
+    tags.unshift(PRISMIC_TAG);
+    super(`prismic-${url}`, { ...defaultConfig, ...opts, tags, url }, query);
   }
 
-  _config(configuration) {
+  configMethod(configuration) {
     if (this._url !== configuration.url) {
       this._prismicApi = null;
       this._url = configuration.url;
-      this.clean();
+      this.cleanCache();
     }
     this._fullResponse = configuration.fullResponse;
     this._release = configuration.release;
@@ -50,28 +46,20 @@ export class Prismic extends Provider {
   }
 
   _prismicRequest(query) {
-    this._prismicApi = this._prismicApi || PrismicClient.api(this._url);
-    return this._prismicApi.then(api => {
+    this._prismicApi =
+      this._prismicApi || (this.parent && this.parent._prismicApi) || PrismicClient.api(this._url);
+    return this._prismicApi.then((api) => {
       const apiParams = {};
       if (this._release) {
         apiParams.ref = this._release;
       }
-      return api.query(this._prismicQuery(query), apiParams).then(response => {
+      return api.query(this._prismicQuery(query), apiParams).then((response) => {
         return Promise.resolve(this._fullResponse ? response : response.results);
       });
     });
   }
 
-  _read(query) {
-    const cached = this._cache.get(query);
-    if (cached) {
-      return cached;
-    }
-    const request = this._prismicRequest(query).catch(err => {
-      this._cache.set(query, null);
-      return Promise.reject(err);
-    });
-    this._cache.set(query, request);
-    return request;
+  readMethod() {
+    return this._prismicRequest(this.queryValue);
   }
 }
