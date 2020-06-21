@@ -13,7 +13,7 @@ import BookNew from "./modules/book-new";
 const Books = () => {
   const books = useData(booksWithAuthorName);
   const loading = useLoading(booksWithAuthorName);
-  usePolling(booksWithAuthorName, 10000);
+  usePolling(booksWithAuthorName, 25000);
 
   console.log("Rendering books", loading, books);
 

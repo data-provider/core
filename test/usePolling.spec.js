@@ -131,7 +131,7 @@ describe("usePolling", () => {
 
     it("should use the next lower polling interval available from the rest of components using it", async () => {
       render(<Component />);
-      const promise = wait(3200);
+      const promise = wait(3100);
       await act(() => promise);
       expect(provider.cleanCache.callCount).toEqual(4);
     });

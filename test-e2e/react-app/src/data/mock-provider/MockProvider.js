@@ -2,10 +2,34 @@ import { Provider } from "@data-provider/core";
 
 import { debounce } from "helpers/debounce";
 
+// Duplicate last item in data after 25 seconds in order to test polling
+
+let addNewItem = false;
+setTimeout(() => {
+  addNewItem = true;
+}, 25000);
+
+const duplicateItem = (item) => {
+  return Object.keys(item).reduce((newItem, itemKey) => {
+    if (typeof item[itemKey] === "string") {
+      newItem[itemKey] = `${item[itemKey]} - NEW ITEM`;
+    } else {
+      newItem[itemKey] = item[itemKey] + 1;
+    }
+    return newItem;
+  }, {});
+};
+
 class MockProvider extends Provider {
   readMethod() {
     var that = this;
     return new Promise(function (resolve) {
+      if (addNewItem) {
+        addNewItem = false;
+        that.options.data = that.options.data.concat([
+          duplicateItem(that.options.data[that.options.data.length - 1]),
+        ]);
+      }
       setTimeout(function () {
         resolve([...that.options.data]);
       }, 1000);
