@@ -20,10 +20,11 @@ const defaultConfig = {
 };
 
 export class Prismic extends Provider {
-  constructor(url, options = {}, query) {
-    const tags = options.tags ? [...options.tags] : [];
+  constructor(url, options, query) {
+    const opts = options || {};
+    const tags = opts.tags ? [...opts.tags] : [];
     tags.unshift(PRISMIC_TAG);
-    super(`prismic-${url}`, { ...defaultConfig, ...options, tags, url }, query);
+    super(`prismic-${url}`, { ...defaultConfig, ...opts, tags, url }, query);
   }
 
   configMethod(configuration) {
