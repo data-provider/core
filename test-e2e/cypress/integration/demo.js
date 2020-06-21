@@ -147,4 +147,13 @@ describe("Demo page", () => {
       books.search.shouldDisplayItems(1);
     });
   });
+
+  describe("books polling", () => {
+    it("should load a new item automatically after 25 seconds", () => {
+      authors.search.type("new item");
+      authors.search.shouldDisplayNoResults();
+      cy.wait(10000);
+      authors.search.shouldDisplayItem(1, `${NEW_AUTHOR} - NEW ITEM`);
+    });
+  });
 });

@@ -14,6 +14,25 @@
 npm i --save @data-provider/react
 ```
 
+## Available hooks
+
+* [useDataProvider](#usedataproviderprovider-equalityfn)
+* [useData](#usedataprovider-equalityfn)
+* [useLoading](#useloadingprovider)
+* [useLoaded](#useloadedprovider)
+* [useError](#useerrorprovider)
+* [usePolling](#usepollingprovider-interval)
+
+## Available HOCs
+
+* [withDataProvider](#withdataproviderprovider-custompropertiesnamescomponent)
+* [withData](#withdataprovider-custompropnamecomponent)
+* [withLoading](#withloadingprovider-custompropnamecomponent)
+* [withLoaded](#withloadedprovider-custompropnamecomponent)
+* [withError](#witherrorprovider-custompropnamecomponent)
+* [withPolling](#withpollingprovider-intervalcomponent)
+* [withDataProviderBranch](#withdataproviderbranchprovider-custompropertiesnamescomponent-loadingcomponent-errorcomponent)
+
 ## Hooks
 
 ### `useDataProvider(provider, [equalityFn])`
@@ -143,9 +162,30 @@ const BooksList = () => {
 };
 ```
 
-### `useRefresh(provider)`
+### `usePolling(provider, [interval])`
 
-Triggers `read` method of the `provider` first time the component is rendered, and each time its cache is cleaned. This hook is used internally by the other ones, but you could also use it separatelly.
+Triggers `cleanDependenciesCache` method of the provider each `interval` miliseconds while the component is "alive". It can be used in multiple components at the same time for the same provider. In that case, the used interval will be the lower one, and it will be recalculated each time a component is added or removed.
+
+This hook can also be used with [Data Provider selectors][data-provider-selectors], as it will clean the cache of all selector dependencies. So, if you are using a selector combining data from two axios providers, for example, it will result in repeating both provider http requests and recalculating the selector result every defined interval.
+
+#### Arguments
+
+* `provider` _(Object)_: [Data Provider][data-provider] provider or selector instance.
+* `interval` _(Object)_: Interval in miliseconds to clean the provider dependencies cache. Default is 5000.
+
+#### Example
+
+```jsx
+import { useData, usePolling } from "@data-provider/react";
+
+import { books } from "../data/books";
+
+const BooksList = () => {
+  const data = useData(books);
+  usePolling(books, 3000);
+  // Do your stuff here. Books will fetched again from server every 3 seconds
+};
+```
 
 ## HOCs
 
@@ -328,9 +368,28 @@ const BooksList = ({ booksError }) => {
 export default withError(books, "booksError")(BooksList);
 ```
 
-### `withRefresh(provider)(Component)`
+### `withPolling(provider, [interval])(Component)`
 
-This High Order Component triggers the `read` method of the provider each time the provider cache is cleaned. It is used internally by the rest of HOCs, but you could also use it separately.
+This High Order Component works as the hook `usePolling` described above.
+
+#### Arguments
+
+* `provider` _(Object)_: [Data Provider][data-provider] provider or selector instance, or a function as described in the [withDataProvider HOC docs](#withdataproviderprovider-custompropertiesnamescomponent)
+* `interval` _(Object)_: Interval in miliseconds to clean the provider dependencies cache. Default is 5000.
+
+#### Example
+
+```jsx
+import { withData, withPolling } from "@data-provider/react";
+
+import { books } from "../data/books";
+
+const BooksList = ({ data }) => {
+  // Do your stuff here. Books data will fetched again from server every 3 seconds
+};
+
+export default withPolling(books, 3000)(withData(books)(BooksList));
+```
 
 #### Arguments
 
@@ -366,6 +425,7 @@ Contributors are welcome.
 Please read the [contributing guidelines](.github/CONTRIBUTING.md) and [code of conduct](.github/CODE_OF_CONDUCT.md).
 
 [data-provider]: https://www.data-provider.org
+[data-provider-selectors]: https://www.data-provider.org/docs/api-selector
 [axios]: https://github.com/axios/axios
 [get-started]: https://www.data-provider.org/docs/getting-started
 [basic-tutorial]: https://www.data-provider.org/docs/basics-intro

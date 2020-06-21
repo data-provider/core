@@ -10,6 +10,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 ### Removed
 
+## [1.2.0] - 2020-06-21
+
+### Added
+- feat(polling): Add usePolling hook and withPolling HOC
+
+### Changed
+- chore(deps): Update dependencies
+
 ## [1.1.0] - 2020-06-14
 
 ### Added

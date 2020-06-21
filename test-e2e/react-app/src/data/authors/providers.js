@@ -22,3 +22,5 @@ const AUTHORS = [
 export const authorsProvider = new MockProvider("authors", {
   data: AUTHORS,
 });
+
+window.authorsProvider = authorsProvider;
