@@ -10,7 +10,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 ### Removed
 
+## [2.1.3] - 2020-06-21
+
+### Changed
+- chore(deps): Update dependencies
+
 ## [2.1.2] - 2020-05-16
+
+### Added
+- test(stryker): Add stryker tests
 
 ### Changed
 - chore(deps): Update dependencies
