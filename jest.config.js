@@ -20,8 +20,8 @@ module.exports = {
       branches: 100,
       functions: 100,
       lines: 100,
-      statements: 100
-    }
+      statements: 100,
+    },
   },
 
   // The test environment that will be used for testing
@@ -32,10 +32,10 @@ module.exports = {
   //testMatch: ["<rootDir>/test/axios-config.spec.js"],
 
   transform: {
-    ".js$": "babel-jest"
+    ".js$": "babel-jest",
   },
 
   setupFiles: ["<rootDir>/jest.init.js"],
 
-  testSequencer: "<rootDir>/jest.testSequencer.js"
+  testSequencer: "<rootDir>/jest.testSequencer.js",
 };
