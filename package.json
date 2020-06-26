@@ -50,7 +50,7 @@
     "@rollup/plugin-babel": "5.0.4",
     "@rollup/plugin-commonjs": "13.0.0",
     "@rollup/plugin-json": "4.1.0",
-    "@rollup/plugin-node-resolve": "8.0.1",
+    "@rollup/plugin-node-resolve": "8.1.0",
     "@stryker-mutator/babel-transpiler": "3.3.0",
     "@stryker-mutator/core": "3.3.0",
     "@stryker-mutator/javascript-mutator": "3.3.0",
