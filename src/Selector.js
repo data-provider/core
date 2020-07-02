@@ -184,9 +184,14 @@ class SelectorBase extends Provider {
     return this._readInProgress;
   }
 
-  _cleanCaches(dependencies) {
+  _cleanCaches(dependencies, options) {
     dependencies.forEach((dependency) => {
-      dependency.cleanDependenciesCache();
+      if (
+        !options.except ||
+        (!options.except.includes(dependency) && !options.except.includes(dependency.parent))
+      ) {
+        dependency.cleanDependenciesCache(options);
+      }
     });
   }
 
@@ -204,11 +209,11 @@ class SelectorBase extends Provider {
     }
   }
 
-  cleanDependenciesCache() {
+  cleanDependenciesCache(options = {}) {
     if (this._inProgressDependencies.size > 0) {
-      this._cleanCaches(Array.from(this._inProgressDependencies));
+      this._cleanCaches(Array.from(this._inProgressDependencies), options);
     } else {
-      this._cleanCaches(this._resolvedDependencies);
+      this._cleanCaches(this._resolvedDependencies, options);
     }
   }
 

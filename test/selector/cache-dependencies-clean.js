@@ -100,6 +100,45 @@ describe("Selector when cleanDependenciesCache method is called", () => {
     providers.clear();
   });
 
+  it("should call to clean all dependendencies cache", async () => {
+    expect.assertions(3);
+    sandbox.spy(dependency1, "cleanDependenciesCache");
+    sandbox.spy(dependency2, "cleanDependenciesCache");
+    sandbox.spy(dependency3, "cleanDependenciesCache");
+    await selector.read();
+    selector.cleanDependenciesCache();
+    await selector.read();
+    expect(dependency1.cleanDependenciesCache.callCount).toEqual(1);
+    expect(dependency2.cleanDependenciesCache.callCount).toEqual(1);
+    expect(dependency3.cleanDependenciesCache.callCount).toEqual(1);
+  });
+
+  it("should call to clean all dependendencies cache except that in the except option", async () => {
+    expect.assertions(3);
+    sandbox.spy(dependency1, "cleanDependenciesCache");
+    sandbox.spy(dependency2, "cleanDependenciesCache");
+    sandbox.spy(dependency3, "cleanDependenciesCache");
+    await selector.read();
+    selector.cleanDependenciesCache({ except: [dependency1] });
+    await selector.read();
+    expect(dependency1.cleanDependenciesCache.callCount).toEqual(0);
+    expect(dependency2.cleanDependenciesCache.callCount).toEqual(1);
+    expect(dependency3.cleanDependenciesCache.callCount).toEqual(1);
+  });
+
+  it("should call to clean all dependendencies cache except those in the except option", async () => {
+    expect.assertions(3);
+    sandbox.spy(dependency1, "cleanDependenciesCache");
+    sandbox.spy(dependency2, "cleanDependenciesCache");
+    sandbox.spy(dependency3, "cleanDependenciesCache");
+    await selector.read();
+    selector.cleanDependenciesCache({ except: [dependency1, dependency3] });
+    await selector.read();
+    expect(dependency1.cleanDependenciesCache.callCount).toEqual(0);
+    expect(dependency2.cleanDependenciesCache.callCount).toEqual(1);
+    expect(dependency3.cleanDependenciesCache.callCount).toEqual(0);
+  });
+
   it("should return last data returned by all dependencies when method is called", async () => {
     expect.assertions(2);
     results = {
