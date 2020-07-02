@@ -10,6 +10,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 ### Removed
 
+## [2.6.0] - 2020-07-02
+
+### Added
+- feat(Selector): Add except option to `cleanDependenciesCache` method. [Issue #121](https://github.com/data-provider/core/issues/121)
+
+### Changed
+- chore(deps): Update dependencies
+
 ## [2.5.2] - 2020-06-20
 
 ### Fixed
