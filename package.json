@@ -44,8 +44,8 @@
     "@data-provider/core": "2.x"
   },
   "devDependencies": {
-    "@babel/core": "7.10.3",
-    "@babel/preset-env": "7.10.3",
+    "@babel/core": "7.10.4",
+    "@babel/preset-env": "7.10.4",
     "@data-provider/core": "2.5.2",
     "@rollup/plugin-babel": "5.0.4",
     "@rollup/plugin-commonjs": "13.0.0",
