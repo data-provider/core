@@ -11,7 +11,7 @@
     "test:react-app": "start-server-and-test start:react-app http-get://localhost:3000 cypress:run"
   },
   "devDependencies": {
-    "cypress": "4.11.0",
+    "cypress": "4.12.1",
     "start-server-and-test": "1.11.2"
   }
 }
