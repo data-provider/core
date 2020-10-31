@@ -1,5 +1,4 @@
 module.exports = {
-  mutator: "javascript",
   files: ["*.js", "src/**/*.js", "test/**/*.js"],
   packageManager: "npm",
   dashboard: {
