@@ -48,8 +48,8 @@
     "@data-provider/core": "2.x"
   },
   "dependencies": {
-    "axios": "0.19.2",
-    "axios-retry": "3.1.8",
+    "axios": "0.21.0",
+    "axios-retry": "3.1.9",
     "path-to-regexp": "6.2.0"
   },
   "devDependencies": {
