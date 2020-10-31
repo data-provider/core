@@ -1,4 +1,4 @@
-import React, { memo, Fragment } from "react";
+import { memo, Fragment } from "react";
 import PropTypes from "prop-types";
 
 import AuthorDelete from "modules/author-delete";

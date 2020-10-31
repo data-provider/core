@@ -1,4 +1,3 @@
-import React from "react";
 import Proptypes from "prop-types";
 
 const SectionContainer = ({ children, id, loading }) => {

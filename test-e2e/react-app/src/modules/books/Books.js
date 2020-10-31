@@ -1,5 +1,3 @@
-import React from "react";
-
 import { useData, useLoading, usePolling } from "@data-provider/react";
 
 import { booksWithAuthorName } from "data/books";
