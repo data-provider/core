@@ -1,5 +1,5 @@
 module.exports = {
-  mutate: ["*.js", "src/**/*.js", "test/**/*.js"],
+  mutate: ["src/**/*.js"],
   packageManager: "npm",
   dashboard: {
     project: "github.com/data-provider/core",
