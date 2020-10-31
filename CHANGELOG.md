@@ -10,6 +10,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 ### Removed
 
+## [1.3.0] - 2020-10-31
+
+### Added
+- feat(hocs): Wrap Components displayNames in HOCs
+
+### Changed
+- chore(deps): Update dependencies
+
 ## [1.2.0] - 2020-06-21
 
 ### Added
