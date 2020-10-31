@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 - chore(deps): Update dependencies
+- chore: Rename stryker commands
 
 ## [2.1.3] - 2020-06-21
 
