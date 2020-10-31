@@ -1,4 +1,4 @@
-import React, { useMemo, memo } from "react";
+import { useMemo, memo } from "react";
 import Proptypes from "prop-types";
 
 import { authorsSearch } from "data/authors";

@@ -1,6 +1,5 @@
 module.exports = {
-  mutator: "javascript",
-  files: ["*.js", "src/**/*.js", "test/**/*.js"],
+  mutate: ["src/**/*.js"],
   packageManager: "npm",
   dashboard: {
     project: "github.com/data-provider/core",
@@ -8,9 +7,5 @@ module.exports = {
   },
   reporters: ["html", "clear-text", "progress", "dashboard"],
   testRunner: "jest",
-  transpilers: ["babel"],
   coverageAnalysis: "off",
-  babel: {
-    optionsFile: ".babelrc",
-  },
 };

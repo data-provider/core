@@ -1,5 +1,3 @@
-import React from "react";
-
 import { authorsProvider } from "data/authors";
 
 import AuthorsList from "modules/authors-list";

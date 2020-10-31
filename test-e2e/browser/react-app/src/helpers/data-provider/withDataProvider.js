@@ -1,4 +1,5 @@
-import React, { useMemo } from "react";
+/* eslint-disable react/display-name */
+import { useMemo } from "react";
 
 import { useRefresh, useDataProvider, useData, useLoading, useError } from "./useDataProvider";
 

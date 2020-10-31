@@ -1,9 +1,9 @@
 const path = require("path");
 const ModuleScopePlugin = require("react-dev-utils/ModuleScopePlugin");
 
-module.exports = config => {
+module.exports = (config) => {
   config.resolve.plugins = config.resolve.plugins.filter(
-    plugin => !(plugin instanceof ModuleScopePlugin)
+    (plugin) => !(plugin instanceof ModuleScopePlugin)
   );
   config.resolve.alias = {
     ...config.resolve.alias,
@@ -11,7 +11,7 @@ module.exports = config => {
     modules: path.resolve(__dirname, "src", "modules"),
     components: path.resolve(__dirname, "src", "components"),
     data: path.resolve(__dirname, "src", "data"),
-    helpers: path.resolve(__dirname, "src", "helpers")
+    helpers: path.resolve(__dirname, "src", "helpers"),
   };
   return config;
 };

@@ -1,5 +1,3 @@
-import React from "react";
-
 import { booksWithAuthorName } from "data/books";
 
 import BooksList from "modules/books-list";

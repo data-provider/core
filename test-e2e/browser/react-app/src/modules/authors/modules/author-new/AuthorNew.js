@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import { useState, useCallback } from "react";
 
 import { createAuthor } from "data/authors";
 import SaveButton from "components/save-button";
