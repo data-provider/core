@@ -1,6 +1,6 @@
 {
   "name": "@data-provider/prismic",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Data Provider for reading data from Prismic CMS API",
   "keywords": [
     "data-provider",
