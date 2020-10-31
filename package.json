@@ -39,12 +39,11 @@
     "test:e2e": "npm run test:e2e:browser && npm run test:e2e:node",
     "test:e2e:ci": "npm run test:e2e:browser:install && npm run test:e2e:node:install && npm run test:e2e",
     "test:ci": "npm run build && npm run test:coverage && npm run test:e2e:ci",
+    "test:mutation": "stryker run",
+    "test:mutation:dev": "stryker run stryker.conf.local.js",
     "lint": "eslint src test test-e2e/browser/vanilla-app/public/main.js test-e2e/browser/react-app/src test-e2e/browser/cypress test-e2e/nodejs/cjs test-e2e/nodejs/esm/src *.js",
     "lint-staged": "lint-staged",
-    "coveralls": "cat ./coverage/lcov.info | coveralls",
-    "stryker:dev": "stryker run stryker.conf.local.js",
-    "stryker": "stryker run",
-    "stryker:ci": "npx stryker run"
+    "coveralls": "cat ./coverage/lcov.info | coveralls"
   },
   "peerDependencies": {
     "redux": "4.x"
@@ -60,9 +59,7 @@
     "@rollup/plugin-commonjs": "16.0.0",
     "@rollup/plugin-json": "4.1.0",
     "@rollup/plugin-node-resolve": "10.0.0",
-    "@stryker-mutator/babel-transpiler": "4.0.0",
     "@stryker-mutator/core": "4.1.0",
-    "@stryker-mutator/javascript-mutator": "4.0.0",
     "@stryker-mutator/jest-runner": "4.1.0",
     "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "10.1.0",
