@@ -25,6 +25,7 @@ const BASE_PLUGINS = [
   }),
   json(),
   babel({
+    babelHelpers: "bundled",
     babelrc: false,
     presets: ["@babel/env"],
   }),
