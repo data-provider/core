@@ -27,7 +27,11 @@ const BASE_PLUGINS = [
     include: "node_modules/**",
   }),
   json(),
-  babel(),
+  babel({
+    babelHelpers: "bundled",
+    babelrc: false,
+    presets: ["@babel/env"],
+  }),
 ];
 
 const BASE_CONFIG = {
