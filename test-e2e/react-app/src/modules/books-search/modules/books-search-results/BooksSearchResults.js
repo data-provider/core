@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import { memo } from "react";
 import Proptypes from "prop-types";
 
 import { withData, withLoading } from "@data-provider/react";

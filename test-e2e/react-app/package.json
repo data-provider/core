@@ -3,12 +3,12 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
-    "@data-provider/core": "2.5.2",
+    "@data-provider/core": "2.6.1",
     "is-promise": "4.0.0",
     "prop-types": "15.7.2",
-    "react": "16.13.1",
-    "react-dom": "16.13.1",
-    "react-redux": "7.2.0",
+    "react": "17.0.1",
+    "react-dom": "17.0.1",
+    "react-redux": "7.2.2",
     "redux": "4.0.5"
   },
   "scripts": {
@@ -31,9 +31,9 @@
     ]
   },
   "devDependencies": {
-    "react-scripts": "3.4.1",
+    "react-scripts": "4.0.0",
     "react-app-rewired": "2.1.6",
     "serve": "11.3.2",
-    "start-server-and-test": "1.11.0"
+    "start-server-and-test": "1.11.5"
   }
 }

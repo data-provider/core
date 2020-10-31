@@ -25,7 +25,7 @@ class PollingHandler {
   }
 
   _checkInterval() {
-    const sortedIntervals = this._intervalTimes.sort((a, b) => a - b);
+    const sortedIntervals = [...this._intervalTimes].sort((a, b) => a - b);
     if (sortedIntervals[0] !== this._currentIntervalTime) {
       this._clearInterval();
       this._currentIntervalTime = sortedIntervals[0];

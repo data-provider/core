@@ -1,5 +1,3 @@
-import React from "react";
-
 import { useRefresh, useData, useLoading } from "@data-provider/react";
 
 import { authorsProvider } from "data/authors";

@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo } from "react";
+import { useState, useCallback, useMemo } from "react";
 
 import SectionContainer from "components/section-container";
 import ItemsTitle from "components/items-title";

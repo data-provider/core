@@ -17,6 +17,9 @@ const isFunction = (provider) => {
 
 const defaultKeys = ["data", "loading", "error", "loaded"];
 
+const getDisplayName = (WrappedComponent) =>
+  WrappedComponent.displayName || WrappedComponent.name || "Component";
+
 const useProvider = (provider, props) => {
   return useMemo(() => {
     if (isFunction(provider)) {
@@ -72,65 +75,97 @@ export const withDataProviderBranch = (provider, keys) => (
   Component,
   LoadingComponent,
   ErrorComponent
-) => (props) => {
-  const providerToRead = useProvider(provider, props);
-  const { dataProp, loadingProp, errorProp, loading, error } = useDataProviderCustomProps(
-    providerToRead,
-    keys
-  );
-  if (loading) {
-    if (LoadingComponent) {
-      return <LoadingComponent {...props} {...loadingProp} />;
+) => {
+  const WithDataProviderBranch = (props) => {
+    const providerToRead = useProvider(provider, props);
+    const { dataProp, loadingProp, errorProp, loading, error } = useDataProviderCustomProps(
+      providerToRead,
+      keys
+    );
+    if (loading) {
+      if (LoadingComponent) {
+        return <LoadingComponent {...props} {...loadingProp} />;
+      }
+      return null;
     }
-    return null;
-  }
-  if (error) {
-    if (ErrorComponent) {
-      return <ErrorComponent {...props} {...errorProp} />;
+    if (error) {
+      if (ErrorComponent) {
+        return <ErrorComponent {...props} {...errorProp} />;
+      }
+      return null;
     }
-    return null;
-  }
-  return <Component {...props} {...dataProp} />;
+    return <Component {...props} {...dataProp} />;
+  };
+  WithDataProviderBranch.displayName = `WithDataProviderBranch${getDisplayName(Component)}`;
+  return WithDataProviderBranch;
 };
 
-export const withDataProvider = (provider, keys) => (Component) => (props) => {
-  const providerToRead = useProvider(provider, props);
-  const { dataProp, loadingProp, errorProp } = useDataProviderCustomProps(providerToRead, keys);
-  return <Component {...props} {...dataProp} {...loadingProp} {...errorProp} />;
+export const withDataProvider = (provider, keys) => (Component) => {
+  const WithDataProvider = (props) => {
+    const providerToRead = useProvider(provider, props);
+    const { dataProp, loadingProp, errorProp } = useDataProviderCustomProps(providerToRead, keys);
+    return <Component {...props} {...dataProp} {...loadingProp} {...errorProp} />;
+  };
+  WithDataProvider.displayName = `WithDataProvider${getDisplayName(Component)}`;
+  return WithDataProvider;
 };
 
-export const withData = (provider, key) => (Component) => (props) => {
-  const providerToRead = useProvider(provider, props);
-  const { dataProp } = useDataCustomProp(providerToRead, key);
-  return <Component {...props} {...dataProp} />;
+export const withData = (provider, key) => (Component) => {
+  const WithData = (props) => {
+    const providerToRead = useProvider(provider, props);
+    const { dataProp } = useDataCustomProp(providerToRead, key);
+    return <Component {...props} {...dataProp} />;
+  };
+  WithData.displayName = `WithData${getDisplayName(Component)}`;
+  return WithData;
 };
 
-export const withLoading = (provider, key) => (Component) => (props) => {
-  const providerToRead = useProvider(provider, props);
-  const { loadingProp } = useLoadingCustomProp(providerToRead, key);
-  return <Component {...props} {...loadingProp} />;
+export const withLoading = (provider, key) => (Component) => {
+  const WithLoading = (props) => {
+    const providerToRead = useProvider(provider, props);
+    const { loadingProp } = useLoadingCustomProp(providerToRead, key);
+    return <Component {...props} {...loadingProp} />;
+  };
+  WithLoading.displayName = `WithLoading${getDisplayName(Component)}`;
+  return WithLoading;
 };
 
-export const withLoaded = (provider, key) => (Component) => (props) => {
-  const providerToRead = useProvider(provider, props);
-  const { loadedProp } = useLoadedCustomProp(providerToRead, key);
-  return <Component {...props} {...loadedProp} />;
+export const withLoaded = (provider, key) => (Component) => {
+  const WithLoaded = (props) => {
+    const providerToRead = useProvider(provider, props);
+    const { loadedProp } = useLoadedCustomProp(providerToRead, key);
+    return <Component {...props} {...loadedProp} />;
+  };
+  WithLoaded.displayName = `WithLoaded${getDisplayName(Component)}`;
+  return WithLoaded;
 };
 
-export const withError = (provider, key) => (Component) => (props) => {
-  const providerToRead = useProvider(provider, props);
-  const { errorProp } = useErrorCustomProp(providerToRead, key);
-  return <Component {...props} {...errorProp} />;
+export const withError = (provider, key) => (Component) => {
+  const WithError = (props) => {
+    const providerToRead = useProvider(provider, props);
+    const { errorProp } = useErrorCustomProp(providerToRead, key);
+    return <Component {...props} {...errorProp} />;
+  };
+  WithError.displayName = `WithError${getDisplayName(Component)}`;
+  return WithError;
 };
 
-export const withPolling = (provider, interval) => (Component) => (props) => {
-  const providerToRead = useProvider(provider, props);
-  usePolling(providerToRead, interval);
-  return <Component {...props} />;
+export const withPolling = (provider, interval) => (Component) => {
+  const WithPolling = (props) => {
+    const providerToRead = useProvider(provider, props);
+    usePolling(providerToRead, interval);
+    return <Component {...props} />;
+  };
+  WithPolling.displayName = `WithPolling${getDisplayName(Component)}`;
+  return WithPolling;
 };
 
-export const withRefresh = (provider) => (Component) => (props) => {
-  const providerToRead = useProvider(provider, props);
-  useRefresh(providerToRead);
-  return <Component {...props} />;
+export const withRefresh = (provider) => (Component) => {
+  const WithRefresh = (props) => {
+    const providerToRead = useProvider(provider, props);
+    useRefresh(providerToRead);
+    return <Component {...props} />;
+  };
+  WithRefresh.displayName = `WithRefresh${getDisplayName(Component)}`;
+  return WithRefresh;
 };
