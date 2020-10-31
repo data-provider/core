@@ -57,6 +57,26 @@ describe("HOCs", () => {
       );
     });
 
+    it("should wrap displayName of the component", async () => {
+      expect(BooksConnectedComponent.displayName).toEqual("WithDataBooksComponent");
+    });
+
+    it("should wrap displayName of the component using name property if component has not displayName", async () => {
+      const BooksComponent = ({ data }) => {
+        return <Books books={data} />;
+      };
+      BooksComponent.displayName = null;
+      BooksConnectedComponent = withData(provider)(BooksComponent);
+      expect(BooksConnectedComponent.displayName).toEqual("WithDataBooksComponent");
+    });
+
+    it("should assign Component displayName by default if the component has not displayName nor name", async () => {
+      BooksConnectedComponent = withData(provider)(function ({ data }) {
+        return <Books books={data} />;
+      });
+      expect(BooksConnectedComponent.displayName).toEqual("WithDataComponent");
+    });
+
     it("should pass data to the component", async () => {
       const bookTitle = "Animal Farm";
       render(<Component />);
@@ -150,6 +170,10 @@ describe("HOCs", () => {
       );
     });
 
+    it("should wrap displayName of the component", async () => {
+      expect(BooksConnectedComponent.displayName).toEqual("WithLoadingBooks");
+    });
+
     it("should be true when provider is loading and false when finish", async () => {
       render(<Component />);
       expect(screen.queryByTestId(LOADING_ID)).toBeInTheDocument();
@@ -204,6 +228,10 @@ describe("HOCs", () => {
           <BooksConnectedComponent />
         </ReduxProvider>
       );
+    });
+
+    it("should wrap displayName of the component", async () => {
+      expect(BooksConnectedComponent.displayName).toEqual("WithLoadedBooksComponent");
     });
 
     it("should be false when provider is loading and true when finish", async () => {
@@ -332,6 +360,10 @@ describe("HOCs", () => {
       );
     });
 
+    it("should wrap displayName of the component", async () => {
+      expect(BooksConnectedComponent.displayName).toEqual("WithRefreshBooksComponent");
+    });
+
     it("should call to read the provider each time the cache is cleaned", async () => {
       render(<Component />);
       await wait();
@@ -355,6 +387,10 @@ describe("HOCs", () => {
           <BooksConnectedComponent />
         </ReduxProvider>
       );
+    });
+
+    it("should wrap displayName of the component", async () => {
+      expect(BooksConnectedComponent.displayName).toEqual("WithDataProviderBooksComponent");
     });
 
     it("loading should be true when provider is loading and false when finish", async () => {
@@ -533,6 +569,10 @@ describe("HOCs", () => {
           <BooksConnectedComponent />
         </ReduxProvider>
       );
+    });
+
+    it("should wrap displayName of the component", async () => {
+      expect(BooksConnectedComponent.displayName).toEqual("WithDataProviderBranchBooksComponent");
     });
 
     it("loading should be true when provider is loading and false when finish", async () => {

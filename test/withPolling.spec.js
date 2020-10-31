@@ -19,7 +19,7 @@ const wait = (time = 600) => {
   });
 };
 
-describe("usePolling", () => {
+describe("withPolling", () => {
   let sandbox, provider, BooksComponent, BooksComponentToRender, Component;
 
   beforeEach(() => {
@@ -33,6 +33,15 @@ describe("usePolling", () => {
   afterEach(() => {
     providers.clear();
     sandbox.restore();
+  });
+
+  it("should wrap displayName of the component", async () => {
+    BooksComponent = () => {
+      return <Books books={[]} />;
+    };
+
+    BooksComponentToRender = withPolling(null, 500)(BooksComponent);
+    expect(BooksComponentToRender.displayName).toEqual("WithPollingBooksComponent");
   });
 
   describe("when no provider is defined", () => {
