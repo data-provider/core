@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import { useState, useCallback } from "react";
 
 import { createBook } from "data/books";
 import SaveButton from "components/save-button";
