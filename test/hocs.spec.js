@@ -62,7 +62,7 @@ describe("HOCs", () => {
     });
 
     it("should wrap displayName of the component using name property if component has not displayName", async () => {
-      const BooksComponent = ({ data }) => {
+      BooksComponent = ({ data }) => {
         return <Books books={data} />;
       };
       BooksComponent.displayName = null;
