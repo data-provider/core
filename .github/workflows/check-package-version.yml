@@ -6,7 +6,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Check NPM version is new
+      - name: Get NPM version is new
         id: check
         uses: EndBug/version-check@v1.6.0
         with:
@@ -14,7 +14,7 @@ jobs:
           file-name: ./package.json
           file-url: https://unpkg.com/@data-provider/react@latest/package.json
           static-checking: localIsNew
-      - name: Fail when version exists
+      - name: Check version is new
         if: steps.check.outputs.changed != 'true'
         run: |
           echo "Version not changed"
