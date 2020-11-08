@@ -8,6 +8,7 @@ jobs:
         uses: EndBug/version-check@v1.6.0
         with:
           diff-search: true
+          file-name: ./package.json
           file-url: https://unpkg.com/@data-provider/react@latest/package.json
           static-checking: localIsNew
       - name: Fail when unchanged
