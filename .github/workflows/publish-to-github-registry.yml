@@ -1,7 +1,5 @@
 name: publish-to-github-registry
-on:
-  release:
-    types: [created]
+on: [push]
 jobs:
   publish:
     runs-on: ubuntu-latest
