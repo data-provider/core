@@ -6,7 +6,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Check local version is newer
+      - name: Check NPM version is new
         id: check
         uses: EndBug/version-check@v1.6.0
         with:
@@ -18,4 +18,19 @@ jobs:
         if: steps.check.outputs.changed != 'true'
         run: |
           echo "Version not upgraded"
+          exit 1
+      - name: Get NPM version
+        id: package-version
+        uses: martinbeentjes/npm-get-version-action@v1.1.0
+      - name: Get Changelog Entry
+        id: changelog_reader
+        uses: mindsers/changelog-reader-action@v2.0.0
+        with:
+          validation_depth: 10
+          version: ${{ steps.package-version.outputs.current-version }}
+          path: ./CHANGELOG.md
+      - name: Fail when version has not entry in CHANGELOG
+        if: steps.changelog_reader.outputs.version != steps.package-version.outputs.current-version
+        run: |
+          echo "Version not included in CHANGELOG"
           exit 1
