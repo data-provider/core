@@ -1,0 +1,14 @@
+name: learn-github-actions
+on: [push]
+jobs:
+  check-package-version:
+    runs-on: ubuntu-latest
+    steps:
+      - id: check
+        uses: EndBug/version-check@v1.6.0
+        with:
+          file-url: https://unpkg.com/@data-provider/react@latest/package.json
+          static-checking: localIsNew
+      - name: Fail when unchanged
+        if: steps.check.outputs.changed != 'true'
+        run: exit 1
