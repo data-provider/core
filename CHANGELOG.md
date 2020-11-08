@@ -10,11 +10,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 ### Removed
 
-## [1.3.1] - 2020-10-31
-
-### Added
-- chore(ci-cd): Test github action
-
 ## [1.3.0] - 2020-10-31
 
 ### Added
