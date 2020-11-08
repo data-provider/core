@@ -4,7 +4,10 @@ jobs:
   check-package-version:
     runs-on: ubuntu-latest
     steps:
-      - id: check
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Check local version
+        id: check
         uses: EndBug/version-check@v1.6.0
         with:
           diff-search: true
