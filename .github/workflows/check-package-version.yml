@@ -6,7 +6,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Check local version
+      - name: Check local version is newer
         id: check
         uses: EndBug/version-check@v1.6.0
         with:
@@ -14,6 +14,8 @@ jobs:
           file-name: ./package.json
           file-url: https://unpkg.com/@data-provider/react@latest/package.json
           static-checking: localIsNew
-      - name: Fail when unchanged
+      - name: Fail when version not upgraded
         if: steps.check.outputs.changed != 'true'
-        run: exit 1
+        run: |
+          echo "Version not upgraded"
+          exit 1
