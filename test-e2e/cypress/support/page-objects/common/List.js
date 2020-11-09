@@ -3,8 +3,8 @@ class List {
     this.SELECTORS = selectors;
   }
 
-  getColumn() {
-    return cy.get(this.SELECTORS.COLUMN);
+  getColumn(options = {}) {
+    return cy.get(this.SELECTORS.COLUMN, options);
   }
 
   getContainer() {
@@ -44,7 +44,7 @@ class List {
   }
 
   shouldNotBeLoading() {
-    this.getColumn().should("not.have.class", "loading");
+    this.getColumn({ timeout: 0 }).should("not.have.class", "loading");
   }
 
   delete(index) {

@@ -6,7 +6,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [unreleased]
 ### Added
+- feat(hocs): Add withDataLoadedError, withDataLoadingError, withDataLoadingErrorComponents, withDataLoadedErrorComponents
+- feat(hooks): Add useDataLoadedError, useDataLoadingError
+
 ### Changed
+- feat(hocs): Deprecate withDataProvider in favour of withDataLoadingError
+- feat(hocs): Deprecate withDataProviderBranch in favour of withDataLoadingErrorComponents
+- feat(hooks): Deprecate useDataProvider in favour of useDataLoadingError
+
 ### Fixed
 ### Removed
 

@@ -1,4 +1,4 @@
-import { useRefresh, useData, useLoading } from "@data-provider/react";
+import { useData, useLoading } from "@data-provider/react";
 
 import { authorsProvider } from "data/authors";
 import AuthorsList from "modules/authors-list";
@@ -9,7 +9,6 @@ import ItemsListContainer from "components/items-list-container";
 import AuthorNew from "./modules/author-new";
 
 const Authors = () => {
-  useRefresh(authorsProvider);
   const authors = useData(authorsProvider);
   const loading = useLoading(authorsProvider);
 

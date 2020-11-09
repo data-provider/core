@@ -1,5 +1,7 @@
 import Books from "../support/page-objects/Books";
 import Authors from "../support/page-objects/Authors";
+import BooksLoaded from "../support/page-objects/BooksLoaded";
+import AuthorsLoaded from "../support/page-objects/AuthorsLoaded";
 
 describe("Demo page", () => {
   const NEW_AUTHOR = "Cervantes";
@@ -7,21 +9,33 @@ describe("Demo page", () => {
   const NEW_BOOK = "Don Quijote";
   const NEW_BOOK_2 = "Don Quijote parte 1";
   let books;
+  let booksLoaded;
   let authors;
+  let authorsLoaded;
 
   before(() => {
     books = new Books();
     authors = new Authors();
+    booksLoaded = new BooksLoaded();
+    authorsLoaded = new AuthorsLoaded();
     cy.visit("/");
   });
 
   describe("loaders", () => {
-    it("should display books loading", () => {
+    it("should display authors loading", () => {
       authors.shouldBeLoading();
     });
 
-    it("should display authors loading", () => {
+    it("should display authorsLoaded loading the first time", () => {
+      authorsLoaded.shouldBeLoading();
+    });
+
+    it("should display books loading", () => {
       books.shouldBeLoading();
+    });
+
+    it("should display booksLoaded loading the first time", () => {
+      booksLoaded.shouldBeLoading();
     });
   });
 
@@ -30,10 +44,16 @@ describe("Demo page", () => {
       authors.shouldDisplayItems(4);
     });
 
+    it("should not be loading", () => {
+      authors.shouldNotBeLoading();
+    });
+
     it("should display 5 results after adding a new book", () => {
       authors.add(NEW_AUTHOR);
       authors.shouldBeLoading();
+      authorsLoaded.shouldNotBeLoading();
       books.shouldBeLoading();
+      booksLoaded.shouldNotBeLoading();
       authors.shouldDisplayItems(5);
     });
 
@@ -48,7 +68,9 @@ describe("Demo page", () => {
       authors.shouldDisplayItems(6);
       authors.delete(6);
       authors.shouldBeLoading();
+      authorsLoaded.shouldNotBeLoading();
       books.shouldBeLoading();
+      booksLoaded.shouldNotBeLoading();
       authors.shouldDisplayItems(5);
     });
   });
@@ -87,6 +109,7 @@ describe("Demo page", () => {
     it("should display 6 results after adding a new book", () => {
       books.add("Don Quijote", NEW_AUTHOR);
       books.shouldBeLoading();
+      booksLoaded.shouldNotBeLoading();
       books.shouldDisplayItems(6);
     });
 
@@ -101,6 +124,7 @@ describe("Demo page", () => {
       books.shouldDisplayItems(7);
       books.delete(7);
       books.shouldBeLoading();
+      booksLoaded.shouldNotBeLoading();
       authors.shouldNotBeLoading();
       books.shouldDisplayItems(6);
     });
@@ -140,6 +164,7 @@ describe("Demo page", () => {
       books.shouldBeLoading();
       books.search.shouldBeLoading();
       authors.shouldBeLoading();
+      authorsLoaded.shouldNotBeLoading();
       authors.search.shouldBeLoading();
       authors.shouldDisplayItems(4);
       books.shouldDisplayItems(4);
