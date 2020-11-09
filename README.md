@@ -16,7 +16,8 @@ npm i --save @data-provider/react
 
 ## Available hooks
 
-* [useDataProvider](#usedataproviderprovider-equalityfn)
+* [useDataLoadingError](#usedataloadingerrorprovider-equalityfn)
+* [useDataLoadedError](#usedataloadederrorprovider-equalityfn)
 * [useData](#usedataprovider-equalityfn)
 * [useLoading](#useloadingprovider)
 * [useLoaded](#useloadedprovider)
@@ -25,17 +26,19 @@ npm i --save @data-provider/react
 
 ## Available HOCs
 
-* [withDataProvider](#withdataproviderprovider-custompropertiesnamescomponent)
+* [withDataLoadingError](#withdataloadingerrorprovider-custompropertiesnamescomponent)
+* [withDataLoadedError](#withdataloadederrorprovider-custompropertiesnamescomponent)
 * [withData](#withdataprovider-custompropnamecomponent)
 * [withLoading](#withloadingprovider-custompropnamecomponent)
 * [withLoaded](#withloadedprovider-custompropnamecomponent)
 * [withError](#witherrorprovider-custompropnamecomponent)
 * [withPolling](#withpollingprovider-intervalcomponent)
-* [withDataProviderBranch](#withdataproviderbranchprovider-custompropertiesnamescomponent-loadingcomponent-errorcomponent)
+* [withDataLoadingErrorComponents](#withdataloadingerrorcomponentsprovider-custompropertiesnamescomponent-loadingcomponent-errorcomponent)
+* [withDataLoadedErrorComponents](#withdataloadederrorcomponentsprovider-custompropertiesnamescomponent-notloadedcomponent-errorcomponent)
 
 ## Hooks
 
-### `useDataProvider(provider, [equalityFn])`
+### `useDataLoadingError(provider, [equalityFn])`
 
 Triggers the provider `read` method and gives you the `data`, `loading` and `error` properties from the state of the provider or selector. When the provider cache is cleaned, it automatically triggers `read` again.
 
@@ -53,12 +56,37 @@ Use this hook only when you need all mentioned properties, because your componen
 #### Example
 
 ```jsx
-import { useDataProvider } from "@data-provider/react";
+import { useDataLoadingError } from "@data-provider/react";
 
 import { books } from "../data/books";
 
 const BooksList = () => {
-  const [data, loading, error] = useDataProvider(books);
+  const [data, loading, error] = useDataLoadingError(books);
+  // Do your stuff here
+};
+```
+
+### `useDataLoadedError(provider, [equalityFn])`
+
+This hook has the same behavior and interface than the described for the [`useDataLoadingError`](#usedataloadingerrorprovider-equalityfn) one, but it returns the `data`, `loaded` and `error` properties from the state of the provider or selector.
+
+Use this hook only when you don't want to rerender a Component each time the provider is loading. It will return `loaded` as `true` once the provider has loaded for the first time, and it will not change again. This is useful to avoid rerenders in scenarios having "pollings", for example, as it will avoid to render a "loading" each time the data is refreshed.
+
+Take into account that the `loaded` property will not be set as `true` until a success read has finished, so the error may have a value, even when `loaded` is `false`. 
+
+#### Returns
+
+* _(Array)_ - Array containing `data`, `loaded` and `error` properties, in that order.
+
+#### Example
+
+```jsx
+import { useDataLoadedError } from "@data-provider/react";
+
+import { books } from "../data/books";
+
+const BooksList = () => {
+  const [data, loaded, error] = useDataLoadedError(books);
   // Do your stuff here
 };
 ```
@@ -67,7 +95,7 @@ const BooksList = () => {
 
 Triggers `read` and gives you only the `data` property from the state of the provider or selector. When the provider cache is cleaned, it automatically triggers `read` again.
 
-Arguments are the same than described for the [`useDataProvider` hook](#usedataproviderprovider-equalityfn).
+Arguments are the same than described for the [`useDataLoadingError` hook](#usedataloadingerrorprovider-equalityfn).
 
 #### Returns
 
@@ -189,7 +217,7 @@ const BooksList = () => {
 
 ## HOCs
 
-### `withDataProvider(provider, [customPropertiesNames])(Component)`
+### `withDataLoadingError(provider, [customPropertiesNames])(Component)`
 
 This High Order Component triggers the read method of the provider and gives to the component the `data`, `loading` and `error` properties from its state. It will trigger the `read` method each time the provider cache is cleaned.
 
@@ -205,7 +233,7 @@ Use this HOC only when you need all mentioned properties, because your component
 Using a provider:
 
 ```jsx
-import { withDataProvider } from "@data-provider/react";
+import { withDataLoadingError } from "@data-provider/react";
 
 import { books } from "../data/books";
 
@@ -213,7 +241,7 @@ const BooksList = ({ data, loading, error }) => {
   // Do your stuff here
 };
 
-export default withDataProvider(books)(BooksList);
+export default withDataLoadingError(books)(BooksList);
 ```
 
 With custom properties:
@@ -223,7 +251,7 @@ const BooksList = ({ booksData, booksLoading, booksError }) => {
   // Do your stuff here
 };
 
-export default withDataProvider(books, ["booksData", "booksLoading", "booksError"])(BooksList);
+export default withDataLoadingError(books, ["booksData", "booksLoading", "booksError"])(BooksList);
 ```
 
 Using a function:
@@ -233,8 +261,16 @@ const BookDetail = ({ data, loading, error }) => {
   // Do your stuff here
 };
 
-export default withDataProvider(({ id }) => books.query({ urlParam: { id }}))(BookDetail);
+export default withDataLoadingError(({ id }) => books.query({ urlParam: { id }}))(BookDetail);
 ```
+
+### `withDataLoadedError(provider, [customPropertiesNames])(Component)`
+
+This hoc has the same behavior and interface than the described for the [`withDataLoadingError`](#withdataloadingerrorprovider-custompropertiesnamescomponent) one, but it provides the `data`, `loaded` and `error` properties from the state.
+
+Use this hook only when you don't want to rerender a Component each time the provider is loading. It will return `loaded` as `true` once the provider has loaded for the first time, and it will not change again. This is useful to avoid rerenders in scenarios having "pollings", for example, as it will avoid to render a "loading" each time the data is refreshed.
+
+Take into account that the `loaded` property will not be set as `true` until a success read has finished, so the error may have a value, even when `loaded` is `false`. 
 
 ### `withData(provider, customPropName)(Component)`
 
@@ -242,7 +278,7 @@ This High Order Component triggers the read method of the provider and gives to 
 
 #### Arguments
 
-* `provider` _(Object)_: [Data Provider][data-provider] provider or selector instance, or a function as described in the [withDataProvider HOC docs](#withdataproviderprovider-custompropertiesnamescomponent)
+* `provider` _(Object)_: [Data Provider][data-provider] provider or selector instance, or a function as described in the [withDataLoadingError HOC docs](#withdataloadingerrorprovider-custompropertiesnamescomponent)
 * `customPropName` _(String)_: By default, the HOC will pass to the component a `data` property. You can change that prop passing a new property name as second argument.
 
 #### Examples
@@ -275,7 +311,7 @@ This High Order Component triggers the read method of the provider and gives to 
 
 #### Arguments
 
-* `provider` _(Object)_: [Data Provider][data-provider] provider or selector instance, or a function as described in the [withDataProvider HOC docs](#withdataproviderprovider-custompropertiesnamescomponent)
+* `provider` _(Object)_: [Data Provider][data-provider] provider or selector instance, or a function as described in the [withDataLoadingError HOC docs](#withdataloadingerrorprovider-custompropertiesnamescomponent)
 * `customPropName` _(String)_: By default, the HOC will pass to the component a `loading` property. You can change that prop passing a new property name as second argument.
 
 #### Examples
@@ -308,7 +344,7 @@ This High Order Component triggers the read method of the provider and gives to 
 
 #### Arguments
 
-* `provider` _(Object)_: [Data Provider][data-provider] provider or selector instance, or a function as described in the [withDataProvider HOC docs](#withdataproviderprovider-custompropertiesnamescomponent)
+* `provider` _(Object)_: [Data Provider][data-provider] provider or selector instance, or a function as described in the [withDataLoadingError HOC docs](#withdataloadingerrorprovider-custompropertiesnamescomponent)
 * `customPropName` _(String)_: By default, the HOC will pass to the component a `loaded` property. You can change that prop passing a new property name as second argument.
 
 #### Examples
@@ -341,7 +377,7 @@ This High Order Component triggers the read method of the provider and gives to 
 
 #### Arguments
 
-* `provider` _(Object)_: [Data Provider][data-provider] provider or selector instance, or a function as described in the [withDataProvider HOC docs](#withdataproviderprovider-custompropertiesnamescomponent)
+* `provider` _(Object)_: [Data Provider][data-provider] provider or selector instance, or a function as described in the [withDataLoadingError HOC docs](#withdataloadingerrorprovider-custompropertiesnamescomponent)
 * `customPropName` _(String)_: By default, the HOC will pass to the component an `error` property. You can change that prop passing a new property name as second argument.
 
 #### Examples
@@ -374,7 +410,7 @@ This High Order Component works as the hook `usePolling` described above.
 
 #### Arguments
 
-* `provider` _(Object)_: [Data Provider][data-provider] provider or selector instance, or a function as described in the [withDataProvider HOC docs](#withdataproviderprovider-custompropertiesnamescomponent)
+* `provider` _(Object)_: [Data Provider][data-provider] provider or selector instance, or a function as described in the [withDataLoadingError HOC docs](#withdataloadingerrorprovider-custompropertiesnamescomponent)
 * `interval` _(Object)_: Interval in miliseconds to clean the provider dependencies cache. Default is 5000.
 
 #### Example
@@ -393,14 +429,14 @@ export default withPolling(books, 3000)(withData(books)(BooksList));
 
 #### Arguments
 
-* `provider` _(Object)_: [Data Provider][data-provider] provider or selector instance, or a function as described in the [withDataProvider HOC docs](#withdataproviderprovider-custompropertiesnamescomponent)
+* `provider` _(Object)_: [Data Provider][data-provider] provider or selector instance, or a function as described in the [withDataLoadingError HOC docs](#withdataloadingerrorprovider-custompropertiesnamescomponent)
 
-### `withDataProviderBranch(provider, [customPropertiesNames])(Component, LoadingComponent, ErrorComponent)`
+### `withDataLoadingErrorComponents(provider, [customPropertiesNames])(Component, LoadingComponent, ErrorComponent)`
 
-This HOC works as the already described [`withDataProvider`](#withdataproviderprovider-custompropertiesnamescomponent), but it will render one component or another depending of the result. If the provider is loading, it will render `LoadingComponent`, if it has an error, it will render `ErrorComponent` (passing the `error` property to it), or `Component` when there is no error and it is not loading (passing the `data` property to it).
+This HOC works as the already described [`withDataLoadingError`](#withdataloadingerrorprovider-custompropertiesnamescomponent), but it will render one component or another depending of the result. If the provider is loading, it will render `LoadingComponent`, if it has an error, it will render `ErrorComponent` (passing the `error` property to it), or it will render `Component` when there is no error and it is not loading (passing the `data` property to it).
 
 ```jsx
-import { withDataProviderBranch } from "@data-provider/react";
+import { withDataLoadingErrorComponents } from "@data-provider/react";
 
 import { books } from "../data/books";
 
@@ -416,7 +452,31 @@ const BooksError = ({ error }) => {
   // Do your stuff here
 };
 
-export default withDataProviderBranch(books)(BooksList, BooksLoading, BooksError);
+export default withDataLoadingErrorComponents(books)(BooksList, BooksLoading, BooksError);
+```
+
+### `withDataLoadedErrorComponents(provider, [customPropertiesNames])(Component, NotLoadedComponent, ErrorComponent)`
+
+This HOC works as the already described [`withDataLoadedError`](#withdataloadederrorprovider-custompropertiesnamescomponent), but it will render one component or another depending of the result. If the provider has an error, it will render `ErrorComponent` (passing the `error` property to it), if it has not loaded, it will render `NotLoadedComponent`, or it will render `Component` when there is no error and it has loaded (passing the `data` property to it).
+
+```jsx
+import { withDataLoadedErrorComponents } from "@data-provider/react";
+
+import { books } from "../data/books";
+
+const BooksList = ({ data }) => {
+  // Do your stuff here
+};
+
+const BooksNotLoaded = () => {
+  // Do your stuff here
+};
+
+const BooksError = ({ error }) => {
+  // Do your stuff here
+};
+
+export default withDataLoadedErrorComponents(books)(BooksList, BooksNotLoaded, BooksError);
 ```
 
 ## Contributing
