@@ -4,7 +4,9 @@ import { storeManager } from "@data-provider/core";
 import "./configProviders";
 
 import Authors from "modules/authors";
+import AuthorsLoaded from "modules/authors-loaded";
 import Books from "modules/books";
+import BooksLoaded from "modules/books-loaded";
 import AuthorsSearch from "modules/authors-search";
 import BooksSearch from "modules/books-search";
 // import Rerender from "modules/rerenderer";
@@ -31,6 +33,10 @@ function App() {
           <div className="row">
             <AuthorsSearch />
             <BooksSearch />
+          </div>
+          <div className="row">
+            <AuthorsLoaded />
+            <BooksLoaded />
           </div>
         </main>
       </div>
