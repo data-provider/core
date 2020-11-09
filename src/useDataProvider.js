@@ -1,6 +1,8 @@
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 
+import { deprecatedMethod } from "./helpers";
+
 export const useRefresh = (dataProvider) => {
   useEffect(() => {
     if (dataProvider) {
@@ -42,11 +44,25 @@ export const useError = (dataProvider) => {
   return useSelector(getError(dataProvider));
 };
 
-export const useDataProvider = (dataProvider, comparator) => {
+export const useDataLoadedError = (dataProvider, comparator) => {
+  useRefresh(dataProvider);
+  return [
+    useSelector(getData(dataProvider), comparator),
+    useSelector(getLoaded(dataProvider)),
+    useSelector(getError(dataProvider)),
+  ];
+};
+
+export const useDataLoadingError = (dataProvider, comparator) => {
   useRefresh(dataProvider);
   return [
     useSelector(getData(dataProvider), comparator),
     useSelector(getLoading(dataProvider)),
     useSelector(getError(dataProvider)),
   ];
+};
+
+export const useDataProvider = (dataProvider, comparator) => {
+  deprecatedMethod("useDataProvider", "useDataLoadingError");
+  return useDataLoadingError(dataProvider, comparator);
 };

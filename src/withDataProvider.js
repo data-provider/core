@@ -1,8 +1,12 @@
 import React, { useMemo } from "react";
+import hoistNonReactStatics from "hoist-non-react-statics";
+
+import { deprecatedMethod } from "./helpers";
 
 import {
   useRefresh,
-  useDataProvider,
+  useDataLoadingError,
+  useDataLoadedError,
   useData,
   useLoading,
   useLoaded,
@@ -39,12 +43,20 @@ const useProp = (data, key) => {
   }, [data, key]);
 };
 
-const useDataProviderCustomProps = (provider, keys = defaultKeys) => {
-  const [data, loading, error] = useDataProvider(provider);
-  const dataProp = useProp(data, keys[0]);
+const useDataLoadingErrorCustomProps = (provider, keys = []) => {
+  const [data, loading, error] = useDataLoadingError(provider);
+  const dataProp = useProp(data, keys[0] || defaultKeys[0]);
   const loadingProp = useProp(loading, keys[1] || defaultKeys[1]);
   const errorProp = useProp(error, keys[2] || defaultKeys[2]);
   return { data, loading, error, dataProp, loadingProp, errorProp };
+};
+
+const useDataLoadedErrorCustomProps = (provider, keys = []) => {
+  const [data, loaded, error] = useDataLoadedError(provider);
+  const dataProp = useProp(data, keys[0] || defaultKeys[0]);
+  const loadedProp = useProp(loaded, keys[1] || defaultKeys[3]);
+  const errorProp = useProp(error, keys[2] || defaultKeys[2]);
+  return { data, loaded, error, dataProp, loadedProp, errorProp };
 };
 
 const useDataCustomProp = (provider, key = defaultKeys[0]) => {
@@ -71,14 +83,46 @@ const useErrorCustomProp = (provider, key = defaultKeys[2]) => {
   return { error, errorProp };
 };
 
-export const withDataProviderBranch = (provider, keys) => (
+export const withDataLoadedErrorComponents = (provider, keys) => (
   Component,
   LoadingComponent,
   ErrorComponent
 ) => {
-  const WithDataProviderBranch = (props) => {
+  const WithDataLoadedErrorComponents = (props) => {
     const providerToRead = useProvider(provider, props);
-    const { dataProp, loadingProp, errorProp, loading, error } = useDataProviderCustomProps(
+    const { dataProp, loadedProp, errorProp, loaded, error } = useDataLoadedErrorCustomProps(
+      providerToRead,
+      keys
+    );
+    if (error) {
+      if (ErrorComponent) {
+        return <ErrorComponent {...props} {...errorProp} />;
+      }
+      return null;
+    }
+    if (!loaded) {
+      if (LoadingComponent) {
+        return <LoadingComponent {...props} {...loadedProp} />;
+      }
+      return null;
+    }
+    return <Component {...props} {...dataProp} />;
+  };
+  hoistNonReactStatics(WithDataLoadedErrorComponents, Component);
+  WithDataLoadedErrorComponents.displayName = `WithDataLoadedErrorComponents${getDisplayName(
+    Component
+  )}`;
+  return WithDataLoadedErrorComponents;
+};
+
+export const withDataLoadingErrorComponents = (provider, keys) => (
+  Component,
+  LoadingComponent,
+  ErrorComponent
+) => {
+  const WithDataLoadingErrorComponents = (props) => {
+    const providerToRead = useProvider(provider, props);
+    const { dataProp, loadingProp, errorProp, loading, error } = useDataLoadingErrorCustomProps(
       providerToRead,
       keys
     );
@@ -96,18 +140,57 @@ export const withDataProviderBranch = (provider, keys) => (
     }
     return <Component {...props} {...dataProp} />;
   };
-  WithDataProviderBranch.displayName = `WithDataProviderBranch${getDisplayName(Component)}`;
-  return WithDataProviderBranch;
+  hoistNonReactStatics(WithDataLoadingErrorComponents, Component);
+  WithDataLoadingErrorComponents.displayName = `WithDataLoadingErrorComponents${getDisplayName(
+    Component
+  )}`;
+  return WithDataLoadingErrorComponents;
+};
+
+export const withDataProviderBranch = (provider, keys) => (
+  Component,
+  LoadingComponent,
+  ErrorComponent
+) => {
+  deprecatedMethod("withDataProviderBranch", "withDataLoadingErrorComponents");
+  return withDataLoadingErrorComponents(provider, keys)(
+    Component,
+    LoadingComponent,
+    ErrorComponent
+  );
+};
+
+export const withDataLoadedError = (provider, keys) => (Component) => {
+  const WithDataLoadedError = (props) => {
+    const providerToRead = useProvider(provider, props);
+    const { dataProp, loadedProp, errorProp } = useDataLoadedErrorCustomProps(
+      providerToRead,
+      keys
+    );
+    return <Component {...props} {...dataProp} {...loadedProp} {...errorProp} />;
+  };
+  hoistNonReactStatics(WithDataLoadedError, Component);
+  WithDataLoadedError.displayName = `WithDataLoadedError${getDisplayName(Component)}`;
+  return WithDataLoadedError;
+};
+
+export const withDataLoadingError = (provider, keys) => (Component) => {
+  const WithDataLoadingError = (props) => {
+    const providerToRead = useProvider(provider, props);
+    const { dataProp, loadingProp, errorProp } = useDataLoadingErrorCustomProps(
+      providerToRead,
+      keys
+    );
+    return <Component {...props} {...dataProp} {...loadingProp} {...errorProp} />;
+  };
+  hoistNonReactStatics(WithDataLoadingError, Component);
+  WithDataLoadingError.displayName = `WithDataLoadingError${getDisplayName(Component)}`;
+  return WithDataLoadingError;
 };
 
 export const withDataProvider = (provider, keys) => (Component) => {
-  const WithDataProvider = (props) => {
-    const providerToRead = useProvider(provider, props);
-    const { dataProp, loadingProp, errorProp } = useDataProviderCustomProps(providerToRead, keys);
-    return <Component {...props} {...dataProp} {...loadingProp} {...errorProp} />;
-  };
-  WithDataProvider.displayName = `WithDataProvider${getDisplayName(Component)}`;
-  return WithDataProvider;
+  deprecatedMethod("withDataProvider", "withDataLoadingError");
+  return withDataLoadingError(provider, keys)(Component);
 };
 
 export const withData = (provider, key) => (Component) => {
@@ -116,6 +199,7 @@ export const withData = (provider, key) => (Component) => {
     const { dataProp } = useDataCustomProp(providerToRead, key);
     return <Component {...props} {...dataProp} />;
   };
+  hoistNonReactStatics(WithData, Component);
   WithData.displayName = `WithData${getDisplayName(Component)}`;
   return WithData;
 };
@@ -126,6 +210,7 @@ export const withLoading = (provider, key) => (Component) => {
     const { loadingProp } = useLoadingCustomProp(providerToRead, key);
     return <Component {...props} {...loadingProp} />;
   };
+  hoistNonReactStatics(WithLoading, Component);
   WithLoading.displayName = `WithLoading${getDisplayName(Component)}`;
   return WithLoading;
 };
@@ -136,6 +221,7 @@ export const withLoaded = (provider, key) => (Component) => {
     const { loadedProp } = useLoadedCustomProp(providerToRead, key);
     return <Component {...props} {...loadedProp} />;
   };
+  hoistNonReactStatics(WithLoaded, Component);
   WithLoaded.displayName = `WithLoaded${getDisplayName(Component)}`;
   return WithLoaded;
 };
@@ -146,6 +232,7 @@ export const withError = (provider, key) => (Component) => {
     const { errorProp } = useErrorCustomProp(providerToRead, key);
     return <Component {...props} {...errorProp} />;
   };
+  hoistNonReactStatics(WithError, Component);
   WithError.displayName = `WithError${getDisplayName(Component)}`;
   return WithError;
 };
@@ -156,6 +243,7 @@ export const withPolling = (provider, interval) => (Component) => {
     usePolling(providerToRead, interval);
     return <Component {...props} />;
   };
+  hoistNonReactStatics(WithPolling, Component);
   WithPolling.displayName = `WithPolling${getDisplayName(Component)}`;
   return WithPolling;
 };
@@ -166,6 +254,7 @@ export const withRefresh = (provider) => (Component) => {
     useRefresh(providerToRead);
     return <Component {...props} />;
   };
+  hoistNonReactStatics(WithRefresh, Component);
   WithRefresh.displayName = `WithRefresh${getDisplayName(Component)}`;
   return WithRefresh;
 };

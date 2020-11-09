@@ -5,8 +5,8 @@ import BooksSearch from "modules/books-search";
 import BooksList from "modules/books-list";
 
 import {
-  withDataProviderBranch,
-  withDataProvider,
+  withDataLoadingErrorComponents,
+  withDataLoadingError,
   withData,
   withLoading,
 } from "helpers/data-provider";
@@ -14,12 +14,14 @@ import {
 import Loading from "./Loading";
 import Wrapper from "./Wrapper";
 
-const BooksListConnected = withDataProviderBranch(booksWithAuthorName, ["books", "isLoading"])(
-  BooksList,
-  Loading
-);
+const BooksListConnected = withDataLoadingErrorComponents(booksWithAuthorName, [
+  "books",
+  "isLoading",
+])(BooksList, Loading);
 
-const WrapperConnected = withDataProvider(booksWithAuthorName, ["books", "isLoading"])(Wrapper);
+const WrapperConnected = withDataLoadingError(booksWithAuthorName, ["books", "isLoading"])(
+  Wrapper
+);
 const WrapperConnectedToDataAndLoading = withLoading(
   booksWithAuthorName,
   "isLoading"

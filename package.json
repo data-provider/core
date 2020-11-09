@@ -1,6 +1,6 @@
 {
   "name": "@data-provider/react",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "React bindings for @data-provider",
   "keywords": [
     "data-provider",
@@ -39,6 +39,9 @@
     "test:ci": "npm run test:unit:ci && npm run test:e2e:ci",
     "test:coverage": "npm run test:unit:ci",
     "coveralls": "cat ./coverage/lcov.info | coveralls"
+  },
+  "dependencies": {
+    "hoist-non-react-statics": "3.3.2"
   },
   "peerDependencies": {
     "@data-provider/core": ">=2.5.2",
