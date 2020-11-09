@@ -738,9 +738,8 @@ describe("HOCs providing multiple props", () => {
     let CustomLoadingComponent, CustomErrorComponent;
 
     beforeEach(() => {
-      provider = new MockProvider(BOOKS_ID, {
-        data: BOOKS,
-      });
+      provider.resetState();
+      provider.cleanCache();
       CustomLoadingComponent = ({ booksAreLoaded }) => {
         if (booksAreLoaded) {
           return null;

@@ -97,9 +97,8 @@ describe("hooks returning multiple props", () => {
 
   describe("useDataLoadedError", () => {
     beforeEach(() => {
-      provider = new MockProvider(`${BOOKS_ID}-2`, {
-        data: BOOKS,
-      });
+      provider.resetState();
+      provider.cleanCache();
 
       BooksComponent = () => {
         const [books, loaded, error] = useDataLoadedError(provider);
