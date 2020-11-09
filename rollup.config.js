@@ -33,7 +33,7 @@ const BASE_PLUGINS = [
 
 const BASE_CONFIG = {
   input: "src/index.js",
-  external: ["@data-provider/core", "react", "react-redux"],
+  external: ["@data-provider/core", "react", "react-redux", "hoist-non-react-statics"],
   plugins: [...BASE_PLUGINS, terser()],
 };
 
@@ -41,6 +41,7 @@ const GLOBALS = {
   "@data-provider/core": "dataProvider",
   "react-redux": "ReactRedux",
   react: "React",
+  "hoist-non-react-statics": "hoistNonReactStatics",
 };
 
 module.exports = [

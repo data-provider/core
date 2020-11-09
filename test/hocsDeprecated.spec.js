@@ -41,6 +41,8 @@ describe("HOCs deprecated", () => {
         return <Books error={error} books={data} loading={loading} />;
       };
 
+      BooksComponent.fooProperty = "foo";
+
       BooksConnectedComponent = withDataProvider(provider)(BooksComponent);
 
       Component = () => (
@@ -48,6 +50,10 @@ describe("HOCs deprecated", () => {
           <BooksConnectedComponent />
         </ReduxProvider>
       );
+    });
+
+    it("should have available statics of the component", async () => {
+      expect(BooksConnectedComponent.fooProperty).toEqual("foo");
     });
 
     it("should have logged a deprecation warning", async () => {
@@ -228,6 +234,8 @@ describe("HOCs deprecated", () => {
         return <Books books={data} />;
       };
 
+      BooksComponent.fooProperty = "foo";
+
       BooksConnectedComponent = withDataProviderBranch(provider)(
         BooksComponent,
         CustomLoadingComponent,
@@ -239,6 +247,10 @@ describe("HOCs deprecated", () => {
           <BooksConnectedComponent />
         </ReduxProvider>
       );
+    });
+
+    it("should have available statics of the component", async () => {
+      expect(BooksConnectedComponent.fooProperty).toEqual("foo");
     });
 
     it("should have logged a deprecation warning", async () => {

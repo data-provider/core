@@ -15,6 +15,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - feat(hooks): Deprecate useDataProvider in favour of useDataLoadingError
 
 ### Fixed
+
+- fix(#101): Add hoist-non-react-statics to HOCs 
+
 ### Removed
 
 ## [1.3.0] - 2020-10-31

@@ -1,4 +1,5 @@
 import React, { useMemo } from "react";
+import hoistNonReactStatics from "hoist-non-react-statics";
 
 import { deprecatedMethod } from "./helpers";
 
@@ -107,6 +108,7 @@ export const withDataLoadedErrorComponents = (provider, keys) => (
     }
     return <Component {...props} {...dataProp} />;
   };
+  hoistNonReactStatics(WithDataLoadedErrorComponents, Component);
   WithDataLoadedErrorComponents.displayName = `WithDataLoadedErrorComponents${getDisplayName(
     Component
   )}`;
@@ -138,6 +140,7 @@ export const withDataLoadingErrorComponents = (provider, keys) => (
     }
     return <Component {...props} {...dataProp} />;
   };
+  hoistNonReactStatics(WithDataLoadingErrorComponents, Component);
   WithDataLoadingErrorComponents.displayName = `WithDataLoadingErrorComponents${getDisplayName(
     Component
   )}`;
@@ -166,6 +169,7 @@ export const withDataLoadedError = (provider, keys) => (Component) => {
     );
     return <Component {...props} {...dataProp} {...loadedProp} {...errorProp} />;
   };
+  hoistNonReactStatics(WithDataLoadedError, Component);
   WithDataLoadedError.displayName = `WithDataLoadedError${getDisplayName(Component)}`;
   return WithDataLoadedError;
 };
@@ -179,6 +183,7 @@ export const withDataLoadingError = (provider, keys) => (Component) => {
     );
     return <Component {...props} {...dataProp} {...loadingProp} {...errorProp} />;
   };
+  hoistNonReactStatics(WithDataLoadingError, Component);
   WithDataLoadingError.displayName = `WithDataLoadingError${getDisplayName(Component)}`;
   return WithDataLoadingError;
 };
@@ -194,6 +199,7 @@ export const withData = (provider, key) => (Component) => {
     const { dataProp } = useDataCustomProp(providerToRead, key);
     return <Component {...props} {...dataProp} />;
   };
+  hoistNonReactStatics(WithData, Component);
   WithData.displayName = `WithData${getDisplayName(Component)}`;
   return WithData;
 };
@@ -204,6 +210,7 @@ export const withLoading = (provider, key) => (Component) => {
     const { loadingProp } = useLoadingCustomProp(providerToRead, key);
     return <Component {...props} {...loadingProp} />;
   };
+  hoistNonReactStatics(WithLoading, Component);
   WithLoading.displayName = `WithLoading${getDisplayName(Component)}`;
   return WithLoading;
 };
@@ -214,6 +221,7 @@ export const withLoaded = (provider, key) => (Component) => {
     const { loadedProp } = useLoadedCustomProp(providerToRead, key);
     return <Component {...props} {...loadedProp} />;
   };
+  hoistNonReactStatics(WithLoaded, Component);
   WithLoaded.displayName = `WithLoaded${getDisplayName(Component)}`;
   return WithLoaded;
 };
@@ -224,6 +232,7 @@ export const withError = (provider, key) => (Component) => {
     const { errorProp } = useErrorCustomProp(providerToRead, key);
     return <Component {...props} {...errorProp} />;
   };
+  hoistNonReactStatics(WithError, Component);
   WithError.displayName = `WithError${getDisplayName(Component)}`;
   return WithError;
 };
@@ -234,6 +243,7 @@ export const withPolling = (provider, interval) => (Component) => {
     usePolling(providerToRead, interval);
     return <Component {...props} />;
   };
+  hoistNonReactStatics(WithPolling, Component);
   WithPolling.displayName = `WithPolling${getDisplayName(Component)}`;
   return WithPolling;
 };
@@ -244,6 +254,7 @@ export const withRefresh = (provider) => (Component) => {
     useRefresh(providerToRead);
     return <Component {...props} />;
   };
+  hoistNonReactStatics(WithRefresh, Component);
   WithRefresh.displayName = `WithRefresh${getDisplayName(Component)}`;
   return WithRefresh;
 };

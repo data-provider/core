@@ -40,6 +40,9 @@
     "test:coverage": "npm run test:unit:ci",
     "coveralls": "cat ./coverage/lcov.info | coveralls"
   },
+  "dependencies": {
+    "hoist-non-react-statics": "3.3.2"
+  },
   "peerDependencies": {
     "@data-provider/core": ">=2.5.2",
     "react-redux": ">=7.1.0",

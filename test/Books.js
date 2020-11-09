@@ -29,4 +29,6 @@ Books.propTypes = {
   error: PropTypes.instanceOf(Error),
 };
 
+Books.fooProperty = "foo";
+
 export default Books;
