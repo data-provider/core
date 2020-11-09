@@ -6,8 +6,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [unreleased]
 ### Added
+### Changed
+### Fixed 
+### Removed
+
+## [1.4.0] - 2020-11-09
+### Added
 - feat(hocs): Add withDataLoadedError, withDataLoadingError, withDataLoadingErrorComponents, withDataLoadedErrorComponents
 - feat(hooks): Add useDataLoadedError, useDataLoadingError
+- chore(ci-cd): Check package version on PRs to master
+- chore(release): Publish releases to github packages repository
 
 ### Changed
 - feat(hocs): Deprecate withDataProvider in favour of withDataLoadingError
@@ -15,10 +23,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - feat(hooks): Deprecate useDataProvider in favour of useDataLoadingError
 
 ### Fixed
-
 - fix(#101): Add hoist-non-react-statics to HOCs 
-
-### Removed
 
 ## [1.3.0] - 2020-10-31
 
