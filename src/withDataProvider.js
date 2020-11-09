@@ -82,6 +82,37 @@ const useErrorCustomProp = (provider, key = defaultKeys[2]) => {
   return { error, errorProp };
 };
 
+export const withDataLoadedErrorComponents = (provider, keys) => (
+  Component,
+  LoadingComponent,
+  ErrorComponent
+) => {
+  const WithDataLoadedErrorComponents = (props) => {
+    const providerToRead = useProvider(provider, props);
+    const { dataProp, loadedProp, errorProp, loaded, error } = useDataLoadedErrorCustomProps(
+      providerToRead,
+      keys
+    );
+    if (error) {
+      if (ErrorComponent) {
+        return <ErrorComponent {...props} {...errorProp} />;
+      }
+      return null;
+    }
+    if (!loaded) {
+      if (LoadingComponent) {
+        return <LoadingComponent {...props} {...loadedProp} />;
+      }
+      return null;
+    }
+    return <Component {...props} {...dataProp} />;
+  };
+  WithDataLoadedErrorComponents.displayName = `WithDataLoadedErrorComponents${getDisplayName(
+    Component
+  )}`;
+  return WithDataLoadedErrorComponents;
+};
+
 export const withDataLoadingErrorComponents = (provider, keys) => (
   Component,
   LoadingComponent,

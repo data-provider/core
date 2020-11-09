@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [unreleased]
 ### Added
-- feat(hocs): Add withDataLoadedError, withDataLoadingError, withDataLoadingErrorComponents
+- feat(hocs): Add withDataLoadedError, withDataLoadingError, withDataLoadingErrorComponents, withDataLoadedErrorComponents
 - feat(hooks): Add useDataLoadedError, useDataLoadingError
 
 ### Changed
