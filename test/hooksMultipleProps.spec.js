@@ -5,7 +5,7 @@ import "@testing-library/jest-dom";
 import { render, screen } from "@testing-library/react";
 import { providers } from "@data-provider/core";
 
-import { useData, useLoading, useLoaded, useError } from "../src";
+import { useDataLoadingError, useDataLoadedError } from "../src";
 
 import MockProvider from "./MockProvider";
 import { BOOKS, BOOKS_ID, LOADING_ID, ERROR_ID } from "./constants";
@@ -18,7 +18,7 @@ const wait = (time = 600) => {
   });
 };
 
-describe("hooks", () => {
+describe("hooks returning multiple props", () => {
   let provider, BooksComponent, Component;
 
   beforeEach(() => {
@@ -31,11 +31,11 @@ describe("hooks", () => {
     providers.clear();
   });
 
-  describe("useData", () => {
+  describe("useDataLoadingError", () => {
     beforeEach(() => {
       BooksComponent = () => {
-        const books = useData(provider);
-        return <Books books={books} />;
+        const [books, loading, error] = useDataLoadingError(provider);
+        return <Books error={error} books={books} loading={loading} />;
       };
 
       Component = () => (
@@ -43,6 +43,23 @@ describe("hooks", () => {
           <BooksComponent />
         </ReduxProvider>
       );
+    });
+
+    it("loading should be true when provider is loading and false when finish", async () => {
+      render(<Component />);
+      expect(screen.queryByTestId(LOADING_ID)).toBeInTheDocument();
+      await wait();
+      expect(screen.queryByTestId(LOADING_ID)).not.toBeInTheDocument();
+    });
+
+    it("loading should change when provider cache is cleaned", async () => {
+      render(<Component />);
+      await wait();
+      expect(screen.queryByTestId(LOADING_ID)).not.toBeInTheDocument();
+      provider.cleanCache();
+      expect(screen.queryByTestId(LOADING_ID)).toBeInTheDocument();
+      await wait();
+      expect(screen.queryByTestId(LOADING_ID)).not.toBeInTheDocument();
     });
 
     it("should pass data to the component", async () => {
@@ -62,27 +79,31 @@ describe("hooks", () => {
       expect(screen.queryByTestId(TEST_ID)).not.toBeInTheDocument();
     });
 
-    it("should do nothing if no provider is provided", async () => {
-      BooksComponent = () => {
-        const books = useData();
-        return <Books books={books} />;
-      };
-
-      Component = () => (
-        <ReduxProvider>
-          <BooksComponent />
-        </ReduxProvider>
-      );
+    it("error should be null when provider does not throw error", async () => {
       render(<Component />);
-      expect(screen.queryByTestId(BOOKS_ID)).toBeInTheDocument();
+      expect(screen.queryByTestId(ERROR_ID)).not.toBeInTheDocument();
+      await wait();
+      expect(screen.queryByTestId(ERROR_ID)).not.toBeInTheDocument();
+    });
+
+    it("should return error when provider throws error", async () => {
+      const ERROR_MESSAGE = "Foo error";
+      provider.error = new Error(ERROR_MESSAGE);
+      render(<Component />);
+      await wait();
+      expect(screen.getByText(ERROR_MESSAGE)).toBeInTheDocument();
     });
   });
 
-  describe("useLoading", () => {
+  describe("useDataLoadedError", () => {
     beforeEach(() => {
+      provider = new MockProvider(`${BOOKS_ID}-2`, {
+        data: BOOKS,
+      });
+
       BooksComponent = () => {
-        const loading = useLoading(provider);
-        return <Books loading={loading} />;
+        const [books, loaded, error] = useDataLoadedError(provider);
+        return <Books error={error} books={books} loading={!loaded} />;
       };
 
       Component = () => (
@@ -92,82 +113,41 @@ describe("hooks", () => {
       );
     });
 
-    it("should be true when provider is loading and false when finish", async () => {
+    it("loading should be true when provider is loading first time and false when finish", async () => {
       render(<Component />);
       expect(screen.queryByTestId(LOADING_ID)).toBeInTheDocument();
       await wait();
       expect(screen.queryByTestId(LOADING_ID)).not.toBeInTheDocument();
     });
 
-    it("should change when provider cache is cleaned", async () => {
+    it("loading not should change when provider cache is cleaned", async () => {
       render(<Component />);
       await wait();
       expect(screen.queryByTestId(LOADING_ID)).not.toBeInTheDocument();
       provider.cleanCache();
-      expect(screen.queryByTestId(LOADING_ID)).toBeInTheDocument();
+      expect(screen.queryByTestId(LOADING_ID)).not.toBeInTheDocument();
       await wait();
       expect(screen.queryByTestId(LOADING_ID)).not.toBeInTheDocument();
     });
-  });
 
-  describe("useLoaded", () => {
-    beforeEach(() => {
-      BooksComponent = () => {
-        const loaded = useLoaded(provider);
-        return <Books loading={loaded} />;
-      };
-
-      Component = () => (
-        <ReduxProvider>
-          <BooksComponent />
-        </ReduxProvider>
-      );
-    });
-
-    it("should be false when provider is loading and true when finish", async () => {
-      render(<Component />);
-      expect(screen.queryByTestId(LOADING_ID)).not.toBeInTheDocument();
-      await wait();
-      expect(screen.queryByTestId(LOADING_ID)).toBeInTheDocument();
-    });
-
-    it("should not change when provider cache is cleaned", async () => {
+    it("should pass data to the component", async () => {
+      const bookTitle = "Animal Farm";
       render(<Component />);
       await wait();
-      expect(screen.queryByTestId(LOADING_ID)).toBeInTheDocument();
-      provider.cleanCache();
-      expect(screen.queryByTestId(LOADING_ID)).toBeInTheDocument();
-      await wait();
-      expect(screen.queryByTestId(LOADING_ID)).toBeInTheDocument();
+      expect(screen.getByText(bookTitle)).toBeInTheDocument();
     });
 
-    it("should change when provider state is reset", async () => {
+    it("should refresh data", async () => {
+      const TEST_ID = "book-2";
       render(<Component />);
       await wait();
-      expect(screen.queryByTestId(LOADING_ID)).toBeInTheDocument();
-      provider.resetState();
-      expect(screen.queryByTestId(LOADING_ID)).not.toBeInTheDocument();
-      provider.cleanCache();
+      expect(screen.queryByTestId(TEST_ID)).toBeInTheDocument();
+      provider.delete(2);
       await wait();
-      expect(screen.queryByTestId(LOADING_ID)).toBeInTheDocument();
-    });
-  });
-
-  describe("useError", () => {
-    beforeEach(() => {
-      BooksComponent = () => {
-        const error = useError(provider);
-        return <Books error={error} />;
-      };
-
-      Component = () => (
-        <ReduxProvider>
-          <BooksComponent />
-        </ReduxProvider>
-      );
+      expect(screen.queryByTestId(TEST_ID)).not.toBeInTheDocument();
     });
 
-    it("should be null when provider does not throw error", async () => {
+    it("error should be null when provider does not throw error", async () => {
       render(<Component />);
       expect(screen.queryByTestId(ERROR_ID)).not.toBeInTheDocument();
       await wait();

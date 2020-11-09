@@ -1,8 +1,11 @@
 import React, { useMemo } from "react";
 
+import { deprecatedMethod } from "./helpers";
+
 import {
   useRefresh,
-  useDataProvider,
+  useDataLoadingError,
+  useDataLoadedError,
   useData,
   useLoading,
   useLoaded,
@@ -39,12 +42,20 @@ const useProp = (data, key) => {
   }, [data, key]);
 };
 
-const useDataProviderCustomProps = (provider, keys = defaultKeys) => {
-  const [data, loading, error] = useDataProvider(provider);
-  const dataProp = useProp(data, keys[0]);
+const useDataLoadingErrorCustomProps = (provider, keys = []) => {
+  const [data, loading, error] = useDataLoadingError(provider);
+  const dataProp = useProp(data, keys[0] || defaultKeys[0]);
   const loadingProp = useProp(loading, keys[1] || defaultKeys[1]);
   const errorProp = useProp(error, keys[2] || defaultKeys[2]);
   return { data, loading, error, dataProp, loadingProp, errorProp };
+};
+
+const useDataLoadedErrorCustomProps = (provider, keys = []) => {
+  const [data, loaded, error] = useDataLoadedError(provider);
+  const dataProp = useProp(data, keys[0] || defaultKeys[0]);
+  const loadedProp = useProp(loaded, keys[1] || defaultKeys[3]);
+  const errorProp = useProp(error, keys[2] || defaultKeys[2]);
+  return { data, loaded, error, dataProp, loadedProp, errorProp };
 };
 
 const useDataCustomProp = (provider, key = defaultKeys[0]) => {
@@ -71,14 +82,14 @@ const useErrorCustomProp = (provider, key = defaultKeys[2]) => {
   return { error, errorProp };
 };
 
-export const withDataProviderBranch = (provider, keys) => (
+export const withDataLoadingErrorComponents = (provider, keys) => (
   Component,
   LoadingComponent,
   ErrorComponent
 ) => {
-  const WithDataProviderBranch = (props) => {
+  const WithDataLoadingErrorComponents = (props) => {
     const providerToRead = useProvider(provider, props);
-    const { dataProp, loadingProp, errorProp, loading, error } = useDataProviderCustomProps(
+    const { dataProp, loadingProp, errorProp, loading, error } = useDataLoadingErrorCustomProps(
       providerToRead,
       keys
     );
@@ -96,18 +107,54 @@ export const withDataProviderBranch = (provider, keys) => (
     }
     return <Component {...props} {...dataProp} />;
   };
-  WithDataProviderBranch.displayName = `WithDataProviderBranch${getDisplayName(Component)}`;
-  return WithDataProviderBranch;
+  WithDataLoadingErrorComponents.displayName = `WithDataLoadingErrorComponents${getDisplayName(
+    Component
+  )}`;
+  return WithDataLoadingErrorComponents;
+};
+
+export const withDataProviderBranch = (provider, keys) => (
+  Component,
+  LoadingComponent,
+  ErrorComponent
+) => {
+  deprecatedMethod("withDataProviderBranch", "withDataLoadingErrorComponents");
+  return withDataLoadingErrorComponents(provider, keys)(
+    Component,
+    LoadingComponent,
+    ErrorComponent
+  );
+};
+
+export const withDataLoadedError = (provider, keys) => (Component) => {
+  const WithDataLoadedError = (props) => {
+    const providerToRead = useProvider(provider, props);
+    const { dataProp, loadedProp, errorProp } = useDataLoadedErrorCustomProps(
+      providerToRead,
+      keys
+    );
+    return <Component {...props} {...dataProp} {...loadedProp} {...errorProp} />;
+  };
+  WithDataLoadedError.displayName = `WithDataLoadedError${getDisplayName(Component)}`;
+  return WithDataLoadedError;
+};
+
+export const withDataLoadingError = (provider, keys) => (Component) => {
+  const WithDataLoadingError = (props) => {
+    const providerToRead = useProvider(provider, props);
+    const { dataProp, loadingProp, errorProp } = useDataLoadingErrorCustomProps(
+      providerToRead,
+      keys
+    );
+    return <Component {...props} {...dataProp} {...loadingProp} {...errorProp} />;
+  };
+  WithDataLoadingError.displayName = `WithDataLoadingError${getDisplayName(Component)}`;
+  return WithDataLoadingError;
 };
 
 export const withDataProvider = (provider, keys) => (Component) => {
-  const WithDataProvider = (props) => {
-    const providerToRead = useProvider(provider, props);
-    const { dataProp, loadingProp, errorProp } = useDataProviderCustomProps(providerToRead, keys);
-    return <Component {...props} {...dataProp} {...loadingProp} {...errorProp} />;
-  };
-  WithDataProvider.displayName = `WithDataProvider${getDisplayName(Component)}`;
-  return WithDataProvider;
+  deprecatedMethod("withDataProvider", "withDataLoadingError");
+  return withDataLoadingError(provider, keys)(Component);
 };
 
 export const withData = (provider, key) => (Component) => {
