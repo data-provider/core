@@ -40,6 +40,8 @@ describe("HOCs", () => {
         return <Books books={data} />;
       };
 
+      BooksComponent.fooProperty = "foo";
+
       BooksConnectedComponent = withData(provider)(BooksComponent);
 
       Component = () => (
@@ -51,6 +53,10 @@ describe("HOCs", () => {
 
     it("should wrap displayName of the component", async () => {
       expect(BooksConnectedComponent.displayName).toEqual("WithDataBooksComponent");
+    });
+
+    it("should have available statics of the component", async () => {
+      expect(BooksConnectedComponent.fooProperty).toEqual("foo");
     });
 
     it("should wrap displayName of the component using name property if component has not displayName", async () => {
@@ -162,6 +168,10 @@ describe("HOCs", () => {
       );
     });
 
+    it("should have available statics of the component", async () => {
+      expect(BooksConnectedComponent.fooProperty).toEqual("foo");
+    });
+
     it("should wrap displayName of the component", async () => {
       expect(BooksConnectedComponent.displayName).toEqual("WithLoadingBooks");
     });
@@ -213,6 +223,8 @@ describe("HOCs", () => {
         return <Books loading={loaded} />;
       };
 
+      BooksComponent.fooProperty = "foo";
+
       BooksConnectedComponent = withLoaded(provider)(BooksComponent);
 
       Component = () => (
@@ -220,6 +232,10 @@ describe("HOCs", () => {
           <BooksConnectedComponent />
         </ReduxProvider>
       );
+    });
+
+    it("should have available statics of the component", async () => {
+      expect(BooksConnectedComponent.fooProperty).toEqual("foo");
     });
 
     it("should wrap displayName of the component", async () => {
@@ -289,6 +305,10 @@ describe("HOCs", () => {
       );
     });
 
+    it("should have available statics of the component", async () => {
+      expect(BooksConnectedComponent.fooProperty).toEqual("foo");
+    });
+
     it("should be null when provider does not throw error", async () => {
       render(<Component />);
       expect(screen.queryByTestId(ERROR_ID)).not.toBeInTheDocument();
@@ -343,6 +363,8 @@ describe("HOCs", () => {
         return <Books books={provider.state.data} />;
       };
 
+      BooksComponent.fooProperty = "foo";
+
       BooksConnectedComponent = withRefresh(provider)(BooksComponent);
 
       Component = () => (
@@ -350,6 +372,10 @@ describe("HOCs", () => {
           <BooksConnectedComponent />
         </ReduxProvider>
       );
+    });
+
+    it("should have available statics of the component", async () => {
+      expect(BooksConnectedComponent.fooProperty).toEqual("foo");
     });
 
     it("should wrap displayName of the component", async () => {

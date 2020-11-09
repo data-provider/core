@@ -47,6 +47,8 @@ describe("HOCs providing multiple props", () => {
         return <Books error={error} books={data} loading={!loaded} />;
       };
 
+      BooksComponent.fooProperty = "foo";
+
       BooksConnectedComponent = withDataLoadedError(provider)(BooksComponent);
 
       Component = () => (
@@ -54,6 +56,10 @@ describe("HOCs providing multiple props", () => {
           <BooksConnectedComponent />
         </ReduxProvider>
       );
+    });
+
+    it("should have available statics of the component", async () => {
+      expect(BooksConnectedComponent.fooProperty).toEqual("foo");
     });
 
     it("should wrap displayName of the component", async () => {
@@ -214,6 +220,8 @@ describe("HOCs providing multiple props", () => {
         return <Books error={error} books={data} loading={loading} />;
       };
 
+      BooksComponent.fooProperty = "foo";
+
       BooksConnectedComponent = withDataLoadingError(provider)(BooksComponent);
 
       Component = () => (
@@ -221,6 +229,10 @@ describe("HOCs providing multiple props", () => {
           <BooksConnectedComponent />
         </ReduxProvider>
       );
+    });
+
+    it("should have available statics of the component", async () => {
+      expect(BooksConnectedComponent.fooProperty).toEqual("foo");
     });
 
     it("should wrap displayName of the component", async () => {
@@ -392,6 +404,8 @@ describe("HOCs providing multiple props", () => {
         return <Books books={data} />;
       };
 
+      BooksComponent.fooProperty = "foo";
+
       BooksConnectedComponent = withDataLoadingErrorComponents(provider)(
         BooksComponent,
         CustomLoadingComponent,
@@ -403,6 +417,10 @@ describe("HOCs providing multiple props", () => {
           <BooksConnectedComponent />
         </ReduxProvider>
       );
+    });
+
+    it("should have available statics of the component", async () => {
+      expect(BooksConnectedComponent.fooProperty).toEqual("foo");
     });
 
     it("should wrap displayName of the component", async () => {
@@ -630,6 +648,8 @@ describe("HOCs providing multiple props", () => {
         return <Books books={data} />;
       };
 
+      BooksComponent.fooProperty = "foo";
+
       BooksConnectedComponent = withDataLoadedErrorComponents(provider)(
         BooksComponent,
         CustomLoadingComponent,
@@ -641,6 +661,10 @@ describe("HOCs providing multiple props", () => {
           <BooksConnectedComponent />
         </ReduxProvider>
       );
+    });
+
+    it("should have available statics of the component", async () => {
+      expect(BooksConnectedComponent.fooProperty).toEqual("foo");
     });
 
     it("should wrap displayName of the component", async () => {
