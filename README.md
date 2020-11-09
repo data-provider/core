@@ -270,7 +270,33 @@ This hoc has the same behavior and interface than the described for the [`withDa
 
 Use this hook only when you don't want to rerender a Component each time the provider is loading. It will return `loaded` as `true` once the provider has loaded for the first time, and it will not change again. This is useful to avoid rerenders in scenarios having "pollings", for example, as it will avoid to render a "loading" each time the data is refreshed.
 
-Take into account that the `loaded` property will not be set as `true` until a success read has finished, so the error may have a value, even when `loaded` is `false`. 
+Take into account that the `loaded` property will not be set as `true` until a success read has finished, so the error may have a value, even when `loaded` is `false`.
+
+#### Examples
+
+Using a provider:
+
+```jsx
+import { withDataLoadedError } from "@data-provider/react";
+
+import { books } from "../data/books";
+
+const BooksList = ({ data, loaded, error }) => {
+  // Do your stuff here
+};
+
+export default withDataLoadedError(books)(BooksList);
+```
+
+With custom properties:
+
+```jsx
+const BooksList = ({ booksData, booksAreLoaded, booksError }) => {
+  // Do your stuff here
+};
+
+export default withDataLoadedError(books, ["booksData", "booksAreLoaded", "booksError"])(BooksList);
+```
 
 ### `withData(provider, customPropName)(Component)`
 
