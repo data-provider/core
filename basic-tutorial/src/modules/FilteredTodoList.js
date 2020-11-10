@@ -1,4 +1,3 @@
-import React from "react";
 import { useData, useLoading } from "@data-provider/react";
 
 import { todosFiltered, updateTodo } from "../data/todos";

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
 import Filters from "../components/Filters";
 import FilteredTodoList from "./FilteredTodoList";

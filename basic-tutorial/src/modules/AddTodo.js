@@ -1,5 +1,3 @@
-import React from "react";
-
 import { createTodo } from '../data/todos';
 import AddTodoComponent from "../components/AddTodo";
 

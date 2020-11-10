@@ -3,7 +3,12 @@
     {
       "id": 1,
       "text": "Finish the basic tutorial",
-      "completed": false
+      "completed": true
+    },
+    {
+      "text": "sdfsdf",
+      "completed": true,
+      "id": 2
     }
   ]
 }

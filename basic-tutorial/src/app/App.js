@@ -1,5 +1,3 @@
-import React from "react";
-
 import AddTodo from "../modules/AddTodo";
 import TodoList from "../modules/TodoList";
 
