@@ -65,10 +65,25 @@ class SelectorBase extends Provider {
     let dependencies;
     let dependenciesListeners;
     let hasToReadAgain = false;
+    let reReadMaxTimeReached = false;
     const inProgressListeners = [];
+    const reReadTimeOut = setTimeout(() => {
+      reReadMaxTimeReached = true;
+    }, this._options.reReadDependenciesMaxTime);
+
+    if (this._readInProgress) {
+      clearTimeout(reReadTimeOut);
+      return this._readInProgress;
+    }
 
     const markToReadAgain = () => {
-      hasToReadAgain = true;
+      if (!reReadMaxTimeReached) {
+        hasToReadAgain = true;
+      }
+    };
+
+    const markToNotReadAgain = () => {
+      hasToReadAgain = false;
     };
 
     const removeInProgressListenerFuncs = () => {
@@ -150,26 +165,25 @@ class SelectorBase extends Provider {
         })
         .then((result) => {
           if (hasToReadAgain) {
-            hasToReadAgain = false;
+            markToNotReadAgain();
             return readAndReturn();
           }
+          clearTimeout(reReadTimeOut);
           removeInProgressListenerFuncs();
           addCleanListeners();
           return Promise.resolve(result);
         })
         .catch((error) => {
           if (hasToReadAgain) {
-            hasToReadAgain = false;
+            markToNotReadAgain();
             return readAndReturn();
           }
+          clearTimeout(reReadTimeOut);
           removeInProgressListenerFuncs();
           addCleanListeners();
           return Promise.reject(error);
         });
     };
-    if (this._readInProgress) {
-      return this._readInProgress;
-    }
 
     this._readInProgress = readAndReturn()
       .then((result) => {
