@@ -132,7 +132,7 @@ class Provider {
   }
 
   read(...args) {
-    if (this._cache && this.options.cache) {
+    if (this._cache && this._options.cache) {
       return this._cache;
     }
     this._dispatch(readStart(this._id, true));
@@ -151,10 +151,10 @@ class Provider {
     const resultPromise = readPromise
       .then((result) => {
         this._dispatch(readSuccess(this._id, result));
-        if (this.options.cacheTime && this.options.cacheTime > 0) {
+        if (this._options.cacheTime && this._options.cacheTime > 0) {
           this._cacheTimeOut = setTimeout(() => {
             this._cache = null;
-          }, this.options.cacheTime);
+          }, this._options.cacheTime);
         }
         return Promise.resolve(result);
       })

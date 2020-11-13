@@ -168,7 +168,6 @@ class SelectorBase extends Provider {
         });
     };
     if (this._readInProgress) {
-      hasToReadAgain = true;
       return this._readInProgress;
     }
 
@@ -225,6 +224,16 @@ class SelectorBase extends Provider {
 
   get selector() {
     return this._selector;
+  }
+
+  get options() {
+    return Object.keys(this._options).reduce((opts, key) => {
+      // Remove Selector private options
+      if (key.indexOf("_") !== 0) {
+        opts[key] = this._options[key];
+      }
+      return opts;
+    }, {});
   }
 }
 
