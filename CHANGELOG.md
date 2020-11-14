@@ -10,6 +10,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 ### Removed
 
+## [2.7.0] - 2020-11-14
+
+### Added
+- feat(Selector): Add reRereadDependenciesMaxTime option (fix #145)
+- feat(Provider): Add cleanCacheThrottle option (#140)
+- chore(release): Publish to Github packages registry
+- chore(release): Add github action to check package version on PRs to master
+
 ## [2.6.1] - 2020-10-31
 
 ### Changed

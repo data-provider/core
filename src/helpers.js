@@ -18,6 +18,10 @@ const NEW_PROVIDER_PREFIX = "new-provider-";
 
 export const defaultOptions = {
   cache: true,
+  cacheTime: null,
+  cleanCacheInterval: null,
+  reReadDependenciesMaxTime: 5000,
+  cleanCacheThrottle: 0,
 };
 
 export const INIT = "init";
@@ -106,4 +110,31 @@ export function fromEntries(map) {
     return Object.fromEntries(map);
   }
   return fromEntriesPolyfill(map);
+}
+
+export function throttle(func, limit) {
+  let inThrottle = false;
+  let calledWhileInThrottle = false;
+  const checkFinishThrottle = (context) => {
+    setTimeout(() => {
+      if (calledWhileInThrottle) {
+        calledWhileInThrottle = false;
+        checkFinishThrottle(context);
+        func.apply(context, arguments);
+      } else {
+        inThrottle = false;
+      }
+    }, limit);
+  };
+  return function () {
+    const context = this;
+    if (!inThrottle) {
+      inThrottle = true;
+      calledWhileInThrottle = false;
+      checkFinishThrottle(context);
+      func.apply(context, arguments);
+    } else {
+      calledWhileInThrottle = true;
+    }
+  };
 }

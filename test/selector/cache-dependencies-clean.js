@@ -287,7 +287,7 @@ describe("Selector when cleanDependenciesCache method is called", () => {
     return promise;
   });
 
-  it("should stop reading dependencies and start again when method is called", async () => {
+  it("should stop reading dependencies and start again when cleanDependenciesCache method is called", async () => {
     expect.assertions(3);
     sandbox.spy(dependency1, "read");
     sandbox.spy(dependency2, "read");
@@ -352,6 +352,61 @@ describe("Selector when cleanDependenciesCache method is called", () => {
     }, 200);
     return promise;
   });
+
+  it("should stop reading dependencies when reReadDependenciesMaxTime option is reached and return last received data", () => {
+    expect.assertions(4);
+    sandbox.spy(dependency1, "read");
+    sandbox.spy(dependency2, "read");
+    sandbox.spy(dependency3, "read");
+    results = {
+      dependency1: ["foo", "foo2", "foo3"],
+      dependency2: ["foo4", "foo5", "foo6"],
+      dependency3: ["foo7", "foo8"],
+    };
+    timeouts = {
+      dependency1: 1000,
+      dependency2: 1000,
+      dependency3: 1000,
+    };
+    let interval = setInterval(() => {
+      dependency1.cleanCache();
+      dependency2.cleanCache();
+    }, 1800);
+    return selector.read().then((receivedResults) => {
+      clearInterval(interval);
+      expect(receivedResults).toEqual(["foo3", "foo6", "foo7"]);
+      expect(dependency1.read.callCount).toEqual(3);
+      expect(dependency2.read.callCount).toEqual(3);
+      expect(dependency3.read.callCount).toEqual(1);
+    });
+  }, 10000);
+
+  it("should stop reading dependencies when reReadDependenciesMaxTime option is reached and return last received data", () => {
+    expect.assertions(4);
+    sandbox.spy(dependency1, "read");
+    sandbox.spy(dependency2, "read");
+    sandbox.spy(dependency3, "read");
+    results = {
+      dependency1: ["foo", "foo2", "foo3"],
+      dependency2: ["foo4", "foo5", "foo6"],
+      dependency3: ["foo7", "foo8"],
+    };
+    timeouts = {
+      dependency1: 1000,
+      dependency2: 1000,
+      dependency3: 1000,
+    };
+    let interval = setInterval(() => {
+      dependency1.cleanCache();
+    }, 1800);
+    return selector.read().then((receivedResults) => {
+      clearInterval(interval);
+      expect(receivedResults).toEqual(["foo3", "foo4", "foo7"]);
+      expect(dependency1.read.callCount).toEqual(3);
+      expect(dependency2.read.callCount).toEqual(3);
+      expect(dependency3.read.callCount).toEqual(1);
+    });
+  }, 10000);
 
   it("should return last data returned by all dependencies, even when method is called while reading and dependencies are parallel", async () => {
     expect.assertions(3);

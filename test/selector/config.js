@@ -10,13 +10,15 @@ Unless required by applicable law or agreed to in writing, software distributed 
 
 const sinon = require("sinon");
 
-const { Provider, providers } = require("../../src/index");
+const { Provider, Selector, providers } = require("../../src/index");
 const { defaultOptions } = require("../../src/helpers");
 
-describe("Provider config", () => {
+describe("Selector config", () => {
   let sandbox;
+  let provider;
 
   beforeEach(() => {
+    provider = new Provider("foo-id");
     sandbox = sinon.createSandbox();
   });
 
@@ -26,53 +28,55 @@ describe("Provider config", () => {
   });
 
   it("should have default options by default", () => {
-    const provider = new Provider("foo-id");
+    const selector = new Selector(provider, () => {});
 
-    expect(provider.options).toEqual({
+    expect(selector.options).toEqual({
       ...defaultOptions,
     });
   });
 
   it("should define cache option if received", () => {
-    const provider = new Provider("foo-id", {
+    const selector = new Selector(provider, () => {}, {
       cache: false,
     });
 
-    expect(provider.options).toEqual({
+    expect(selector.options).toEqual({
       ...defaultOptions,
       cache: false,
     });
   });
 
-  it("should be created from options", () => {
-    const provider = new Provider("foo-id", {
-      option1: "foo",
-      option2: "foo2",
+  it("should define reReadDependenciesMaxTime option if received", () => {
+    const selector = new Selector(provider, () => {}, {
+      reReadDependenciesMaxTime: 7000,
     });
 
-    expect(provider.options).toEqual({
+    expect(selector.options).toEqual({
       ...defaultOptions,
-      option1: "foo",
-      option2: "foo2",
+      reReadDependenciesMaxTime: 7000,
     });
   });
 
   it("method should extend current options", () => {
-    const provider = new Provider("foo-id", {
+    const selector = new Selector(provider, () => {}, {
       option1: "foo",
       option2: "foo2",
     });
 
-    provider.config({
+    selector.config({
       option2: "foo-2",
       option3: "foo3",
+      cache: true,
+      reReadDependenciesMaxTime: 2000,
     });
 
-    expect(provider.options).toEqual({
+    expect(selector.options).toEqual({
       ...defaultOptions,
       option1: "foo",
       option2: "foo-2",
       option3: "foo3",
+      cache: true,
+      reReadDependenciesMaxTime: 2000,
     });
   });
 });

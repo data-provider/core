@@ -65,10 +65,25 @@ class SelectorBase extends Provider {
     let dependencies;
     let dependenciesListeners;
     let hasToReadAgain = false;
+    let reReadMaxTimeReached = false;
     const inProgressListeners = [];
+    const reReadTimeOut = setTimeout(() => {
+      reReadMaxTimeReached = true;
+    }, this._options.reReadDependenciesMaxTime);
+
+    if (this._readInProgress) {
+      clearTimeout(reReadTimeOut);
+      return this._readInProgress;
+    }
 
     const markToReadAgain = () => {
-      hasToReadAgain = true;
+      if (!reReadMaxTimeReached) {
+        hasToReadAgain = true;
+      }
+    };
+
+    const markToNotReadAgain = () => {
+      hasToReadAgain = false;
     };
 
     const removeInProgressListenerFuncs = () => {
@@ -150,27 +165,25 @@ class SelectorBase extends Provider {
         })
         .then((result) => {
           if (hasToReadAgain) {
-            hasToReadAgain = false;
+            markToNotReadAgain();
             return readAndReturn();
           }
+          clearTimeout(reReadTimeOut);
           removeInProgressListenerFuncs();
           addCleanListeners();
           return Promise.resolve(result);
         })
         .catch((error) => {
           if (hasToReadAgain) {
-            hasToReadAgain = false;
+            markToNotReadAgain();
             return readAndReturn();
           }
+          clearTimeout(reReadTimeOut);
           removeInProgressListenerFuncs();
           addCleanListeners();
           return Promise.reject(error);
         });
     };
-    if (this._readInProgress) {
-      hasToReadAgain = true;
-      return this._readInProgress;
-    }
 
     this._readInProgress = readAndReturn()
       .then((result) => {
@@ -225,6 +238,16 @@ class SelectorBase extends Provider {
 
   get selector() {
     return this._selector;
+  }
+
+  get options() {
+    return Object.keys(this._options).reduce((opts, key) => {
+      // Remove Selector private options
+      if (key.indexOf("_") !== 0) {
+        opts[key] = this._options[key];
+      }
+      return opts;
+    }, {});
   }
 }
 
