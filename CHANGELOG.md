@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - feat(Selector): Add reRereadDependenciesMaxTime option (fix #145)
 - feat(Provider): Add cleanCacheThrottle option (#140)
+- chore(release): Publish to Github packages registry
+- chore(release): Add github action to check package version on PRs to master
 
 ## [2.6.1] - 2020-10-31
 
