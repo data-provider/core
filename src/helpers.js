@@ -18,6 +18,7 @@ const NEW_PROVIDER_PREFIX = "new-provider-";
 
 export const defaultOptions = {
   cache: true,
+  reReadDependenciesMaxTime: 5000,
 };
 
 export const INIT = "init";
