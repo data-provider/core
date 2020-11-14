@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [unreleased]
 ### Added
+- feat(Selector): Add reRereadDependenciesMaxTime option (fix #145)
 ### Changed
 ### Fixed
 ### Removed
