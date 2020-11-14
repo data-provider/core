@@ -85,6 +85,7 @@ describe("Provider cleanCacheInterval option", () => {
   describe("reading many times after cleanCacheInterval", () => {
     it("should execute read every times", async () => {
       provider.config({
+        cleanCacheThrottle: 0,
         cleanCacheInterval: 200,
       });
       provider.read();
