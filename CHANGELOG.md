@@ -6,11 +6,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [unreleased]
 ### Added
-- feat(Selector): Add reRereadDependenciesMaxTime option (fix #145)
-- feat(Provider): Add cleanCacheThrottle option (#140)
 ### Changed
 ### Fixed
 ### Removed
+
+## [2.7.0] - 2020-11-14
+
+### Added
+- feat(Selector): Add reRereadDependenciesMaxTime option (fix #145)
+- feat(Provider): Add cleanCacheThrottle option (#140)
 
 ## [2.6.1] - 2020-10-31
 
