@@ -23,6 +23,7 @@ import {
   isPromise,
   fromEntries,
   defaultOptions,
+  throttle,
 } from "./helpers";
 import { providers } from "./providers";
 import { init, resetState, readStart, readSuccess, readError } from "./reducer";
@@ -79,11 +80,36 @@ class Provider {
     }
   }
 
+  _setCleanCacheThrottle(throttleTime) {
+    if (throttleTime) {
+      if (throttleTime !== this._previousThrottleTime) {
+        this._previousThrottleTime = throttleTime;
+        this._throttledCleanCache = throttle(this._unthrottledCleanCache.bind(this), throttleTime);
+      }
+    } else {
+      this._throttledCleanCache = this._unthrottledCleanCache;
+    }
+  }
+
+  _unthrottledCleanCache() {
+    // Reset cacheTime counter
+    if (this._cacheTimeOut) {
+      clearTimeout(this._cacheTimeOut);
+      this._cacheTimeOut = null;
+    }
+    // Reset cleanCacheInterval
+    this._setCleanCacheInterval(this._previousCleanCacheInterval, true);
+    this._cache = null;
+    this.emit(CLEAN_CACHE);
+    this._children.forEach((child) => child.cleanCache());
+  }
+
   // Public methods
 
   config(options) {
     this._options = { ...this._options, ...options };
     this._setCleanCacheInterval(this._options.cleanCacheInterval);
+    this._setCleanCacheThrottle(this._options.cleanCacheThrottle);
     this.configMethod(this._options);
   }
 
@@ -112,14 +138,7 @@ class Provider {
   }
 
   cleanCache() {
-    if (this._cacheTimeOut) {
-      clearTimeout(this._cacheTimeOut);
-      this._cacheTimeOut = null;
-    }
-    this._setCleanCacheInterval(this._previousCleanCacheInterval, true);
-    this._cache = null;
-    this.emit(CLEAN_CACHE);
-    this._children.forEach((child) => child.cleanCache());
+    this._throttledCleanCache();
   }
 
   cleanDependenciesCache() {
