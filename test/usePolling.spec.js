@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import "@testing-library/jest-dom";
 import { render, act } from "@testing-library/react";
-import { providers } from "@data-provider/core";
+import { providers, Selector } from "@data-provider/core";
 import sinon from "sinon";
 
 import { usePolling, useData } from "../src";
@@ -20,13 +20,14 @@ const wait = (time = 600) => {
 };
 
 describe("usePolling", () => {
-  let sandbox, provider, BooksComponent, Component;
+  let sandbox, provider, BooksComponent, Component, selector;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
     provider = new MockProvider(BOOKS_ID, {
       data: BOOKS,
     });
+    selector = new Selector(provider, (result) => result);
     sandbox.spy(provider, "cleanCache");
   });
 
@@ -135,5 +136,55 @@ describe("usePolling", () => {
       await act(() => promise);
       expect(provider.cleanCache.callCount).toEqual(4);
     });
+  });
+
+  describe("when using except option", () => {
+    beforeEach(() => {
+      const OPTIONS = {
+        except: [provider],
+      };
+      BooksComponent = () => {
+        const books = useData(selector);
+        usePolling(selector, 500, OPTIONS);
+        return <Books books={books} />;
+      };
+
+      Component = () => (
+        <ReduxProvider>
+          <BooksComponent />
+        </ReduxProvider>
+      );
+    });
+
+    it("should not clean the provider cache as it is defined in except option", async () => {
+      render(<Component />);
+      await wait(3000);
+      expect(provider.cleanCache.callCount).toEqual(0);
+    });
+  });
+
+  describe("when using options as first argument", () => {
+    beforeEach(() => {
+      const OPTIONS = {
+        except: [provider],
+      };
+      BooksComponent = () => {
+        const books = useData(selector);
+        usePolling(selector, OPTIONS);
+        return <Books books={books} />;
+      };
+
+      Component = () => (
+        <ReduxProvider>
+          <BooksComponent />
+        </ReduxProvider>
+      );
+    });
+
+    it("should not clean the provider cache as it is defined in except option", async () => {
+      render(<Component />);
+      await wait(8000);
+      expect(provider.cleanCache.callCount).toEqual(0);
+    }, 10000);
   });
 });

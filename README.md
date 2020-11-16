@@ -190,7 +190,7 @@ const BooksList = () => {
 };
 ```
 
-### `usePolling(provider, [interval])`
+### `usePolling(provider, [interval/options], [options])`
 
 Triggers `cleanDependenciesCache` method of the provider each `interval` miliseconds while the component is "alive". It can be used in multiple components at the same time for the same provider. In that case, the used interval will be the lower one, and it will be recalculated each time a component is added or removed.
 
@@ -199,9 +199,10 @@ This hook can also be used with [Data Provider selectors][data-provider-selector
 #### Arguments
 
 * `provider` _(Object)_: [Data Provider][data-provider] provider or selector instance.
-* `interval` _(Object)_: Interval in miliseconds to clean the provider dependencies cache. Default is 5000.
+* `interval` _(Number)_: Interval in miliseconds to clean the provider dependencies cache. Default is 5000.
+* `options` _(Object)_: Options object that will be passed as is to the `cleanCache` method of providers or `cleanDependenciesCache` method of selectors. Check the [data-provider API documentation](https://www.data-provider.org/docs/api-providers-and-selectors-methods) for further info. Options can be defined as second argument as well if interval is omitted.
 
-#### Example
+#### Examples
 
 ```jsx
 import { useData, usePolling } from "@data-provider/react";
@@ -212,6 +213,20 @@ const BooksList = () => {
   const data = useData(books);
   usePolling(books, 3000);
   // Do your stuff here. Books will fetched again from server every 3 seconds
+};
+```
+
+```jsx
+import { useData, usePolling } from "@data-provider/react";
+
+import { booksAndAuthors, books } from "../data/books";
+
+const BooksList = () => {
+  const data = useData(books);
+  usePolling(booksAndAuthors, {
+    except: [books]
+  });
+  // Do your stuff here. booksAndAuthors selector dependencies will fetched again from server every 3 seconds, except the "books" provider.
 };
 ```
 
@@ -430,14 +445,15 @@ const BooksList = ({ booksError }) => {
 export default withError(books, "booksError")(BooksList);
 ```
 
-### `withPolling(provider, [interval])(Component)`
+### `withPolling(provider, [interval/options], [options])(Component)`
 
 This High Order Component works as the hook `usePolling` described above.
 
 #### Arguments
 
 * `provider` _(Object)_: [Data Provider][data-provider] provider or selector instance, or a function as described in the [withDataLoadingError HOC docs](#withdataloadingerrorprovider-custompropertiesnamescomponent)
-* `interval` _(Object)_: Interval in miliseconds to clean the provider dependencies cache. Default is 5000.
+* `interval` _(Number)_: Interval in miliseconds to clean the provider dependencies cache. Default is 5000.
+* `options` _(Object)_: Options object that will be passed as is to the `cleanCache` method of providers or `cleanDependenciesCache` method of selectors. Check the [data-provider API documentation](https://www.data-provider.org/docs/api-providers-and-selectors-methods) for further info. Options can be defined as second argument as well if interval is omitted.
 
 #### Example
 

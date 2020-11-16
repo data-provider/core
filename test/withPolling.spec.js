@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import "@testing-library/jest-dom";
 import { render, act } from "@testing-library/react";
-import { providers } from "@data-provider/core";
+import { providers, Selector } from "@data-provider/core";
 import sinon from "sinon";
 
 import { withPolling, useData } from "../src";
@@ -20,13 +20,14 @@ const wait = (time = 600) => {
 };
 
 describe("withPolling", () => {
-  let sandbox, provider, BooksComponent, BooksComponentToRender, Component;
+  let sandbox, provider, BooksComponent, BooksComponentToRender, Component, selector;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
     provider = new MockProvider(BOOKS_ID, {
       data: BOOKS,
     });
+    selector = new Selector(provider, (result) => result);
     sandbox.spy(provider, "cleanCache");
   });
 
@@ -150,5 +151,57 @@ describe("withPolling", () => {
       await act(() => promise);
       expect(provider.cleanCache.callCount).toEqual(4);
     });
+  });
+
+  describe("when using except option", () => {
+    beforeEach(() => {
+      const OPTIONS = {
+        except: [provider],
+      };
+      BooksComponent = () => {
+        const books = useData(selector);
+        return <Books books={books} />;
+      };
+
+      BooksComponentToRender = withPolling(selector, 500, OPTIONS)(BooksComponent);
+
+      Component = () => (
+        <ReduxProvider>
+          <BooksComponentToRender />
+        </ReduxProvider>
+      );
+    });
+
+    it("should not clean the provider cache as it is defined in except option", async () => {
+      render(<Component />);
+      await wait(3000);
+      expect(provider.cleanCache.callCount).toEqual(0);
+    });
+  });
+
+  describe("when using options as first argument", () => {
+    beforeEach(() => {
+      const OPTIONS = {
+        except: [provider],
+      };
+      BooksComponent = () => {
+        const books = useData(selector);
+        return <Books books={books} />;
+      };
+
+      BooksComponentToRender = withPolling(selector, OPTIONS)(BooksComponent);
+
+      Component = () => (
+        <ReduxProvider>
+          <BooksComponent />
+        </ReduxProvider>
+      );
+    });
+
+    it("should not clean the provider cache as it is defined in except option", async () => {
+      render(<Component />);
+      await wait(8000);
+      expect(provider.cleanCache.callCount).toEqual(0);
+    }, 10000);
   });
 });
