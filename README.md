@@ -200,7 +200,7 @@ This hook can also be used with [Data Provider selectors][data-provider-selector
 
 * `provider` _(Object)_: [Data Provider][data-provider] provider or selector instance.
 * `interval` _(Number)_: Interval in miliseconds to clean the provider dependencies cache. Default is 5000.
-* `options` _(Object)_: Options object that will be passed as is to the `cleanCache` method of providers or `cleanDependenciesCache` method of selectors. Check the [data-provider API documentation](https://www.data-provider.org/docs/api-providers-and-selectors-methods) for further info. Options can be defined as second argument as well if interval is omitted.
+* `options` _(Object)_: Options object that will be passed as is to the `cleanCache` method of providers or `cleanDependenciesCache` method of selectors. Check the [data-provider API documentation](https://www.data-provider.org/docs/api-providers-and-selectors-methods) for further info. Options can be defined as second argument if interval is omitted.
 
 #### Examples
 
@@ -453,7 +453,7 @@ This High Order Component works as the hook `usePolling` described above.
 
 * `provider` _(Object)_: [Data Provider][data-provider] provider or selector instance, or a function as described in the [withDataLoadingError HOC docs](#withdataloadingerrorprovider-custompropertiesnamescomponent)
 * `interval` _(Number)_: Interval in miliseconds to clean the provider dependencies cache. Default is 5000.
-* `options` _(Object)_: Options object that will be passed as is to the `cleanCache` method of providers or `cleanDependenciesCache` method of selectors. Check the [data-provider API documentation](https://www.data-provider.org/docs/api-providers-and-selectors-methods) for further info. Options can be defined as second argument as well if interval is omitted.
+* `options` _(Object)_: Options object that will be passed as is to the `cleanCache` method of providers or `cleanDependenciesCache` method of selectors. Check the [data-provider API documentation](https://www.data-provider.org/docs/api-providers-and-selectors-methods) for further info. Options can be defined as second argument if interval is omitted.
 
 #### Example
 
