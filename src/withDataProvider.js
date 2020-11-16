@@ -237,10 +237,10 @@ export const withError = (provider, key) => (Component) => {
   return WithError;
 };
 
-export const withPolling = (provider, interval) => (Component) => {
+export const withPolling = (provider, interval, options) => (Component) => {
   const WithPolling = (props) => {
     const providerToRead = useProvider(provider, props);
-    usePolling(providerToRead, interval);
+    usePolling(providerToRead, interval, options);
     return <Component {...props} />;
   };
   hoistNonReactStatics(WithPolling, Component);

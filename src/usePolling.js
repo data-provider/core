@@ -1,10 +1,12 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 
+const DEFAULT_INTERVAL_TIME = 5000;
 const pollingProviders = {};
 
 class PollingHandler {
-  constructor(provider, intervalTime) {
+  constructor(provider, intervalTime, options) {
     provider.cleanCache();
+    this._options = options;
     this._provider = provider;
     this._id = provider.id;
     this._clients = 1;
@@ -16,7 +18,7 @@ class PollingHandler {
 
   _setInterval() {
     this._interval = setInterval(() => {
-      this._provider.cleanDependenciesCache();
+      this._provider.cleanDependenciesCache(this._options);
     }, this._currentIntervalTime);
   }
 
@@ -55,19 +57,32 @@ class PollingHandler {
   }
 }
 
-export const usePolling = (provider, intervalTime = 5000) => {
+export const usePolling = (provider, intervalTimeOrOptions, options = {}) => {
+  const [intervalTimeToUse, optionsToUse] = useMemo(() => {
+    if (typeof intervalTimeOrOptions === "undefined") {
+      return [DEFAULT_INTERVAL_TIME, options];
+    } else if (typeof intervalTimeOrOptions === "object") {
+      return [DEFAULT_INTERVAL_TIME, intervalTimeOrOptions];
+    }
+    return [intervalTimeOrOptions, options];
+  }, [intervalTimeOrOptions, options]);
+
   useEffect(() => {
     let clearProviderInterval;
     if (provider) {
       if (pollingProviders[provider.id]) {
-        pollingProviders[provider.id].addClient(intervalTime);
+        pollingProviders[provider.id].addClient(intervalTimeToUse);
       } else {
-        pollingProviders[provider.id] = new PollingHandler(provider, intervalTime);
+        pollingProviders[provider.id] = new PollingHandler(
+          provider,
+          intervalTimeToUse,
+          optionsToUse
+        );
       }
       clearProviderInterval = () => {
-        pollingProviders[provider.id].removeClient(intervalTime);
+        pollingProviders[provider.id].removeClient(intervalTimeToUse);
       };
     }
     return clearProviderInterval;
-  }, [provider, intervalTime]);
+  }, [provider, intervalTimeToUse]);
 };

@@ -10,6 +10,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed 
 ### Removed
 
+## [1.5.0] - 2020-11-16
+### Added
+- feat: Supports passing options to cleanCache methods in usePolling and withPolling
+
 ## [1.4.0] - 2020-11-09
 ### Added
 - feat(hocs): Add withDataLoadedError, withDataLoadingError, withDataLoadingErrorComponents, withDataLoadedErrorComponents
