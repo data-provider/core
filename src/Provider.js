@@ -137,12 +137,12 @@ class Provider {
     this._queryMethods.set(key, returnQuery);
   }
 
-  cleanCache() {
-    this._throttledCleanCache();
+  cleanCache(options) {
+    this._throttledCleanCache(options);
   }
 
-  cleanDependenciesCache() {
-    this.cleanCache();
+  cleanDependenciesCache(options) {
+    this.cleanCache(options);
   }
 
   resetState() {
