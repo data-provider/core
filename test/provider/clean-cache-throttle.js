@@ -103,12 +103,15 @@ describe("Provider cleanCacheThrottle option", () => {
     });
 
     it("should not clean cache again while it is throttled", async () => {
+      expect.assertions(3);
       provider.config({
         cleanCacheThrottle: 500,
       });
       await provider.read();
       provider.cleanCache(); // This one cleans the cache
+      expect(spies.read.callCount).toEqual(1);
       await provider.read();
+      expect(spies.read.callCount).toEqual(2);
       provider.cleanCache(); // throttled
       await provider.read(); // from cache
       provider.cleanCache(); // throttled
@@ -117,16 +120,20 @@ describe("Provider cleanCacheThrottle option", () => {
     });
 
     it("should clean cache one more time after throttle time if it receive calls while throttled", async () => {
+      expect.assertions(4);
       provider.config({
         cleanCacheThrottle: 500,
       });
       await provider.read();
       provider.cleanCache(); // This one cleans the cache
+      expect(spies.read.callCount).toEqual(1);
       await provider.read();
+      expect(spies.read.callCount).toEqual(2);
       provider.cleanCache(); // throttled
       await provider.read(); // from cache
       provider.cleanCache(); // throttled
       await provider.read(); // from cache
+      expect(spies.read.callCount).toEqual(2);
       await wait(700);
       // It should have cleaned cache again after throttle time
       await provider.read(); // from cache
@@ -153,15 +160,61 @@ describe("Provider cleanCacheThrottle option", () => {
       expect(cleanCacheEventListener.callCount).toEqual(1);
     });
 
-    it("should emit cleanCacheEvent one more time after throttle time if it receive calls while throttled", async () => {
+    it("should emit cleanCache event if is called with force option even when it is throttled", async () => {
+      expect.assertions(2);
       provider.config({
         cleanCacheThrottle: 500,
       });
       provider.cleanCache(); // This one cleans the cache
+      expect(cleanCacheEventListener.callCount).toEqual(1);
+      provider.cleanCache({ force: true }); // throttled
+      expect(cleanCacheEventListener.callCount).toEqual(2);
+    });
+
+    it("should not emit any event more when finish throttle time after cleaning cache forced", async () => {
+      expect.assertions(4);
+      provider.config({
+        cleanCacheThrottle: 500,
+      });
+      provider.cleanCache(); // This one cleans the cache
+      expect(cleanCacheEventListener.callCount).toEqual(1);
+      provider.cleanCache(); // throttled
+      expect(cleanCacheEventListener.callCount).toEqual(1);
+      provider.cleanCache({ force: true }); // throttled
+      expect(cleanCacheEventListener.callCount).toEqual(2);
+      await wait(600);
+      expect(cleanCacheEventListener.callCount).toEqual(2);
+    });
+
+    it("should reset throttle time when cleanCache is called with force option", async () => {
+      expect.assertions(5);
+      provider.config({
+        cleanCacheThrottle: 500,
+      });
+      provider.cleanCache(); // This one cleans the cache
+      expect(cleanCacheEventListener.callCount).toEqual(1);
+      provider.cleanCache(); // throttled
+      expect(cleanCacheEventListener.callCount).toEqual(1);
+      provider.cleanCache({ force: true });
+      expect(cleanCacheEventListener.callCount).toEqual(2);
+      provider.cleanCache(); // throttled
+      expect(cleanCacheEventListener.callCount).toEqual(2);
+      await wait(600);
+      expect(cleanCacheEventListener.callCount).toEqual(3);
+    });
+
+    it("should emit cleanCacheEvent one more time after throttle time if it receive calls while throttled", async () => {
+      expect.assertions(3);
+      provider.config({
+        cleanCacheThrottle: 500,
+      });
+      provider.cleanCache(); // This one cleans the cache
+      expect(cleanCacheEventListener.callCount).toEqual(1);
       provider.cleanCache(); // throttled
       provider.cleanCache(); // throttled
       provider.cleanCache(); // throttled
       provider.cleanCache(); // throttled
+      expect(cleanCacheEventListener.callCount).toEqual(1);
       await wait(700);
       expect(cleanCacheEventListener.callCount).toEqual(2);
     });
