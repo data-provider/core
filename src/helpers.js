@@ -115,8 +115,9 @@ export function fromEntries(map) {
 export function throttle(func, limit) {
   let inThrottle = false;
   let calledWhileInThrottle = false;
+  let finishThrottleTimeout = null;
   const checkFinishThrottle = (context) => {
-    setTimeout(() => {
+    finishThrottleTimeout = setTimeout(() => {
       if (calledWhileInThrottle) {
         calledWhileInThrottle = false;
         checkFinishThrottle(context);
@@ -126,9 +127,12 @@ export function throttle(func, limit) {
       }
     }, limit);
   };
-  return function () {
+  return function (options = {}) {
     const context = this;
-    if (!inThrottle) {
+    if (!inThrottle || options.force) {
+      if (options.force) {
+        clearTimeout(finishThrottleTimeout);
+      }
       inThrottle = true;
       calledWhileInThrottle = false;
       checkFinishThrottle(context);
