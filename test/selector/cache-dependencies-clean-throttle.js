@@ -10,7 +10,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 
 const sinon = require("sinon");
 
-const { Provider, providers } = require("../../src/index");
+const { Provider, Selector, providers } = require("../../src/index");
 
 const wait = (time) => {
   return new Promise((resolve) => {
@@ -24,10 +24,11 @@ const logTime = (start, name) => {
   console.info(`${name || "Trace"} time: %dms`, new Date() - start);
 };
 
-describe("Provider cleanCacheThrottle option", () => {
+describe("Selector cleanCacheThrottle option", () => {
   let sandbox;
   let spies;
   let TestProvider;
+  let selector;
   let provider;
   let cleanCacheEventListener;
 
@@ -51,7 +52,11 @@ describe("Provider cleanCacheThrottle option", () => {
     };
 
     provider = new TestProvider();
-    provider.cleanCache();
+    selector = new Selector(provider, (results) => results);
+    selector.cleanDependenciesCache();
+    provider.config({
+      cleanCacheThrottle: null,
+    });
     provider.on("cleanCache", cleanCacheEventListener);
   });
 
@@ -61,126 +66,131 @@ describe("Provider cleanCacheThrottle option", () => {
   });
 
   describe("without cleanCacheThrottle", () => {
-    it("should execute read method all times cleanCache is called", async () => {
-      await provider.read();
-      provider.cleanCache();
-      await provider.read();
-      provider.cleanCache();
-      await provider.read();
-      provider.cleanCache();
-      await provider.read();
+    it("should execute read method of dependencies all times cleanCache is called", async () => {
+      await selector.read();
+      selector.cleanDependenciesCache();
+      await selector.read();
+      selector.cleanDependenciesCache();
+      await selector.read();
+      selector.cleanDependenciesCache();
+      await selector.read();
       expect(spies.read.callCount).toEqual(4);
     });
   });
 
-  describe("withot cleanCacheThrottle option", () => {
+  describe("with cleanCacheThrottle option", () => {
     it("should execute read method all times cleanCache is called if option value is 0", async () => {
-      provider.config({
+      selector.config({
         cleanCacheThrottle: 0,
       });
-      await provider.read();
-      provider.cleanCache();
-      await provider.read();
-      provider.cleanCache();
-      await provider.read();
-      provider.cleanCache();
-      await provider.read();
+      await selector.read();
+      selector.cleanDependenciesCache();
+      await selector.read();
+      selector.cleanDependenciesCache();
+      await selector.read();
+      selector.cleanDependenciesCache();
+      await selector.read();
       expect(spies.read.callCount).toEqual(4);
     });
 
     it("should execute read method all times cleanCache is called if option value is null", async () => {
-      provider.config({
+      selector.config({
         cleanCacheThrottle: null,
       });
-      await provider.read();
-      provider.cleanCache();
-      await provider.read();
-      provider.cleanCache();
-      await provider.read();
-      provider.cleanCache();
-      await provider.read();
+      await selector.read();
+      selector.cleanDependenciesCache();
+      await selector.read();
+      selector.cleanDependenciesCache();
+      await selector.read();
+      selector.cleanDependenciesCache();
+      await selector.read();
       expect(spies.read.callCount).toEqual(4);
     });
 
     it("should not clean cache again while it is throttled", async () => {
-      expect.assertions(3);
-      provider.config({
+      expect.assertions(4);
+      selector.config({
         cleanCacheThrottle: 500,
       });
-      await provider.read();
-      provider.cleanCache(); // This one cleans the cache
+      await selector.read();
+      selector.cleanDependenciesCache(); // This one cleans the cache
       expect(spies.read.callCount).toEqual(1);
-      await provider.read();
+      await selector.read();
       expect(spies.read.callCount).toEqual(2);
-      provider.cleanCache(); // throttled
-      await provider.read(); // from cache
-      provider.cleanCache(); // throttled
-      await provider.read(); // from cache
+      selector.cleanDependenciesCache(); // throttled
+      await selector.read(); // from cache
+      expect(spies.read.callCount).toEqual(2);
+      selector.cleanDependenciesCache(); // throttled
+      await selector.read(); // from cache
       expect(spies.read.callCount).toEqual(2);
     });
 
     it("should clean cache one more time after throttle time if it receive calls while throttled", async () => {
       expect.assertions(4);
-      provider.config({
+      selector.config({
         cleanCacheThrottle: 500,
       });
-      await provider.read();
-      provider.cleanCache(); // This one cleans the cache
+      await selector.read();
+      selector.cleanDependenciesCache(); // This one cleans the cache
       expect(spies.read.callCount).toEqual(1);
-      await provider.read();
+      await selector.read();
       expect(spies.read.callCount).toEqual(2);
-      provider.cleanCache(); // throttled
-      await provider.read(); // from cache
-      provider.cleanCache(); // throttled
-      await provider.read(); // from cache
+      selector.cleanDependenciesCache(); // throttled
+      await selector.read(); // from cache
+      selector.cleanDependenciesCache(); // throttled
+      await selector.read(); // from cache
       expect(spies.read.callCount).toEqual(2);
       await wait(700);
       // It should have cleaned cache again after throttle time
-      await provider.read(); // from cache
+      await selector.read(); // from cache
       expect(spies.read.callCount).toEqual(3);
     });
 
     it("should emit cleanCache event all times cleanCache is called if option value is null", async () => {
-      provider.config({
+      selector.config({
         cleanCacheThrottle: null,
       });
-      provider.cleanCache();
-      provider.cleanCache();
-      provider.cleanCache();
+      await selector.read();
+      selector.cleanDependenciesCache();
+      selector.cleanDependenciesCache();
+      selector.cleanDependenciesCache();
       expect(cleanCacheEventListener.callCount).toEqual(3);
     });
 
     it("should not emit cleanCache event again while it is throttled", async () => {
-      provider.config({
+      selector.config({
         cleanCacheThrottle: 500,
       });
-      provider.cleanCache(); // This one cleans the cache
-      provider.cleanCache(); // throttled
-      provider.cleanCache(); // throttled
+      await selector.read();
+      selector.cleanDependenciesCache(); // This one cleans the cache
+      selector.cleanDependenciesCache(); // throttled
+      selector.cleanDependenciesCache(); // throttled
       expect(cleanCacheEventListener.callCount).toEqual(1);
     });
 
     it("should emit cleanCache event if is called with force option even when it is throttled", async () => {
       expect.assertions(2);
-      provider.config({
+      selector.config({
         cleanCacheThrottle: 500,
       });
-      provider.cleanCache(); // This one cleans the cache
+      await selector.read();
+      selector.cleanDependenciesCache(); // This one cleans the cache
       expect(cleanCacheEventListener.callCount).toEqual(1);
-      provider.cleanCache({ force: true }); // throttled
+      selector.cleanDependenciesCache({ force: true }); // throttled
       expect(cleanCacheEventListener.callCount).toEqual(2);
     });
 
     it("should not emit any event more when finish throttle time after cleaning cache forced", async () => {
       expect.assertions(4);
-      provider.config({
+      selector.config({
         cleanCacheThrottle: 500,
       });
-      provider.cleanCache(); // This one cleans the cache
+      await selector.read();
+      selector.cleanDependenciesCache(); // This one cleans the cache
       expect(cleanCacheEventListener.callCount).toEqual(1);
-      provider.cleanCache(); // throttled
+      selector.cleanDependenciesCache(); // throttled
       expect(cleanCacheEventListener.callCount).toEqual(1);
-      provider.cleanCache({ force: true }); // throttled
+      selector.cleanDependenciesCache({ force: true }); // throttled
       expect(cleanCacheEventListener.callCount).toEqual(2);
       await wait(600);
       expect(cleanCacheEventListener.callCount).toEqual(2);
@@ -188,16 +198,17 @@ describe("Provider cleanCacheThrottle option", () => {
 
     it("should reset throttle time when cleanCache is called with force option", async () => {
       expect.assertions(5);
-      provider.config({
+      selector.config({
         cleanCacheThrottle: 500,
       });
-      provider.cleanCache(); // This one cleans the cache
+      await selector.read();
+      selector.cleanDependenciesCache(); // This one cleans the cache
       expect(cleanCacheEventListener.callCount).toEqual(1);
-      provider.cleanCache(); // throttled
+      selector.cleanDependenciesCache(); // throttled
       expect(cleanCacheEventListener.callCount).toEqual(1);
-      provider.cleanCache({ force: true });
+      selector.cleanDependenciesCache({ force: true });
       expect(cleanCacheEventListener.callCount).toEqual(2);
-      provider.cleanCache(); // throttled
+      selector.cleanDependenciesCache(); // throttled
       expect(cleanCacheEventListener.callCount).toEqual(2);
       await wait(600);
       expect(cleanCacheEventListener.callCount).toEqual(3);
@@ -205,15 +216,16 @@ describe("Provider cleanCacheThrottle option", () => {
 
     it("should emit cleanCacheEvent one more time after throttle time if it receive calls while throttled", async () => {
       expect.assertions(3);
-      provider.config({
+      selector.config({
         cleanCacheThrottle: 500,
       });
-      provider.cleanCache(); // This one cleans the cache
+      await selector.read();
+      selector.cleanDependenciesCache(); // This one cleans the cache
       expect(cleanCacheEventListener.callCount).toEqual(1);
-      provider.cleanCache(); // throttled
-      provider.cleanCache(); // throttled
-      provider.cleanCache(); // throttled
-      provider.cleanCache(); // throttled
+      selector.cleanDependenciesCache(); // throttled
+      selector.cleanDependenciesCache(); // throttled
+      selector.cleanDependenciesCache(); // throttled
+      selector.cleanDependenciesCache(); // throttled
       expect(cleanCacheEventListener.callCount).toEqual(1);
       await wait(700);
       expect(cleanCacheEventListener.callCount).toEqual(2);
@@ -221,24 +233,25 @@ describe("Provider cleanCacheThrottle option", () => {
 
     it("should emit on cleanCache event maximum per throttle time", async () => {
       expect.assertions(7);
-      provider.config({
+      selector.config({
         cleanCacheThrottle: 500,
       });
+      await selector.read();
       var start = new Date();
-      provider.cleanCache(); // This one cleans the cache
-      provider.cleanCache(); // throttled
-      provider.cleanCache(); // throttled
-      provider.cleanCache(); // throttled
-      provider.cleanCache(); // throttled
+      selector.cleanDependenciesCache(); // This one cleans the cache
+      selector.cleanDependenciesCache(); // throttled
+      selector.cleanDependenciesCache(); // throttled
+      selector.cleanDependenciesCache(); // throttled
+      selector.cleanDependenciesCache(); // throttled
       logTime(start, "First block");
       expect(cleanCacheEventListener.callCount).toEqual(1);
       await wait(500);
       // Cleaned the cache on finish first throttle
       logTime(start, "After first wait");
       expect(cleanCacheEventListener.callCount).toEqual(2);
-      provider.cleanCache(); // throttled
-      provider.cleanCache(); // throttled
-      provider.cleanCache(); // throttled
+      selector.cleanDependenciesCache(); // throttled
+      selector.cleanDependenciesCache(); // throttled
+      selector.cleanDependenciesCache(); // throttled
       logTime(start, "After second block");
       expect(cleanCacheEventListener.callCount).toEqual(2);
       await wait(1500);
@@ -248,7 +261,7 @@ describe("Provider cleanCacheThrottle option", () => {
       await wait(2000);
       // Do not cleans the cache more times as it is not called any more
       expect(cleanCacheEventListener.callCount).toEqual(3);
-      provider.cleanCache(); // not throttled
+      selector.cleanDependenciesCache(); // not throttled
       expect(cleanCacheEventListener.callCount).toEqual(4);
       await wait(1000);
       // Do not cleans the cache more times as it is not called any more
@@ -257,30 +270,31 @@ describe("Provider cleanCacheThrottle option", () => {
 
     it("should apply new throttleTime when config is called again", async () => {
       expect.assertions(7);
-      provider.config({
+      selector.config({
         cleanCacheThrottle: 100,
       });
+      await selector.read();
       var start = new Date();
-      provider.cleanCache(); // This one cleans the cache
-      provider.cleanCache(); // throttled
+      selector.cleanDependenciesCache(); // This one cleans the cache
+      selector.cleanDependenciesCache(); // throttled
       logTime(start, "First block");
       expect(cleanCacheEventListener.callCount).toEqual(1);
       await wait(500);
       // Cleans the cache on finish first throttle
       logTime(start, "After first wait");
       expect(cleanCacheEventListener.callCount).toEqual(2);
-      provider.config({
+      selector.config({
         cleanCacheThrottle: 2000,
       });
-      provider.cleanCache(); // Not throttled
-      provider.cleanCache(); // throttled
-      provider.cleanCache(); // throttled
+      selector.cleanDependenciesCache(); // Not throttled
+      selector.cleanDependenciesCache(); // throttled
+      selector.cleanDependenciesCache(); // throttled
       logTime(start, "After second block");
       expect(cleanCacheEventListener.callCount).toEqual(3);
       await wait(1500);
       // Still in throttle
       expect(cleanCacheEventListener.callCount).toEqual(3);
-      provider.cleanCache(); // throttled
+      selector.cleanDependenciesCache(); // throttled
       expect(cleanCacheEventListener.callCount).toEqual(3);
       await wait(2000);
       // Cleaned the cache on finish throttle
@@ -290,26 +304,28 @@ describe("Provider cleanCacheThrottle option", () => {
       expect(cleanCacheEventListener.callCount).toEqual(4);
     }, 10000);
 
-    it("should do nothing when config is called whith same throttle value", () => {
-      provider.config({
+    it("should do nothing when config is called whith same throttle value", async () => {
+      selector.config({
         cleanCacheThrottle: 100,
       });
-      const originalCleanCacheMethod = provider.cleanCache;
-      provider.config({
+      await selector.read();
+      const originalCleanCacheMethod = selector.cleanDependenciesCache;
+      selector.config({
         cleanCacheThrottle: 100,
       });
-      expect(provider.cleanCache).toEqual(originalCleanCacheMethod);
+      expect(selector.cleanDependenciesCache).toEqual(originalCleanCacheMethod);
     });
 
-    it("should change throttledCleanCache method when throttle value is changed", () => {
-      provider.config({
+    it("should change throttledCleanCache method when throttle value is changed", async () => {
+      selector.config({
         cleanCacheThrottle: 100,
       });
-      const originalThrottledCleanCache = provider._throttledCleanCache;
-      provider.config({
+      await selector.read();
+      const originalThrottledCleanCache = selector._throttledCleanDependenciesCache;
+      selector.config({
         cleanCacheThrottle: 200,
       });
-      expect(provider._throttledCleanCache).not.toBe(originalThrottledCleanCache);
+      expect(selector._throttledCleanDependenciesCache).not.toBe(originalThrottledCleanCache);
     });
   });
 });

@@ -222,7 +222,7 @@ class SelectorBase extends Provider {
     }
   }
 
-  cleanDependenciesCache(options = {}) {
+  _unthrottledCleanDependenciesCache(options = {}) {
     if (this._inProgressDependencies.size > 0) {
       this._cleanCaches(Array.from(this._inProgressDependencies), options);
     } else {
