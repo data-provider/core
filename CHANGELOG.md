@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [unreleased]
 ### Added
 - feat(Provider): Add force option to throttled methods, as cleanCache.
+- feat(Selector): Apply cleanCacheThrottle option also to cleanDependenciesCache method
+
 ### Changed
 ### Fixed
 ### Removed
