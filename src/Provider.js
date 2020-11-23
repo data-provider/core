@@ -85,9 +85,14 @@ class Provider {
       if (throttleTime !== this._previousThrottleTime) {
         this._previousThrottleTime = throttleTime;
         this._throttledCleanCache = throttle(this._unthrottledCleanCache.bind(this), throttleTime);
+        this._throttledCleanDependenciesCache = throttle(
+          this._unthrottledCleanDependenciesCache.bind(this),
+          throttleTime
+        );
       }
     } else {
       this._throttledCleanCache = this._unthrottledCleanCache;
+      this._throttledCleanDependenciesCache = this._unthrottledCleanDependenciesCache;
     }
   }
 
@@ -102,6 +107,10 @@ class Provider {
     this._cache = null;
     this.emit(CLEAN_CACHE);
     this._children.forEach((child) => child.cleanCache());
+  }
+
+  _unthrottledCleanDependenciesCache(options) {
+    this.cleanCache(options);
   }
 
   // Public methods
@@ -142,7 +151,7 @@ class Provider {
   }
 
   cleanDependenciesCache(options) {
-    this.cleanCache(options);
+    this._throttledCleanDependenciesCache(options);
   }
 
   resetState() {
