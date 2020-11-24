@@ -205,7 +205,7 @@ export class Axios extends Provider {
   _cleanAfterRequestAndDispatch(request, eventName, data) {
     return request.then((responseData) => {
       this.emit(eventName, data);
-      this.cleanCache();
+      this.cleanCache({ force: true });
       return Promise.resolve(responseData);
     });
   }

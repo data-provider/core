@@ -150,7 +150,25 @@ describe("Axios data providers", () => {
       await books.update("");
       promise = books.read();
       expect(books.state.loading).toEqual(true);
-      return promise.then(() => {
+      await promise.then(() => {
+        expect(books.state.loading).toEqual(false);
+      });
+    });
+
+    it("should clean the cache when finish successfully even when cleanCacheThrottle is configured", async () => {
+      expect.assertions(3);
+      books.config({
+        cleanCacheThrottle: 3000,
+      });
+      let promise = books.read();
+      expect(books.state.loading).toEqual(true);
+      await promise;
+      books.cleanCache();
+      await books.read();
+      await books.update("");
+      promise = books.read();
+      expect(books.state.loading).toEqual(true);
+      await promise.then(() => {
         expect(books.state.loading).toEqual(false);
       });
     });
@@ -177,6 +195,24 @@ describe("Axios data providers", () => {
         expect(books.state.loading).toEqual(false);
       });
     });
+
+    it("should clean the cache when finish successfully even when cleanCacheThrottle is configured", async () => {
+      expect.assertions(3);
+      books.config({
+        cleanCacheThrottle: 3000,
+      });
+      let promise = books.read();
+      expect(books.state.loading).toEqual(true);
+      await promise;
+      books.cleanCache();
+      await books.read();
+      await books.create("");
+      promise = books.read();
+      expect(books.state.loading).toEqual(true);
+      await promise.then(() => {
+        expect(books.state.loading).toEqual(false);
+      });
+    });
   });
 
   describe("delete method", () => {
@@ -197,6 +233,24 @@ describe("Axios data providers", () => {
       promise = books.read();
       expect(books.state.loading).toEqual(true);
       return promise.then(() => {
+        expect(books.state.loading).toEqual(false);
+      });
+    });
+
+    it("should clean the cache when finish successfully even when cleanCacheThrottle is configured", async () => {
+      expect.assertions(3);
+      books.config({
+        cleanCacheThrottle: 3000,
+      });
+      let promise = books.read();
+      expect(books.state.loading).toEqual(true);
+      await promise;
+      books.cleanCache();
+      await books.read();
+      await books.delete();
+      promise = books.read();
+      expect(books.state.loading).toEqual(true);
+      await promise.then(() => {
         expect(books.state.loading).toEqual(false);
       });
     });

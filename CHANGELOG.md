@@ -10,6 +10,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 ### Removed
 
+## [2.1.5] - 2020-11-24
+
+### Added
+- chore(release): Add github actions to check package version and publish to gpr
+
+### Changed
+- feat(cache): Force the cleaning of the cache after CUD requests
+
 ## [2.1.4] - 2020-10-31
 
 ### Changed
