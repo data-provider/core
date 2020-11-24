@@ -170,6 +170,8 @@ booksCollection.query({
 }).delete();
 ```
 
+> When cleaning the cache after a successful request, all methods use the `force` option under the hood, so the cache will be cleaned inmediately, no matter the `cleanCacheThrottle` option configured for the provider, as the resource should have changed in the API also inmediatly.
+
 ### `setHeaders(headers)`
 
 Defines headers that will be applied to all subsequent requests.

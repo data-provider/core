@@ -55,7 +55,7 @@
   "devDependencies": {
     "@babel/core": "7.12.3",
     "@babel/preset-env": "7.12.1",
-    "@data-provider/core": "2.6.1",
+    "@data-provider/core": "2.8.0",
     "@mocks-server/admin-api-paths": "1.0.8",
     "@mocks-server/main": "1.8.7",
     "@rollup/plugin-babel": "5.2.1",
