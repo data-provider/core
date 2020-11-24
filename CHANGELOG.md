@@ -7,9 +7,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [unreleased]
 ### Added
 ### Changed
-- feat(cache): Force the cleaning of the cache after CUD requests
 ### Fixed
 ### Removed
+
+## [2.1.5] - 2020-11-24
+
+### Changed
+- feat(cache): Force the cleaning of the cache after CUD requests
 
 ## [2.1.4] - 2020-10-31
 
