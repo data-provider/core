@@ -10,6 +10,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 ### Removed
 
+## [2.8.1] - 2020-11-27
+
+### Fixed
+- fix(#154): Pass original arguments to throttled methods
+
 ## [2.8.0] - 2020-11-23
 
 ### Added
