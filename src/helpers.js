@@ -116,12 +116,13 @@ export function throttle(func, limit) {
   let inThrottle = false;
   let calledWhileInThrottle = false;
   let finishThrottleTimeout = null;
-  const checkFinishThrottle = (context) => {
+  const checkFinishThrottle = (context, args) => {
     finishThrottleTimeout = setTimeout(() => {
       if (calledWhileInThrottle) {
+        inThrottle = true;
         calledWhileInThrottle = false;
-        checkFinishThrottle(context);
-        func.apply(context, arguments);
+        checkFinishThrottle(context, args);
+        func.apply(context, args);
       } else {
         inThrottle = false;
       }
@@ -135,7 +136,7 @@ export function throttle(func, limit) {
       }
       inThrottle = true;
       calledWhileInThrottle = false;
-      checkFinishThrottle(context);
+      checkFinishThrottle(context, arguments);
       func.apply(context, arguments);
     } else {
       calledWhileInThrottle = true;
