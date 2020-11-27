@@ -73,7 +73,7 @@ describe("Provider cleanCacheThrottle option", () => {
     });
   });
 
-  describe("withot cleanCacheThrottle option", () => {
+  describe("with cleanCacheThrottle option", () => {
     it("should execute read method all times cleanCache is called if option value is 0", async () => {
       provider.config({
         cleanCacheThrottle: 0,
@@ -117,6 +117,33 @@ describe("Provider cleanCacheThrottle option", () => {
       provider.cleanCache(); // throttled
       await provider.read(); // from cache
       expect(spies.read.callCount).toEqual(2);
+    });
+
+    it("should pass same options to cleanCache method when it is throttled", async () => {
+      expect.assertions(7);
+      const options = { foo: "foo" };
+      const originalUnthrottledCleanCache = provider._unthrottledCleanCache.bind(provider);
+      provider._unthrottledCleanCache = function (options) {
+        originalUnthrottledCleanCache(options);
+      };
+      const spy = sandbox.spy(provider, "_unthrottledCleanCache");
+      provider.config({
+        cleanCacheThrottle: 500,
+      });
+      sandbox.spy(provider, "_throttledCleanCache");
+      await provider.read();
+      provider.cleanCache(options); // This one cleans the cache
+      expect(provider._throttledCleanCache.getCall(0).args[0]).toBe(options);
+      expect(spy.getCall(0).args[0]).toBe(options);
+      provider.cleanCache(); // throttled
+      provider.cleanCache(); // throttled
+      expect(provider._throttledCleanCache.callCount).toEqual(3);
+      expect(spy.callCount).toEqual(1);
+      await wait(700);
+      // It should have cleaned cache again after throttle time
+      expect(provider._throttledCleanCache.callCount).toEqual(3);
+      expect(spy.callCount).toEqual(2);
+      expect(spy.getCall(1).args[0]).toBe(options);
     });
 
     it("should clean cache one more time after throttle time if it receive calls while throttled", async () => {
