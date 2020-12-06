@@ -10,7 +10,21 @@ It provides CRUD methods for objects saved in `localStorage` or `sessionStorage`
 
 ## Usage
 
-Read the [Data Provider][data-provider] docs to learn how to use addons.
+Create a new provider using the `LocalStorage` or `SessionStorage` classes.
+
+#### Arguments
+
+* `id` _(String)_: Id of the provider, will be used also as the `key` where the provider data is stored in `localStorage` or `sessionStorage`.
+
+#### Example
+
+```javascript
+import { LocalStorage } from "@data-provider/browser-storage";
+
+const userPreferences = new LocalStorage("user-preferences"); //userPreferences object will be stored in localStorage `user-preferences` key.
+```
+
+Read the [Data Provider][data-provider] docs for further info about how to use addons.
 
 * [Home][data-provider]
 * [Get started][get-started]
