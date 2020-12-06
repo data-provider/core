@@ -33,6 +33,20 @@ class StorageMock {
   }
 }
 
+class StorageErrorMock {
+  constructor(error) {
+    this._error = error;
+  }
+
+  getItem() {
+    throw this._error;
+  }
+
+  setItem() {
+    throw this._error;
+  }
+}
+
 export class Storage extends Provider {
   constructor(id, options, query) {
     const tags = options.tags ? [...options.tags] : [];
@@ -45,13 +59,16 @@ export class Storage extends Provider {
     super(id, extendedOptions, query);
   }
 
-  _getStorage(storageKey, root) {
+  _getStorage(storageKey, root, storageFallback) {
     if (root && root[storageKey]) {
       return root[storageKey];
     }
     try {
       return window[storageKey];
-    } catch (err) {
+    } catch (error) {
+      if (storageFallback === false) {
+        return new StorageErrorMock(error);
+      }
       return new StorageMock();
     }
   }
@@ -68,10 +85,14 @@ export class Storage extends Provider {
   get initialState() {
     let initialState = this.initialStateFromOptions || {};
     this._namespace = this.options.parentId;
-    this._storage = this._getStorage(this.options.storageKey, this.options.root);
+    this._storage = this._getStorage(
+      this.options.storageKey,
+      this.options.root,
+      this.options.storageFallback
+    );
     return {
       ...initialState,
-      data: this.readMethod(),
+      data: this.readSync(),
     };
   }
 
@@ -79,13 +100,34 @@ export class Storage extends Provider {
     return this.queryValue && this.queryValue.prop;
   }
 
-  readMethod() {
+  readSync() {
     const queryProp = this._queriedProp;
-    const rootValue = this._getRootValue();
+    let rootValue;
+    try {
+      rootValue = this._getRootValue();
+    } catch (err) {
+      rootValue = {};
+    }
     if (queryProp) {
       return rootValue[queryProp];
     }
     return rootValue;
+  }
+
+  readMethod() {
+    return new Promise((resolve, reject) => {
+      let rootValue;
+      const queryProp = this._queriedProp;
+      try {
+        rootValue = this._getRootValue();
+        if (queryProp) {
+          resolve(rootValue[queryProp]);
+        }
+        resolve(rootValue);
+      } catch (err) {
+        reject(err);
+      }
+    });
   }
 
   _cleanParentCache() {

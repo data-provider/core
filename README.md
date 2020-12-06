@@ -15,14 +15,24 @@ Create a new provider using the `LocalStorage` or `SessionStorage` classes.
 #### Arguments
 
 * `id` _(String)_: Id of the provider, will be used also as the `key` where the provider data is stored in `localStorage` or `sessionStorage`.
+* `options` _(Object)_: Apart of [common data-provider options](https://www.data-provider.org/docs/api-provider), this plugin also accept next options:
+  * `storageFallback` _(Boolean)_: Default `true`. If there is an error trying to access to `window.localStorage` or `window.sessionStorage`, a mock will be used instead, and data will be persisted in memory. This could happen if `localStorage` is disabled by the browser, for example. If you want to handle exceptions by yourself, you can disable this behavior setting this option to `false`, and then all calls to `read`, `update` or `delete` methods will be rejected with the correspondent error, which will be stored also in the `error` property of the provider state.
+  * `initialState` _(Object)_: Same option than the one described in the [data-provider API docs](https://www.data-provider.org/docs/api-provider), except the `data` property, which in this case has no effect, as the initial data set in the state will be the data retrieved synchronously from the real `localStorage` or `sessionStorage`.
 
 #### Example
 
 ```javascript
 import { LocalStorage } from "@data-provider/browser-storage";
 
-const userPreferences = new LocalStorage("user-preferences"); //userPreferences object will be stored in localStorage `user-preferences` key.
+const userPreferences = new LocalStorage("user-preferences", { storageFallback: false });
+// userPreferences object will be stored in localStorage `user-preferences` key.
+// If localStorage is disabled, no in-memory mock will be used instead
+
+const sessionData = new SessionStorage("user-session");
+// sessionData object will be stored in sessionStorate `user-session` key.
 ```
+
+#### Further info
 
 Read the [Data Provider][data-provider] docs for further info about how to use addons.
 
@@ -64,7 +74,7 @@ Updates an specific property of the stored object when the provider is queried, 
 
 #### Returns
 
-A promise that will be resolved when the localStorage is updated, or will be rejected with an error in case the operation fails ([MDN docs explicitly state](https://developer.mozilla.org/en-US/docs/Web/API/Storage/setItem) that "developers should make sure to always catch possible exceptions from setItem()")
+A promise that will be resolved when the localStorage is updated, or will be rejected with an error in case the operation fails.
 
 #### Examples
 
@@ -92,7 +102,7 @@ Removes an specific property of the stored object when the provider is queried, 
 
 #### Returns
 
-A promise that will be resolved when the localStorage is updated, or will be rejected with an error in case the operation fails ([MDN docs explicitly state](https://developer.mozilla.org/en-US/docs/Web/API/Storage/setItem) that "developers should make sure to always catch possible exceptions from setItem()")
+A promise that will be resolved when the localStorage is updated, or will be rejected with an error in case the operation fails.
 
 #### Examples
 

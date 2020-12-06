@@ -75,7 +75,7 @@ describe("SessionStorage Storage", () => {
   describe("Loading property of a method", () => {
     let userData;
 
-    beforeAll(() => {
+    beforeEach(() => {
       userData = new SessionStorage("userData", {
         root: storage.mock,
       });
