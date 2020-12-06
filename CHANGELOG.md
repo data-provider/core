@@ -10,6 +10,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 ### Removed
 
+## [2.2.0] - 2020-12-06
+
+### Added
+- feat(#99): Handle `getItem` exceptions
+- feat: Add `storageFallback` option, which allows to disable the storage mock in case there is an error accesing to `localStorage` or `sessionStorage`
+
 ## [2.1.0] - 2020-12-06
 
 ### Added

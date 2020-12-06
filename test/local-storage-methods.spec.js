@@ -41,7 +41,7 @@ describe("Local Storage", () => {
     });
   });
 
-  describe("When window is not available and it uses storage mock", () => {
+  describe("When window or localStorage are not available and it uses storage mock", () => {
     let userData;
     const fooData = {
       foo: "foo-value",
@@ -72,10 +72,124 @@ describe("Local Storage", () => {
     });
   });
 
+  describe("When window or localStorage are not available and it has disabled storageFallback", () => {
+    let userData;
+
+    beforeEach(() => {
+      userData = new LocalStorage("userData", {
+        storageFallback: false,
+      });
+    });
+
+    it("should return an empty object as root value", async () => {
+      expect(userData.state.data).toEqual({});
+    });
+
+    it("should return undefined for queried values", async () => {
+      expect(userData.query({ prop: "foo" }).state.data).toEqual(undefined);
+    });
+
+    it("should reject read method when reading", async () => {
+      let receivedError;
+      await userData.read().catch((error) => {
+        receivedError = error;
+      });
+      expect(receivedError.message).toEqual(expect.stringContaining("window is not defined"));
+    });
+
+    it("should reject read method when queried", async () => {
+      let receivedError;
+      await userData
+        .query({ prop: "foo" })
+        .read()
+        .catch((error) => {
+          receivedError = error;
+        });
+      expect(receivedError.message).toEqual(expect.stringContaining("window is not defined"));
+    });
+
+    it("should reject update method", async () => {
+      let receivedError;
+      await userData.update({ foo: "foo" }).catch((error) => {
+        receivedError = error;
+      });
+      expect(receivedError.message).toEqual(expect.stringContaining("window is not defined"));
+    });
+
+    it("should reject update method queried", async () => {
+      let receivedError;
+      await userData
+        .query({ prop: "foo" })
+        .update("foo2")
+        .catch((error) => {
+          receivedError = error;
+        });
+      expect(receivedError.message).toEqual(expect.stringContaining("window is not defined"));
+    });
+
+    it("should reject delete method", async () => {
+      let receivedError;
+      await userData.delete().catch((error) => {
+        receivedError = error;
+      });
+      expect(receivedError.message).toEqual(expect.stringContaining("window is not defined"));
+    });
+
+    it("should reject delete method queried", async () => {
+      let receivedError;
+      await userData
+        .query({ prop: "foo" })
+        .delete()
+        .catch((error) => {
+          receivedError = error;
+        });
+      expect(receivedError.message).toEqual(expect.stringContaining("window is not defined"));
+    });
+  });
+
+  describe("when localStorage getItem method throws", () => {
+    let error;
+    let userData;
+
+    beforeEach(() => {
+      error = new Error("foo");
+      storage = new Storage("localStorage");
+      storage.stubs.getItem.throws(error);
+      userData = new LocalStorage("userData", { root: storage.mock });
+    });
+
+    it("should return an empty object as root value", async () => {
+      expect(userData.state.data).toEqual({});
+    });
+
+    it("should return undefined for queried values", async () => {
+      expect(userData.query({ prop: "foo" }).state.data).toEqual(undefined);
+    });
+
+    it("should reject read method with getItem exception when reading", async () => {
+      let receivedError;
+      await userData.read().catch((err) => {
+        receivedError = err;
+      });
+      expect(receivedError).toEqual(error);
+    });
+
+    it("should reject read method with getItem exception when queried", async () => {
+      let receivedError;
+      await userData
+        .query({ prop: "foo" })
+        .read()
+        .catch((err) => {
+          receivedError = err;
+        });
+      expect(receivedError).toEqual(error);
+    });
+  });
+
   describe("Loading property of a method", () => {
     let userData;
 
-    beforeAll(() => {
+    beforeEach(() => {
       userData = new LocalStorage("userData", {
         root: storage.mock,
       });
