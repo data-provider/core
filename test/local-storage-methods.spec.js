@@ -232,6 +232,19 @@ describe("Local Storage", () => {
         });
       });
     });
+
+    describe("when localStorage setItem method throws", () => {
+      it("should reject the promise with the received error", async () => {
+        let queriedData = userData.query({ prop: "foo" });
+        let receivedError;
+        const error = new Error("foo");
+        storage.stubs.setItem.throws(error);
+        await queriedData.update("foo-updated-value").catch((err) => {
+          receivedError = err;
+        });
+        expect(receivedError).toEqual(error);
+      });
+    });
   });
 
   describe("Delete method", () => {
@@ -265,6 +278,19 @@ describe("Local Storage", () => {
         let queriedData = userData.query({ prop: "foo" });
         await queriedData.delete();
         expect(storage.stubs.setItem.getCall(0).args[1]).toEqual(JSON.stringify({}));
+      });
+    });
+
+    describe("when localStorage setItem method throws", () => {
+      it("should reject the promise with the received error", async () => {
+        let queriedData = userData.query({ prop: "foo" });
+        let receivedError;
+        const error = new Error("foo");
+        storage.stubs.setItem.throws(error);
+        await queriedData.delete().catch((err) => {
+          receivedError = err;
+        });
+        expect(receivedError).toEqual(error);
       });
     });
   });
