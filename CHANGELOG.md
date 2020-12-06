@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [unreleased]
 ### Added
+- feat(#99): Handle `setItem` exceptions
+
 ### Changed
 ### Fixed
 ### Removed
