@@ -92,7 +92,7 @@ export class Storage extends Provider {
     if (this.parent) {
       this.parent._cleanParentCache();
     } else {
-      this.cleanCache();
+      this.cleanCache({ force: true });
     }
   }
 

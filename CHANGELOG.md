@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - feat(#99): Handle `setItem` exceptions
 
 ### Changed
+- feat(cache): Force the cleaning of the cache after delete and update methods
 - chore(deps): Update devDependencies
 
 ## [2.0.6] - 2020-10-31
