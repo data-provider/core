@@ -92,34 +92,46 @@ export class Storage extends Provider {
     if (this.parent) {
       this.parent._cleanParentCache();
     } else {
-      this.cleanCache();
+      this.cleanCache({ force: true });
     }
   }
 
   update(data) {
-    let rootValue;
-    const queryProp = this._queriedProp;
-    if (queryProp) {
-      rootValue = this._getRootValue();
-      rootValue[queryProp] = data;
-    } else {
-      rootValue = data;
-    }
-    this._setRootValue(rootValue);
-    this._cleanParentCache();
-    return Promise.resolve();
+    return new Promise((resolve, reject) => {
+      let rootValue;
+      const queryProp = this._queriedProp;
+      try {
+        if (queryProp) {
+          rootValue = this._getRootValue();
+          rootValue[queryProp] = data;
+        } else {
+          rootValue = data;
+        }
+        this._setRootValue(rootValue);
+        this._cleanParentCache();
+        resolve();
+      } catch (error) {
+        reject(error);
+      }
+    });
   }
 
   delete() {
-    let rootValue = this._getRootValue();
-    const queryProp = this._queriedProp;
-    if (queryProp) {
-      delete rootValue[queryProp];
-    } else {
-      rootValue = {};
-    }
-    this._setRootValue(rootValue);
-    this._cleanParentCache();
-    return Promise.resolve();
+    return new Promise((resolve, reject) => {
+      let rootValue = this._getRootValue();
+      const queryProp = this._queriedProp;
+      try {
+        if (queryProp) {
+          delete rootValue[queryProp];
+        } else {
+          rootValue = {};
+        }
+        this._setRootValue(rootValue);
+        this._cleanParentCache();
+        resolve();
+      } catch (error) {
+        reject(error);
+      }
+    });
   }
 }

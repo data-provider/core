@@ -10,7 +10,21 @@ It provides CRUD methods for objects saved in `localStorage` or `sessionStorage`
 
 ## Usage
 
-Read the [Data Provider][data-provider] docs to learn how to use addons.
+Create a new provider using the `LocalStorage` or `SessionStorage` classes.
+
+#### Arguments
+
+* `id` _(String)_: Id of the provider, will be used also as the `key` where the provider data is stored in `localStorage` or `sessionStorage`.
+
+#### Example
+
+```javascript
+import { LocalStorage } from "@data-provider/browser-storage";
+
+const userPreferences = new LocalStorage("user-preferences"); //userPreferences object will be stored in localStorage `user-preferences` key.
+```
+
+Read the [Data Provider][data-provider] docs for further info about how to use addons.
 
 * [Home][data-provider]
 * [Get started][get-started]
@@ -48,11 +62,21 @@ Updates an specific property of the stored object when the provider is queried, 
 
 * `data` _(Any)_: New data to be set. _(Take into account that provided data will be stringified when saved to localStorage)_
 
+#### Returns
+
+A promise that will be resolved when the localStorage is updated, or will be rejected with an error in case the operation fails ([MDN docs explicitly state](https://developer.mozilla.org/en-US/docs/Web/API/Storage/setItem) that "developers should make sure to always catch possible exceptions from setItem()")
+
 #### Examples
 
 ```javascript
 // modify an specific property
-userPreferences.query({ prop: "cookiesAccepted" }).update(true);
+userPreferences.query({ prop: "cookiesAccepted" }).update(true)
+  .then(() => {
+    console.log("Local storage updated!");
+  })
+  .catch(error => {
+    console.log("Error updating local storage", error);
+  });
 ```
 
 ```javascript
@@ -66,11 +90,21 @@ userPreferences.update({
 
 Removes an specific property of the stored object when the provider is queried, or sets the full object as empty when not. When the object is modified, it will __automatically cleans the cache of the provider__ and also the cache of the parent provider when it is queried _(as deleting a property also modifies the full object)_.
 
+#### Returns
+
+A promise that will be resolved when the localStorage is updated, or will be rejected with an error in case the operation fails ([MDN docs explicitly state](https://developer.mozilla.org/en-US/docs/Web/API/Storage/setItem) that "developers should make sure to always catch possible exceptions from setItem()")
+
 #### Examples
 
 ```javascript
 // removes an specific property
-userPreferences.query({ prop: "cookiesAccepted" }).delete();
+userPreferences.query({ prop: "cookiesAccepted" }).delete()
+  .then(() => {
+    console.log("Local storage updated");
+  })
+  .catch(error => {
+    console.log("Error updating local storage", error);
+  });
 ```
 
 ```javascript
