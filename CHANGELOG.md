@@ -6,11 +6,17 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [unreleased]
 ### Added
-- feat(#99): Handle `setItem` exceptions
-
 ### Changed
 ### Fixed
 ### Removed
+
+## [2.1.0] - 2020-12-06
+
+### Added
+- feat(#99): Handle `setItem` exceptions
+
+### Changed
+- chore(deps): Update devDependencies
 
 ## [2.0.6] - 2020-10-31
 
