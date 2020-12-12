@@ -15,11 +15,11 @@ The main target of the library are front-end applications, but it could be used 
 It helps you __providing async data__ to your components informing them about __loading and error states__.
 It also provides a __cache layer__, so you don´t have to worry about when to read the data, and allows you to __combine the results of different data providers__ using a syntax very similar to the known [Reselect][reselect], recalculating them only when one of the dependencies cache is cleaned.
 
-As its states are managed with [Redux][redux], you can take advantage of his large ecosystem of addons, which will improve the developer experience. _(You don't need to use Redux directly in your application if you don't want, the library includes its own internal store for that purpose, which [can be migrated to your own store][api-store-manager])._
+As its states are managed with [Redux][redux], you can take advantage of his large ecosystem of addons, which will improve the developer experience. _(You don't need to use Redux directly in your application if you don't want, the library includes its own internal store for that purpose, which [can be migrated to your own store easily][api-store-manager] for debugging purposes, for example)._
 
-You can use Data Provider with [React][react], or with any other view library. Separated addons are available for that purpose, as [@data-provider/react][data-provider-react].
+You can use Data Provider with [React][react], or with any other view library. [Separated addons][addons] are available for that purpose, as [@data-provider/react][data-provider-react].
 
-Data Provider is __agnostic about data origins__, so it can be used to read data from a REST API, from localStorage, or from any other origin. Choose one of the available plugins depending of the type of the origin you want to read from, as [@data-provider/axios][data-provider-axios], or [@data-provider/browser-storage][data-provider-browser-storage].
+Data Provider is __agnostic about data origins__, so it can be used to read data from a REST API, from localStorage, or from any other origin. Choose one of the [available addons][addons] depending of the type of the origin you want to read from, as [@data-provider/axios][data-provider-axios], or [@data-provider/browser-storage][data-provider-browser-storage].
 
 It has a __light weight__, 4.2KB gzipped in UMD format _(you have to add the Redux weight to this)_, and addons usually are even lighter.
 
@@ -32,6 +32,7 @@ We have a website available to help you to learn to use Data Provider. There are
 * [Motivation][motivation]
 * [Installation][installation]
 * [Basic tutorial][basic-tutorial]
+* [Addons][addons]
 * [Recipes][recipes]
 * [API reference][api-reference]
 
@@ -39,9 +40,9 @@ We have a website available to help you to learn to use Data Provider. There are
 
 ### Agnostic about data origins
 
-The Provider class provides the cache, state handler, etc., but not the "read" method. The "read" behavior is implemented by __different Data Provider Origins addons__.
+The Provider class provides the cache, state handler, etc., but not the "read" method. The "read" behavior is implemented by __different [Data Provider Origins addons][addons]__.
 
-There are different origins available, such as __[Axios][data-provider-axios], [LocalStorage][data-provider-browser-storage], [Memory][data-provider-memory], etc.__ and building your own is so easy as extending the Provider class with a custom "readMethod".
+There are different origins addons available, such as __[Axios][data-provider-axios], [LocalStorage][data-provider-browser-storage], [Memory][data-provider-memory], etc.__ and building your own is so easy as extending the Provider class with a custom "readMethod".
 
 Sharing the same interface for all origins, and being able to build Selectors combining all of them implies that your logic will be __completely isolated about WHERE the data is being retrieved.__
 
@@ -119,7 +120,7 @@ Providers and selectors instances can be queried, which returns a new child inst
 
 Each different child has a different cache, different state, etc.
 
-Different origins can use the "query" value for different purposes (API origins will normally use it for adding different params or query strings to the provider url)
+Different origins can use the "query" value for different purposes (API origins will normally use it for adding different params or query strings to the provider url, for example)
 
 When the parent provider cache is clean, also the children is. _(For example, cleaning the cache of an API origin requesting to "/api/books", will also clean the cache for "/api/books?author=2")_
 
@@ -147,26 +148,30 @@ export default Book;
 
 Data Provider is not concerned about the views, but UI binding addons are available.
 
-For example, the [@data-provider/react][data-provider-react] package __gives you HOCs to connect providers to your components__, creating a wrapper component handling all the logic for you.
+For example, the [@data-provider/react][data-provider-react] package __gives you hooks to easily retrieve and provide data and other data-provider states to your components__, 
 
-It also provides __hooks like "useData", "useLoading", etc.__
+It also provides __HOCs like "withData", "withLoading", etc., creating a wrapper component handling all the logic for you.__
 
-__Optimized__, it takes care of reading the data and re-renders the component only when your desired props have changed.
+__Optimized__, it takes care of reading the data and re-renders the component only when the provider desired props have changed. It also takes care of reading the data again every time the cache of the provider is invalidated.
 
 ```jsx
-import { withDataProvider } from "@data-provider/react";
+import { useData, useLoading, useError } from "@data-provider/react";
 
 import { booksProvider } from "data/books";
 import ErrorComponent from "components/error";
 
-const Books = ({ data, loading, error }) => {
+const Books = () => {
+  const error = useError(booksProvider);
+  const data = useData(booksProvider);
+  const loading = useLoading(booksProvider);
+
   if (error) {
     return <ErrorComponent error={error}/>
   }
   return <BooksList data={data} loading={loading} />;
 };
 
-export default withDataProvider(booksProvider)(Books);
+export default Books;
 ```
 
 ## Contributing
@@ -190,6 +195,7 @@ Please read the [contributing guidelines](.github/CONTRIBUTING.md) and [code of 
 [motivation]: https://www.data-provider.org/docs/motivation
 [installation]: https://www.data-provider.org/docs/installation
 [basic-tutorial]: https://www.data-provider.org/docs/basics-intro
+[addons]: https://www.data-provider.org/docs/addons-intro
 [recipes]: https://www.data-provider.org/docs/recipes-index
 [api-reference]: https://www.data-provider.org/docs/api-reference
 [api-selector]: https://www.data-provider.org/docs/api-selector
