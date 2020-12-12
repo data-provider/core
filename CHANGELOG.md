@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 - fix(events): Pass force option also to children when cleaning caches
 - fix(selector): Force cleaning of cache when a selector dependency is cleaned
+- fix(providers): Allow options in providers.cleanCache method
 ### Removed
 
 ## [2.8.1] - 2020-11-27
