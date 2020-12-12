@@ -50,6 +50,15 @@ describe("providers handler cleanCache method", () => {
       expect(fooProvider3.cleanCache.callCount).toEqual(1);
       expect(fooProvider4.cleanCache.callCount).toEqual(1);
     });
+
+    it("should pass options to providers cleanCache method", () => {
+      providers.cleanCache({ force: true });
+
+      expect(fooProvider.cleanCache.getCall(0).args[0]).toEqual({ force: true });
+      expect(fooProvider2.cleanCache.getCall(0).args[0]).toEqual({ force: true });
+      expect(fooProvider3.cleanCache.getCall(0).args[0]).toEqual({ force: true });
+      expect(fooProvider4.cleanCache.getCall(0).args[0]).toEqual({ force: true });
+    });
   });
 
   describe("when used with getById", () => {

@@ -96,7 +96,7 @@ class Provider {
     }
   }
 
-  _unthrottledCleanCache() {
+  _unthrottledCleanCache(options) {
     // Reset cacheTime counter
     if (this._cacheTimeOut) {
       clearTimeout(this._cacheTimeOut);
@@ -106,7 +106,7 @@ class Provider {
     this._setCleanCacheInterval(this._previousCleanCacheInterval, true);
     this._cache = null;
     this.emit(CLEAN_CACHE);
-    this._children.forEach((child) => child.cleanCache());
+    this._children.forEach((child) => child.cleanCache(options));
   }
 
   _unthrottledCleanDependenciesCache(options) {

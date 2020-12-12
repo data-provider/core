@@ -253,6 +253,7 @@ describe("Provider events", () => {
       provider.on("cleanCache", spy);
       provider.cleanCache();
       expect(spy.callCount).toEqual(1);
+      expect(spy.getCall(0).args[0]).toEqual(undefined);
     });
 
     it("should emit a cleanCache event when listener is added with wildcard", async () => {
@@ -267,6 +268,7 @@ describe("Provider events", () => {
       provider.onChild("cleanCache", spy);
       childProvider.cleanCache();
       expect(spy.callCount).toEqual(1);
+      expect(spy.getCall(0).args[0]).toEqual(childProvider);
     });
 
     it("should emit a child cleanCache event when parent cache is clean", async () => {
@@ -274,6 +276,7 @@ describe("Provider events", () => {
       provider.onChild("cleanCache", spy);
       provider.cleanCache();
       expect(spy.callCount).toEqual(1);
+      expect(spy.getCall(0).args[0]).toEqual(childProvider);
     });
   });
 
