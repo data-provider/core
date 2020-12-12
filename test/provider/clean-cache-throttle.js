@@ -123,8 +123,8 @@ describe("Provider cleanCacheThrottle option", () => {
       expect.assertions(7);
       const options = { foo: "foo" };
       const originalUnthrottledCleanCache = provider._unthrottledCleanCache.bind(provider);
-      provider._unthrottledCleanCache = function (options) {
-        originalUnthrottledCleanCache(options);
+      provider._unthrottledCleanCache = function (opts) {
+        originalUnthrottledCleanCache(opts);
       };
       const spy = sandbox.spy(provider, "_unthrottledCleanCache");
       provider.config({
