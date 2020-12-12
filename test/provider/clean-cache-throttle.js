@@ -198,6 +198,20 @@ describe("Provider cleanCacheThrottle option", () => {
       expect(cleanCacheEventListener.callCount).toEqual(2);
     });
 
+    it("should emit cleanCache event if parent cleanCache is called with force option", async () => {
+      expect.assertions(2);
+      const childCleanCacheEventListener = sandbox.stub();
+      const childProvider = provider.query({ foo: "foo" });
+      childProvider.config({
+        cleanCacheThrottle: 500,
+      });
+      childProvider.on("cleanCache", childCleanCacheEventListener);
+      childProvider.cleanCache(); // This one cleans the cache
+      expect(childCleanCacheEventListener.callCount).toEqual(1);
+      provider.cleanCache({ force: true }); // throttled
+      expect(childCleanCacheEventListener.callCount).toEqual(2);
+    });
+
     it("should not emit any event more when finish throttle time after cleaning cache forced", async () => {
       expect.assertions(4);
       provider.config({

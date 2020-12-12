@@ -50,9 +50,9 @@ class Provider {
     return eventNamespace(eventName, this._id);
   }
 
-  _emitChild(eventName, child) {
-    this.emit(childEventName(eventName), child);
-    eventEmitter.emit(this._eventNamespace(childEventName(ANY)), eventName, child);
+  _emitChild(eventName, child, data) {
+    this.emit(childEventName(eventName), child, data);
+    eventEmitter.emit(this._eventNamespace(childEventName(ANY)), eventName, child, data);
   }
 
   _dispatch(action) {
@@ -96,7 +96,7 @@ class Provider {
     }
   }
 
-  _unthrottledCleanCache() {
+  _unthrottledCleanCache(options) {
     // Reset cacheTime counter
     if (this._cacheTimeOut) {
       clearTimeout(this._cacheTimeOut);
@@ -105,8 +105,8 @@ class Provider {
     // Reset cleanCacheInterval
     this._setCleanCacheInterval(this._previousCleanCacheInterval, true);
     this._cache = null;
-    this.emit(CLEAN_CACHE);
-    this._children.forEach((child) => child.cleanCache());
+    this.emit(CLEAN_CACHE, null, options);
+    this._children.forEach((child) => child.cleanCache(options));
   }
 
   _unthrottledCleanDependenciesCache(options) {
@@ -208,7 +208,7 @@ class Provider {
     this._queryMethodsParsers.forEach((queryMethodParser, queryMethodKey) =>
       child.addQuery(queryMethodKey, queryMethodParser)
     );
-    child.on(ANY, (eventName) => this._emitChild(eventName, child));
+    child.on(ANY, (eventName, data) => this._emitChild(eventName, child, data));
     this._children.set(id, child);
     child._parent = this;
     return child;
@@ -260,9 +260,14 @@ class Provider {
       : this._options.initialState;
   }
 
-  emit(eventName, child) {
-    eventEmitter.emit(this._eventNamespace(eventName), child);
-    eventEmitter.emit(this._eventNamespace(ANY), eventName, child);
+  emit(eventName, child, data) {
+    if (child) {
+      eventEmitter.emit(this._eventNamespace(eventName), child, data);
+      eventEmitter.emit(this._eventNamespace(ANY), eventName, child, data);
+    } else {
+      eventEmitter.emit(this._eventNamespace(eventName), data);
+      eventEmitter.emit(this._eventNamespace(ANY), eventName, data);
+    }
   }
 
   // Methods that can be overwritten by addons

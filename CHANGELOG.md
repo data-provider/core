@@ -8,9 +8,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - chore(ci): Migrate from Travis CI to github actions
 - chore(deps): Support all Node.js releases that have not passed their end date
-
+- feat(events): Allow passing a new argument to events with extra details. Emit used options in the cleanCache event.
 ### Changed
+- test(mutation): Set branch name in stryker dashboard based on environment variable
 ### Fixed
+- fix(events): Pass force option also to children when cleaning caches
 ### Removed
 
 ## [2.8.1] - 2020-11-27
