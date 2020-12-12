@@ -1,6 +1,6 @@
 {
   "name": "@data-provider/core",
-  "version": "2.8.1",
+  "version": "2.8.2",
   "description": "Async Data Provider agnostic about data origins",
   "keywords": [
     "data",
@@ -10,7 +10,9 @@
     "cache",
     "reactive",
     "state",
-    "agnostic"
+    "modular",
+    "front-end",
+    "nodejs"
   ],
   "author": "Javier Brea",
   "license": "Apache-2.0",
@@ -31,19 +33,17 @@
   "scripts": {
     "build": "rollup --config",
     "test": "jest",
-    "test:coverage": "npm run test",
+    "test:unit": "npm run test",
     "test:e2e:browser:install": "cd test-e2e/browser && npm i && cd vanilla-app && npm i && cd ../react-app && npm i",
     "test:e2e:browser": "cd test-e2e/browser && npm run test:vanilla-app && npm run test:react-app",
     "test:e2e:node:install": "cd test-e2e/nodejs/esm && npm i",
     "test:e2e:node": "cd test-e2e/nodejs/cjs && npm run test && cd ../esm && npm run test",
     "test:e2e": "npm run test:e2e:browser && npm run test:e2e:node",
-    "test:e2e:ci": "npm run test:e2e:browser:install && npm run test:e2e:node:install && npm run test:e2e",
-    "test:ci": "npm run build && npm run test:coverage && npm run test:e2e:ci",
+    "test:e2e:ci": "npm run build && npm run test:e2e:browser:install && npm run test:e2e:node:install && npm run test:e2e",
+    "test:ci": "npm run test:unit && npm run test:e2e:ci",
     "test:mutation": "stryker run",
-    "test:mutation:dev": "stryker run stryker.conf.local.js",
     "lint": "eslint src test test-e2e/browser/vanilla-app/public/main.js test-e2e/browser/react-app/src test-e2e/browser/cypress test-e2e/nodejs/cjs test-e2e/nodejs/esm/src *.js",
-    "lint-staged": "lint-staged",
-    "coveralls": "cat ./coverage/lcov.info | coveralls"
+    "lint-staged": "lint-staged"
   },
   "peerDependencies": {
     "redux": "4.x"
@@ -64,7 +64,6 @@
     "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "10.1.0",
     "babel-polyfill": "6.26.0",
-    "coveralls": "3.0.9",
     "eslint": "7.12.1",
     "eslint-config-prettier": "6.15.0",
     "eslint-plugin-prettier": "3.1.4",
@@ -95,6 +94,6 @@
     }
   },
   "engines": {
-    "node": "12.x || 14.x || 15.x"
+    "node": "10.x || 12.x || 14.x || 15.x"
   }
 }

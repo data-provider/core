@@ -180,6 +180,21 @@ describe("Selector cleanCacheThrottle option", () => {
       expect(cleanCacheEventListener.callCount).toEqual(2);
     });
 
+    it("should emit cleanCache event if cleanCache is called in a dependency even when it is throttled", async () => {
+      expect.assertions(2);
+      const ownCleanCacheEventListener = sandbox.stub();
+      selector.config({
+        cleanCacheThrottle: 500,
+      });
+      selector.on("cleanCache", ownCleanCacheEventListener);
+      await selector.read();
+      selector.cleanDependenciesCache(); // This one cleans the cache
+      expect(ownCleanCacheEventListener.callCount).toEqual(1);
+      await selector.read();
+      provider.cleanCache(); // throttled
+      expect(ownCleanCacheEventListener.callCount).toEqual(2);
+    });
+
     it("should not emit any event more when finish throttle time after cleaning cache forced", async () => {
       expect.assertions(4);
       selector.config({

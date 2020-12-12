@@ -10,6 +10,21 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 ### Removed
 
+## [2.8.2] - 2020-12-12
+### Added
+- chore(ci): Migrate from Travis CI to github actions
+- chore(deps): Support all Node.js releases that have not passed their end date
+
+### Changed
+- test(mutation): Set branch name in stryker dashboard based on environment variable
+- docs(readme): Update docs
+
+### Fixed
+- fix(events): Pass force option also to children when cleaning caches
+- fix(selector): Force cleaning of cache when a selector dependency is cleaned (#156)
+- fix(providers): Allow options in providers.cleanCache method
+- test: Fix Sonar smell in tests
+
 ## [2.8.1] - 2020-11-27
 
 ### Fixed

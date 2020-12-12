@@ -94,7 +94,7 @@ class SelectorBase extends Provider {
 
     const cleanCache = () => {
       dependenciesListeners.forEach((removeListener) => removeListener());
-      this.cleanCache();
+      this.cleanCache({ force: true });
     };
 
     const readDependency = (dependencyToRead, catchMethod) => {
