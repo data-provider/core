@@ -10,7 +10,9 @@
     "cache",
     "reactive",
     "state",
-    "agnostic"
+    "modular",
+    "front-end",
+    "nodejs"
   ],
   "author": "Javier Brea",
   "license": "Apache-2.0",
