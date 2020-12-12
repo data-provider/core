@@ -253,13 +253,7 @@ describe("Provider events", () => {
       provider.on("cleanCache", spy);
       provider.cleanCache();
       expect(spy.callCount).toEqual(1);
-    });
-
-    it("should emit cleanCache options as first argument", async () => {
-      const spy = sandbox.spy();
-      provider.on("cleanCache", spy);
-      provider.cleanCache({ force: true });
-      expect(spy.getCall(0).args[0]).toEqual({ force: true });
+      expect(spy.getCall(0).args[0]).toEqual(undefined);
     });
 
     it("should emit a cleanCache event when listener is added with wildcard", async () => {
@@ -269,27 +263,12 @@ describe("Provider events", () => {
       expect(spy.getCall(0).args[0]).toEqual("cleanCache");
     });
 
-    it("should emit cleanCache options as second argument when listener is added with wildcard", async () => {
-      const spy = sandbox.spy();
-      provider.on("*", spy);
-      provider.cleanCache({ force: true });
-      expect(spy.getCall(0).args[0]).toEqual("cleanCache");
-      expect(spy.getCall(0).args[1]).toEqual({ force: true });
-    });
-
     it("should emit a child cleanCache event when child cache is clean", async () => {
       const spy = sandbox.spy();
       provider.onChild("cleanCache", spy);
       childProvider.cleanCache();
       expect(spy.callCount).toEqual(1);
-    });
-
-    it("should emit cleanCache options as second argument when child cache is clean", async () => {
-      const spy = sandbox.spy();
-      provider.onChild("cleanCache", spy);
-      childProvider.cleanCache({ force: true });
       expect(spy.getCall(0).args[0]).toEqual(childProvider);
-      expect(spy.getCall(0).args[1]).toEqual({ force: true });
     });
 
     it("should emit a child cleanCache event when parent cache is clean", async () => {
@@ -297,14 +276,7 @@ describe("Provider events", () => {
       provider.onChild("cleanCache", spy);
       provider.cleanCache();
       expect(spy.callCount).toEqual(1);
-    });
-
-    it("should emit cleanCache options as second argument when parent cache is clean", async () => {
-      const spy = sandbox.spy();
-      provider.onChild("cleanCache", spy);
-      provider.cleanCache({ force: true });
       expect(spy.getCall(0).args[0]).toEqual(childProvider);
-      expect(spy.getCall(0).args[1]).toEqual({ force: true });
     });
   });
 

@@ -50,9 +50,9 @@ class Provider {
     return eventNamespace(eventName, this._id);
   }
 
-  _emitChild(eventName, child, data) {
-    this.emit(childEventName(eventName), child, data);
-    eventEmitter.emit(this._eventNamespace(childEventName(ANY)), eventName, child, data);
+  _emitChild(eventName, child) {
+    this.emit(childEventName(eventName), child);
+    eventEmitter.emit(this._eventNamespace(childEventName(ANY)), eventName, child);
   }
 
   _dispatch(action) {
@@ -105,7 +105,7 @@ class Provider {
     // Reset cleanCacheInterval
     this._setCleanCacheInterval(this._previousCleanCacheInterval, true);
     this._cache = null;
-    this.emit(CLEAN_CACHE, null, options);
+    this.emit(CLEAN_CACHE);
     this._children.forEach((child) => child.cleanCache(options));
   }
 
@@ -208,7 +208,7 @@ class Provider {
     this._queryMethodsParsers.forEach((queryMethodParser, queryMethodKey) =>
       child.addQuery(queryMethodKey, queryMethodParser)
     );
-    child.on(ANY, (eventName, data) => this._emitChild(eventName, child, data));
+    child.on(ANY, (eventName) => this._emitChild(eventName, child));
     this._children.set(id, child);
     child._parent = this;
     return child;
@@ -260,14 +260,9 @@ class Provider {
       : this._options.initialState;
   }
 
-  emit(eventName, child, data) {
-    if (child) {
-      eventEmitter.emit(this._eventNamespace(eventName), child, data);
-      eventEmitter.emit(this._eventNamespace(ANY), eventName, child, data);
-    } else {
-      eventEmitter.emit(this._eventNamespace(eventName), data);
-      eventEmitter.emit(this._eventNamespace(ANY), eventName, data);
-    }
+  emit(eventName, child) {
+    eventEmitter.emit(this._eventNamespace(eventName), child);
+    eventEmitter.emit(this._eventNamespace(ANY), eventName, child);
   }
 
   // Methods that can be overwritten by addons

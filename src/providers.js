@@ -28,8 +28,8 @@ export class ProvidersHandler {
     return this;
   }
 
-  _run(method) {
-    this._providers.forEach((provider) => provider[method]());
+  _run(method, options) {
+    this._providers.forEach((provider) => provider[method](options));
     return this;
   }
 
@@ -51,8 +51,8 @@ export class ProvidersHandler {
     return this;
   }
 
-  cleanCache() {
-    return this._run("cleanCache");
+  cleanCache(options) {
+    return this._run("cleanCache", options);
   }
 
   resetState() {
@@ -170,8 +170,8 @@ export class Providers {
     return this._allProviders.config(options);
   }
 
-  cleanCache() {
-    return this._allProviders.cleanCache();
+  cleanCache(options) {
+    return this._allProviders.cleanCache(options);
   }
 
   resetState() {
