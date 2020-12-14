@@ -34,10 +34,8 @@
     "lint-staged": "lint-staged",
     "build": "rollup --config",
     "test": "jest",
-    "test:ci": "npm run test -- --coverage --ci --verbose=false --coverageReporters=lcov --coverageReporters=text-summary && npm run test:mutation",
-    "test:coverage": "npm run test:ci",
-    "test:mutation": "stryker run",
-    "coveralls": "cat ./coverage/lcov.info | coveralls"
+    "test:unit": "npm run test -- --coverage --ci --verbose=false --coverageReporters=lcov --coverageReporters=text-summary",
+    "test:mutation": "stryker run"
   },
   "peerDependencies": {
     "@data-provider/core": "2.x"
@@ -55,7 +53,6 @@
     "babel-core": "7.0.0-bridge.0",
     "babel-jest": "26.6.3",
     "babel-polyfill": "6.26.0",
-    "coveralls": "3.0.9",
     "eslint": "7.14.0",
     "eslint-config-prettier": "6.15.0",
     "eslint-plugin-prettier": "3.1.4",
@@ -79,6 +76,6 @@
     }
   },
   "engines": {
-    "node": "12.x || 14.x || 15.x"
+    "node": "10.x || 12.x || 14.x || 15.x"
   }
 }
