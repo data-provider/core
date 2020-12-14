@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [unreleased]
 ### Added
 ### Changed
+- chore(ci): Migrate from Travis CI to GitHub actions. (#89)
 ### Fixed
 ### Removed
 
