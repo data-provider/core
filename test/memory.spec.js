@@ -12,6 +12,12 @@ Unless required by applicable law or agreed to in writing, software distributed 
 const { providers } = require("@data-provider/core");
 const { Memory } = require("../src/index");
 
+const wait = (time) => {
+  return new Promise((resolve) => {
+    setTimeout(() => resolve(), time);
+  });
+};
+
 describe("Memory origin", () => {
   afterEach(() => {
     providers.clear();
@@ -23,6 +29,13 @@ describe("Memory origin", () => {
       expect(userData.read).toBeDefined();
       expect(userData.update).toBeDefined();
       expect(userData.delete).toBeDefined();
+    });
+  });
+
+  describe("Tags", () => {
+    it("should contain memory tag", () => {
+      const userData = new Memory();
+      expect(userData._tags).toContain("memory");
     });
   });
 
@@ -63,6 +76,28 @@ describe("Memory origin", () => {
       return secondRead.then(() => {
         expect(userData.state.loading).toEqual(false);
       });
+    });
+
+    it("should be loading again after an update even when provider is throttled", async () => {
+      expect.assertions(4);
+      userData.config({
+        cleanCacheThrottle: 1000,
+      });
+      await userData.read();
+      expect(userData.state.loading).toEqual(false);
+      userData.cleanCache();
+      const secondRead = userData.read();
+      expect(userData.state.loading).toEqual(true);
+      await secondRead;
+      userData.cleanCache();
+      const read = userData.read();
+      expect(userData.state.loading).toEqual(false);
+      await read;
+      await userData.update({ foo: "foo" });
+      const thirdRead = userData.read();
+      expect(userData.state.loading).toEqual(true);
+      await thirdRead;
+      await wait(1000);
     });
   });
 
