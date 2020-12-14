@@ -41,6 +41,13 @@ describe("SessionStorage Storage", () => {
     });
   });
 
+  describe("Tags", () => {
+    it("should contain memory tag", () => {
+      const userData = new SessionStorage("userData", { root: storage.mock });
+      expect(userData._tags).toContain("session-storage");
+    });
+  });
+
   describe("When window is not available and it uses storage mock", () => {
     let userData;
     const fooData = {

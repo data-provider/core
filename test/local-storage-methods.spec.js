@@ -14,6 +14,12 @@ const Storage = require("./Storage.mock");
 
 const { LocalStorage } = require("../src/LocalStorage");
 
+const wait = (time) => {
+  return new Promise((resolve) => {
+    setTimeout(() => resolve(), time);
+  });
+};
+
 describe("Local Storage", () => {
   let storage;
 
@@ -38,6 +44,13 @@ describe("Local Storage", () => {
       expect.assertions(1);
       const userData = new LocalStorage("userData");
       expect(userData._storage.removeItem).toEqual(undefined);
+    });
+  });
+
+  describe("Tags", () => {
+    it("should contain memory tag", () => {
+      const userData = new LocalStorage("userData", { root: storage.mock });
+      expect(userData._tags).toContain("local-storage");
     });
   });
 
@@ -225,6 +238,28 @@ describe("Local Storage", () => {
       return secondRead.then(() => {
         expect(userData.state.loading).toEqual(false);
       });
+    });
+
+    it("should be loading again after update method even when cleanCacheThrottle option is set", async () => {
+      expect.assertions(4);
+      userData.config({
+        cleanCacheThrottle: 1000,
+      });
+      await userData.read();
+      expect(userData.state.loading).toEqual(false);
+      userData.cleanCache();
+      const secondRead = userData.read();
+      expect(userData.state.loading).toEqual(true);
+      await secondRead;
+      userData.cleanCache();
+      const read = userData.read();
+      expect(userData.state.loading).toEqual(false);
+      await read;
+      await userData.update({ foo: "foo" });
+      const thirdRead = userData.read();
+      expect(userData.state.loading).toEqual(true);
+      await thirdRead;
+      await wait(1000);
     });
   });
 
