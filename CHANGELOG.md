@@ -6,13 +6,19 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [unreleased]
 ### Added
-- test(unit): Add force cleanCache test
+### Changed
+### Fixed
+### Removed
+
+## [2.2.1] - 2020-12-14
+
+### Added
+- test(unit): Add force cleanCache test (#104)
+
 ### Changed
 - chore(ci): Migrate from Travis CI to GitHub actions. (#100)
 - chore(deps): Support all Node.js releases that have not passed their end date
 - chore(deps): Update dependencies
-### Fixed
-### Removed
 
 ## [2.2.0] - 2020-12-06
 
