@@ -33,10 +33,8 @@
     "lint-staged": "lint-staged",
     "build": "rollup --config",
     "test": "jest",
-    "test:ci": "npm run test -- --coverage --ci --verbose=false --coverageReporters=lcov --coverageReporters=text-summary && npm run test:mutation",
-    "test:coverage": "npm run test:ci",
-    "test:mutation": "stryker run",
-    "coveralls": "cat ./coverage/lcov.info | coveralls"
+    "test:unit": "jest",
+    "test:mutation": "stryker run"
   },
   "peerDependencies": {
     "@data-provider/core": "2.x"
@@ -78,6 +76,6 @@
     }
   },
   "engines": {
-    "node": "12.x || 14.x || 15.x"
+    "node": "10.x || 12.x || 14.x || 15.x"
   }
 }
