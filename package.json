@@ -1,6 +1,6 @@
 {
   "name": "@data-provider/axios",
-  "version": "2.1.5",
+  "version": "2.1.6",
   "description": "REST API Data Provider origin addon using Axios",
   "keywords": [
     "data-provider",
@@ -36,13 +36,10 @@
     "mocks": "mocks-server",
     "mocks:silent": "mocks-server --log=silent",
     "build": "rollup --config",
-    "test": "jest",
+    "stryker:run": "stryker run",
     "mocks-and-test": "start-server-and-test mocks tcp:3100 jest",
-    "test:ci": "npm run mocks-and-test",
-    "test:coverage": "npm run test:ci",
-    "test:mutation": "stryker run",
-    "test:mutation:ci": "start-server-and-test mocks:silent tcp:3100 test:mutation",
-    "coveralls": "cat ./coverage/lcov.info | coveralls"
+    "test:unit": "npm run mocks-and-test",
+    "test:mutation": "start-server-and-test mocks:silent tcp:3100 stryker:run"
   },
   "peerDependencies": {
     "@data-provider/core": "2.x"
@@ -55,7 +52,7 @@
   "devDependencies": {
     "@babel/core": "7.12.3",
     "@babel/preset-env": "7.12.1",
-    "@data-provider/core": "2.8.0",
+    "@data-provider/core": "2.8.2",
     "@mocks-server/admin-api-paths": "1.0.8",
     "@mocks-server/main": "1.8.7",
     "@rollup/plugin-babel": "5.2.1",
@@ -67,7 +64,6 @@
     "babel-core": "7.0.0-bridge.0",
     "babel-jest": "26.6.1",
     "babel-polyfill": "6.26.0",
-    "coveralls": "3.0.9",
     "cross-fetch": "3.0.6",
     "eslint": "7.12.1",
     "eslint-config-prettier": "6.15.0",
@@ -93,6 +89,6 @@
     }
   },
   "engines": {
-    "node": "12.x || 14.x || 15.x"
+    "node": "10.x || 12.x || 14.x || 15.x"
   }
 }

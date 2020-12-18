@@ -10,6 +10,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 ### Removed
 
+## [2.1.6] - 2020-12-18
+
+### Changed
+- chore(ci): Migrate from Travis CI to GitHub actions. (#103)
+- chore(deps): Support all Node.js releases that have not passed their end date
+- chore(deps): Update dependencies
+
 ## [2.1.5] - 2020-11-24
 
 ### Added
