@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [unreleased]
 ### Added
 ### Changed
+- chore(ci): Migrate from Travis CI to GitHub actions. (#103)
+- chore(deps): Support all Node.js releases that have not passed their end date
+- chore(deps): Update dependencies
 ### Fixed
 ### Removed
 
