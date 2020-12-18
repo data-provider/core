@@ -148,9 +148,9 @@ export default Book;
 
 Data Provider is not concerned about the views, but UI binding addons are available.
 
-For example, the [@data-provider/react][data-provider-react] package __gives you hooks to easily retrieve and provide data and other data-provider states to your components__, 
+For example, the [@data-provider/react][data-provider-react] package __gives you hooks to easily retrieve and provide data__ and other data-provider states to React components.
 
-It also provides __HOCs like "withData", "withLoading", etc., creating a wrapper component handling all the logic for you.__
+It also provides __HOCs__ like "withData", "withLoading", etc. creating a wrapper component handling all the logic for you.
 
 __Optimized__, it takes care of reading the data and re-renders the component only when the provider desired props have changed. It also takes care of reading the data again every time the cache of the provider is invalidated.
 
