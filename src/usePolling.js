@@ -5,7 +5,9 @@ const pollingProviders = {};
 
 class PollingHandler {
   constructor(provider, intervalTime, options) {
-    provider.cleanDependenciesCache(options);
+    if (!provider.state.loading) {
+      provider.cleanDependenciesCache(options);
+    }
     this._options = options;
     this._provider = provider;
     this._id = provider.id;
