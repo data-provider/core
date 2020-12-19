@@ -6,7 +6,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [unreleased]
 ### Added
+- chore(deps): Support all Node.js releases that have not passed their end date
 ### Changed
+- chore(ci): Migrate from Travis CI to github actions
 ### Fixed 
 - fix(usePolling): Use cleanDepedenciesCache instead of cleanCache in first invocation. Pass options to it and do not execute it in case provider is loading (#107)
 ### Removed
