@@ -32,13 +32,9 @@
     "lint-staged": "lint-staged",
     "build": "rollup --config",
     "test": "jest",
-    "test:e2e": "cd test-e2e && npm run test:react-app",
+    "test:e2e": "npm run build && npm run test:e2e:install && npm run test:e2e",
     "test:e2e:install": "cd test-e2e && npm i && cd react-app && npm i",
-    "test:e2e:ci": "npm run build && npm run test:e2e:install && npm run test:e2e",
-    "test:unit:ci": "npm run test -- --coverage --ci --verbose=false --coverageReporters=lcov --coverageReporters=text-summary",
-    "test:ci": "npm run test:unit:ci && npm run test:e2e:ci",
-    "test:coverage": "npm run test:unit:ci",
-    "coveralls": "cat ./coverage/lcov.info | coveralls"
+    "test:unit": "npm run test -- --coverage --ci --verbose=false --coverageReporters=lcov --coverageReporters=text-summary"
   },
   "dependencies": {
     "hoist-non-react-statics": "3.3.2"
@@ -63,7 +59,6 @@
     "babel-eslint": "10.1.0",
     "babel-jest": "26.6.1",
     "babel-polyfill": "6.26.0",
-    "coveralls": "3.0.9",
     "eslint": "7.12.1",
     "eslint-config-prettier": "6.15.0",
     "eslint-plugin-prettier": "3.1.4",
@@ -95,6 +90,6 @@
     }
   },
   "engines": {
-    "node": "12.x || 14.x || 15.x"
+    "node": "10.x || 12.x || 14.x || 15.x"
   }
 }
