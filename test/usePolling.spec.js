@@ -76,6 +76,29 @@ describe("usePolling", () => {
     it("should clean provider cache each 500ms", async () => {
       render(<Component />);
       await wait(2200);
+      expect(provider.cleanCache.callCount).toEqual(4);
+    });
+  });
+
+  describe("when provider is not loading", () => {
+    beforeEach(async () => {
+      await provider.read();
+      BooksComponent = () => {
+        const books = useData(provider);
+        usePolling(provider, 500);
+        return <Books books={books} />;
+      };
+
+      Component = () => (
+        <ReduxProvider>
+          <BooksComponent />
+        </ReduxProvider>
+      );
+    });
+
+    it("should clean provider cache on initalization", async () => {
+      render(<Component />);
+      await wait(2200);
       expect(provider.cleanCache.callCount).toEqual(5);
     });
   });
@@ -99,7 +122,7 @@ describe("usePolling", () => {
     it("should use the lower polling interval", async () => {
       render(<Component />);
       await wait(2200);
-      expect(provider.cleanCache.callCount).toEqual(5);
+      expect(provider.cleanCache.callCount).toEqual(4);
     });
   });
 
@@ -134,7 +157,7 @@ describe("usePolling", () => {
       render(<Component />);
       const promise = wait(3100);
       await act(() => promise);
-      expect(provider.cleanCache.callCount).toEqual(4);
+      expect(provider.cleanCache.callCount).toEqual(3);
     });
   });
 

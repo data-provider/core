@@ -47,8 +47,40 @@ describe("Demo page", () => {
     it("should not be loading", () => {
       authors.shouldNotBeLoading();
     });
+  });
 
-    it("should display 5 results after adding a new book", () => {
+  describe("books column", () => {
+    it("should display 5 results", () => {
+      books.shouldDisplayItems(5);
+    });
+
+    it("should not be loading", () => {
+      books.shouldNotBeLoading();
+    });
+  });
+
+  describe("authors loaded column", () => {
+    it("should display 4 results", () => {
+      authorsLoaded.shouldDisplayItems(4);
+    });
+
+    it("should not be loading", () => {
+      authorsLoaded.shouldNotBeLoading();
+    });
+  });
+
+  describe("books loaded column", () => {
+    it("should display 5 results", () => {
+      booksLoaded.shouldDisplayItems(5);
+    });
+
+    it("should not be loading", () => {
+      booksLoaded.shouldNotBeLoading();
+    });
+  });
+
+  describe("when adding a new book", () => {
+    it("should display 5 results", () => {
       authors.add(NEW_AUTHOR);
       authors.shouldBeLoading();
       authorsLoaded.shouldNotBeLoading();

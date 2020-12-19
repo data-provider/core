@@ -87,7 +87,7 @@ describe("withPolling", () => {
     it("should clean provider cache each 500ms", async () => {
       render(<Component />);
       await wait(2200);
-      expect(provider.cleanCache.callCount).toEqual(5);
+      expect(provider.cleanCache.callCount).toEqual(4);
     });
   });
 
@@ -112,7 +112,7 @@ describe("withPolling", () => {
     it("should use the lower polling interval", async () => {
       render(<Component />);
       await wait(2200);
-      expect(provider.cleanCache.callCount).toEqual(5);
+      expect(provider.cleanCache.callCount).toEqual(4);
     });
   });
 
@@ -149,7 +149,7 @@ describe("withPolling", () => {
       render(<Component />);
       const promise = wait(3200);
       await act(() => promise);
-      expect(provider.cleanCache.callCount).toEqual(4);
+      expect(provider.cleanCache.callCount).toEqual(3);
     });
   });
 
