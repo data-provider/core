@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 ### Changed
 ### Fixed 
+- fix(usePolling): Use cleanDepedenciesCache instead of cleanCache in first invocation. Pass options to it and do not execute it in case provider is loading (#107)
 ### Removed
 
 ## [1.5.0] - 2020-11-16
