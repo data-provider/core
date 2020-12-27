@@ -13,12 +13,6 @@ Unless required by applicable law or agreed to in writing, software distributed 
 
 import { Provider } from "@data-provider/core";
 
-const TAG = "browser-storage";
-const storageKeysTags = {
-  localStorage: "local-storage",
-  sessionStorage: "session-storage",
-};
-
 class StorageMock {
   constructor() {
     this._value = "{}";
@@ -49,10 +43,7 @@ class StorageErrorMock {
 
 export class Storage extends Provider {
   constructor(id, options, query) {
-    const tags = options.tags ? [...options.tags] : [];
-    tags.unshift(storageKeysTags[options.storageKey]);
-    tags.unshift(TAG);
-    const extendedOptions = { ...options, tags };
+    const extendedOptions = { ...options };
     if (!query) {
       extendedOptions.parentId = id;
     }

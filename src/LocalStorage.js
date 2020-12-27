@@ -10,9 +10,14 @@ Unless required by applicable law or agreed to in writing, software distributed 
 */
 
 import { Storage } from "./Storage";
+import { TAG, LOCAL_TAG } from "./tags";
 
 export class LocalStorage extends Storage {
   constructor(id, options, query) {
     super(id, { ...options, storageKey: "localStorage" }, query);
+  }
+
+  get baseTags() {
+    return [TAG, LOCAL_TAG];
   }
 }

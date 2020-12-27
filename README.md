@@ -122,6 +122,21 @@ userPreferences.query({ prop: "cookiesAccepted" }).delete()
 userPreferences.delete();
 ```
 
+## Tags
+
+Providers created with this addon will have automatically the `browser-storage` tag, so you can select all of them together using the `providers` methods as in:
+
+```javascript
+import { providers } from "@data-provider/core";
+
+providers.getByTag("browser-storage").cleanCache();
+```
+
+Apart of this common tag, each different type of `browser-storage` origin also has next tags:
+
+* `LocalStorage`: "local-storage"
+* `SessionStorage`: "session-storage"
+
 ## Contributing
 
 Contributors are welcome.
