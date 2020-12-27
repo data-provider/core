@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - feat: Add tags getter.
 ### Changed
 ### Fixed
+- docs(readme): Fix typos
 ### Removed
 
 ## [2.8.2] - 2020-12-12
