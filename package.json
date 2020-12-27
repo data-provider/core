@@ -1,6 +1,6 @@
 {
   "name": "@data-provider/browser-storage",
-  "version": "2.2.1",
+  "version": "2.2.2",
   "description": "Data Provider addon providing localStorage and sessionStorage origins",
   "keywords": [
     "data-provider",
