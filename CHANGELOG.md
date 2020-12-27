@@ -6,7 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [unreleased]
 ### Added
+- docs(readme): Add example about using default tag
 ### Changed
+- chore(deps): Update dependencies
+- refactor: Use baseTags getter to define base tag (#94)
 ### Fixed
 ### Removed
 
