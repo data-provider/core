@@ -88,6 +88,10 @@ export function removeFalsy(array) {
   return array.filter((el) => !!el);
 }
 
+export function arrayWithoutFalsies(els) {
+  return removeFalsy(ensureArray(els));
+}
+
 export function message(text) {
   return `@data-provider/core: ${text}`;
 }

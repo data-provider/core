@@ -240,6 +240,101 @@ describe("providers handler config method", () => {
     });
   });
 
+  describe("When base tags are defined in the addon", () => {
+    let FooAddon;
+    let fooProvider4;
+    let fooProvider5;
+    beforeEach(() => {
+      FooAddon = class extends Provider {
+        readMethod() {
+          return Promise.resolve();
+        }
+        get baseTags() {
+          return ["tag-3"];
+        }
+      };
+
+      fooProvider4 = new FooAddon("foo-4");
+      fooProvider5 = new FooAddon("foo-5", { tags: "tag-5" });
+    });
+
+    describe("tags getter", () => {
+      it("should return tags from baseTags extended with tags option", () => {
+        expect(fooProvider4.tags).toEqual(["tag-3"]);
+        expect(fooProvider5.tags).toEqual(["tag-3", "tag-5"]);
+      });
+
+      it("should return only tags from options if addon has not defined baseTags", () => {
+        const FooAddon2 = class extends Provider {
+          readMethod() {
+            return Promise.resolve();
+          }
+        };
+        const fooProvider6 = new FooAddon2("foo-6", { tags: "tag-5" });
+        expect(fooProvider6.tags).toEqual(["tag-5"]);
+      });
+
+      it("should return tags from baseTags extended with tags option even when baseTags return an string", () => {
+        const FooAddon2 = class extends Provider {
+          readMethod() {
+            return Promise.resolve();
+          }
+          get baseTags() {
+            return "tag-3";
+          }
+        };
+        const fooProvider6 = new FooAddon2("foo-6", { tags: "tag-5" });
+        expect(fooProvider6.tags).toEqual(["tag-3", "tag-5"]);
+      });
+    });
+
+    describe("when applied to groups of providers using getByTag method", () => {
+      it("should apply config to all providers in group", () => {
+        providers.getByTag("tag-3").config({
+          foo: "foo",
+        });
+
+        expect(fooProvider5.options.foo).toEqual("foo");
+        expect(fooProvider4.options.foo).toEqual("foo");
+        expect(fooProvider2.options.foo).toEqual("foo");
+        expect(fooProvider3.options.foo).toEqual("foo");
+      });
+
+      it("should not apply config to non-belonging providers", () => {
+        providers.getByTag("tag-5").config({
+          foo: "foo",
+        });
+
+        expect(fooProvider5.options.foo).toEqual("foo");
+        expect(fooProvider4.options.foo).toEqual(undefined);
+      });
+
+      it("should extend previously defined configuration when creating source containing tag", () => {
+        providers.getByTag("tag-3").config({
+          foo: "foo",
+          foo2: "foo2",
+        });
+
+        const fooProvider6 = new FooAddon("foo-6", { tags: ["tag-5", "tag-6"] });
+
+        providers.getByTag("tag-3").config({
+          foo2: "new-foo2",
+          foo3: "foo3",
+        });
+
+        expect(fooProvider6.options).toEqual({
+          ...defaultOptions,
+          foo: "foo",
+          foo2: "new-foo2",
+          foo3: "foo3",
+          tags: ["tag-5", "tag-6"],
+        });
+
+        expect(fooProvider6.tags).toEqual(["tag-3", "tag-5", "tag-6"]);
+      });
+    });
+  });
+
   describe("when applied to groups of providers using getById method", () => {
     it("should apply config to source with id", () => {
       providers.getById("foo-2").config({

@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [unreleased]
 ### Added
+- feat: Allow defining baseTags property in addons. Will be extended with "tags" option when instantiated for calculating provider tags. (#143)
+- feat: Add tags getter.
 ### Changed
 ### Fixed
 ### Removed
