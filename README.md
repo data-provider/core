@@ -6,9 +6,9 @@
 
 # [![Data Provider][logo]][home]
 
-> Async Data Provider. Powered by Redux. Agnostic about data origins. Framework agnostic.
+> Async Data Provider. Powered by Redux. Agnostic about data origins. Agnostic about UI Frameworks.
 
-Data Provider is a data provider _(surprise!)_ with states ands built-in cache for JavaScript apps.
+Data Provider is a data provider _(surprise!)_ with states and built-in cache for JavaScript apps.
 
 The main target of the library are front-end applications, but it could be used also in [Node.js][nodejs].
 
@@ -19,7 +19,7 @@ As its states are managed with [Redux][redux], you can take advantage of his lar
 
 You can use Data Provider with [React][react], or with any other view library. [Separated addons][addons] are available for that purpose, as [@data-provider/react][data-provider-react].
 
-Data Provider is __agnostic about data origins__, so it can be used to read data from a REST API, from localStorage, or from any other origin. Choose one of the [available addons][addons] depending of the type of the origin you want to read from, as [@data-provider/axios][data-provider-axios], or [@data-provider/browser-storage][data-provider-browser-storage].
+Data Provider is __agnostic about data origins__, so it can be used to read data from a REST API, from `localStorage`, or from any other origin. Choose one of the [available addons][addons] depending of the type of the origin you want to read from, as [`@data-provider/axios`][data-provider-axios], or [`@data-provider/browser-storage`][data-provider-browser-storage].
 
 It has a __light weight__, 4.2KB gzipped in UMD format _(you have to add the Redux weight to this)_, and addons usually are even lighter.
 
@@ -40,7 +40,7 @@ We have a website available to help you to learn to use Data Provider. There are
 
 ### Agnostic about data origins
 
-The Provider class provides the cache, state handler, etc., but not the "read" method. The "read" behavior is implemented by __different [Data Provider Origins addons][addons]__.
+The Provider class provides the cache, state handler, etc., but not the `read` method. The `read` behavior is implemented by __different [Data Provider Origins addons][addons]__.
 
 There are different origins addons available, such as __[Axios][data-provider-axios], [LocalStorage][data-provider-browser-storage], [Memory][data-provider-memory], etc.__ and building your own is so easy as extending the Provider class with a custom "readMethod".
 
@@ -116,11 +116,11 @@ export default RenderBooksTwice;
 
 ### Queryable
 
-Providers and selectors instances can be queried, which returns a new child instance with his own "query value".
+Providers and selectors instances can be queried, which returns a new child instance with its own `query value`.
 
 Each different child has a different cache, different state, etc.
 
-Different origins can use the "query" value for different purposes (API origins will normally use it for adding different params or query strings to the provider url, for example)
+Different origins can use the `queryValue` for different purposes (API origins will normally use it for adding different params or query strings to the provider url, for example)
 
 When the parent provider cache is clean, also the children is. _(For example, cleaning the cache of an API origin requesting to "/api/books", will also clean the cache for "/api/books?author=2")_
 
@@ -148,11 +148,11 @@ export default Book;
 
 Data Provider is not concerned about the views, but UI binding addons are available.
 
-For example, the [@data-provider/react][data-provider-react] package __gives you hooks to easily retrieve and provide data and other data-provider states to your components__, 
+For example, the [@data-provider/react][data-provider-react] package __gives you hooks to easily retrieve and provide data__ and other data-provider states to React components.
 
-It also provides __HOCs like "withData", "withLoading", etc., creating a wrapper component handling all the logic for you.__
+It also provides __HOCs__ like "withData", "withLoading", etc. creating a wrapper component handling all the logic for you.
 
-__Optimized__, it takes care of reading the data and re-renders the component only when the provider desired props have changed. It also takes care of reading the data again every time the cache of the provider is invalidated.
+__Optimized__, it takes care of reading the data and re-renders the component only when the provider desired properties have changed. It also takes care of reading the data again every time the cache of the provider is invalidated.
 
 ```jsx
 import { useData, useLoading, useError } from "@data-provider/react";

@@ -9,7 +9,14 @@ http://www.apache.org/licenses/LICENSE-2.0
 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 */
 
-import { CLEAN_CACHE, isFunction, isArray, isPromise, ensureArray } from "./helpers";
+import {
+  SELECTORS_TAG,
+  CLEAN_CACHE,
+  isFunction,
+  isArray,
+  isPromise,
+  ensureArray,
+} from "./helpers";
 import Provider from "./Provider";
 import CatchDependency from "./CatchDependency";
 
@@ -228,6 +235,12 @@ class SelectorBase extends Provider {
     } else {
       this._cleanCaches(this._resolvedDependencies, options);
     }
+  }
+
+  // Define base tag
+
+  get baseTags() {
+    return SELECTORS_TAG;
   }
 
   // Methods to be used for testing

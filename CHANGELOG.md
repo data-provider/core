@@ -10,6 +10,17 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 ### Removed
 
+## [2.9.0] - 2020-12-27
+
+### Added
+- feat: Allow defining baseTags property in addons. Will be extended with "tags" option when instantiated for calculating provider tags. (#143)
+- feat: Add tags getter
+- feat: Add "selector" base tag to selectors (#163)
+- feat: Add `cleanDependenciesCache` method to `providers` handler (#164)
+
+### Fixed
+- docs(readme): Fix typos
+
 ## [2.8.2] - 2020-12-12
 ### Added
 - chore(ci): Migrate from Travis CI to github actions

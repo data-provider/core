@@ -24,6 +24,7 @@ export const defaultOptions = {
   cleanCacheThrottle: 0,
 };
 
+export const SELECTORS_TAG = "selector";
 export const INIT = "init";
 export const CLEAN_CACHE = "cleanCache";
 export const RESET_STATE = "resetState";
@@ -86,6 +87,10 @@ export function ensureArray(els) {
 
 export function removeFalsy(array) {
   return array.filter((el) => !!el);
+}
+
+export function arrayWithoutFalsies(els) {
+  return removeFalsy(ensureArray(els));
 }
 
 export function message(text) {

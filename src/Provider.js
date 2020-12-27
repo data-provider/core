@@ -13,8 +13,7 @@ import { storeManager } from "./storeManager";
 import {
   childId,
   eventNamespace,
-  removeFalsy,
-  ensureArray,
+  arrayWithoutFalsies,
   isFunction,
   isUndefined,
   ANY,
@@ -34,7 +33,10 @@ class Provider {
     this._emitChild = this._emitChild.bind(this);
     this._options = { ...defaultOptions, ...options };
     this._query = { ...query };
-    this._tags = removeFalsy(ensureArray(this._options.tags));
+    this._tags = [
+      ...arrayWithoutFalsies(this.baseTags),
+      ...arrayWithoutFalsies(this._options.tags),
+    ];
     this._children = new Map();
     this._queryMethods = new Map();
     this._queryMethodsParsers = new Map();
@@ -244,6 +246,10 @@ class Provider {
 
   get options() {
     return this._options;
+  }
+
+  get tags() {
+    return this._tags;
   }
 
   // Methods to be used for testing
