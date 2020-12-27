@@ -81,6 +81,16 @@ Please refer to the [@data-provider/react][data-provider-react] UI addon documen
 
 Connect a provider to all components that need it. Data Provider will fetch data only when needed, and will avoid making it more than once, no matter how many components need the data.
 
+## Tags
+
+Providers created with this addon will have automatically the `prismic` tag, so you can select all of them together using the `providers` methods as in:
+
+```javascript
+import { providers } from "@data-provider/core";
+
+providers.getByTag("prismic").cleanCache();
+```
+
 
 ## Contributing
 
