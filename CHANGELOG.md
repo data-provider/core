@@ -11,6 +11,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Removed
 ### BREAKING CHANGES
 
+## [2.0.3] - 2020-12-27
+
+### Added
+- docs(readme): Add example about using default tag
+
+### Changed
+- chore(deps): Update dependencies
+- refactor: Use baseTags getter to define base tag (#56)
+
 ## [2.0.2] - 2020-12-21
 
 ### Changed
