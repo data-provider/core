@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [unreleased]
 ### Added
+- docs(readme): Add example about using default tag
 ### Changed
 - chore(deps): Update dependencies
 ### Fixed
