@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - chore(deps): Update dependencies
 - refactor: Use baseTags getter to define base tag (#108)
+- chore(ci): Add GitHub action to run mutation tests on master branch
 ### Fixed
 ### Removed
 
