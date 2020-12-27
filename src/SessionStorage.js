@@ -10,9 +10,14 @@ Unless required by applicable law or agreed to in writing, software distributed 
 */
 
 import { Storage } from "./Storage";
+import { TAG, SESSION_TAG } from "./tags";
 
 export class SessionStorage extends Storage {
   constructor(id, options, query) {
     super(id, { ...options, storageKey: "sessionStorage" }, query);
+  }
+
+  get baseTags() {
+    return [TAG, SESSION_TAG];
   }
 }

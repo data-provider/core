@@ -10,6 +10,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 ### Removed
 
+## [2.2.2] - 2020-12-27
+
+### Added
+- docs(readme): Add example about using default tag
+
+### Changed
+- chore(deps): Update dependencies
+- refactor: Use baseTags getter to define base tag (#109)
+
 ## [2.2.1] - 2020-12-14
 
 ### Added
