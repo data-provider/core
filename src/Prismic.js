@@ -21,10 +21,7 @@ const defaultConfig = {
 
 export class Prismic extends Provider {
   constructor(url, options, query) {
-    const opts = options || {};
-    const tags = opts.tags ? [...opts.tags] : [];
-    tags.unshift(PRISMIC_TAG);
-    super(`prismic-${url}`, { ...defaultConfig, ...opts, tags, url }, query);
+    super(`prismic-${url}`, { ...defaultConfig, ...options, url }, query);
   }
 
   configMethod(configuration) {
@@ -61,5 +58,9 @@ export class Prismic extends Provider {
 
   readMethod() {
     return this._prismicRequest(this.queryValue);
+  }
+
+  get baseTags() {
+    return PRISMIC_TAG;
   }
 }
