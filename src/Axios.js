@@ -27,10 +27,7 @@ import { defaultConfig } from "./defaultConfig";
 
 export class Axios extends Provider {
   constructor(id, options, query) {
-    const opts = options || {};
-    const tags = opts.tags ? [...opts.tags] : [];
-    tags.unshift(TAG);
-    super(id, { ...defaultConfig, ...opts, tags }, query);
+    super(id, { ...defaultConfig, ...options }, query);
   }
 
   _addOnceBeforeRequest(onceBeforeRequest) {
@@ -266,5 +263,9 @@ export class Axios extends Provider {
       ...this._headers,
       ...headers,
     };
+  }
+
+  get baseTags() {
+    return TAG;
   }
 }

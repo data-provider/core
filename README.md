@@ -224,6 +224,16 @@ booksCollection.on(eventNames.CREATE_SUCCESS, () => {
 });
 ```
 
+## Tags
+
+Providers created with this addon will have automatically the `axios` tag, so you can select all of them together using the `providers` methods as in:
+
+```javascript
+import { providers } from "@data-provider/core";
+
+providers.getByTag("axios").cleanCache();
+```
+
 ## Contributing
 
 Contributors are welcome.
