@@ -55,6 +55,10 @@ export class ProvidersHandler {
     return this._run("cleanCache", options);
   }
 
+  cleanDependenciesCache(options) {
+    return this._run("cleanDependenciesCache", options);
+  }
+
   resetState() {
     return this._run("resetState");
   }
@@ -172,6 +176,10 @@ export class Providers {
 
   cleanCache(options) {
     return this._allProviders.cleanCache(options);
+  }
+
+  cleanDependenciesCache(options) {
+    return this._allProviders.cleanDependenciesCache(options);
   }
 
   resetState() {
