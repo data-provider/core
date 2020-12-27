@@ -84,6 +84,16 @@ sessionStatus.query({ prop: "loggedIn" }).delete();
 sessionStatus.delete();
 ```
 
+## Tags
+
+Providers created with this addon will add automatically the `memory` tag, so you can select all of them together using the `providers` methods as in:
+
+```javascript
+import { providers } from "@data-provider/core";
+
+providers.getByTag("memory").cleanCache();
+```
+
 ## Contributing
 
 Contributors are welcome.
