@@ -6,13 +6,19 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [unreleased]
 ### Added
+### Changed
+### Fixed
+### Removed
+
+## [2.1.7] - 2020-12-27
+
+### Added
 - docs(readme): Add example about using default tag
+
 ### Changed
 - chore(deps): Update dependencies
 - refactor: Use baseTags getter to define base tag (#108)
 - chore(ci): Add GitHub action to run mutation tests on master branch
-### Fixed
-### Removed
 
 ## [2.1.6] - 2020-12-18
 
