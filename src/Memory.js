@@ -15,10 +15,7 @@ const TAG = "memory";
 
 class Memory extends Provider {
   constructor(id, options, query) {
-    const opts = options || {};
-    const tags = opts.tags ? [...opts.tags] : [];
-    tags.unshift(TAG);
-    super(id, { ...opts, tags }, query);
+    super(id, options, query);
     this._data = this.initialState.data;
     this.options._data = this._options._data || this._data;
   }
@@ -74,6 +71,10 @@ class Memory extends Provider {
     }
     this._cleanParentCache();
     return Promise.resolve();
+  }
+
+  get baseTags() {
+    return TAG;
   }
 }
 
