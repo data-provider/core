@@ -10,6 +10,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 */
 
 export { default as isPromise } from "is-promise";
+export { default as isPlainObject } from "lodash.isplainobject";
 
 let automaticIdCounter = 0;
 
@@ -21,6 +22,7 @@ export const defaultOptions = {
   cacheTime: null,
   cleanCacheInterval: null,
   reReadDependenciesMaxTime: 5000,
+  readAgainMaxTime: 5000,
   cleanCacheThrottle: 0,
 };
 

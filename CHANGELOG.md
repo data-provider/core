@@ -6,7 +6,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [unreleased]
 ### Added
+- feat: Add SelectorBeta, a Selector Class but with the new interface defined in #167. Maybe both selectors will be exposed in a minor release before publishing a breaking change in order to facilitate progressive migrations.
 ### Changed
+- feat: Rename reReadDependenciesMaxTime option in Selector beta to readAgainMaxTime
 ### Fixed
 ### Removed
 

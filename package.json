@@ -50,7 +50,8 @@
     "redux": "4.x"
   },
   "dependencies": {
-    "is-promise": "4.0.0"
+    "is-promise": "4.0.0",
+    "lodash.isplainobject": "4.0.6"
   },
   "devDependencies": {
     "@babel/core": "7.12.3",
