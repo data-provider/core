@@ -9,10 +9,17 @@ http://www.apache.org/licenses/LICENSE-2.0
 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 */
 
-import { SELECTORS_TAG, CLEAN_CACHE, isFunction, isArray, isPlainObject } from "./helpers";
+import {
+  SELECTORS_TAG,
+  CLEAN_CACHE,
+  isFunction,
+  isPromise,
+  isArray,
+  isPlainObject,
+} from "./helpers";
 import Provider from "./Provider";
 
-import { isCatchedDependency, isDependencyExpression, resolveResult } from "./selectorHelpers";
+import { isCatchedDependency, isDataProvider, resolveResult } from "./selectorHelpers";
 
 class SelectorBetaBase extends Provider {
   constructor(id, options, query) {
@@ -62,11 +69,22 @@ class SelectorBetaBase extends Provider {
     };
 
     const readDependency = (dependencyToRead, catchMethod) => {
+      const catchError = (promise) => {
+        return promise.catch((error) => {
+          if (catchMethod) {
+            return readDependency(
+              catchMethod.apply(catchMethod, [error, this._query].concat(dependenciesResults))
+            );
+          }
+          return Promise.reject(error);
+        });
+      };
+
       if (hasToReadAgain) {
         return Promise.resolve();
       }
-      if (!isDependencyExpression(dependencyToRead)) {
-        return resolveResult(dependencyToRead);
+      if (isCatchedDependency(dependencyToRead)) {
+        return readDependency(dependencyToRead.dependency, dependencyToRead.catch);
       }
       if (isArray(dependencyToRead)) {
         return Promise.all(dependencyToRead.map((dep) => readDependency(dep, catchMethod)));
@@ -77,8 +95,15 @@ class SelectorBetaBase extends Provider {
           catchMethod
         );
       }
-      if (isCatchedDependency(dependencyToRead)) {
-        return readDependency(dependencyToRead.dependency, dependencyToRead.catch);
+      if (isPromise(dependencyToRead)) {
+        return catchError(
+          dependencyToRead.then((result) => {
+            return readDependency(result);
+          })
+        );
+      }
+      if (!isDataProvider(dependencyToRead)) {
+        return resolveResult(dependencyToRead);
       }
       dependencies.push(dependencyToRead);
       if (!this._dependenciesInProgress.has(dependencyToRead)) {
@@ -86,14 +111,7 @@ class SelectorBetaBase extends Provider {
         inProgressListeners.push(dependencyToRead.on(CLEAN_CACHE, markToReadAgain));
       }
 
-      return dependencyToRead.read().catch((error) => {
-        if (catchMethod) {
-          return readDependency(
-            catchMethod.apply(catchMethod, [error, this._query].concat(dependenciesResults))
-          );
-        }
-        return Promise.reject(error);
-      });
+      return catchError(dependencyToRead.read());
     };
 
     const readDependencies = (dependencyIndex = 0) => {
