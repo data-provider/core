@@ -397,11 +397,125 @@ describe("Selector dependencies", () => {
     });
   });
 
-  // TODO, test function returning array of dependencies
+  describe("when defined as functions returning an array of data-provider instances", () => {
+    const QUERY = { foo: "foo" };
+    let querySpy;
+    let querySpy2;
+    let querySpy3;
+    beforeEach(() => {
+      querySpy = sandbox.spy();
+      querySpy2 = sandbox.spy();
+      querySpy3 = sandbox.spy();
+      selector = new SelectorBeta(
+        (query) => {
+          querySpy(query);
+          return [dependency1.query(query), dependency2.query(query)];
+        },
+        (query, dependency1Result) => {
+          querySpy2({
+            query,
+            dependency1Result,
+          });
+          return [dependency3.query(query)];
+        },
+        (query, dependency1Result, dependency2Result) => {
+          querySpy3({
+            query,
+            dependency1Result,
+            dependency2Result,
+          });
+          spies.dependency4Read();
+          return {
+            query,
+            dependency1Result,
+            dependency2Result,
+          };
+        }
+      );
+    });
+
+    it("should receive query as an argument in all dependencies", async () => {
+      await selector.query(QUERY).read();
+      expect(querySpy.getCall(0).args[0]).toEqual(QUERY);
+      expect(querySpy2.getCall(0).args[0].query).toEqual(QUERY);
+      expect(querySpy3.getCall(0).args[0].query).toEqual(QUERY);
+    });
+
+    it("should receive previous results as arguments in consequent dependencies", async () => {
+      await selector.query(QUERY).read();
+      expect(querySpy2.getCall(0).args[0].dependency1Result).toEqual([
+        DEPENDENCY_1_RESULT,
+        DEPENDENCY_2_RESULT,
+      ]);
+      expect(querySpy3.getCall(0).args[0].dependency1Result).toEqual(
+        [DEPENDENCY_1_RESULT, DEPENDENCY_2_RESULT],
+        [DEPENDENCY_3_RESULT]
+      );
+    });
+
+    it("should receive dependencies results in last dependency", async () => {
+      const result = await selector.read();
+      expect(result).toEqual({
+        query: {},
+        dependency1Result: [DEPENDENCY_1_RESULT, DEPENDENCY_2_RESULT],
+        dependency2Result: [DEPENDENCY_3_RESULT],
+      });
+    });
+
+    it("should execute dependency only once when called multiple times if query does not change", async () => {
+      selector.query(QUERY).read();
+      selector.query(QUERY).read();
+      selector.query(QUERY).read();
+      await selector.query(QUERY).read();
+      expect(spies.dependency1Read.callCount).toEqual(1);
+      expect(spies.dependency2Read.callCount).toEqual(1);
+      expect(spies.dependency3Read.callCount).toEqual(1);
+      expect(spies.dependency4Read.callCount).toEqual(1);
+    });
+
+    it("should execute dependency more than once when called multiple times in query changes", async () => {
+      selector.query(QUERY).read();
+      selector.query(QUERY).read();
+      await selector.query(QUERY).read();
+      await selector.query({ foo: "foo2" }).read();
+      expect(spies.dependency1Read.callCount).toEqual(2);
+      expect(spies.dependency2Read.callCount).toEqual(2);
+      expect(spies.dependency3Read.callCount).toEqual(2);
+      expect(spies.dependency4Read.callCount).toEqual(2);
+    });
+
+    it("should clean cache when dependency 1 cache is clean", async () => {
+      selector.query(QUERY).read();
+      selector.query(QUERY).read();
+      selector.query(QUERY).read();
+      await selector.query(QUERY).read();
+      dependency1.cleanCache();
+      await selector.query(QUERY).read();
+      expect(spies.dependency1Read.callCount).toEqual(2);
+      expect(spies.dependency2Read.callCount).toEqual(1);
+      expect(spies.dependency3Read.callCount).toEqual(1);
+      expect(spies.dependency4Read.callCount).toEqual(2);
+    });
+
+    it("should clean cache when dependency 2 cache is clean", async () => {
+      selector.query(QUERY).read();
+      selector.query(QUERY).read();
+      selector.query(QUERY).read();
+      await selector.query(QUERY).read();
+      dependency2.cleanCache();
+      await selector.query(QUERY).read();
+      expect(spies.dependency1Read.callCount).toEqual(1);
+      expect(spies.dependency2Read.callCount).toEqual(2);
+      expect(spies.dependency3Read.callCount).toEqual(1);
+      expect(spies.dependency4Read.callCount).toEqual(2);
+    });
+  });
+
   // TODO, test function returning catchDependencies
   // TODO, test function returning array of functions
   // TODO, test promise as dependency
   // TODO, test value as dependency
   // TODO, test function returning value
   // TODO, test function returning promise
+  // TODO, test array of functions
 });
