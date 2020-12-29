@@ -16,11 +16,13 @@ const { Provider, SelectorBeta, providers } = require("../../src/index");
 describe("Selector dependencies", () => {
   const DEPENDENCY_1_RESULT = "dependency-1-result";
   const DEPENDENCY_2_RESULT = "dependency-2-result";
+  const DEPENDENCY_3_RESULT = "dependency-3-result";
   let sandbox;
   let spies;
   let TestProvider;
   let dependency1;
   let dependency2;
+  let dependency3;
   let selector;
 
   beforeEach(() => {
@@ -29,7 +31,8 @@ describe("Selector dependencies", () => {
     spies = {
       dependency1Read: sinon.spy(),
       dependency2Read: sinon.spy(),
-      selectorRead: sinon.spy(),
+      dependency3Read: sinon.spy(),
+      dependency4Read: sinon.spy(),
     };
 
     TestProvider = class extends Provider {
@@ -51,6 +54,10 @@ describe("Selector dependencies", () => {
       spy: spies.dependency2Read,
       return: DEPENDENCY_2_RESULT,
     });
+    dependency3 = new TestProvider("dependency-3", {
+      spy: spies.dependency3Read,
+      return: DEPENDENCY_3_RESULT,
+    });
   });
 
   afterEach(() => {
@@ -61,7 +68,7 @@ describe("Selector dependencies", () => {
   describe("when defined as data provider instance", () => {
     beforeEach(() => {
       selector = new SelectorBeta(dependency1, (query, dependencyResult) => {
-        spies.selectorRead();
+        spies.dependency4Read();
         return dependencyResult;
       });
     });
@@ -77,15 +84,15 @@ describe("Selector dependencies", () => {
       selector.read();
       await selector.read();
       expect(spies.dependency1Read.callCount).toEqual(1);
-      expect(spies.selectorRead.callCount).toEqual(1);
+      expect(spies.dependency4Read.callCount).toEqual(1);
     });
 
     it("should clean cache when dependency cache is clean", async () => {
       await selector.read();
-      expect(spies.selectorRead.callCount).toEqual(1);
+      expect(spies.dependency4Read.callCount).toEqual(1);
       dependency1.cleanCache();
       await selector.read();
-      expect(spies.selectorRead.callCount).toEqual(2);
+      expect(spies.dependency4Read.callCount).toEqual(2);
     });
   });
 
@@ -109,7 +116,7 @@ describe("Selector dependencies", () => {
         dependency1,
         dependency2,
         (query, dependency1Result, dependency2Result) => {
-          spies.selectorRead({
+          spies.dependency4Read({
             dependency1Result,
             dependency2Result,
           });
@@ -136,33 +143,33 @@ describe("Selector dependencies", () => {
       await selector.read();
       expect(spies.dependency1Read.callCount).toEqual(1);
       expect(spies.dependency2Read.callCount).toEqual(1);
-      expect(spies.selectorRead.callCount).toEqual(1);
+      expect(spies.dependency4Read.callCount).toEqual(1);
     });
 
     it("should clean cache when dependency 1 cache is clean", async () => {
       await selector.read();
-      expect(spies.selectorRead.callCount).toEqual(1);
+      expect(spies.dependency4Read.callCount).toEqual(1);
       dependency1.cleanCache();
       await selector.read();
-      expect(spies.selectorRead.callCount).toEqual(2);
+      expect(spies.dependency4Read.callCount).toEqual(2);
     });
 
     it("should clean cache when dependency 2 cache is clean", async () => {
       await selector.read();
-      expect(spies.selectorRead.callCount).toEqual(1);
+      expect(spies.dependency4Read.callCount).toEqual(1);
       dependency2.cleanCache();
       await selector.read();
-      expect(spies.selectorRead.callCount).toEqual(2);
+      expect(spies.dependency4Read.callCount).toEqual(2);
     });
 
     it("should clean cache only once when dependency 1 and dependency 2 caches are clean", async () => {
       sinon.spy(selector, "cleanCache");
       await selector.read();
-      expect(spies.selectorRead.callCount).toEqual(1);
+      expect(spies.dependency4Read.callCount).toEqual(1);
       dependency1.cleanCache();
       dependency2.cleanCache();
       await selector.read();
-      expect(spies.selectorRead.callCount).toEqual(2);
+      expect(spies.dependency4Read.callCount).toEqual(2);
       expect(selector.cleanCache.callCount).toEqual(1);
     });
   });
@@ -172,7 +179,7 @@ describe("Selector dependencies", () => {
       selector = new SelectorBeta(
         [dependency1, dependency2],
         (query, [dependency1Result, dependency2Result]) => {
-          spies.selectorRead({
+          spies.dependency4Read({
             dependency1Result,
             dependency2Result,
           });
@@ -199,23 +206,23 @@ describe("Selector dependencies", () => {
       await selector.read();
       expect(spies.dependency1Read.callCount).toEqual(1);
       expect(spies.dependency2Read.callCount).toEqual(1);
-      expect(spies.selectorRead.callCount).toEqual(1);
+      expect(spies.dependency4Read.callCount).toEqual(1);
     });
 
     it("should clean cache when dependency 1 cache is clean", async () => {
       await selector.read();
-      expect(spies.selectorRead.callCount).toEqual(1);
+      expect(spies.dependency4Read.callCount).toEqual(1);
       dependency1.cleanCache();
       await selector.read();
-      expect(spies.selectorRead.callCount).toEqual(2);
+      expect(spies.dependency4Read.callCount).toEqual(2);
     });
 
     it("should clean cache when dependency 2 cache is clean", async () => {
       await selector.read();
-      expect(spies.selectorRead.callCount).toEqual(1);
+      expect(spies.dependency4Read.callCount).toEqual(1);
       dependency2.cleanCache();
       await selector.read();
-      expect(spies.selectorRead.callCount).toEqual(2);
+      expect(spies.dependency4Read.callCount).toEqual(2);
     });
   });
 
@@ -229,7 +236,7 @@ describe("Selector dependencies", () => {
           return dependency1;
         },
         (query, dependencyResult) => {
-          spies.selectorRead();
+          spies.dependency4Read();
           return dependencyResult;
         }
       );
@@ -252,15 +259,15 @@ describe("Selector dependencies", () => {
       selector.read();
       await selector.read();
       expect(spies.dependency1Read.callCount).toEqual(1);
-      expect(spies.selectorRead.callCount).toEqual(1);
+      expect(spies.dependency4Read.callCount).toEqual(1);
     });
 
     it("should clean cache when dependency cache is clean", async () => {
       await selector.read();
-      expect(spies.selectorRead.callCount).toEqual(1);
+      expect(spies.dependency4Read.callCount).toEqual(1);
       dependency1.cleanCache();
       await selector.read();
-      expect(spies.selectorRead.callCount).toEqual(2);
+      expect(spies.dependency4Read.callCount).toEqual(2);
     });
   });
 
@@ -268,9 +275,13 @@ describe("Selector dependencies", () => {
     const QUERY = { foo: "foo" };
     let querySpy;
     let querySpy2;
+    let querySpy3;
+    let querySpy4;
     beforeEach(() => {
       querySpy = sandbox.spy();
       querySpy2 = sandbox.spy();
+      querySpy3 = sandbox.spy();
+      querySpy4 = sandbox.spy();
       selector = new SelectorBeta(
         (query) => {
           querySpy(query);
@@ -284,10 +295,26 @@ describe("Selector dependencies", () => {
           return dependency2.query(query);
         },
         (query, dependency1Result, dependency2Result) => {
-          spies.selectorRead();
-          return {
+          querySpy3({
+            query,
             dependency1Result,
             dependency2Result,
+          });
+          return dependency3.query(query);
+        },
+        (query, dependency1Result, dependency2Result, dependency3Result) => {
+          querySpy4({
+            query,
+            dependency1Result,
+            dependency2Result,
+            dependency3Result,
+          });
+          spies.dependency4Read();
+          return {
+            query,
+            dependency1Result,
+            dependency2Result,
+            dependency3Result,
           };
         }
       );
@@ -297,29 +324,39 @@ describe("Selector dependencies", () => {
       await selector.query(QUERY).read();
       expect(querySpy.getCall(0).args[0]).toEqual(QUERY);
       expect(querySpy2.getCall(0).args[0].query).toEqual(QUERY);
+      expect(querySpy3.getCall(0).args[0].query).toEqual(QUERY);
+      expect(querySpy4.getCall(0).args[0].query).toEqual(QUERY);
     });
 
     it("should receive previous results as arguments in consequent functions", async () => {
       await selector.query(QUERY).read();
       expect(querySpy2.getCall(0).args[0].dependency1Result).toEqual(DEPENDENCY_1_RESULT);
+      expect(querySpy3.getCall(0).args[0].dependency1Result).toEqual(DEPENDENCY_1_RESULT);
+      expect(querySpy3.getCall(0).args[0].dependency2Result).toEqual(DEPENDENCY_2_RESULT);
+      expect(querySpy4.getCall(0).args[0].dependency1Result).toEqual(DEPENDENCY_1_RESULT);
+      expect(querySpy4.getCall(0).args[0].dependency2Result).toEqual(DEPENDENCY_2_RESULT);
+      expect(querySpy4.getCall(0).args[0].dependency3Result).toEqual(DEPENDENCY_3_RESULT);
     });
 
-    it("should receive dependencies results in selector function", async () => {
+    it("should receive dependencies results in last dependency", async () => {
       const result = await selector.read();
       expect(result).toEqual({
+        query: {},
         dependency1Result: DEPENDENCY_1_RESULT,
         dependency2Result: DEPENDENCY_2_RESULT,
+        dependency3Result: DEPENDENCY_3_RESULT,
       });
     });
 
-    it("should execute dependency only once when called multiple times in query does not change", async () => {
+    it("should execute dependency only once when called multiple times if query does not change", async () => {
       selector.query(QUERY).read();
       selector.query(QUERY).read();
       selector.query(QUERY).read();
       await selector.query(QUERY).read();
       expect(spies.dependency1Read.callCount).toEqual(1);
       expect(spies.dependency2Read.callCount).toEqual(1);
-      expect(spies.selectorRead.callCount).toEqual(1);
+      expect(spies.dependency3Read.callCount).toEqual(1);
+      expect(spies.dependency4Read.callCount).toEqual(1);
     });
 
     it("should execute dependency more than once when called multiple times in query changes", async () => {
@@ -329,7 +366,8 @@ describe("Selector dependencies", () => {
       await selector.query({ foo: "foo2" }).read();
       expect(spies.dependency1Read.callCount).toEqual(2);
       expect(spies.dependency2Read.callCount).toEqual(2);
-      expect(spies.selectorRead.callCount).toEqual(2);
+      expect(spies.dependency3Read.callCount).toEqual(2);
+      expect(spies.dependency4Read.callCount).toEqual(2);
     });
 
     it("should clean cache when dependency 1 cache is clean", async () => {
@@ -341,7 +379,8 @@ describe("Selector dependencies", () => {
       await selector.query(QUERY).read();
       expect(spies.dependency1Read.callCount).toEqual(2);
       expect(spies.dependency2Read.callCount).toEqual(1);
-      expect(spies.selectorRead.callCount).toEqual(2);
+      expect(spies.dependency3Read.callCount).toEqual(1);
+      expect(spies.dependency4Read.callCount).toEqual(2);
     });
 
     it("should clean cache when dependency 2 cache is clean", async () => {
@@ -353,7 +392,8 @@ describe("Selector dependencies", () => {
       await selector.query(QUERY).read();
       expect(spies.dependency1Read.callCount).toEqual(1);
       expect(spies.dependency2Read.callCount).toEqual(2);
-      expect(spies.selectorRead.callCount).toEqual(2);
+      expect(spies.dependency3Read.callCount).toEqual(1);
+      expect(spies.dependency4Read.callCount).toEqual(2);
     });
   });
 
