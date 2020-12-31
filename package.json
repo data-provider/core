@@ -35,15 +35,16 @@
     "build": "rollup --config",
     "test": "jest",
     "test:unit": "npm run test",
-    "test:e2e:browser:install": "cd test-e2e/browser && npm i && cd vanilla-app && npm i && cd ../react-app && npm i",
-    "test:e2e:browser": "cd test-e2e/browser && npm run test:vanilla-app && npm run test:react-app",
-    "test:e2e:node:install": "cd test-e2e/nodejs/esm && npm i",
-    "test:e2e:node": "cd test-e2e/nodejs/cjs && npm run test && cd ../esm && npm run test",
+    "test:e2e:browser:install": "cd test-e2e/browser && npm run test:install",
+    "test:e2e:browser": "cd test-e2e/browser && npm run test",
+    "test:e2e:node:install": "cd test-e2e/nodejs/esm && npm i && cd ../v3-esm && npm i",
+    "test:e2e:node": "cd test-e2e/nodejs/cjs && npm run test && cd ../v3-cjs && npm run test && cd ../esm && npm run test && cd ../v3-esm && npm run test",
+    "test:e2e:install": "npm run test:e2e:browser:install && npm run test:e2e:node:install",
     "test:e2e": "npm run test:e2e:browser && npm run test:e2e:node",
-    "test:e2e:ci": "npm run build && npm run test:e2e:browser:install && npm run test:e2e:node:install && npm run test:e2e",
+    "test:e2e:ci": "npm run build && npm run test:e2e:install && npm run test:e2e",
     "test:ci": "npm run test:unit && npm run test:e2e:ci",
     "test:mutation": "stryker run",
-    "lint": "eslint src test test-e2e/browser/vanilla-app/public/main.js test-e2e/browser/react-app/src test-e2e/browser/cypress test-e2e/nodejs/cjs test-e2e/nodejs/esm/src *.js",
+    "lint": "eslint src test test-e2e/browser/vanilla-app/public/main.js test-e2e/browser/v3-vanilla-app/public/main.js test-e2e/browser/v3-react-app/src test-e2e/browser/react-app/src test-e2e/browser/cypress test-e2e/nodejs/cjs test-e2e/nodejs/v3-cjs test-e2e/nodejs/esm/*.js test-e2e/nodejs/esm/src test-e2e/nodejs/v3-esm/*.js test-e2e/nodejs/v3-esm/src *.js",
     "lint-staged": "lint-staged"
   },
   "peerDependencies": {
@@ -86,9 +87,13 @@
     "test/**/*.js": "eslint",
     "test-e2e/browser/cypress/**/*.js": "eslint",
     "test-e2e/browser/vanilla-app/public/main.js": "eslint",
+    "test-e2e/browser/v3-vanilla-app/public/main.js": "eslint",
     "test-e2e/browser/react-app/src/**/*.js": "eslint",
+    "test-e2e/browser/v3-react-app/src/**/*.js": "eslint",
     "test-e2e/nodejs/cjs/**/*.js": "eslint",
-    "test-e2e/nodejs/esm/src/**/*.js": "eslint"
+    "test-e2e/nodejs/v3-cjs/**/*.js": "eslint",
+    "test-e2e/nodejs/esm/src/**/*.js": "eslint",
+    "test-e2e/nodejs/v3-esm/src/**/*.js": "eslint"
   },
   "husky": {
     "hooks": {
