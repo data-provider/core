@@ -10,7 +10,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 
 const sinon = require("sinon");
 
-const { Provider, SelectorBeta, providers, catchDependency } = require("../../src/index");
+const { Provider, SelectorV3, providers, catchDependency } = require("../../src/index");
 
 describe("Selector when cleanDependenciesCache method is called", () => {
   let sandbox;
@@ -80,11 +80,11 @@ describe("Selector when cleanDependenciesCache method is called", () => {
     dependency1 = new TestProvider("dependency1");
     dependency2 = new TestProvider("dependency2");
     dependency3 = new TestProvider("dependency3");
-    dependency4 = new SelectorBeta(dependency3, (query, dependencyResult) => {
+    dependency4 = new SelectorV3(dependency3, (query, dependencyResult) => {
       return dependencyResult;
     });
 
-    selector = new SelectorBeta(
+    selector = new SelectorV3(
       dependency1,
       dependency2,
       dependency4,
@@ -155,7 +155,7 @@ describe("Selector when cleanDependenciesCache method is called", () => {
 
   it("should work with dependencies as functions", async () => {
     expect.assertions(2);
-    selector = new SelectorBeta(
+    selector = new SelectorV3(
       () => dependency1,
       () => dependency2,
       () => dependency4,
@@ -178,7 +178,7 @@ describe("Selector when cleanDependenciesCache method is called", () => {
 
   it("should ignore promise dependencies", async () => {
     expect.assertions(2);
-    selector = new SelectorBeta(
+    selector = new SelectorV3(
       () => dependency1,
       () => dependency2,
       () => dependency4,
@@ -202,7 +202,7 @@ describe("Selector when cleanDependenciesCache method is called", () => {
 
   it("should ignore value dependencies", async () => {
     expect.assertions(2);
-    selector = new SelectorBeta(
+    selector = new SelectorV3(
       () => dependency1,
       () => dependency2,
       () => dependency4,
@@ -312,7 +312,7 @@ describe("Selector when cleanDependenciesCache method is called", () => {
       }
     };
     const dependency5 = new TestProvider2("dependency-5");
-    selector = new SelectorBeta(
+    selector = new SelectorV3(
       catchDependency(dependency5, () => {
         return [dependency1, dependency2, dependency3];
       }),
@@ -414,7 +414,7 @@ describe("Selector when cleanDependenciesCache method is called", () => {
     let testPromise = new Promise((resolve) => {
       resolveTest = resolve;
     });
-    selector = new SelectorBeta(
+    selector = new SelectorV3(
       [dependency1, dependency2, dependency3],
       (query, [dependency1Result, dependency2Result, dependency3Result]) => {
         spies.selectorRead();

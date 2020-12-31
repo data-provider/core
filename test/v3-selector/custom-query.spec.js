@@ -10,7 +10,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 
 const sinon = require("sinon");
 
-const { Provider, providers, SelectorBeta } = require("../../src/index");
+const { Provider, providers, SelectorV3 } = require("../../src/index");
 
 describe("Selector with custom query", () => {
   let sandbox;
@@ -20,7 +20,7 @@ describe("Selector with custom query", () => {
   beforeEach(() => {
     sandbox = sinon.createSandbox();
     provider = new Provider();
-    selector = new SelectorBeta(provider, () => {}, {
+    selector = new SelectorV3(provider, () => {}, {
       getChildQueryMethod: (newQuery, currentQuery) => {
         return {
           queryString: {

@@ -11,7 +11,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 
 const sinon = require("sinon");
 
-const { Provider, SelectorBeta, providers, catchDependency } = require("../../src/index");
+const { Provider, SelectorV3, providers, catchDependency } = require("../../src/index");
 
 describe("Selector with multiple dependencies", () => {
   let sandbox;
@@ -80,7 +80,7 @@ describe("Selector with multiple dependencies", () => {
       spy: spies.dependency2Read,
     });
 
-    dependency3 = new SelectorBeta(
+    dependency3 = new SelectorV3(
       dependency1,
       (query, testResult) => {
         spies.dependency3Read();
@@ -91,7 +91,7 @@ describe("Selector with multiple dependencies", () => {
       }
     );
 
-    dependency4 = new SelectorBeta(
+    dependency4 = new SelectorV3(
       [dependency2, dependency3],
       (query, [provider2Results, selectorResults]) => {
         spies.dependency4Read();
@@ -105,7 +105,7 @@ describe("Selector with multiple dependencies", () => {
       }
     );
 
-    dependency5 = new SelectorBeta(
+    dependency5 = new SelectorV3(
       (query) => dependency4.query(query),
       (query, dependency4Results) => {
         spies.dependency5Read();
@@ -126,7 +126,7 @@ describe("Selector with multiple dependencies", () => {
       spy: spies.dependency7Read,
     });
 
-    dependency8 = new SelectorBeta(
+    dependency8 = new SelectorV3(
       dependency6,
       (query) => dependency5.query(query),
       () => {
@@ -142,7 +142,7 @@ describe("Selector with multiple dependencies", () => {
       spy: spies.dependency9Read,
     });
 
-    dependency10 = new SelectorBeta(
+    dependency10 = new SelectorV3(
       dependency8,
       () => {
         spies.dependency10Read();
@@ -165,7 +165,7 @@ describe("Selector with multiple dependencies", () => {
       spy: spies.dependency13Read,
     });
 
-    dependency14 = new SelectorBeta(
+    dependency14 = new SelectorV3(
       [
         dependency10,
         catchDependency(dependency11.query({ hasToThrow: new Error() }), () => {
@@ -185,7 +185,7 @@ describe("Selector with multiple dependencies", () => {
       spy: spies.dependency15Read,
     });
 
-    dependency16 = new SelectorBeta(
+    dependency16 = new SelectorV3(
       dependency14,
       catchDependency(dependency15.query({ hasToThrow: new Error() }), () => {
         return "foo";
@@ -199,7 +199,7 @@ describe("Selector with multiple dependencies", () => {
       }
     );
 
-    selector = new SelectorBeta(
+    selector = new SelectorV3(
       (query) => dependency16.query(query),
       (query, selector2Results) => {
         spies.selectorRead();

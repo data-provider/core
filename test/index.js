@@ -20,6 +20,10 @@ describe("index", () => {
     expect(index.Selector).toBeDefined();
   });
 
+  it("should export SelectorV3", () => {
+    expect(index.SelectorV3).toBeDefined();
+  });
+
   it("should export providers", () => {
     expect(index.providers).toBeDefined();
   });

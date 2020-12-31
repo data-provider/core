@@ -10,7 +10,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 
 const sinon = require("sinon");
 
-const { Provider, SelectorBeta, providers } = require("../../src/index");
+const { Provider, SelectorV3, providers } = require("../../src/index");
 
 describe("Selector id", () => {
   let sandbox;
@@ -28,30 +28,30 @@ describe("Selector id", () => {
 
   it("should not return two equal ids is no specific id is provided", () => {
     expect.assertions(3);
-    const selector = new SelectorBeta(provider, () => {});
-    const selector2 = new SelectorBeta(provider, () => {});
-    const selector3 = new SelectorBeta(provider, () => {});
+    const selector = new SelectorV3(provider, () => {});
+    const selector2 = new SelectorV3(provider, () => {});
+    const selector3 = new SelectorV3(provider, () => {});
     expect(selector.id).not.toEqual(selector2.id);
     expect(selector2.id).not.toEqual(selector3.id);
     expect(selector3.id).not.toEqual(selector.id);
   });
 
   it("should be provided id", () => {
-    const selector = new SelectorBeta(provider, () => {}, {
+    const selector = new SelectorV3(provider, () => {}, {
       id: "foo-id",
     });
     expect(selector.id).toEqual("foo-id");
   });
 
   it("should be provided id adding query id", () => {
-    const selector = new SelectorBeta(provider, () => {}, {
+    const selector = new SelectorV3(provider, () => {}, {
       id: "foo-id",
     });
     expect(selector.query({ foo: "foo" }).id).toEqual('foo-id({"foo":"foo"})');
   });
 
   it("should be provided id adding all childs query ids", () => {
-    const selector = new SelectorBeta(provider, () => {}, {
+    const selector = new SelectorV3(provider, () => {}, {
       id: "foo-id",
     });
     expect(selector.query({ foo: "foo" }).query({ var: "var" }).id).toEqual(

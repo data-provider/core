@@ -11,7 +11,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 
 const sinon = require("sinon");
 
-const { Provider, SelectorBeta, providers, catchDependency } = require("../../src/index");
+const { Provider, SelectorV3, providers, catchDependency } = require("../../src/index");
 
 describe("Selector dependencies", () => {
   const DEPENDENCY_1_RESULT = "dependency-1-result";
@@ -67,7 +67,7 @@ describe("Selector dependencies", () => {
 
   describe("when defined as data provider instance", () => {
     beforeEach(() => {
-      selector = new SelectorBeta(dependency1, (query, dependencyResult) => {
+      selector = new SelectorV3(dependency1, (query, dependencyResult) => {
         spies.dependency4Read();
         return dependencyResult;
       });
@@ -98,7 +98,7 @@ describe("Selector dependencies", () => {
 
   describe("when defined with an invalid data provider", () => {
     beforeEach(() => {
-      selector = new SelectorBeta("foo", (query, dependencyResult) => {
+      selector = new SelectorV3("foo", (query, dependencyResult) => {
         return dependencyResult;
       });
     });
@@ -112,7 +112,7 @@ describe("Selector dependencies", () => {
 
   describe("when defined as data provider instances", () => {
     beforeEach(() => {
-      selector = new SelectorBeta(
+      selector = new SelectorV3(
         dependency1,
         dependency2,
         (query, dependency1Result, dependency2Result) => {
@@ -176,7 +176,7 @@ describe("Selector dependencies", () => {
 
   describe("when defined as data provider instances array", () => {
     beforeEach(() => {
-      selector = new SelectorBeta(
+      selector = new SelectorV3(
         [dependency1, dependency2],
         (query, [dependency1Result, dependency2Result]) => {
           spies.dependency4Read({
@@ -230,7 +230,7 @@ describe("Selector dependencies", () => {
     let querySpy;
     beforeEach(() => {
       querySpy = sandbox.spy();
-      selector = new SelectorBeta(
+      selector = new SelectorV3(
         (query) => {
           querySpy(query);
           return dependency1;
@@ -282,7 +282,7 @@ describe("Selector dependencies", () => {
       querySpy2 = sandbox.spy();
       querySpy3 = sandbox.spy();
       querySpy4 = sandbox.spy();
-      selector = new SelectorBeta(
+      selector = new SelectorV3(
         (query) => {
           querySpy(query);
           return dependency1.query(query);
@@ -406,7 +406,7 @@ describe("Selector dependencies", () => {
       querySpy = sandbox.spy();
       querySpy2 = sandbox.spy();
       querySpy3 = sandbox.spy();
-      selector = new SelectorBeta(
+      selector = new SelectorV3(
         (query) => {
           querySpy(query);
           return [dependency1.query(query), dependency2.query(query)];
@@ -521,7 +521,7 @@ describe("Selector dependencies", () => {
       querySpy = sandbox.spy();
       querySpy2 = sandbox.spy();
       querySpy3 = sandbox.spy();
-      selector = new SelectorBeta(
+      selector = new SelectorV3(
         (query) => {
           querySpy(query);
           return [
@@ -639,7 +639,7 @@ describe("Selector dependencies", () => {
       querySpy = sandbox.spy();
       querySpy2 = sandbox.spy();
       querySpy3 = sandbox.spy();
-      selector = new SelectorBeta(
+      selector = new SelectorV3(
         () => {
           return (query) => {
             return [
@@ -763,7 +763,7 @@ describe("Selector dependencies", () => {
       querySpy = sandbox.spy();
       querySpy2 = sandbox.spy();
       querySpy3 = sandbox.spy();
-      selector = new SelectorBeta(
+      selector = new SelectorV3(
         (query) => {
           querySpy(query);
           return [
@@ -871,7 +871,7 @@ describe("Selector dependencies", () => {
       querySpy = sandbox.spy();
       querySpy2 = sandbox.spy();
       querySpy3 = sandbox.spy();
-      selector = new SelectorBeta(
+      selector = new SelectorV3(
         (query) => {
           querySpy(query);
           return [DEPENDENCY_1_STATIC_RESULT, dependency2.query(query)];
@@ -967,7 +967,7 @@ describe("Selector dependencies", () => {
       querySpy = sandbox.spy();
       querySpy2 = sandbox.spy();
       querySpy3 = sandbox.spy();
-      selector = new SelectorBeta(
+      selector = new SelectorV3(
         new Promise((resolve) => {
           querySpy();
           setTimeout(() => {
@@ -1093,7 +1093,7 @@ describe("Selector dependencies", () => {
     let querySpy3;
     beforeEach(() => {
       querySpy3 = sandbox.spy();
-      selector = new SelectorBeta(
+      selector = new SelectorV3(
         [DEPENDENCY_1_RESULT, dependency2],
         DEPENDENCY_3_RESULT,
         (query, dependency1Result, dependency2Result) => {
@@ -1174,7 +1174,7 @@ describe("Selector dependencies", () => {
       querySpy = sandbox.spy();
       querySpy2 = sandbox.spy();
       querySpy3 = sandbox.spy();
-      selector = new SelectorBeta(
+      selector = new SelectorV3(
         catchDependency(
           new Promise((resolve) => {
             querySpy();

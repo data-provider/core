@@ -10,7 +10,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 
 const sinon = require("sinon");
 
-const { Provider, SelectorBeta, providers, catchDependency } = require("../../src/index");
+const { Provider, SelectorV3, providers, catchDependency } = require("../../src/index");
 
 describe("Selector dependencies cache", () => {
   let sandbox;
@@ -74,7 +74,7 @@ describe("Selector dependencies cache", () => {
     dependency1 = new TestProvider("dependency1");
     dependency2 = new TestProvider("dependency2");
 
-    selector = new SelectorBeta(
+    selector = new SelectorV3(
       dependency1,
       dependency2,
       (query, dependency1Result, dependency2Result) => {
@@ -176,7 +176,7 @@ describe("Selector dependencies cache", () => {
       }
     };
     const dependency3 = new TestProvider2("dependency-3");
-    selector = new SelectorBeta(
+    selector = new SelectorV3(
       catchDependency(dependency3, () => {
         return [dependency1, dependency2];
       }),
@@ -216,7 +216,7 @@ describe("Selector dependencies cache", () => {
     let testPromise = new Promise((resolve) => {
       resolveTest = resolve;
     });
-    selector = new SelectorBeta(
+    selector = new SelectorV3(
       [dependency1, dependency2],
       (query, [dependency1Result, dependency2Result]) => {
         spies.selectorRead();

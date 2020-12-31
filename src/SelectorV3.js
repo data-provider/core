@@ -21,7 +21,7 @@ import Provider from "./Provider";
 
 import { isCatchedDependency, isDataProvider, resolveResult } from "./selectorHelpers";
 
-class SelectorBetaBase extends Provider {
+class SelectorV3Base extends Provider {
   constructor(id, options, query) {
     super(id, options, query);
     this._dependencies = options._dependencies;
@@ -231,7 +231,7 @@ class SelectorBetaBase extends Provider {
 
 // Expose a different interface for Selectors the first time, but children are built with the same interface than providers internally
 
-class SelectorBeta extends SelectorBetaBase {
+class SelectorV3 extends SelectorV3Base {
   constructor(...args) {
     const lastIndex = args.length - 1;
     let dependenciesNumber = args.length;
@@ -249,8 +249,8 @@ class SelectorBeta extends SelectorBetaBase {
   // Overwrite Provider methods
 
   createChildMethod(id, options, query) {
-    return new SelectorBetaBase(id, options, query);
+    return new SelectorV3Base(id, options, query);
   }
 }
 
-export default SelectorBeta;
+export default SelectorV3;

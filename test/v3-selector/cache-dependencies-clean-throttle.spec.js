@@ -10,7 +10,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 
 const sinon = require("sinon");
 
-const { Provider, SelectorBeta, providers } = require("../../src/index");
+const { Provider, SelectorV3, providers } = require("../../src/index");
 
 const wait = (time) => {
   return new Promise((resolve) => {
@@ -52,7 +52,7 @@ describe("Selector cleanCacheThrottle option", () => {
     };
 
     provider = new TestProvider();
-    selector = new SelectorBeta(provider, (query, results) => results);
+    selector = new SelectorV3(provider, (query, results) => results);
     selector.cleanDependenciesCache();
     provider.config({
       cleanCacheThrottle: null,

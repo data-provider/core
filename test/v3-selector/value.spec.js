@@ -10,7 +10,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 
 const sinon = require("sinon");
 
-const { Provider, providers, SelectorBeta } = require("../../src/index");
+const { Provider, providers, SelectorV3 } = require("../../src/index");
 
 describe("Selector value", () => {
   const DEPENDENCY_1_RESULT = "dependency-1-result";
@@ -58,7 +58,7 @@ describe("Selector value", () => {
   describe("when defining default value", () => {
     const RESULT = "foo";
     beforeEach(() => {
-      selector = new SelectorBeta(
+      selector = new SelectorV3(
         dependency1,
         () => {
           return RESULT;
@@ -79,7 +79,7 @@ describe("Selector value", () => {
   describe("when returning a value", () => {
     const RESULT = "foo";
     beforeEach(() => {
-      selector = new SelectorBeta(dependency1, () => {
+      selector = new SelectorV3(dependency1, () => {
         return RESULT;
       });
     });
@@ -92,7 +92,7 @@ describe("Selector value", () => {
 
   describe("when returning null", () => {
     beforeEach(() => {
-      selector = new SelectorBeta(dependency1, () => {
+      selector = new SelectorV3(dependency1, () => {
         return null;
       });
     });
@@ -106,7 +106,7 @@ describe("Selector value", () => {
   describe("when returning a promise", () => {
     const RESULT = "foo";
     beforeEach(() => {
-      selector = new SelectorBeta(dependency1, () => {
+      selector = new SelectorV3(dependency1, () => {
         return new Promise((resolve) => {
           setTimeout(() => {
             resolve(RESULT);
@@ -124,7 +124,7 @@ describe("Selector value", () => {
   describe("when returning another provider", () => {
     describe("expressed as a provider instance", () => {
       beforeEach(() => {
-        selector = new SelectorBeta(dependency1, () => {
+        selector = new SelectorV3(dependency1, () => {
           return dependency2;
         });
       });
@@ -137,7 +137,7 @@ describe("Selector value", () => {
 
     describe("expressed as an array of provider instances", () => {
       beforeEach(() => {
-        selector = new SelectorBeta(dependency1, () => {
+        selector = new SelectorV3(dependency1, () => {
           return [dependency2, dependency3];
         });
       });
@@ -152,7 +152,7 @@ describe("Selector value", () => {
       let querySpy;
       beforeEach(() => {
         querySpy = sandbox.spy();
-        selector = new SelectorBeta(dependency1, () => {
+        selector = new SelectorV3(dependency1, () => {
           return (query) => {
             querySpy(query);
             return dependency2;
@@ -178,7 +178,7 @@ describe("Selector value", () => {
       beforeEach(() => {
         query1Spy = sandbox.spy();
         query2Spy = sandbox.spy();
-        selector = new SelectorBeta(dependency1, () => {
+        selector = new SelectorV3(dependency1, () => {
           return [
             (query) => {
               query1Spy(query);
@@ -210,7 +210,7 @@ describe("Selector value", () => {
 
   describe("when returning a function returning a result", () => {
     beforeEach(() => {
-      selector = new SelectorBeta(dependency1, () => {
+      selector = new SelectorV3(dependency1, () => {
         return () => "foo";
       });
     });
@@ -225,7 +225,7 @@ describe("Selector value", () => {
   describe("when returning an error", () => {
     const FOO_ERROR = new Error("Foo");
     beforeEach(() => {
-      selector = new SelectorBeta(dependency1, () => {
+      selector = new SelectorV3(dependency1, () => {
         throw FOO_ERROR;
       });
     });

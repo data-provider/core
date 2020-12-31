@@ -11,7 +11,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 
 const sinon = require("sinon");
 
-const { Provider, providers, SelectorBeta, catchDependency } = require("../../src/index");
+const { Provider, providers, SelectorV3, catchDependency } = require("../../src/index");
 
 describe("Selector test methods", () => {
   const RESULT = "result";
@@ -34,7 +34,7 @@ describe("Selector test methods", () => {
       }
     };
     testProvider = new TestProvider();
-    testSelector = new SelectorBeta(
+    testSelector = new SelectorV3(
       catchDependency(
         (query) => {
           spies.query();
@@ -66,7 +66,7 @@ describe("Selector test methods", () => {
       it("should have all concurrent queries available recursively", () => {
         const testProvider2 = new TestProvider();
         const testProvider3 = new TestProvider();
-        testSelector = new SelectorBeta(
+        testSelector = new SelectorV3(
           [() => testProvider, [() => testProvider2, () => testProvider3]],
           spies.lastDependency
         );
@@ -88,7 +88,7 @@ describe("Selector test methods", () => {
     describe("when there are concurrent providers", () => {
       it("should be avaible for testing at the  catches property as an array", () => {
         const testProvider2 = new TestProvider();
-        testSelector = new SelectorBeta(
+        testSelector = new SelectorV3(
           [
             catchDependency(testProvider, (err) => {
               spies.catch();
@@ -109,7 +109,7 @@ describe("Selector test methods", () => {
       it("should have all concurrent catches available recursively", () => {
         const testProvider2 = new TestProvider();
         const testProvider3 = new TestProvider();
-        testSelector = new SelectorBeta(
+        testSelector = new SelectorV3(
           [
             catchDependency(testProvider, (err) => {
               spies.catch();

@@ -6,10 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [unreleased]
 ### Added
-- feat: Add SelectorBeta, a Selector Class but with the new interface defined in #167. Maybe both selectors will be exposed in a minor release before publishing a breaking change in order to facilitate progressive migrations.
-- feat: SelectorBeta accepts Promises resolving data-providers, the resolved data-provider will be added to selector dependencies
+- feat: Add SelectorV3, a Selector Class but with the new interface defined in #167. Maybe both selectors will be exposed in a minor release before publishing a breaking change in order to facilitate progressive migrations.
+- feat: SelectorV3 accepts Promises resolving data-providers, the resolved data-provider will be added to selector dependencies
 ### Changed
-- feat: Rename reReadDependenciesMaxTime option in Selector beta to readAgainMaxTime
+- feat: Rename reReadDependenciesMaxTime option in SelectorV3 to readAgainMaxTime
 ### Fixed
 ### Removed
 

@@ -10,7 +10,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 
 const sinon = require("sinon");
 
-const { Provider, SelectorBeta, providers } = require("../../src/index");
+const { Provider, SelectorV3, providers } = require("../../src/index");
 const { defaultOptions } = require("../../src/helpers");
 
 describe("Selector config", () => {
@@ -28,7 +28,7 @@ describe("Selector config", () => {
   });
 
   it("should have default options by default", () => {
-    const selector = new SelectorBeta(provider, () => {});
+    const selector = new SelectorV3(provider, () => {});
 
     expect(selector.options).toEqual({
       ...defaultOptions,
@@ -36,7 +36,7 @@ describe("Selector config", () => {
   });
 
   it("should define cache option if received", () => {
-    const selector = new SelectorBeta(provider, () => {}, {
+    const selector = new SelectorV3(provider, () => {}, {
       cache: false,
     });
 
@@ -47,7 +47,7 @@ describe("Selector config", () => {
   });
 
   it("should define reReadDependenciesMaxTime option if received", () => {
-    const selector = new SelectorBeta(provider, () => {}, {
+    const selector = new SelectorV3(provider, () => {}, {
       readAgainMaxTime: 7000,
     });
 
@@ -58,7 +58,7 @@ describe("Selector config", () => {
   });
 
   it("method should extend current options", () => {
-    const selector = new SelectorBeta(provider, () => {}, {
+    const selector = new SelectorV3(provider, () => {}, {
       option1: "foo",
       option2: "foo2",
     });

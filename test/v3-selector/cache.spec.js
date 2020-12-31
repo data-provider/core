@@ -11,7 +11,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 
 const sinon = require("sinon");
 
-const { Provider, SelectorBeta, providers } = require("../../src/index");
+const { Provider, SelectorV3, providers } = require("../../src/index");
 
 describe("Selector cache", () => {
   let sandbox;
@@ -44,7 +44,7 @@ describe("Selector cache", () => {
     };
 
     provider = new TestProvider();
-    selector = new SelectorBeta(provider, (query, testResult) => {
+    selector = new SelectorV3(provider, (query, testResult) => {
       spies.selectorRead();
       return testResult;
     });
@@ -183,7 +183,7 @@ describe("Selector cache", () => {
   describe("with query applied to dependency", () => {
     beforeEach(() => {
       providers.clear();
-      selector = new SelectorBeta(
+      selector = new SelectorV3(
         (query) => provider.query(query),
         (query, testResult) => {
           spies.selectorRead();
@@ -247,7 +247,7 @@ describe("Selector cache", () => {
   describe("when selector method throws an error", () => {
     beforeEach(() => {
       providers.clear();
-      selector = new SelectorBeta(provider, () => {
+      selector = new SelectorV3(provider, () => {
         spies.selectorRead();
         throw new Error();
       });
