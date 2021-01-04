@@ -113,6 +113,39 @@ describe("Selector when cleanDependenciesCache method is called", () => {
     expect(dependency3.cleanDependenciesCache.callCount).toEqual(1);
   });
 
+  it("should call to clean all dependendencies cache, even when read is in progress", async () => {
+    let readSelectorPromise;
+    expect.assertions(3);
+    sandbox.spy(dependency1, "cleanDependenciesCache");
+    sandbox.spy(dependency2, "cleanDependenciesCache");
+    sandbox.spy(dependency3, "cleanDependenciesCache");
+    await selector.read();
+    dependency3.cleanCache();
+    readSelectorPromise = selector.read();
+    selector.cleanDependenciesCache();
+    await readSelectorPromise;
+    expect(dependency1.cleanDependenciesCache.callCount).toEqual(1);
+    expect(dependency2.cleanDependenciesCache.callCount).toEqual(1);
+    expect(dependency3.cleanDependenciesCache.callCount).toEqual(1);
+  });
+
+  it("should return last data returned by all dependencies, even when read is in progress", async () => {
+    let readSelectorPromise;
+    expect.assertions(2);
+    results = {
+      dependency1: ["foo", "foo2"],
+      dependency2: ["foo3", "foo4"],
+      dependency3: ["foo5", "foo6"],
+    };
+    const result = await selector.read();
+    expect(result).toEqual(["foo", "foo3", "foo5"]);
+    dependency3.cleanCache();
+    readSelectorPromise = selector.read();
+    selector.cleanDependenciesCache();
+    await readSelectorPromise;
+    expect(selector.state.data).toEqual(["foo2", "foo4", "foo6"]);
+  });
+
   it("should call to clean all dependendencies cache except that in the except option", async () => {
     expect.assertions(3);
     sandbox.spy(dependency1, "cleanDependenciesCache");

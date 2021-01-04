@@ -230,11 +230,11 @@ class SelectorBase extends Provider {
   }
 
   _unthrottledCleanDependenciesCache(options = {}) {
-    if (this._inProgressDependencies.size > 0) {
-      this._cleanCaches(Array.from(this._inProgressDependencies), options);
-    } else {
-      this._cleanCaches(this._resolvedDependencies, options);
-    }
+    const dependenciesToClean = new Set(this._resolvedDependencies);
+    this._inProgressDependencies.forEach((dependency) => {
+      dependenciesToClean.add(dependency);
+    });
+    this._cleanCaches(Array.from(dependenciesToClean), options);
   }
 
   // Define base tag

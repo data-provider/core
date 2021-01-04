@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 ### Changed
 ### Fixed
+- fix: Selector cleanDependenciesCache method was cleaning only inProgress dependencies if the selector read was in progress, which produced that previous dependencies wasn't cleaned
 ### Removed
 
 ## [2.9.0] - 2020-12-27
