@@ -11,8 +11,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - feat: Rename reReadDependenciesMaxTime option in SelectorV3 to readAgainMaxTime
 ### Fixed
-- fix: Selector cleanDependenciesCache method was cleaning only in progress dependencies if the selector read was in progress, so previous dependencies were not being cleaned
 ### Removed
+
+## [2.9.1] - 2021-01-04
+
+### Fixed
+- fix: Selector cleanDependenciesCache method was cleaning only in progress dependencies if the selector read was in progress, so previous dependencies were not being cleaned
 
 ## [2.9.0] - 2020-12-27
 
