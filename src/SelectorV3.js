@@ -199,11 +199,11 @@ class SelectorV3Base extends Provider {
   }
 
   _unthrottledCleanDependenciesCache(options = {}) {
-    if (this._dependenciesInProgress.size > 0) {
-      this._cleanCaches(Array.from(this._dependenciesInProgress), options);
-    } else {
-      this._cleanCaches(this._dependenciesResolved, options);
-    }
+    const dependenciesToClean = new Set(this._dependenciesResolved);
+    this._dependenciesInProgress.forEach((dependency) => {
+      dependenciesToClean.add(dependency);
+    });
+    this._cleanCaches(Array.from(dependenciesToClean), options);
   }
 
   // Define base tag
