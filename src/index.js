@@ -15,4 +15,4 @@ export { default as SelectorV3 } from "./SelectorV3";
 export { catchDependency } from "./selectorHelpers";
 export { providers } from "./providers";
 export { storeManager } from "./storeManager";
-export { eventNames } from "./helpers";
+export { eventNames, providerArgsV3 } from "./helpers";

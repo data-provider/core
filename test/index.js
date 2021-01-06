@@ -41,4 +41,8 @@ describe("index", () => {
     expect(index.eventNames.READ_ERROR).toBeDefined();
     expect(index.eventNames.ANY).toBeDefined();
   });
+
+  it("should export providerArgsV3 method", () => {
+    expect(index.providerArgsV3).toBeDefined();
+  });
 });
