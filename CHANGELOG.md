@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - feat: Add SelectorV3, a Selector Class but with the new interface defined in #167. Maybe both selectors will be exposed in a minor release before publishing a breaking change in order to facilitate progressive migrations.
 - feat: SelectorV3 accepts Promises resolving data-providers, the resolved data-provider will be added to selector dependencies
+- feat: Provider accepts passing options as first argument. Id can be defined as a property in options.
 ### Changed
 - feat: Rename reReadDependenciesMaxTime option in SelectorV3 to readAgainMaxTime
 ### Fixed

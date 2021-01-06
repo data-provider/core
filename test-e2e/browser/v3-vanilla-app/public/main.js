@@ -127,11 +127,13 @@ dataProvider.providers.config({
   },
 });
 
-var authorsProvider = new MockProvider("authors", {
+var authorsProvider = new MockProvider({
+  id: "authors",
   data: AUTHORS,
 });
 
-var booksProvider = new MockProvider("books", {
+var booksProvider = new MockProvider({
+  id: "books",
   data: BOOKS,
 });
 

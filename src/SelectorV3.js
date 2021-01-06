@@ -22,8 +22,8 @@ import Provider from "./Provider";
 import { isCatchedDependency, isDataProvider, resolveResult } from "./selectorHelpers";
 
 class SelectorV3Base extends Provider {
-  constructor(id, options, query) {
-    super(id, options, query);
+  constructor(options, query) {
+    super(options, query);
     this._dependencies = options._dependencies;
     this._dependenciesResolved = [];
     this._dependenciesInProgress = new Set();
@@ -227,9 +227,15 @@ class SelectorV3Base extends Provider {
       return opts;
     }, {});
   }
+
+  // Overwrite Provider methods
+  // TODO in V3. Remove id argument.
+  createChildMethod(id, options, query) {
+    return new SelectorV3Base({ ...options, id }, query);
+  }
 }
 
-// Expose a different interface for Selectors the first time, but children are built with the same interface than providers internally
+// Use different arguments for Selectors the first time, but children are built with the same interface than providers internally
 
 class SelectorV3 extends SelectorV3Base {
   constructor(...args) {
@@ -243,13 +249,13 @@ class SelectorV3 extends SelectorV3Base {
     }
 
     options._dependencies = args.slice(0, dependenciesNumber);
-    super(options.id, options);
+    super(options);
   }
 
   // Overwrite Provider methods
-
+  // TODO in V3. Remove id argument.
   createChildMethod(id, options, query) {
-    return new SelectorV3Base(id, options, query);
+    return new SelectorV3Base({ ...options, id }, query);
   }
 }
 

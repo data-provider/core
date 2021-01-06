@@ -79,7 +79,7 @@ describe("Selector query", () => {
       expect(queried.queryMethods.byName).toBe(selector.queryMethods.byName);
     });
 
-    it("should extend his own query with received one when queried again", () => {
+    it("should extend its own query with received one when queried again", () => {
       const queried = selector.query({ foo: "foo" });
       const queried2 = queried.query({ var: "var" });
       expect(queried2.queryValue).toEqual({ foo: "foo", var: "var" });

@@ -54,16 +54,20 @@ export function childEventName(eventName) {
   return `${CHILD_EVENT_PREFIX}${eventName.replace(CHILD_EVENT_PREFIX, "")}`;
 }
 
-export function isArray(obj) {
-  return Array.isArray(obj);
+export function isString(value) {
+  return typeof value === "string";
 }
 
-export function isFunction(obj) {
-  return typeof obj === "function";
+export function isArray(value) {
+  return Array.isArray(value);
 }
 
-export function isUndefined(variable) {
-  return typeof variable === "undefined";
+export function isFunction(value) {
+  return typeof value === "function";
+}
+
+export function isUndefined(value) {
+  return typeof value === "undefined";
 }
 
 export function queryId(query) {
@@ -149,4 +153,18 @@ export function throttle(func, limit) {
       calledWhileInThrottle = true;
     }
   };
+}
+
+/* Backward compatibility with v2. Accepts:
+- id as first argument and options as second argument
+- options as first argument with id as a property
+*/
+export function providerArgsV3(args) {
+  if (isString(args[0])) {
+    return [args[0], args[1], args[2]];
+  }
+  if (!!args[0]) {
+    return [args[0].id, args[0], args[1]];
+  }
+  return args;
 }

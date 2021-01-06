@@ -19,7 +19,8 @@ const AUTHORS = [
   },
 ];
 
-const authorsProvider = new MockProvider("authors", {
+const authorsProvider = new MockProvider({
+  id: "authors",
   data: AUTHORS,
 });
 
