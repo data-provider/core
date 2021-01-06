@@ -22,9 +22,9 @@ describe("providers handler config method", () => {
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
-    fooProvider = new Provider("foo-1", { tags: "tag-1" });
-    fooProvider2 = new Provider("foo-2", { tags: ["tag-2", "tag-3"] });
-    fooProvider3 = new Provider("foo-3", { tags: "tag-3" });
+    fooProvider = new Provider({ id: "foo-1", tags: "tag-1" });
+    fooProvider2 = new Provider({ id: "foo-2", tags: ["tag-2", "tag-3"] });
+    fooProvider3 = new Provider({ id: "foo-3", tags: "tag-3" });
   });
 
   afterEach(() => {
@@ -52,16 +52,19 @@ describe("providers handler config method", () => {
         ...defaultOptions,
         foo: "foo",
         tags: "tag-1",
+        id: "foo-1",
       });
       expect(fooProvider2.options).toEqual({
         ...defaultOptions,
         foo: "foo",
         tags: ["tag-2", "tag-3"],
+        id: "foo-2",
       });
       expect(fooProvider3.options).toEqual({
         ...defaultOptions,
         foo: "foo",
         tags: "tag-3",
+        id: "foo-3",
       });
     });
 
@@ -73,11 +76,12 @@ describe("providers handler config method", () => {
         foo: "foo",
       });
 
-      const fooProvider4 = new Provider("foo-4");
+      const fooProvider4 = new Provider({ id: "foo-4" });
 
       expect(fooProvider4.options).toEqual({
         ...defaultOptions,
         foo: "foo",
+        id: "foo-4",
       });
     });
 
@@ -87,7 +91,7 @@ describe("providers handler config method", () => {
         foo2: "foo2",
       });
 
-      const fooProvider4 = new Provider("foo-4");
+      const fooProvider4 = new Provider({ id: "foo-4" });
 
       providers.config({
         foo2: "new-foo2",
@@ -100,12 +104,14 @@ describe("providers handler config method", () => {
         foo2: "new-foo2",
         foo3: "foo3",
         tags: "tag-1",
+        id: "foo-1",
       });
       expect(fooProvider4.options).toEqual({
         ...defaultOptions,
         foo: "foo",
         foo2: "new-foo2",
         foo3: "foo3",
+        id: "foo-4",
       });
     });
   });
@@ -136,16 +142,19 @@ describe("providers handler config method", () => {
       expect(fooProvider.options).toEqual({
         ...defaultOptions,
         tags: "tag-1",
+        id: "foo-1",
       });
       expect(fooProvider2.options).toEqual({
         ...defaultOptions,
         foo: "foo",
         tags: ["tag-2", "tag-3"],
+        id: "foo-2",
       });
       expect(fooProvider3.options).toEqual({
         ...defaultOptions,
         foo: "foo",
         tags: "tag-3",
+        id: "foo-3",
       });
     });
 
@@ -154,12 +163,13 @@ describe("providers handler config method", () => {
         foo: "foo",
       });
 
-      const fooProvider4 = new Provider("foo-4", { tags: "tag-4" });
+      const fooProvider4 = new Provider({ id: "foo-4", tags: "tag-4" });
 
       expect(fooProvider4.options).toEqual({
         ...defaultOptions,
         foo: "foo",
         tags: "tag-4",
+        id: "foo-4",
       });
     });
 
@@ -168,12 +178,13 @@ describe("providers handler config method", () => {
         foo: "foo",
       });
 
-      const fooProvider4 = new Provider("foo-4", { tags: ["tag-4", "tag-2"] });
+      const fooProvider4 = new Provider({ id: "foo-4", tags: ["tag-4", "tag-2"] });
 
       expect(fooProvider4.options).toEqual({
         ...defaultOptions,
         foo: "foo",
         tags: ["tag-4", "tag-2"],
+        id: "foo-4",
       });
     });
 
@@ -183,7 +194,7 @@ describe("providers handler config method", () => {
         foo2: "foo2",
       });
 
-      const fooProvider4 = new Provider("foo-4", { tags: "tag-3" });
+      const fooProvider4 = new Provider({ id: "foo-4", tags: "tag-3" });
 
       providers.getByTag("tag-3").config({
         foo2: "new-foo2",
@@ -193,6 +204,7 @@ describe("providers handler config method", () => {
       expect(fooProvider.options).toEqual({
         ...defaultOptions,
         tags: "tag-1",
+        id: "foo-1",
       });
       expect(fooProvider2.options).toEqual({
         ...defaultOptions,
@@ -200,6 +212,7 @@ describe("providers handler config method", () => {
         foo2: "new-foo2",
         foo3: "foo3",
         tags: ["tag-2", "tag-3"],
+        id: "foo-2",
       });
       expect(fooProvider3.options).toEqual({
         ...defaultOptions,
@@ -207,6 +220,7 @@ describe("providers handler config method", () => {
         foo2: "new-foo2",
         foo3: "foo3",
         tags: "tag-3",
+        id: "foo-3",
       });
       expect(fooProvider4.options).toEqual({
         ...defaultOptions,
@@ -214,6 +228,7 @@ describe("providers handler config method", () => {
         foo2: "new-foo2",
         foo3: "foo3",
         tags: "tag-3",
+        id: "foo-4",
       });
     });
 
@@ -223,7 +238,7 @@ describe("providers handler config method", () => {
         foo2: "foo2",
       });
 
-      const fooProvider4 = new Provider("foo-4", { tags: ["tag-3", "tag-5"] });
+      const fooProvider4 = new Provider({ id: "foo-4", tags: ["tag-3", "tag-5"] });
 
       providers.getByTag("tag-3").config({
         foo2: "new-foo2",
@@ -236,6 +251,7 @@ describe("providers handler config method", () => {
         foo2: "new-foo2",
         foo3: "foo3",
         tags: ["tag-3", "tag-5"],
+        id: "foo-4",
       });
     });
   });
@@ -254,8 +270,8 @@ describe("providers handler config method", () => {
         }
       };
 
-      fooProvider4 = new FooAddon("foo-4");
-      fooProvider5 = new FooAddon("foo-5", { tags: "tag-5" });
+      fooProvider4 = new FooAddon({ id: "foo-4" });
+      fooProvider5 = new FooAddon({ id: "foo-5", tags: "tag-5" });
     });
 
     describe("tags getter", () => {
@@ -270,7 +286,7 @@ describe("providers handler config method", () => {
             return Promise.resolve();
           }
         };
-        const fooProvider6 = new FooAddon2("foo-6", { tags: "tag-5" });
+        const fooProvider6 = new FooAddon2({ id: "foo-6", tags: "tag-5" });
         expect(fooProvider6.tags).toEqual(["tag-5"]);
       });
 
@@ -283,7 +299,7 @@ describe("providers handler config method", () => {
             return "tag-3";
           }
         };
-        const fooProvider6 = new FooAddon2("foo-6", { tags: "tag-5" });
+        const fooProvider6 = new FooAddon2({ id: "foo-6", tags: "tag-5" });
         expect(fooProvider6.tags).toEqual(["tag-3", "tag-5"]);
       });
     });
@@ -315,7 +331,7 @@ describe("providers handler config method", () => {
           foo2: "foo2",
         });
 
-        const fooProvider6 = new FooAddon("foo-6", { tags: ["tag-5", "tag-6"] });
+        const fooProvider6 = new FooAddon({ id: "foo-6", tags: ["tag-5", "tag-6"] });
 
         providers.getByTag("tag-3").config({
           foo2: "new-foo2",
@@ -328,6 +344,7 @@ describe("providers handler config method", () => {
           foo2: "new-foo2",
           foo3: "foo3",
           tags: ["tag-5", "tag-6"],
+          id: "foo-6",
         });
 
         expect(fooProvider6.tags).toEqual(["tag-3", "tag-5", "tag-6"]);
@@ -421,6 +438,7 @@ describe("providers handler config method", () => {
         ...defaultOptions,
         foo: "foo",
         tags: "tag-3",
+        id: "foo-3",
       });
     });
 
@@ -429,11 +447,12 @@ describe("providers handler config method", () => {
         foo: "foo",
       });
 
-      const fooProvider4 = new Provider("foo-4");
+      const fooProvider4 = new Provider({ id: "foo-4" });
 
       expect(fooProvider4.options).toEqual({
         ...defaultOptions,
         foo: "foo",
+        id: "foo-4",
       });
     });
 
@@ -443,7 +462,7 @@ describe("providers handler config method", () => {
         foo2: "foo2",
       });
 
-      const fooProvider4 = new Provider("foo-4");
+      const fooProvider4 = new Provider({ id: "foo-4" });
 
       providers.getById("foo-4").config({
         foo2: "new-foo2",
@@ -455,6 +474,7 @@ describe("providers handler config method", () => {
         foo: "foo",
         foo2: "new-foo2",
         foo3: "foo3",
+        id: "foo-4",
       });
     });
   });

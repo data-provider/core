@@ -13,6 +13,7 @@ export { default as isPromise } from "is-promise";
 export { default as isPlainObject } from "lodash.isplainobject";
 
 let automaticIdCounter = 0;
+let warnsTraced = {};
 
 const CHILD_EVENT_PREFIX = "child-";
 const NEW_PROVIDER_PREFIX = "new-provider-";
@@ -107,6 +108,13 @@ export function warn(text) {
   console.warn(message(text));
 }
 
+export function warnOnce(message) {
+  if (!warnsTraced[message]) {
+    warnsTraced[message] = true;
+    warn(message);
+  }
+}
+
 // TODO, remove when node 10 is not maintained
 export function fromEntriesPolyfill(map) {
   return Array.from(map.entries()).reduce((accumulator, [key, value]) => {
@@ -161,6 +169,9 @@ export function throttle(func, limit) {
 */
 export function providerArgsV3(args) {
   if (isString(args[0])) {
+    warnOnce(
+      "Passing id as Provider first argument is deprecated. Please migrate to v3 arguments format"
+    );
     return [args[0], args[1], args[2]];
   }
   if (!!args[0]) {

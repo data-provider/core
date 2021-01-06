@@ -26,9 +26,9 @@ describe("providers handler call method", () => {
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
-    fooProvider = new FooProvider("foo-1", { tags: "tag-1" });
-    fooProvider2 = new FooProvider("foo-2", { tags: ["tag-2", "tag-3"] });
-    fooProvider3 = new FooProvider("foo-3", { tags: "tag-3" });
+    fooProvider = new FooProvider({ id: "foo-1", tags: "tag-1" });
+    fooProvider2 = new FooProvider({ id: "foo-2", tags: ["tag-2", "tag-3"] });
+    fooProvider3 = new FooProvider({ id: "foo-3", tags: "tag-3" });
     new SelectorV3(fooProvider, fooProvider2, () => {}, {
       id: "foo-4",
       tags: "tag-2",

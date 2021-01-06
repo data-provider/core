@@ -33,10 +33,10 @@ describe("providers handler", () => {
     it("should print a trace when duplicated id is detected", () => {
       new Provider("foo-id");
       new Provider("foo-id");
-      expect(console.warn.getCall(0).args[0]).toEqual(expect.stringContaining("foo-id"));
+      expect(console.warn.getCall(1).args[0]).toEqual(expect.stringContaining("foo-id"));
     });
 
-    it("should not print a trace when providers has been clear", () => {
+    it("should not print a trace when providers have been clear", () => {
       new Provider("foo-id");
       providers.clear();
       new Provider("foo-id");
