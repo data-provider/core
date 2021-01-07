@@ -23,13 +23,16 @@ import {
   fromEntries,
   defaultOptions,
   throttle,
+  providerArgsV3,
 } from "./helpers";
 import { providers } from "./providers";
 import { init, resetState, readStart, readSuccess, readError } from "./reducer";
 import eventEmitter from "./eventEmitter";
 
 class Provider {
-  constructor(id, options, query) {
+  constructor(...args) {
+    // TODO in V3. Remove backward compatibility
+    const [id, options, query] = providerArgsV3(args);
     this._emitChild = this._emitChild.bind(this);
     this._options = { ...defaultOptions, ...options };
     this._query = { ...query };
@@ -206,7 +209,8 @@ class Provider {
     if (this._children.has(id)) {
       return this._children.get(id);
     }
-    const child = this.createChildMethod(id, this._options, newQuery);
+    // TODO in V3, pass id as property of options, remove id argument
+    const child = this.createChildMethod(id, { ...this._options }, newQuery);
     this._queryMethodsParsers.forEach((queryMethodParser, queryMethodKey) =>
       child.addQuery(queryMethodKey, queryMethodParser)
     );
@@ -280,6 +284,8 @@ class Provider {
   getChildQueryMethod(query) {
     return { ...this.queryValue, ...query };
   }
+
+  // TODO in V3. Remove id argument
 
   createChildMethod(id, options, query) {
     return new this.constructor(id, options, query);

@@ -50,11 +50,13 @@ Sharing the same interface for all origins, and being able to build Selectors co
 import { Axios } from "@data-provider/axios";
 import { LocalStorage } from "@data-provider/browser-storage";
 
-export const books = new Axios("books", {
+export const books = new Axios({
+  id: "books",
   url: "/api/books"
 });
 
-export const favoriteBooks = new LocalStorage("favorite-books", {
+export const favoriteBooks = new LocalStorage({
+  id: "favorite-books",
   initialState: {
     data: []
   }
@@ -80,7 +82,7 @@ import { authorsProvider } from "data/authors";
 export const booksWithAuthor = new Selector(
   booksProvider,
   authorsProvider,
-  (books, authors) => {
+  (queryValue, books, authors) => {
     return books.map(book => ({
       ...book,
       author: authors.find(

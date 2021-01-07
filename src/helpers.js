@@ -10,8 +10,10 @@ Unless required by applicable law or agreed to in writing, software distributed 
 */
 
 export { default as isPromise } from "is-promise";
+export { default as isPlainObject } from "lodash.isplainobject";
 
 let automaticIdCounter = 0;
+let warnsTraced = {};
 
 const CHILD_EVENT_PREFIX = "child-";
 const NEW_PROVIDER_PREFIX = "new-provider-";
@@ -21,6 +23,7 @@ export const defaultOptions = {
   cacheTime: null,
   cleanCacheInterval: null,
   reReadDependenciesMaxTime: 5000,
+  readAgainMaxTime: 5000,
   cleanCacheThrottle: 0,
 };
 
@@ -52,16 +55,20 @@ export function childEventName(eventName) {
   return `${CHILD_EVENT_PREFIX}${eventName.replace(CHILD_EVENT_PREFIX, "")}`;
 }
 
-export function isArray(obj) {
-  return Array.isArray(obj);
+export function isString(value) {
+  return typeof value === "string";
 }
 
-export function isFunction(obj) {
-  return typeof obj === "function";
+export function isArray(value) {
+  return Array.isArray(value);
 }
 
-export function isUndefined(variable) {
-  return typeof variable === "undefined";
+export function isFunction(value) {
+  return typeof value === "function";
+}
+
+export function isUndefined(value) {
+  return typeof value === "undefined";
 }
 
 export function queryId(query) {
@@ -99,6 +106,13 @@ export function message(text) {
 
 export function warn(text) {
   console.warn(message(text));
+}
+
+export function warnOnce(message) {
+  if (!warnsTraced[message]) {
+    warnsTraced[message] = true;
+    warn(message);
+  }
 }
 
 // TODO, remove when node 10 is not maintained
@@ -147,4 +161,21 @@ export function throttle(func, limit) {
       calledWhileInThrottle = true;
     }
   };
+}
+
+/* Backward compatibility with v2. Accepts:
+- id as first argument and options as second argument
+- options as first argument with id as a property
+*/
+export function providerArgsV3(args) {
+  if (isString(args[0])) {
+    warnOnce(
+      "Passing id as Provider first argument is deprecated. Please migrate to v3 arguments format"
+    );
+    return [args[0], args[1], args[2]];
+  }
+  if (!!args[0]) {
+    return [args[0].id, args[0], args[1]];
+  }
+  return args;
 }

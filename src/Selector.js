@@ -9,56 +9,22 @@ http://www.apache.org/licenses/LICENSE-2.0
 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 */
 
-import {
-  SELECTORS_TAG,
-  CLEAN_CACHE,
-  isFunction,
-  isArray,
-  isPromise,
-  ensureArray,
-} from "./helpers";
+import { SELECTORS_TAG, CLEAN_CACHE, isFunction, isArray, warnOnce } from "./helpers";
 import Provider from "./Provider";
-import CatchDependency from "./CatchDependency";
 
-export function catchDependency(dependency, catchMethod) {
-  return new CatchDependency(dependency, catchMethod);
-}
-
-const isDataProvider = (objectToCheck) => {
-  return objectToCheck && objectToCheck instanceof Provider;
-};
-
-const isCatchedDependency = (objectToCheck) => {
-  return objectToCheck && objectToCheck instanceof CatchDependency;
-};
-
-const isDependency = (objectToCheck) => {
-  if (!objectToCheck) {
-    return false;
-  }
-  return (
-    isDataProvider(objectToCheck) ||
-    isFunction(objectToCheck) ||
-    isCatchedDependency(objectToCheck)
-  );
-};
-
-const isDependencyExpression = (arrayToCheck) => {
-  return ensureArray(arrayToCheck).reduce((allAreDataProviders, arrayElement) => {
-    if (!allAreDataProviders || !isDependency(arrayElement)) {
-      return false;
-    }
-    return true;
-  }, true);
-};
-
-const resolveResult = (result) => {
-  return isPromise(result) ? result : Promise.resolve(result);
-};
+import {
+  isDataProvider,
+  isCatchedDependency,
+  isDependencyExpression,
+  resolveResult,
+} from "./selectorHelpers";
 
 class SelectorBase extends Provider {
   constructor(id, options, query) {
     super(id, options, query);
+    warnOnce(
+      "Usage of deprecated Selector detected. You should use SelectorV3 to prepare migration to v3"
+    );
     this._dependencies = options._dependencies;
     this._resolvedDependencies = [];
     this._selector = options._selector;
@@ -279,7 +245,7 @@ class Selector extends SelectorBase {
 
     options._dependencies = args.slice(0, selectorIndex);
     options._selector = args[selectorIndex];
-    super(options.id, options, undefined);
+    super(options.id, options);
   }
 
   // Overwrite Provider methods
