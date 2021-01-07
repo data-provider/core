@@ -7,7 +7,7 @@
     "cypress:verify": "cypress verify",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
-    "test:install": "cd vanilla-app && npm i && cd ../react-app && npm i && cd ../v3-react-app && npm i",
+    "test:install": "cd vanilla-app && npm i && cd ../react-app && npm i && cd ../v3-react-app && npm i && cd ../v3-vanilla-app && npm i",
     "start:vanilla-app": "cd vanilla-app && npm run build-and-serve",
     "start:v3-vanilla-app": "cd v3-vanilla-app && npm run build-and-serve",
     "start:react-app": "cd react-app && npm start",
