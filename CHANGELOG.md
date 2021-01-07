@@ -6,10 +6,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [unreleased]
 ### Added
-- feat: Add compatibility with @data-provider/core v3 arguments.
 ### Changed
 ### Fixed
 ### Removed
+
+## [2.3.0] - 2021-01-07
+
+### Added
+- feat: Add compatibility with @data-provider/core v3 arguments.
 
 ## [2.2.2] - 2020-12-27
 
