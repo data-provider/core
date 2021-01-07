@@ -108,10 +108,10 @@ export function warn(text) {
   console.warn(message(text));
 }
 
-export function warnOnce(message) {
-  if (!warnsTraced[message]) {
-    warnsTraced[message] = true;
-    warn(message);
+export function warnOnce(text) {
+  if (!warnsTraced[text]) {
+    warnsTraced[text] = true;
+    warn(text);
   }
 }
 
