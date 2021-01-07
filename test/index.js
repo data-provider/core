@@ -20,6 +20,10 @@ describe("index", () => {
     expect(index.Selector).toBeDefined();
   });
 
+  it("should export SelectorV3", () => {
+    expect(index.SelectorV3).toBeDefined();
+  });
+
   it("should export providers", () => {
     expect(index.providers).toBeDefined();
   });
@@ -36,5 +40,9 @@ describe("index", () => {
     expect(index.eventNames.READ_SUCCESS).toBeDefined();
     expect(index.eventNames.READ_ERROR).toBeDefined();
     expect(index.eventNames.ANY).toBeDefined();
+  });
+
+  it("should export providerArgsV3 method", () => {
+    expect(index.providerArgsV3).toBeDefined();
   });
 });
