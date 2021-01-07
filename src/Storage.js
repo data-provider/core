@@ -42,12 +42,12 @@ class StorageErrorMock {
 }
 
 export class Storage extends Provider {
-  constructor(id, options, query) {
+  constructor(options, queryValue) {
     const extendedOptions = { ...options };
-    if (!query) {
-      extendedOptions.parentId = id;
+    if (!queryValue) {
+      extendedOptions.parentId = options.id;
     }
-    super(id, extendedOptions, query);
+    super(extendedOptions, queryValue);
   }
 
   _getStorage(storageKey, root, storageFallback) {
