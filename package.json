@@ -1,6 +1,6 @@
 {
   "name": "@data-provider/axios",
-  "version": "2.1.7",
+  "version": "2.2.0",
   "description": "REST API Data Provider origin addon using Axios",
   "keywords": [
     "data-provider",
@@ -37,12 +37,13 @@
     "mocks:silent": "mocks-server --log=silent",
     "build": "rollup --config",
     "stryker:run": "stryker run",
-    "mocks-and-test": "start-server-and-test mocks tcp:3100 jest",
+    "test": "jest --runInBand",
+    "mocks-and-test": "start-server-and-test mocks tcp:3100 test",
     "test:unit": "npm run mocks-and-test",
     "test:mutation": "start-server-and-test mocks:silent tcp:3100 stryker:run"
   },
   "peerDependencies": {
-    "@data-provider/core": "2.x"
+    "@data-provider/core": ">=2.10.0"
   },
   "dependencies": {
     "axios": "0.21.0",
@@ -52,7 +53,7 @@
   "devDependencies": {
     "@babel/core": "7.12.3",
     "@babel/preset-env": "7.12.1",
-    "@data-provider/core": "2.9.0",
+    "@data-provider/core": "2.10.0",
     "@mocks-server/admin-api-paths": "1.0.8",
     "@mocks-server/main": "1.8.7",
     "@rollup/plugin-babel": "5.2.1",
