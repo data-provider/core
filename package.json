@@ -35,7 +35,7 @@
     "build": "rollup --config",
     "test": "jest",
     "test:unit": "npm run test",
-    "test:e2e:browser:install": "cd test-e2e/browser && npm run test:install",
+    "test:e2e:browser:install": "cd test-e2e/browser && npm i && npm run test:install",
     "test:e2e:browser": "cd test-e2e/browser && npm run test",
     "test:e2e:node:install": "cd test-e2e/nodejs/esm && npm i && cd ../v3-esm && npm i",
     "test:e2e:node": "cd test-e2e/nodejs/cjs && npm run test && cd ../v3-cjs && npm run test && cd ../esm && npm run test && cd ../v3-esm && npm run test",
