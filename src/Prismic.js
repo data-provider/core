@@ -21,7 +21,7 @@ const defaultConfig = {
 
 export class Prismic extends Provider {
   constructor(url, options, query) {
-    super(`prismic-${url}`, { ...defaultConfig, ...options, url }, query);
+    super({ id: `prismic-${url}`, ...defaultConfig, ...options, url }, query);
   }
 
   configMethod(configuration) {
