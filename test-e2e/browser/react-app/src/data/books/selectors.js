@@ -5,6 +5,7 @@ import { authorsProvider } from "data/authors";
 import { booksProvider } from "./providers";
 
 export const booksWithAuthorName = new Selector([authorsProvider, booksProvider], function (
+  queryValue,
   results
 ) {
   return results[1].map(function (book) {
@@ -18,12 +19,12 @@ export const booksWithAuthorName = new Selector([authorsProvider, booksProvider]
   });
 });
 
-export const booksSearch = new Selector(booksWithAuthorName, function (booksResults, query) {
-  if (!query.search.length) {
+export const booksSearch = new Selector(booksWithAuthorName, function (queryValue, booksResults) {
+  if (!queryValue.search.length) {
     return [];
   }
   return booksResults.filter(function (book) {
-    var lowerCaseSearch = query.search.toLowerCase();
+    var lowerCaseSearch = queryValue.search.toLowerCase();
     return (
       book.title.toLowerCase().indexOf(lowerCaseSearch) > -1 ||
       book.authorName.toLowerCase().indexOf(lowerCaseSearch) > -1
@@ -31,9 +32,9 @@ export const booksSearch = new Selector(booksWithAuthorName, function (booksResu
   });
 });
 
-export const authorBooks = new Selector(booksProvider, function (booksResults, query) {
+export const authorBooks = new Selector(booksProvider, function (queryValue, booksResults) {
   return booksResults.filter(function (book) {
-    return book.author === query.author;
+    return book.author === queryValue.author;
   });
 });
 

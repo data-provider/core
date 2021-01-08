@@ -4,7 +4,10 @@ const { authorsProvider } = require("../authors");
 
 const { booksProvider } = require("./providers");
 
-const booksWithAuthorName = new Selector([authorsProvider, booksProvider], function (results) {
+const booksWithAuthorName = new Selector([authorsProvider, booksProvider], function (
+  query,
+  results
+) {
   return results[1].map(function (book) {
     return {
       id: book.id,
@@ -16,7 +19,7 @@ const booksWithAuthorName = new Selector([authorsProvider, booksProvider], funct
   });
 });
 
-const booksSearch = new Selector(booksWithAuthorName, function (booksResults, query) {
+const booksSearch = new Selector(booksWithAuthorName, function (query, booksResults) {
   if (!query.search.length) {
     return [];
   }
@@ -29,7 +32,7 @@ const booksSearch = new Selector(booksWithAuthorName, function (booksResults, qu
   });
 });
 
-const authorBooks = new Selector(booksProvider, function (booksResults, query) {
+const authorBooks = new Selector(booksProvider, function (query, booksResults) {
   return booksResults.filter(function (book) {
     return book.author === query.author;
   });

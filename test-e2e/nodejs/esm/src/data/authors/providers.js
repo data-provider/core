@@ -19,6 +19,7 @@ const AUTHORS = [
   },
 ];
 
-export const authorsProvider = new MockProvider("authors", {
+export const authorsProvider = new MockProvider({
+  id: "authors",
   data: AUTHORS,
 });

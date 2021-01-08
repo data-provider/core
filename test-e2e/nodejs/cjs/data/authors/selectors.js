@@ -2,7 +2,7 @@ const { Selector } = require("../../../../../dist/index.cjs");
 
 const { authorsProvider } = require("./providers");
 
-const authorsSearch = new Selector(authorsProvider, function (authorsResults, query) {
+const authorsSearch = new Selector(authorsProvider, function (query, authorsResults) {
   if (!query.search.length) {
     return [];
   }
