@@ -268,5 +268,35 @@ describe("Selector dependencies errors", () => {
         expect(selectorSpy.callCount).toEqual(2);
       });
     });
+
+    describe("when it is used in a Selector with only one dependency", () => {
+      beforeEach(() => {
+        selector = new Selector(
+          catchDependency(dependency1, (err) => {
+            selectorSpy();
+            catchSpy(err);
+            return catchReturns;
+          })
+        );
+      });
+
+      it("should return the value as dependency value", async () => {
+        const FOO_RESULT = "foo";
+        hasToThrow = FOO_ERROR;
+        catchReturns = FOO_RESULT;
+        const result = await selector.read();
+        expect(result).toEqual(FOO_RESULT);
+      });
+
+      it("should clean cache when dependency cache is clean", async () => {
+        const FOO_RESULT = "foo";
+        hasToThrow = FOO_ERROR;
+        catchReturns = FOO_RESULT;
+        await selector.read();
+        dependency1.cleanCache();
+        await selector.read();
+        expect(selectorSpy.callCount).toEqual(2);
+      });
+    });
   });
 });
