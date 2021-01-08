@@ -32,7 +32,7 @@ class Provider {
   constructor(options, queryValue) {
     this._emitChild = this._emitChild.bind(this);
     this._options = { ...defaultOptions, ...options };
-    this._query = { ...queryValue };
+    this._queryValue = { ...queryValue };
     this._tags = [
       ...arrayWithoutFalsies(this.baseTags),
       ...arrayWithoutFalsies(this._options.tags),
@@ -141,8 +141,8 @@ class Provider {
   }
 
   addQuery(key, queryFunc) {
-    const returnQuery = (query) => {
-      return this.query(queryFunc(query));
+    const returnQuery = (queryValue) => {
+      return this.query(queryFunc(queryValue));
     };
     this._queryMethodsParsers.set(key, queryFunc);
     this._queryMethods.set(key, returnQuery);
@@ -197,11 +197,11 @@ class Provider {
     return this._cache;
   }
 
-  query(query) {
-    if (isUndefined(query)) {
+  query(queryValue) {
+    if (isUndefined(queryValue)) {
       return this;
     }
-    const newQueryValue = this.getChildQueryMethod(query);
+    const newQueryValue = this.getChildQueryMethod(queryValue);
     const id = childId(this._id, newQueryValue);
     if (this._children.has(id)) {
       return this._children.get(id);
@@ -229,7 +229,7 @@ class Provider {
   }
 
   get queryValue() {
-    return this._query;
+    return this._queryValue;
   }
 
   get queries() {
@@ -262,7 +262,7 @@ class Provider {
 
   get initialStateFromOptions() {
     return isFunction(this._options.initialState)
-      ? this._options.initialState(this._query)
+      ? this._options.initialState(this._queryValue)
       : this._options.initialState;
   }
 
@@ -277,14 +277,14 @@ class Provider {
     return this.initialStateFromOptions;
   }
 
-  getChildQueryMethod(query) {
-    return { ...this.queryValue, ...query };
+  getChildQueryMethod(queryValue) {
+    return { ...this.queryValue, ...queryValue };
   }
 
   // TODO in V3. Remove id argument
 
-  createChildMethod(options, query) {
-    return new this.constructor(options, query);
+  createChildMethod(options, queryValue) {
+    return new this.constructor(options, queryValue);
   }
 
   configMethod() {}

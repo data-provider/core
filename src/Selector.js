@@ -73,7 +73,7 @@ class SelectorBase extends Provider {
         return promise.catch((error) => {
           if (catchMethod) {
             return readDependency(
-              catchMethod.apply(catchMethod, [error, this._query].concat(dependenciesResults))
+              catchMethod.apply(catchMethod, [error, this.queryValue].concat(dependenciesResults))
             );
           }
           return Promise.reject(error);
@@ -91,7 +91,7 @@ class SelectorBase extends Provider {
       }
       if (isFunction(dependencyToRead)) {
         return readDependency(
-          dependencyToRead.apply(dependencyToRead, [this._query].concat(dependenciesResults)),
+          dependencyToRead.apply(dependencyToRead, [this.queryValue].concat(dependenciesResults)),
           catchMethod
         );
       }
@@ -192,8 +192,8 @@ class SelectorBase extends Provider {
 
   configMethod(options) {
     if (options.getChildQueryMethod) {
-      this.getChildQueryMethod = (query) => {
-        return options.getChildQueryMethod(query, this.queryValue);
+      this.getChildQueryMethod = (queryValue) => {
+        return options.getChildQueryMethod(queryValue, this.queryValue);
       };
     }
   }
