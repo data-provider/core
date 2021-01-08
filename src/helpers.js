@@ -22,7 +22,6 @@ export const defaultOptions = {
   cache: true,
   cacheTime: null,
   cleanCacheInterval: null,
-  reReadDependenciesMaxTime: 5000,
   readAgainMaxTime: 5000,
   cleanCacheThrottle: 0,
 };
@@ -53,10 +52,6 @@ export function newProviderEventName(groupId) {
 
 export function childEventName(eventName) {
   return `${CHILD_EVENT_PREFIX}${eventName.replace(CHILD_EVENT_PREFIX, "")}`;
-}
-
-export function isString(value) {
-  return typeof value === "string";
 }
 
 export function isArray(value) {
@@ -161,21 +156,4 @@ export function throttle(func, limit) {
       calledWhileInThrottle = true;
     }
   };
-}
-
-/* Backward compatibility with v2. Accepts:
-- id as first argument and options as second argument
-- options as first argument with id as a property
-*/
-export function providerArgsV3(args) {
-  if (isString(args[0])) {
-    warnOnce(
-      "Passing id as Provider first argument is deprecated. Please migrate to v3 arguments format"
-    );
-    return [args[0], args[1], args[2]];
-  }
-  if (!!args[0]) {
-    return [args[0].id, args[0], args[1]];
-  }
-  return args;
 }

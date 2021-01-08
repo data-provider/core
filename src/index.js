@@ -11,8 +11,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 
 export { default as Provider } from "./Provider";
 export { default as Selector } from "./Selector";
-export { default as SelectorV3 } from "./SelectorV3";
 export { catchDependency } from "./selectorHelpers";
 export { providers } from "./providers";
 export { storeManager } from "./storeManager";
-export { eventNames, providerArgsV3 } from "./helpers";
+export { eventNames } from "./helpers";

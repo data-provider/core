@@ -23,19 +23,16 @@ import {
   fromEntries,
   defaultOptions,
   throttle,
-  providerArgsV3,
 } from "./helpers";
 import { providers } from "./providers";
 import { init, resetState, readStart, readSuccess, readError } from "./reducer";
 import eventEmitter from "./eventEmitter";
 
 class Provider {
-  constructor(...args) {
-    // TODO in V3. Remove backward compatibility
-    const [id, options, query] = providerArgsV3(args);
+  constructor(options, queryValue) {
     this._emitChild = this._emitChild.bind(this);
     this._options = { ...defaultOptions, ...options };
-    this._query = { ...query };
+    this._query = { ...queryValue };
     this._tags = [
       ...arrayWithoutFalsies(this.baseTags),
       ...arrayWithoutFalsies(this._options.tags),
@@ -44,7 +41,7 @@ class Provider {
     this._queryMethods = new Map();
     this._queryMethodsParsers = new Map();
 
-    this._id = providers._add(this, id); // initial configuration is made by providers handler
+    this._id = providers._add(this, this._options.id); // initial configuration is made by providers handler
 
     storeManager.store.dispatch(init(this._id, this.initialState));
   }
@@ -204,13 +201,12 @@ class Provider {
     if (isUndefined(query)) {
       return this;
     }
-    const newQuery = this.getChildQueryMethod(query);
-    const id = childId(this._id, newQuery);
+    const newQueryValue = this.getChildQueryMethod(query);
+    const id = childId(this._id, newQueryValue);
     if (this._children.has(id)) {
       return this._children.get(id);
     }
-    // TODO in V3, pass id as property of options, remove id argument
-    const child = this.createChildMethod(id, { ...this._options }, newQuery);
+    const child = this.createChildMethod({ ...this._options, id }, newQueryValue);
     this._queryMethodsParsers.forEach((queryMethodParser, queryMethodKey) =>
       child.addQuery(queryMethodKey, queryMethodParser)
     );
@@ -287,8 +283,8 @@ class Provider {
 
   // TODO in V3. Remove id argument
 
-  createChildMethod(id, options, query) {
-    return new this.constructor(id, options, query);
+  createChildMethod(options, query) {
+    return new this.constructor(options, query);
   }
 
   configMethod() {}
