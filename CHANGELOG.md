@@ -6,14 +6,24 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [unreleased]
 ### Added
+### Changed
+### Fixed
+### Removed
+### BREAKING CHANGES
+
+## [3.0.0] - 2021-01-08
+
+### Added
 - feat: Selector accepts Promises resolving data-providers, the resolved data-provider will be added to selector dependencies
+
 ### Changed
 - chore(deps): Update dependencies
 - test(deps): Update dependencies. Adapt style to new lint version
-### Fixed
+
 ### Removed
 - Remove `SelectorV3`, which was exposed only in version v2.10.0 in order to facilitate progressive migrations to this version.
 - Remove `providerArgsV3` helper, which was exposed only in version v2.10.0 in order to facilitate addons to publish a migration version to v3
+
 ### BREAKING CHANGES
 - feat: Remove `selectorFunction` argument from Selector. Now all received arguments except the last one, and only if it is an object, are considered dependencies
 - feat: Remove `selector` getter from Selector
