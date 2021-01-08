@@ -9,6 +9,29 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 ### Fixed
 ### Removed
+### BREAKING CHANGES
+
+## [3.0.0] - 2021-01-08
+
+### Added
+- feat: Selector accepts Promises resolving data-providers, the resolved data-provider will be added to selector dependencies
+
+### Changed
+- chore(deps): Update dependencies
+- test(deps): Update dependencies. Adapt style to new lint version
+
+### Removed
+- Remove `SelectorV3`, which was exposed only in version v2.10.0 in order to facilitate progressive migrations to this version.
+- Remove `providerArgsV3` helper, which was exposed only in version v2.10.0 in order to facilitate addons to publish a migration version to v3
+
+### BREAKING CHANGES
+- feat: Remove `selectorFunction` argument from Selector. Now all received arguments except the last one, and only if it is an object, are considered dependencies
+- feat: Remove `selector` getter from Selector
+- feat: Provider receive options as first argument. Id has to be defined as a property in options
+- Selector dependencies receive queryValue as first argument
+- Selector dependencies receive results of previous dependencies in an argument for each one
+- `reReadDependenciesMaxTime` option renamed to `readAgainMaxTime`
+- Migration to this major version from v2 can be achieved progressively, read [how to migrate from v2 to v3](https://www.data-provider.org/docs/guides-migrating-from-v2-to-v3) for further info
 
 ## [2.10.0] - 2021-01-07
 

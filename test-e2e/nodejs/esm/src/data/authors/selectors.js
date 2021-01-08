@@ -2,7 +2,7 @@ import { Selector } from "@data-provider/core";
 
 import { authorsProvider } from "./providers";
 
-export const authorsSearch = new Selector(authorsProvider, function (authorsResults, query) {
+export const authorsSearch = new Selector(authorsProvider, function (query, authorsResults) {
   if (!query.search.length) {
     return [];
   }

@@ -28,6 +28,7 @@ const BOOKS = [
   },
 ];
 
-export const booksProvider = new MockProvider("books", {
+export const booksProvider = new MockProvider({
+  id: "books",
   data: BOOKS,
 });

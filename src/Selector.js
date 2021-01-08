@@ -9,48 +9,46 @@ http://www.apache.org/licenses/LICENSE-2.0
 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 */
 
-import { SELECTORS_TAG, CLEAN_CACHE, isFunction, isArray, warnOnce } from "./helpers";
+import {
+  SELECTORS_TAG,
+  CLEAN_CACHE,
+  isFunction,
+  isPromise,
+  isArray,
+  isPlainObject,
+} from "./helpers";
 import Provider from "./Provider";
 
-import {
-  isDataProvider,
-  isCatchedDependency,
-  isDependencyExpression,
-  resolveResult,
-} from "./selectorHelpers";
+import { isCatchedDependency, isDataProvider, resolveResult } from "./selectorHelpers";
 
 class SelectorBase extends Provider {
-  constructor(id, options, query) {
-    super(id, options, query);
-    warnOnce(
-      "Usage of deprecated Selector detected. You should use SelectorV3 to prepare migration to v3"
-    );
+  constructor(options, queryValue) {
+    super(options, queryValue);
     this._dependencies = options._dependencies;
-    this._resolvedDependencies = [];
-    this._selector = options._selector;
-    this._inProgressDependencies = new Set();
+    this._dependenciesResolved = [];
+    this._dependenciesInProgress = new Set();
   }
 
   // Private methods
 
-  _readAllDependenciesAndSelect() {
+  _readAllDependencies() {
     let dependenciesResults;
     let dependencies;
     let dependenciesListeners;
     let hasToReadAgain = false;
-    let reReadMaxTimeReached = false;
+    let readAgainMaxTimeReached = false;
     const inProgressListeners = [];
-    const reReadTimeOut = setTimeout(() => {
-      reReadMaxTimeReached = true;
-    }, this._options.reReadDependenciesMaxTime);
+    const readAgainTimeOut = setTimeout(() => {
+      readAgainMaxTimeReached = true;
+    }, this._options.readAgainMaxTime);
 
     if (this._readInProgress) {
-      clearTimeout(reReadTimeOut);
+      clearTimeout(readAgainTimeOut);
       return this._readInProgress;
     }
 
     const markToReadAgain = () => {
-      if (!reReadMaxTimeReached) {
+      if (!readAgainMaxTimeReached) {
         hasToReadAgain = true;
       }
     };
@@ -61,8 +59,8 @@ class SelectorBase extends Provider {
 
     const removeInProgressListenerFuncs = () => {
       inProgressListeners.forEach((removeListener) => removeListener());
-      this._resolvedDependencies = Array.from(this._inProgressDependencies);
-      this._inProgressDependencies.clear();
+      this._dependenciesResolved = Array.from(this._dependenciesInProgress);
+      this._dependenciesInProgress.clear();
     };
 
     const cleanCache = () => {
@@ -71,37 +69,49 @@ class SelectorBase extends Provider {
     };
 
     const readDependency = (dependencyToRead, catchMethod) => {
+      const catchError = (promise) => {
+        return promise.catch((error) => {
+          if (catchMethod) {
+            return readDependency(
+              catchMethod.apply(catchMethod, [error, this.queryValue].concat(dependenciesResults))
+            );
+          }
+          return Promise.reject(error);
+        });
+      };
+
       if (hasToReadAgain) {
         return Promise.resolve();
+      }
+      if (isCatchedDependency(dependencyToRead)) {
+        return readDependency(dependencyToRead.dependency, dependencyToRead.catch);
       }
       if (isArray(dependencyToRead)) {
         return Promise.all(dependencyToRead.map((dep) => readDependency(dep, catchMethod)));
       }
       if (isFunction(dependencyToRead)) {
-        return readDependency(dependencyToRead(this._query, dependenciesResults), catchMethod);
+        return readDependency(
+          dependencyToRead.apply(dependencyToRead, [this.queryValue].concat(dependenciesResults)),
+          catchMethod
+        );
       }
-      if (isCatchedDependency(dependencyToRead)) {
-        return readDependency(dependencyToRead.dependency, dependencyToRead.catch);
+      if (isPromise(dependencyToRead)) {
+        return catchError(
+          dependencyToRead.then((result) => {
+            return readDependency(result);
+          })
+        );
       }
       if (!isDataProvider(dependencyToRead)) {
         return resolveResult(dependencyToRead);
       }
       dependencies.push(dependencyToRead);
-      if (!this._inProgressDependencies.has(dependencyToRead)) {
-        this._inProgressDependencies.add(dependencyToRead);
+      if (!this._dependenciesInProgress.has(dependencyToRead)) {
+        this._dependenciesInProgress.add(dependencyToRead);
         inProgressListeners.push(dependencyToRead.on(CLEAN_CACHE, markToReadAgain));
       }
 
-      return dependencyToRead.read().catch((error) => {
-        if (catchMethod) {
-          const catchResult = catchMethod(error, this._query, dependenciesResults);
-          if (isDependencyExpression(catchResult)) {
-            return readDependency(catchResult);
-          }
-          return catchResult;
-        }
-        return Promise.reject(error);
-      });
+      return catchError(dependencyToRead.read());
     };
 
     const readDependencies = (dependencyIndex = 0) => {
@@ -117,8 +127,7 @@ class SelectorBase extends Provider {
         if (dependencyIndex < this._dependencies.length - 1) {
           return readDependencies(dependencyIndex + 1);
         }
-        const result = this._selector.apply(null, dependenciesResults.concat(this._query));
-        return resolveResult(result);
+        return resolveResult(dependencyResult);
       });
     };
 
@@ -131,17 +140,11 @@ class SelectorBase extends Provider {
     const readAndReturn = () => {
       return readDependencies()
         .then((result) => {
-          if (isDependencyExpression(result)) {
-            return readDependency(result);
-          }
-          return Promise.resolve(result);
-        })
-        .then((result) => {
           if (hasToReadAgain) {
             markToNotReadAgain();
             return readAndReturn();
           }
-          clearTimeout(reReadTimeOut);
+          clearTimeout(readAgainTimeOut);
           removeInProgressListenerFuncs();
           addCleanListeners();
           return Promise.resolve(result);
@@ -151,7 +154,7 @@ class SelectorBase extends Provider {
             markToNotReadAgain();
             return readAndReturn();
           }
-          clearTimeout(reReadTimeOut);
+          clearTimeout(readAgainTimeOut);
           removeInProgressListenerFuncs();
           addCleanListeners();
           return Promise.reject(error);
@@ -184,20 +187,20 @@ class SelectorBase extends Provider {
   // Overwrite Provider methods
 
   readMethod() {
-    return this._readAllDependenciesAndSelect();
+    return this._readAllDependencies();
   }
 
   configMethod(options) {
     if (options.getChildQueryMethod) {
-      this.getChildQueryMethod = (query) => {
-        return options.getChildQueryMethod(query, this.queryValue);
+      this.getChildQueryMethod = (queryValue) => {
+        return options.getChildQueryMethod(queryValue, this.queryValue);
       };
     }
   }
 
   _unthrottledCleanDependenciesCache(options = {}) {
-    const dependenciesToClean = new Set(this._resolvedDependencies);
-    this._inProgressDependencies.forEach((dependency) => {
+    const dependenciesToClean = new Set(this._dependenciesResolved);
+    this._dependenciesInProgress.forEach((dependency) => {
       dependenciesToClean.add(dependency);
     });
     this._cleanCaches(Array.from(dependenciesToClean), options);
@@ -215,10 +218,6 @@ class SelectorBase extends Provider {
     return this._dependencies;
   }
 
-  get selector() {
-    return this._selector;
-  }
-
   get options() {
     return Object.keys(this._options).reduce((opts, key) => {
       // Remove Selector private options
@@ -228,30 +227,31 @@ class SelectorBase extends Provider {
       return opts;
     }, {});
   }
+
+  createChildMethod(options, queryValue) {
+    return new SelectorBase(options, queryValue);
+  }
 }
 
-// Expose a different interface for Selectors the first time, but children are built with the same interface than providers internally
+// Use different arguments for Selectors the first time, but children are built with the same interface than providers internally
 
 class Selector extends SelectorBase {
   constructor(...args) {
     const lastIndex = args.length - 1;
-    let selectorIndex = lastIndex;
+    let dependenciesNumber = args.length;
     let options = {};
 
-    if (!isFunction(args[lastIndex])) {
-      selectorIndex = args.length - 2;
-      options = args[lastIndex];
+    if (isPlainObject(args[lastIndex])) {
+      dependenciesNumber = dependenciesNumber - 1;
+      options = { ...args[lastIndex] };
     }
 
-    options._dependencies = args.slice(0, selectorIndex);
-    options._selector = args[selectorIndex];
-    super(options.id, options);
+    options._dependencies = args.slice(0, dependenciesNumber);
+    super(options);
   }
 
-  // Overwrite Provider methods
-
-  createChildMethod(id, options, query) {
-    return new SelectorBase(id, options, query);
+  createChildMethod(options, queryValue) {
+    return new SelectorBase(options, queryValue);
   }
 }
 

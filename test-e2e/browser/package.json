@@ -7,19 +7,15 @@
     "cypress:verify": "cypress verify",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
-    "test:install": "cd vanilla-app && npm i && cd ../react-app && npm i && cd ../v3-react-app && npm i && cd ../v3-vanilla-app && npm i",
+    "test:install": "cd vanilla-app && npm i && cd ../react-app && npm i",
     "start:vanilla-app": "cd vanilla-app && npm run build-and-serve",
-    "start:v3-vanilla-app": "cd v3-vanilla-app && npm run build-and-serve",
     "start:react-app": "cd react-app && npm start",
-    "start:v3-react-app": "cd v3-react-app && npm start",
     "test:vanilla-app": "start-server-and-test start:vanilla-app http-get://localhost:3000 cypress:run",
-    "test:v3-vanilla-app": "start-server-and-test start:v3-vanilla-app http-get://localhost:3000 cypress:run",
     "test:react-app": "start-server-and-test start:react-app http-get://localhost:3000 cypress:run",
-    "test:v3-react-app": "start-server-and-test start:v3-react-app http-get://localhost:3000 cypress:run",
-    "test": "npm run test:vanilla-app && npm run test:v3-vanilla-app && npm run test:react-app && npm run test:v3-react-app"
+    "test": "npm run test:vanilla-app && npm run test:react-app"
   },
   "devDependencies": {
-    "cypress": "5.5.0",
+    "cypress": "6.2.1",
     "start-server-and-test": "1.11.5"
   }
 }
