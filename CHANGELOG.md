@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - feat: Selector accepts Promises resolving data-providers, the resolved data-provider will be added to selector dependencies
 ### Changed
+- chore(deps): Update dependencies
+- test(deps): Update dependencies. Adapt style to new lint version
 ### Fixed
 ### Removed
 - Remove `SelectorV3`, which was exposed only in version v2.10.0 in order to facilitate progressive migrations to this version.

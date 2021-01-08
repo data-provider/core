@@ -146,20 +146,20 @@ var authorsSearch = new dataProvider.Selector(authorsProvider, function (query, 
   });
 });
 
-var booksWithAuthorName = new dataProvider.Selector([authorsProvider, booksProvider], function (
-  query,
-  results
-) {
-  return results[1].map(function (book) {
-    return {
-      id: book.id,
-      authorName: results[0].find(function (author) {
-        return author.id === book.author;
-      }).name,
-      title: book.title,
-    };
-  });
-});
+var booksWithAuthorName = new dataProvider.Selector(
+  [authorsProvider, booksProvider],
+  function (query, results) {
+    return results[1].map(function (book) {
+      return {
+        id: book.id,
+        authorName: results[0].find(function (author) {
+          return author.id === book.author;
+        }).name,
+        title: book.title,
+      };
+    });
+  }
+);
 
 var booksSearch = new dataProvider.Selector(booksWithAuthorName, function (query, booksResults) {
   if (!query.search.length) {

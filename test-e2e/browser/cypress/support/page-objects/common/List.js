@@ -40,7 +40,7 @@ class List {
   }
 
   shouldNotDisplayPlaceholder() {
-    this.getPlaceholder().should("not.be.visible");
+    this.getPlaceholder().should("not.exist");
   }
 
   shouldDisplayItems(number) {
