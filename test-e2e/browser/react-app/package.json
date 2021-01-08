@@ -30,9 +30,9 @@
     ]
   },
   "devDependencies": {
-    "react-scripts": "4.0.0",
-    "react-app-rewired": "2.1.6",
+    "react-scripts": "4.0.1",
+    "react-app-rewired": "2.1.8",
     "serve": "11.3.2",
-    "start-server-and-test": "1.11.5"
+    "start-server-and-test": "1.11.7"
   }
 }

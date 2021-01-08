@@ -23,19 +23,16 @@ import {
   fromEntries,
   defaultOptions,
   throttle,
-  providerArgsV3,
 } from "./helpers";
 import { providers } from "./providers";
 import { init, resetState, readStart, readSuccess, readError } from "./reducer";
 import eventEmitter from "./eventEmitter";
 
 class Provider {
-  constructor(...args) {
-    // TODO in V3. Remove backward compatibility
-    const [id, options, query] = providerArgsV3(args);
+  constructor(options, queryValue) {
     this._emitChild = this._emitChild.bind(this);
     this._options = { ...defaultOptions, ...options };
-    this._query = { ...query };
+    this._queryValue = { ...queryValue };
     this._tags = [
       ...arrayWithoutFalsies(this.baseTags),
       ...arrayWithoutFalsies(this._options.tags),
@@ -44,7 +41,7 @@ class Provider {
     this._queryMethods = new Map();
     this._queryMethodsParsers = new Map();
 
-    this._id = providers._add(this, id); // initial configuration is made by providers handler
+    this._id = providers._add(this, this._options.id); // initial configuration is made by providers handler
 
     storeManager.store.dispatch(init(this._id, this.initialState));
   }
@@ -144,8 +141,8 @@ class Provider {
   }
 
   addQuery(key, queryFunc) {
-    const returnQuery = (query) => {
-      return this.query(queryFunc(query));
+    const returnQuery = (queryValue) => {
+      return this.query(queryFunc(queryValue));
     };
     this._queryMethodsParsers.set(key, queryFunc);
     this._queryMethods.set(key, returnQuery);
@@ -200,17 +197,16 @@ class Provider {
     return this._cache;
   }
 
-  query(query) {
-    if (isUndefined(query)) {
+  query(queryValue) {
+    if (isUndefined(queryValue)) {
       return this;
     }
-    const newQuery = this.getChildQueryMethod(query);
-    const id = childId(this._id, newQuery);
+    const newQueryValue = this.getChildQueryMethod(queryValue);
+    const id = childId(this._id, newQueryValue);
     if (this._children.has(id)) {
       return this._children.get(id);
     }
-    // TODO in V3, pass id as property of options, remove id argument
-    const child = this.createChildMethod(id, { ...this._options }, newQuery);
+    const child = this.createChildMethod({ ...this._options, id }, newQueryValue);
     this._queryMethodsParsers.forEach((queryMethodParser, queryMethodKey) =>
       child.addQuery(queryMethodKey, queryMethodParser)
     );
@@ -233,7 +229,7 @@ class Provider {
   }
 
   get queryValue() {
-    return this._query;
+    return this._queryValue;
   }
 
   get queries() {
@@ -266,7 +262,7 @@ class Provider {
 
   get initialStateFromOptions() {
     return isFunction(this._options.initialState)
-      ? this._options.initialState(this._query)
+      ? this._options.initialState(this._queryValue)
       : this._options.initialState;
   }
 
@@ -281,14 +277,14 @@ class Provider {
     return this.initialStateFromOptions;
   }
 
-  getChildQueryMethod(query) {
-    return { ...this.queryValue, ...query };
+  getChildQueryMethod(queryValue) {
+    return { ...this.queryValue, ...queryValue };
   }
 
   // TODO in V3. Remove id argument
 
-  createChildMethod(id, options, query) {
-    return new this.constructor(id, options, query);
+  createChildMethod(options, queryValue) {
+    return new this.constructor(options, queryValue);
   }
 
   configMethod() {}

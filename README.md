@@ -33,7 +33,7 @@ We have a website available to help you to learn to use Data Provider. There are
 * [Installation][installation]
 * [Basic tutorial][basic-tutorial]
 * [Addons][addons]
-* [Recipes][recipes]
+* [Guides][guides]
 * [API reference][api-reference]
 
 ## Main features
@@ -198,7 +198,7 @@ Please read the [contributing guidelines](.github/CONTRIBUTING.md) and [code of 
 [installation]: https://www.data-provider.org/docs/installation
 [basic-tutorial]: https://www.data-provider.org/docs/basics-intro
 [addons]: https://www.data-provider.org/docs/addons-intro
-[recipes]: https://www.data-provider.org/docs/recipes-index
+[guides]: https://www.data-provider.org/docs/guides-index
 [api-reference]: https://www.data-provider.org/docs/api-reference
 [api-selector]: https://www.data-provider.org/docs/api-selector
 [api-store-manager]: https://www.data-provider.org/docs/api-store-manager

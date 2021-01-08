@@ -127,15 +127,17 @@ dataProvider.providers.config({
   },
 });
 
-var authorsProvider = new MockProvider("authors", {
+var authorsProvider = new MockProvider({
+  id: "authors",
   data: AUTHORS,
 });
 
-var booksProvider = new MockProvider("books", {
+var booksProvider = new MockProvider({
+  id: "books",
   data: BOOKS,
 });
 
-var authorsSearch = new dataProvider.Selector(authorsProvider, function (authorsResults, query) {
+var authorsSearch = new dataProvider.Selector(authorsProvider, function (query, authorsResults) {
   if (!query.search.length) {
     return [];
   }
@@ -144,21 +146,22 @@ var authorsSearch = new dataProvider.Selector(authorsProvider, function (authors
   });
 });
 
-var booksWithAuthorName = new dataProvider.Selector([authorsProvider, booksProvider], function (
-  results
-) {
-  return results[1].map(function (book) {
-    return {
-      id: book.id,
-      authorName: results[0].find(function (author) {
-        return author.id === book.author;
-      }).name,
-      title: book.title,
-    };
-  });
-});
+var booksWithAuthorName = new dataProvider.Selector(
+  [authorsProvider, booksProvider],
+  function (query, results) {
+    return results[1].map(function (book) {
+      return {
+        id: book.id,
+        authorName: results[0].find(function (author) {
+          return author.id === book.author;
+        }).name,
+        title: book.title,
+      };
+    });
+  }
+);
 
-var booksSearch = new dataProvider.Selector(booksWithAuthorName, function (booksResults, query) {
+var booksSearch = new dataProvider.Selector(booksWithAuthorName, function (query, booksResults) {
   if (!query.search.length) {
     return [];
   }
@@ -171,7 +174,7 @@ var booksSearch = new dataProvider.Selector(booksWithAuthorName, function (books
   });
 });
 
-var authorBooks = new dataProvider.Selector(booksProvider, function (booksResults, query) {
+var authorBooks = new dataProvider.Selector(booksProvider, function (query, booksResults) {
   return booksResults.filter(function (book) {
     return book.author === query.author;
   });
