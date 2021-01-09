@@ -37,9 +37,7 @@ describe("Axios queries", () => {
 
   describe("Queryed data-providers", () => {
     it("should have all crud methods", () => {
-      const books = new Axios("/books", {
-        url: "/books",
-      }).query(fooQuery);
+      const books = new Axios({ id: "/books", url: "/books" }).query(fooQuery);
       expect(books.create).toBeDefined();
       expect(books.read).toBeDefined();
       expect(books.update).toBeDefined();
@@ -50,7 +48,7 @@ describe("Axios queries", () => {
   describe("Queried providers", () => {
     it("should add query params to axios request", async () => {
       axios.stubs.instance.resetHistory();
-      const books = new Axios(null, {
+      const books = new Axios({
         url: "/books",
       }).query({
         queryString: {
@@ -63,7 +61,7 @@ describe("Axios queries", () => {
 
     it("should add query params to axios request when url includes protocol", async () => {
       axios.stubs.instance.resetHistory();
-      const books = new Axios(null, {
+      const books = new Axios({
         url: "http://domain.com/books",
       }).query({
         queryString: {
@@ -78,7 +76,7 @@ describe("Axios queries", () => {
 
     it("should replace params in axios request", async () => {
       axios.stubs.instance.resetHistory();
-      const books = new Axios(null, { url: "/books/:id" }).query({
+      const books = new Axios({ url: "/books/:id" }).query({
         urlParams: {
           id: "foo",
         },
@@ -89,7 +87,7 @@ describe("Axios queries", () => {
 
     it("should replace params encoding them correctly", async () => {
       axios.stubs.instance.resetHistory();
-      const books = new Axios(null, { url: "/books/:id" }).query({
+      const books = new Axios({ url: "/books/:id" }).query({
         urlParams: {
           id: "café",
         },
@@ -100,7 +98,7 @@ describe("Axios queries", () => {
 
     it("should replace params in axios request maintaining trailing slash", async () => {
       axios.stubs.instance.resetHistory();
-      const books = new Axios(null, { url: "/books/:id/" }).query({
+      const books = new Axios({ url: "/books/:id/" }).query({
         urlParams: {
           id: "foo",
         },
@@ -112,7 +110,7 @@ describe("Axios queries", () => {
 
     it("should replace params in axios request when url includes protocol", async () => {
       axios.stubs.instance.resetHistory();
-      const books = new Axios(null, { url: "http://localhost/books/:id" }).query({
+      const books = new Axios({ url: "http://localhost/books/:id" }).query({
         urlParams: {
           id: "foo",
         },
@@ -123,7 +121,7 @@ describe("Axios queries", () => {
 
     it("should replace many params in axios request", async () => {
       axios.stubs.instance.resetHistory();
-      const books = new Axios(null, { url: "/books/:id/:author" }).query({
+      const books = new Axios({ url: "/books/:id/:author" }).query({
         urlParams: {
           id: "foo",
           author: "cervantes",
@@ -135,7 +133,7 @@ describe("Axios queries", () => {
 
     it("should replace many params in axios request when url includes protocol", async () => {
       axios.stubs.instance.resetHistory();
-      const books = new Axios(null, {
+      const books = new Axios({
         url: "https://www.domain.com:3000/books/:id/:author",
       }).query({
         urlParams: {
@@ -151,7 +149,7 @@ describe("Axios queries", () => {
 
     it("should replace many params and add query strings in axios request", async () => {
       axios.stubs.instance.resetHistory();
-      const books = new Axios(null, { url: "/books/:id/:author" }).query({
+      const books = new Axios({ url: "/books/:id/:author" }).query({
         urlParams: {
           id: "foo",
           author: "cervantes",
@@ -169,7 +167,7 @@ describe("Axios queries", () => {
 
     it("should replace many params and add query strings in axios request when url includes protocol", async () => {
       axios.stubs.instance.resetHistory();
-      const books = new Axios(null, {
+      const books = new Axios({
         url: "https://www.domain.com:3000/books/:id/:author",
       }).query({
         urlParams: {
@@ -192,7 +190,7 @@ describe("Axios queries", () => {
     let books;
 
     beforeAll(() => {
-      books = new Axios(null, { url: "/books" }).query(fooQuery);
+      books = new Axios({ url: "/books" }).query(fooQuery);
     });
 
     it("should be true while resource is being loaded, false when finished", () => {
@@ -232,7 +230,7 @@ describe("Axios queries", () => {
     let books;
 
     beforeAll(() => {
-      books = new Axios(null, { url: "/books" }).query(fooQuery);
+      books = new Axios({ url: "/books" }).query(fooQuery);
     });
 
     it("should be null while resource is being loaded, null when finished successfully", () => {
@@ -267,7 +265,7 @@ describe("Axios queries", () => {
       axios.stubs.instance.resolves({
         data: "foo-data",
       });
-      books = new Axios(null, { url: "/books" }).query(fooQuery);
+      books = new Axios({ url: "/books" }).query(fooQuery);
     });
 
     it("should be undefined while resource is being loaded, and returned value when finished successfully", () => {
@@ -286,7 +284,7 @@ describe("Axios queries", () => {
       axios.stubs.instance.resolves({
         data: "",
       });
-      books = new Axios(null, { url: "/books" }).query(fooQuery);
+      books = new Axios({ url: "/books" }).query(fooQuery);
     });
 
     it("should clean the cache when finish successfully", async () => {
@@ -309,7 +307,7 @@ describe("Axios queries", () => {
       axios.stubs.instance.resolves({
         data: "",
       });
-      books = new Axios(null, { url: "/books" }).query(fooQuery);
+      books = new Axios({ url: "/books" }).query(fooQuery);
     });
 
     it("should clean the cache when finish successfully", async () => {
@@ -332,7 +330,7 @@ describe("Axios queries", () => {
       axios.stubs.instance.resolves({
         data: "",
       });
-      books = new Axios(null, { url: "/books" }).query(fooQuery);
+      books = new Axios({ url: "/books" }).query(fooQuery);
     });
 
     it("should clean the cache when finish successfully", async () => {
@@ -357,7 +355,7 @@ describe("Axios queries", () => {
       axios.stubs.instance.resolves({
         data: "",
       });
-      books = new Axios(null, { url: "/books" });
+      books = new Axios({ url: "/books" });
       queriedBooks = books.query(fooQuery);
     });
 
@@ -389,7 +387,7 @@ describe("Axios queries", () => {
       axios.stubs.instance.resolves({
         data: "",
       });
-      books = new Axios(null, { url: "/books" });
+      books = new Axios({ url: "/books" });
 
       booksQuery1 = books.query(fooQuery);
       booksQuery2 = books.query(fooQuery);

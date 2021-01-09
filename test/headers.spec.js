@@ -43,7 +43,7 @@ describe("Axios configuration", () => {
     };
     it("should set the requests headers", async () => {
       expect.assertions(1);
-      const books = new Axios("/books");
+      const books = new Axios({ id: "/books" });
       books.setHeaders(headers);
       await books.read();
       expect(axios.stubs.instance.getCall(0).args[0].headers).toEqual(headers);
@@ -52,7 +52,7 @@ describe("Axios configuration", () => {
     it("should override all headers", async () => {
       expect.assertions(2);
       const newHeaders = { ...headers, foo2: "foo-new-2" };
-      const books = new Axios("/books");
+      const books = new Axios({ id: "/books" });
       books.setHeaders(headers);
       await books.read();
       expect(axios.stubs.instance.getCall(0).args[0].headers).toEqual(headers);
@@ -73,7 +73,7 @@ describe("Axios configuration", () => {
       const newHeaders = {
         foo3: "foo-3",
       };
-      const books = new Axios("/books");
+      const books = new Axios({ id: "/books" });
       books.setHeaders(headers);
       await books.read();
       expect(axios.stubs.instance.getCall(0).args[0].headers).toEqual(headers);
@@ -93,7 +93,7 @@ describe("Axios configuration", () => {
         foo2: "foo-4",
         foo3: "foo-3",
       };
-      const books = new Axios("/books");
+      const books = new Axios({ id: "/books" });
       books.setHeaders(headers);
       await books.read();
       expect(axios.stubs.instance.getCall(0).args[0].headers).toEqual(headers);

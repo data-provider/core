@@ -70,7 +70,8 @@ When querying providers created with this addon, the query object can have one o
 ```javascript
 import { Axios } from "@data-provider/axios";
 
-const booksModel = new Axios("books-model", {
+const booksModel = new Axios({
+  id: "books-model",
   url: "/books/:id",
   baseUrl: "http://foo.api.com"
 });
@@ -87,7 +88,8 @@ booksModel.query({
 ```javascript
 import { Axios } from "@data-provider/axios";
 
-const booksCollection = new Axios("books-collection", {
+const booksCollection = new Axios({
+  id: "books-collection",
   url: "/books/:id",
   baseUrl: "http://foo.api.com"
 });
