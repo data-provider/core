@@ -27,7 +27,7 @@ describe("Prismic", () => {
   beforeEach(() => {
     sandbox = sinon.createSandbox();
     mock = new PrismicMock();
-    prismic = new Prismic(fooPrismicUrl);
+    prismic = new Prismic({ url: fooPrismicUrl });
     sandbox.spy(prismic, "cleanCache");
   });
 
@@ -60,7 +60,8 @@ describe("Prismic", () => {
 
   describe("when read is dispatched", () => {
     it("should pass release config as ref parameter to prismic client", async () => {
-      prismic = new Prismic(fooPrismicUrl, {
+      prismic = new Prismic({
+        url: fooPrismicUrl,
         release: "foo-release",
       });
       await prismic.read();
@@ -188,7 +189,8 @@ describe("Prismic", () => {
 
     it("should override previously defined url when using providers handler even when provider has its own tag defined", async () => {
       expect.assertions(1);
-      prismic = new Prismic(fooPrismicUrl, {
+      prismic = new Prismic({
+        url: fooPrismicUrl,
         tags: ["foo-tag"],
       });
       const FOO_NEW_URL = "foo-prismic-url-3";
@@ -201,7 +203,8 @@ describe("Prismic", () => {
 
     it("should override previously defined url when using providers handler even when provider has its own prismic tag defined", async () => {
       expect.assertions(1);
-      prismic = new Prismic(fooPrismicUrl, {
+      prismic = new Prismic({
+        url: fooPrismicUrl,
         tags: ["prismic"],
       });
       const FOO_NEW_URL = "foo-prismic-url-3";
@@ -214,7 +217,8 @@ describe("Prismic", () => {
 
     it("should work when using providers handler even when provider has its own tags defined", async () => {
       expect.assertions(1);
-      prismic = new Prismic(fooPrismicUrl, {
+      prismic = new Prismic({
+        url: fooPrismicUrl,
         tags: ["foo-tag", "foo-tag-2"],
       });
       const FOO_NEW_URL = "foo-prismic-url-4";
@@ -227,7 +231,8 @@ describe("Prismic", () => {
 
     it("should work when using providers handler and specific tags", async () => {
       expect.assertions(1);
-      prismic = new Prismic(fooPrismicUrl, {
+      prismic = new Prismic({
+        url: fooPrismicUrl,
         tags: ["foo-tag"],
       });
       const FOO_NEW_URL = "foo-prismic-url-5";
@@ -240,7 +245,8 @@ describe("Prismic", () => {
 
     it("should work when using providers handler and an specific tag that is present in defined tags", async () => {
       expect.assertions(1);
-      prismic = new Prismic(fooPrismicUrl, {
+      prismic = new Prismic({
+        url: fooPrismicUrl,
         tags: ["foo-tag", "foo-tag-3"],
       });
       const FOO_NEW_URL = "foo-prismic-url-5";
