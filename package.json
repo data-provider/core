@@ -1,6 +1,6 @@
 {
   "name": "@data-provider/axios",
-  "version": "2.2.0",
+  "version": "3.0.0",
   "description": "REST API Data Provider origin addon using Axios",
   "keywords": [
     "data-provider",

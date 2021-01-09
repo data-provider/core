@@ -6,12 +6,20 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [unreleased]
 ### Added
+### Changed
+### Fixed
+### Removed
+### BREAKING CHANGES
+
+## [3.0.0] - 2021-01-09
+
+### Added
 - chore: Add data-provider addons recommended tags to package.json
+
 ### Changed
 - docs: Adapt docs to data-provider v3 API
 - chore(deps): Update dependencies
-### Fixed
-### Removed
+
 ### BREAKING CHANGES
 - feat: Remove v2 compatibility
 
