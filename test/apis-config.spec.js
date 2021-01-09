@@ -33,10 +33,7 @@ describe("providers config method", () => {
   describe("when configuring each api", () => {
     describe("if no providers.config method was called", () => {
       it("should set received api configuration", () => {
-        const api = new Axios("foo-1", {
-          url: "/foo-1",
-          retries: 5,
-        });
+        const api = new Axios({ id: "foo-1", url: "/foo-1", retries: 5 });
         testsAxios.push(api);
         expect(api.options.retries).toEqual(5);
       });
@@ -47,18 +44,13 @@ describe("providers config method", () => {
         allAxiosSources.config({
           retries: 5,
         });
-        const api = new Axios("foo-2", {
-          url: "/foo-2",
-        });
+        const api = new Axios({ id: "foo-2", url: "/foo-2" });
         testsAxios.push(api);
         expect(api.options.retries).toEqual(5);
       });
 
       it("should inherit common config previously defined even when api is tagged", () => {
-        const api = new Axios("foo-3", {
-          url: "/foo-3",
-          tags: ["foo-tag-1"],
-        });
+        const api = new Axios({ id: "foo-3", url: "/foo-3", tags: ["foo-tag-1"] });
         testsAxios.push(api);
         expect(api.options.retries).toEqual(5);
       });
@@ -70,20 +62,14 @@ describe("providers config method", () => {
           providers.getByTag("foo-tag-1").config({
             expirationTime: 10,
           });
-          const api = new Axios("foo-4", {
-            url: "foo-4",
-            tags: ["foo-tag-1"],
-          });
+          const api = new Axios({ id: "foo-4", url: "foo-4", tags: ["foo-tag-1"] });
           testsAxios.push(api);
           expect(api.options.expirationTime).toEqual(10);
           expect(api.options.retries).toEqual(5);
         });
 
         it("should inherit common config, and do not inherit config previously defined for the tag if it does not match", () => {
-          const api = new Axios("foo-5", {
-            url: "foo-5",
-            tags: ["foo-tag-2"],
-          });
+          const api = new Axios({ id: "foo-5", url: "foo-5", tags: ["foo-tag-2"] });
           testsAxios.push(api);
           expect(api.options.expirationTime).toEqual(0);
           expect(api.options.retries).toEqual(5);
@@ -101,21 +87,20 @@ describe("providers config method", () => {
         });
 
         it("should get the value of defined tag if there is no tags conflict", () => {
-          const api = new Axios("foo-6", {
-            url: "/foo-6",
-            tags: ["foo-retries-1"],
-          });
+          const api = new Axios({ id: "foo-6", url: "/foo-6", tags: ["foo-retries-1"] });
           expect(api.options.retries).toEqual(10);
         });
 
         it("should get the value of last defined tag if there is tags conflict", () => {
           expect.assertions(2);
-          let api = new Axios("foo-6b", {
+          let api = new Axios({
+            id: "foo-6b",
             url: "/foo-6",
             tags: ["foo-retries-1", "foo-retries-2"],
           });
           expect(api.options.retries).toEqual(20);
-          api = new Axios("foo-6c", {
+          api = new Axios({
+            id: "foo-6c",
             url: "/foo-6b",
             tags: ["foo-retries-2", "foo-retries-1"],
           });
@@ -129,10 +114,7 @@ describe("providers config method", () => {
           providers.getByTag("foo-tag-1").config({
             expirationTime: 10,
           });
-          const api = new Axios("foo-6d", {
-            url: "/foo-6",
-            tags: ["foo-tag-1", "foo-tag-3"],
-          });
+          const api = new Axios({ id: "foo-6d", url: "/foo-6", tags: ["foo-tag-1", "foo-tag-3"] });
           testsAxios.push(api);
           expect(api.options.expirationTime).toEqual(10);
           expect(api.options.retries).toEqual(5);
@@ -140,10 +122,7 @@ describe("providers config method", () => {
 
         it("should inherit common config, and do not inherit config previously defined for the tag if it does not match", () => {
           expect.assertions(2);
-          const api = new Axios("foo-7", {
-            url: "/foo-7",
-            tags: ["foo-tag-2", "foo-tag-3"],
-          });
+          const api = new Axios({ id: "foo-7", url: "/foo-7", tags: ["foo-tag-2", "foo-tag-3"] });
           testsAxios.push(api);
           expect(api.options.expirationTime).toEqual(0);
           expect(api.options.retries).toEqual(5);

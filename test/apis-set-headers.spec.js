@@ -26,9 +26,7 @@ describe("apis setHeaders method", () => {
   describe("when creating api", () => {
     describe("if apis setHeaders method was not called previously", () => {
       it("should not set any header", () => {
-        const api = new Axios("foo-1", {
-          url: "/foo-1",
-        });
+        const api = new Axios({ id: "foo-1", url: "/foo-1" });
         testsAxios.push(api);
         expect(api.headers).toEqual({});
       });
@@ -41,9 +39,7 @@ describe("apis setHeaders method", () => {
             foo: "foo",
           },
         });
-        const api = new Axios("foo-2", {
-          url: "/foo-2",
-        });
+        const api = new Axios({ id: "foo-2", url: "/foo-2" });
         testsAxios.push(api);
         expect(api.headers).toEqual({
           foo: "foo",
@@ -51,10 +47,7 @@ describe("apis setHeaders method", () => {
       });
 
       it("should inherit common headers previously defined even when api is tagged", () => {
-        const api = new Axios("foo-3", {
-          url: "/foo-3",
-          tags: ["foo-tag-1"],
-        });
+        const api = new Axios({ id: "foo-3", url: "/foo-3", tags: ["foo-tag-1"] });
         testsAxios.push(api);
         expect(api.headers).toEqual({
           foo: "foo",
@@ -69,10 +62,7 @@ describe("apis setHeaders method", () => {
             foo2: "foo2",
           },
         });
-        const api = new Axios("foo-4", {
-          url: "/foo-4",
-          tags: ["foo-tag-1"],
-        });
+        const api = new Axios({ id: "foo-4", url: "/foo-4", tags: ["foo-tag-1"] });
         testsAxios.push(api);
         expect(api.headers.foo).toEqual("foo");
         expect(api.headers.foo2).toEqual(undefined);

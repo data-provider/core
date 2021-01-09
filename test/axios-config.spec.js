@@ -29,7 +29,8 @@ describe("axios config", () => {
         "Content-Type": "application/json",
       },
     });
-    books = new Axios("books", {
+    books = new Axios({
+      id: "books",
       url: "/api/books/success",
       baseUrl: "http://localhost:3100",
       axiosConfig: {
