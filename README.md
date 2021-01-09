@@ -12,10 +12,10 @@ This package provides a [Data Provider][data-provider] origin for reading data f
 
 `import { Prismic } from "@data-provider/prismic"`
 
-`new Prismic(url, options)`
+`new Prismic(options)`
 * Arguments
-	* url - _`<String>`_. Prismic api url. Will be used also as provider id.
 	* options - _`<Object>`_ Apart from common Data Provider options, this addon has next custom options:
+    * url - _`<String>`_. Prismic api url.
 		* fullResponse - _`<Boolean>`_ If `true`, the full response of the Prismic api will be used as value. If `false`, only the `response.results` property will be returned, which is the default behavior.
 		* release - _`<String>`_ Prismic release to be read. This parameter will be passed as `ref` to the [prismic-javascript][prismic-javascript-url] query.
 
@@ -23,9 +23,9 @@ This package provides a [Data Provider][data-provider] origin for reading data f
 
 ### query
 
-`prismic.query(queryObject)`
+`prismic.query(queryValue)`
 * Arguments
-	* queryObject - `<Object>` containing properties:
+	* queryValue - `<Object>` containing properties:
 		* documentType - `<String>` Prismic document type to filter by. (It will be used to build a [prismic-javascript][prismic-javascript-url] query as in `PrismicJs.Predicates.at("document.type", documentType)`)
 * Returns - New queried instance having all common [Data Provider][data-provider] methods.
 
@@ -61,7 +61,8 @@ Next example will be easier to understand if you are already familiarized with t
 ```js
 import { Prismic } from "@data-provider/prismic";
 
-const prismic = new Prismic("https://foo-prismic-repository.cdn.prismic.io/api/v2", {
+const prismic = new Prismic({
+  url: "https://foo-prismic-repository.cdn.prismic.io/api/v2",
   release: "foo-release"
 });
 

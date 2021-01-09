@@ -20,29 +20,29 @@ const defaultConfig = {
 };
 
 export class Prismic extends Provider {
-  constructor(url, options, query) {
-    super({ id: `prismic-${url}`, ...defaultConfig, ...options, url }, query);
+  constructor(options, queryValue) {
+    super({ ...defaultConfig, ...options }, queryValue);
   }
 
   configMethod(configuration) {
     if (this._url !== configuration.url) {
       this._prismicApi = null;
       this._url = configuration.url;
-      this.cleanCache();
+      this.cleanCache({ force: true });
     }
     this._fullResponse = configuration.fullResponse;
     this._release = configuration.release;
   }
 
-  _prismicQuery(query) {
+  _prismicQuery(queryValue) {
     const prismicQuery = [];
-    if (query && query.documentType) {
-      prismicQuery.push(PrismicClient.Predicates.at("document.type", query.documentType));
+    if (queryValue && queryValue.documentType) {
+      prismicQuery.push(PrismicClient.Predicates.at("document.type", queryValue.documentType));
     }
     return prismicQuery;
   }
 
-  _prismicRequest(query) {
+  _prismicRequest(queryValue) {
     this._prismicApi =
       this._prismicApi || (this.parent && this.parent._prismicApi) || PrismicClient.api(this._url);
     return this._prismicApi.then((api) => {
@@ -50,7 +50,7 @@ export class Prismic extends Provider {
       if (this._release) {
         apiParams.ref = this._release;
       }
-      return api.query(this._prismicQuery(query), apiParams).then((response) => {
+      return api.query(this._prismicQuery(queryValue), apiParams).then((response) => {
         return Promise.resolve(this._fullResponse ? response : response.results);
       });
     });
