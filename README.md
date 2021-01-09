@@ -6,7 +6,7 @@
 
 # Memory origin addon for Data Provider
 
-It provides CRUD methods for objects saved in memory.
+It provides CRUD methods for objects stored in memory.
 
 ## Usage
 
@@ -27,7 +27,8 @@ When querying providers created with this addon, the query object can have one o
 ```javascript
 import { Memory } from "@data-provider/memory";
 
-const sessionStatus = new Memory("session-status", {
+const sessionStatus = new Memory({
+  id: "session-status",
   initialState: {
     data: {
       loggedIn: false
