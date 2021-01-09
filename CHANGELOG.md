@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - chore: Add data-provider addons recommended tags to pacakge.json
 ### Changed
 - docs: Adapt docs to data-provider v3 API
+- chore(deps): Update dependencies
 ### Fixed
 ### Removed
 - feat: Remove v2 compatibility
