@@ -27,12 +27,12 @@ describe("storage namespaces", () => {
 
   describe("should be the id", () => {
     it("should be equal to the provider id", () => {
-      const provider = new LocalStorage("foo-id");
+      const provider = new LocalStorage({ id: "foo-id" });
       expect(provider._namespace).toEqual("foo-id");
     });
 
     it("should be equal to the provider id for queried instances", () => {
-      const provider = new LocalStorage("foo-id");
+      const provider = new LocalStorage({ id: "foo-id" });
       provider.query({ foo: "foo" }).update("foo");
       expect(provider.query({ foo: "foo" })._namespace).toEqual("foo-id");
     });
