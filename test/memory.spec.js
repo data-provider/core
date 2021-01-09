@@ -108,7 +108,8 @@ describe("Memory origin", () => {
     };
 
     beforeEach(() => {
-      userData = new Memory("foo-id", {
+      userData = new Memory({
+        id: "foo-id",
         initialState: {
           data: fooData,
         },
@@ -117,7 +118,7 @@ describe("Memory origin", () => {
 
     describe("without initialState", () => {
       it("should return an empty object while resource is being loaded", () => {
-        userData = new Memory("foo-id-2");
+        userData = new Memory({ id: "foo-id-2" });
         expect.assertions(2);
         const promise = userData.read();
         expect(userData.state.data).toEqual({});
@@ -141,7 +142,8 @@ describe("Memory origin", () => {
     describe("when queried", () => {
       it("should return default value correspondent to query while resource is being loaded", () => {
         expect.assertions(2);
-        userData = new Memory("foo-id-2", {
+        userData = new Memory({
+          id: "foo-id-2",
           initialState: {
             data: fooData,
           },
@@ -171,7 +173,8 @@ describe("Memory origin", () => {
         foo: "foo-value",
       };
 
-      userData = new Memory("foo-id", {
+      userData = new Memory({
+        id: "foo-id",
         initialState: {
           data: fooData,
         },
@@ -257,7 +260,8 @@ describe("Memory origin", () => {
     };
 
     beforeEach(() => {
-      userData = new Memory("foo-id-2", {
+      userData = new Memory({
+        id: "foo-id-2",
         initialState: {
           data: fooData,
         },
@@ -297,7 +301,7 @@ describe("Memory origin", () => {
   describe("Instance id", () => {
     it("should be assigned based on first argument", () => {
       const FOO_ID = "foo-id";
-      const fooData = new Memory(FOO_ID);
+      const fooData = new Memory({ id: FOO_ID });
       expect(providers.getById(FOO_ID).elements[0]).toEqual(fooData);
     });
   });
@@ -305,21 +309,23 @@ describe("Memory origin", () => {
   describe("Instance tags", () => {
     describe("when no options are defined", () => {
       it("should contain the memory tag", () => {
-        const fooData = new Memory("foo");
+        const fooData = new Memory({ id: "foo" });
         expect(providers.getByTag("memory").elements[0]).toEqual(fooData);
       });
     });
 
     describe("when passing options as second argument", () => {
       it("should contain the memory tag even when a custom tag is received", () => {
-        const fooData = new Memory("foo", {
+        const fooData = new Memory({
+          id: "foo",
           tags: ["foo-tag"],
         });
         expect(providers.getByTag("memory").elements[0]).toEqual(fooData);
       });
 
       it("should contain the memory tag even when an array of custom tags is received", () => {
-        const fooData = new Memory("foo", {
+        const fooData = new Memory({
+          id: "foo",
           tags: ["foo-tag", "foo-tag-2"],
         });
         expect(providers.getByTag("memory").elements[0]).toEqual(fooData);
@@ -327,7 +333,8 @@ describe("Memory origin", () => {
 
       it("should contain defined custom tag if received", () => {
         const FOO_TAG = "foo-tag";
-        const fooData = new Memory("foo", {
+        const fooData = new Memory({
+          id: "foo",
           tags: [FOO_TAG],
         });
         expect(providers.getByTag(FOO_TAG).elements[0]).toEqual(fooData);
@@ -337,7 +344,8 @@ describe("Memory origin", () => {
         expect.assertions(2);
         const FOO_TAG = "foo-tag";
         const FOO_TAG_2 = "foo-tag-2";
-        const fooData = new Memory("foo", {
+        const fooData = new Memory({
+          id: "foo",
           tags: [FOO_TAG, FOO_TAG_2],
         });
         expect(providers.getByTag(FOO_TAG).elements[0]).toEqual(fooData);

@@ -9,6 +9,19 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 ### Fixed
 ### Removed
+### BREAKING CHANGES
+
+## [3.0.0] - 2021-01-09
+
+### Added
+- chore: Add data-provider addons recommended tags to package.json
+
+### Changed
+- docs: Adapt docs to data-provider v3 API
+- chore(deps): Update dependencies
+
+### BREAKING CHANGES
+- feat: Remove v2 compatibility
 
 ## [2.1.0] - 2021-01-07
 
