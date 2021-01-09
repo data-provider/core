@@ -6,7 +6,7 @@
 
 # Data Provider localStorage and sessionStorage origins addon
 
-It provides CRUD methods for objects saved in `localStorage` or `sessionStorage`.
+It provides CRUD methods for objects stored in `localStorage` or `sessionStorage`.
 
 ## Usage
 
@@ -14,8 +14,8 @@ Create a new provider using the `LocalStorage` or `SessionStorage` classes.
 
 #### Arguments
 
-* `id` _(String)_: Id of the provider, will be used also as the `key` where the provider data is stored in `localStorage` or `sessionStorage`.
 * `options` _(Object)_: Apart of [common data-provider options](https://www.data-provider.org/docs/api-provider), this plugin also accept next options:
+  * `id` _(String)_: Id of the provider, will be used also as the `key` where the provider data is stored in `localStorage` or `sessionStorage`.
   * `storageFallback` _(Boolean)_: Default `true`. If there is an error trying to access to `window.localStorage` or `window.sessionStorage`, a mock will be used instead, and data will be persisted in memory. This could happen if `localStorage` is disabled by the browser, for example. If you want to handle exceptions by yourself, you can disable this behavior setting this option to `false`, and then all calls to `read`, `update` or `delete` methods will be rejected with the correspondent error, which will be stored also in the `error` property of the provider state.
   * `initialState` _(Object)_: Same option than the one described in the [data-provider API docs](https://www.data-provider.org/docs/api-provider), except the `data` property, which in this case has no effect, as the initial data set in the state will be the data retrieved synchronously from the real `localStorage` or `sessionStorage`.
 
@@ -24,11 +24,16 @@ Create a new provider using the `LocalStorage` or `SessionStorage` classes.
 ```javascript
 import { LocalStorage } from "@data-provider/browser-storage";
 
-const userPreferences = new LocalStorage("user-preferences", { storageFallback: false });
+const userPreferences = new LocalStorage({
+  id: "user-preferences",
+  storageFallback: false
+});
 // userPreferences object will be stored in localStorage `user-preferences` key.
 // If localStorage is disabled, no in-memory mock will be used instead
 
-const sessionData = new SessionStorage("user-session");
+const sessionData = new SessionStorage({
+  id: "user-session"
+});
 // sessionData object will be stored in sessionStorate `user-session` key.
 ```
 
@@ -51,7 +56,9 @@ When querying providers created with this addon, the query object can have one o
 ```javascript
 import { LocalStorage } from "@data-provider/browser-storage";
 
-const userPreferences = new LocalStorage("user-preferences");
+const userPreferences = new LocalStorage({
+  id: "user-preferences"
+});
 
 userPreferences.query({ prop: "cookiesAccepted" }).update(true);
 userPreferences.query({ prop: "cookiesAccepted" }).read().then(result => {

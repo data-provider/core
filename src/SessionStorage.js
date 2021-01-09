@@ -12,12 +12,9 @@ Unless required by applicable law or agreed to in writing, software distributed 
 import { Storage } from "./Storage";
 import { TAG, SESSION_TAG } from "./tags";
 
-import { providerArgsV3 } from "@data-provider/core";
-
 export class SessionStorage extends Storage {
-  constructor(...args) {
-    const [id, options, queryValue] = providerArgsV3(args);
-    super({ id, ...options, storageKey: "sessionStorage" }, queryValue);
+  constructor(options, queryValue) {
+    super({ ...options, storageKey: "sessionStorage" }, queryValue);
   }
 
   get baseTags() {
