@@ -6,10 +6,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [unreleased]
 ### Added
+- chore: Add data-provider addons recommended tags to package.json
 ### Changed
+- docs: Adapt docs to data-provider v3 API
+- chore(deps): Update dependencies
 ### Fixed
+- feat: Add force option when cleaning cache if url is changed
 ### Removed
 ### BREAKING CHANGES
+- feat: Url now has to be defined as a property options object. Options has to be passed as first and unique argument.
+- feat: Remove v2 compatibility
 
 ## [2.1.0] - 2021-01-07
 
