@@ -35,7 +35,7 @@ describe("Axios events", () => {
     it("should execute clean listeners", () => {
       let called = false;
       expect.assertions(1);
-      const books = new Axios("/books");
+      const books = new Axios({ id: "/books" });
       books.on("cleanCache", () => {
         called = true;
       });
@@ -47,7 +47,7 @@ describe("Axios events", () => {
     it("should execute onceClean listeners only once", () => {
       let callCounter = 0;
       expect.assertions(1);
-      const books = new Axios("/books");
+      const books = new Axios({ id: "/books" });
       books.once("cleanCache", () => {
         callCounter++;
       });
@@ -60,7 +60,7 @@ describe("Axios events", () => {
     it("should not execute clean listeners if were removed", () => {
       let called = false;
       expect.assertions(1);
-      const books = new Axios("/books");
+      const books = new Axios({ id: "/books" });
       const setCalled = () => {
         called = true;
       };
@@ -75,7 +75,7 @@ describe("Axios events", () => {
       let called = false;
       let queriedCalled = false;
       expect.assertions(2);
-      const books = new Axios("/books");
+      const books = new Axios({ id: "/books" });
       const queriedBooks = books.query("foo");
       books.on("cleanCache", () => {
         called = true;
@@ -95,7 +95,7 @@ describe("Axios events", () => {
       let called = false;
       let anyCalled = false;
       expect.assertions(2);
-      const books = new Axios("/books");
+      const books = new Axios({ id: "/books" });
       const queriedBooks = books.query("foo");
 
       books.onChild("cleanCache", () => {
@@ -115,7 +115,7 @@ describe("Axios events", () => {
       let called = false;
       let anyCalled = false;
       expect.assertions(2);
-      const books = new Axios("/books");
+      const books = new Axios({ id: "/books" });
       const queriedBooks = books.query("foo");
 
       const setCalled = () => {
@@ -142,7 +142,7 @@ describe("Axios events", () => {
     it("should execute change listeners", async () => {
       let called = false;
       expect.assertions(1);
-      const books = new Axios("/books");
+      const books = new Axios({ id: "/books" });
       books.on("*", () => {
         called = true;
       });
@@ -154,7 +154,7 @@ describe("Axios events", () => {
     it("should not execute change listeners if were removed", async () => {
       let called = false;
       expect.assertions(1);
-      const books = new Axios("/books");
+      const books = new Axios({ id: "/books" });
       const setCalled = () => {
         called = true;
       };
@@ -172,7 +172,7 @@ describe("Axios events", () => {
       let called = false;
       let calledAny = false;
 
-      const books = new Axios("/books");
+      const books = new Axios({ id: "/books" });
       const queriedBooks = books.query("foo");
 
       books.onChild("*", () => {
@@ -193,7 +193,7 @@ describe("Axios events", () => {
       let called = false;
       let calledAny = false;
 
-      const books = new Axios("/books");
+      const books = new Axios({ id: "/books" });
       const queriedBooks = books.query("foo");
 
       const setCalled = () => {

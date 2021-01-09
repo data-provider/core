@@ -28,19 +28,18 @@ describe("axios requests", () => {
       baseUrl: "http://localhost:3100",
     });
 
-    apiStatsReset = new Axios("reset-stats", {
-      url: "/api/stats/reset",
-      tags: ["mocks"],
-    });
+    apiStatsReset = new Axios({ id: "reset-stats", url: "/api/stats/reset", tags: ["mocks"] });
     await apiStatsReset.create();
 
-    apiStatsCallCount = new Axios("call-count", {
+    apiStatsCallCount = new Axios({
+      id: "call-count",
       url: "/api/stats/call-count",
       cache: false,
       tags: ["mocks"],
     });
 
-    booksSuccess = new Axios("books-success", {
+    booksSuccess = new Axios({
+      id: "books-success",
       url: "/api/books/success",
       tags: ["mocks"],
       initialState: {

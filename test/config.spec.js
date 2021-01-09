@@ -38,7 +38,7 @@ describe("Axios configuration", () => {
   describe("baseUrl option", () => {
     it("should set the base url for axios requests", async () => {
       expect.assertions(1);
-      const books = new Axios(null, {
+      const books = new Axios({
         url: "/books",
         baseUrl: "http://localhost:3000",
       });
@@ -48,7 +48,7 @@ describe("Axios configuration", () => {
 
     it("should work with config method", async () => {
       expect.assertions(2);
-      const books = new Axios(null, {
+      const books = new Axios({
         url: "/books",
       });
       await books.read();
@@ -65,7 +65,7 @@ describe("Axios configuration", () => {
   describe("readVerb option", () => {
     it("should set the read method for axios requests", async () => {
       expect.assertions(1);
-      const books = new Axios(null, {
+      const books = new Axios({
         url: "/books",
         readVerb: "post",
       });
@@ -75,7 +75,7 @@ describe("Axios configuration", () => {
 
     it("should work with config method", async () => {
       expect.assertions(2);
-      const books = new Axios(null, {
+      const books = new Axios({
         url: "/books",
       });
       await books.read();
@@ -92,7 +92,7 @@ describe("Axios configuration", () => {
   describe("updateVerb option", () => {
     it("should set the update method for axios requests", async () => {
       expect.assertions(1);
-      const books = new Axios(null, {
+      const books = new Axios({
         url: "/books",
         updateVerb: "get",
       });
@@ -102,7 +102,7 @@ describe("Axios configuration", () => {
 
     it("should work with config method", async () => {
       expect.assertions(2);
-      const books = new Axios(null, {
+      const books = new Axios({
         url: "/books",
       });
       await books.update();
@@ -118,7 +118,7 @@ describe("Axios configuration", () => {
   describe("createVerb option", () => {
     it("should set the create method for axios requests", async () => {
       expect.assertions(1);
-      const books = new Axios(null, {
+      const books = new Axios({
         url: "/books",
         createVerb: "get",
       });
@@ -128,7 +128,7 @@ describe("Axios configuration", () => {
 
     it("should work with config method", async () => {
       expect.assertions(2);
-      const books = new Axios(null, {
+      const books = new Axios({
         url: "/books",
       });
       await books.create();
@@ -144,7 +144,7 @@ describe("Axios configuration", () => {
   describe("deleteVerb option", () => {
     it("should set the delete method for axios requests", async () => {
       expect.assertions(1);
-      const books = new Axios(null, {
+      const books = new Axios({
         url: "/books",
         deleteVerb: "get",
       });
@@ -154,7 +154,7 @@ describe("Axios configuration", () => {
 
     it("should work with config method", async () => {
       expect.assertions(2);
-      const books = new Axios(null, {
+      const books = new Axios({
         url: "/books",
         deleteVerb: "delete",
       });
@@ -177,7 +177,7 @@ describe("Axios configuration", () => {
         status: 1240,
       };
       axios.stubs.instance.rejects(error);
-      const books = new Axios(null, {
+      const books = new Axios({
         url: "/books",
         authErrorStatus: 1240,
         authErrorHandler: () => {
@@ -201,7 +201,7 @@ describe("Axios configuration", () => {
         status: 401,
       };
       axios.stubs.instance.rejects(error);
-      const books = new Axios(null, {
+      const books = new Axios({
         url: "/books",
         authErrorHandler: (dataSource, retry) => {
           dataSource.setHeaders({
@@ -232,7 +232,7 @@ describe("Axios configuration", () => {
         dataSource = source;
       });
 
-      const books = new Axios(null, {
+      const books = new Axios({
         url: "/books",
         onBeforeRequest: stub,
       });
@@ -256,7 +256,7 @@ describe("Axios configuration", () => {
         dataSource = source;
       });
 
-      const books = new Axios(null, {
+      const books = new Axios({
         url: "/books",
         onceBeforeRequest: stub,
       });
@@ -275,7 +275,7 @@ describe("Axios configuration", () => {
       let dataSource;
       const stub = sinon.stub();
 
-      const books = new Axios(null, {
+      const books = new Axios({
         url: "/books",
         baseUrl: "/foo-base-url",
         onceBeforeRequest: (source) => {
@@ -310,7 +310,7 @@ describe("Axios configuration", () => {
     let books;
 
     beforeAll(() => {
-      books = new Axios(null, {
+      books = new Axios({
         url: "/books",
         expirationTime: 100,
       });
@@ -360,7 +360,7 @@ describe("Axios configuration", () => {
   describe("cache option", () => {
     it("should do requests always if it is false", async () => {
       expect.assertions(1);
-      const books = new Axios(null, {
+      const books = new Axios({
         url: "/books",
         cache: false,
       });
@@ -382,7 +382,7 @@ describe("Axios configuration", () => {
     it("should set value with full axios response when true", async () => {
       axios.stubs.instance.resolves(axiosResponse);
       expect.assertions(1);
-      const books = new Axios(null, {
+      const books = new Axios({
         url: "/books",
         fullResponse: true,
       });
@@ -393,7 +393,7 @@ describe("Axios configuration", () => {
     it("should set value with axios data when false", async () => {
       axios.stubs.instance.resolves(axiosResponse);
       expect.assertions(1);
-      const books = new Axios(null, {
+      const books = new Axios({
         url: "/books",
       });
       await books.read();
@@ -405,7 +405,7 @@ describe("Axios configuration", () => {
     it("should be used as axios validateStatus callback", async () => {
       expect.assertions(2);
       const validateStatus = (status) => status !== 200;
-      const books = new Axios(null, {
+      const books = new Axios({
         url: "/books",
         validateStatus,
       });
@@ -415,21 +415,21 @@ describe("Axios configuration", () => {
     });
 
     it("should consider error responses with status lower than 200 by default", () => {
-      const books = new Axios(null, {
+      const books = new Axios({
         url: "/books",
       });
       expect(books._validateStatus(140)).toEqual(false);
     });
 
     it("should consider error responses with status upper than 300 by default", () => {
-      const books = new Axios(null, {
+      const books = new Axios({
         url: "/books",
       });
       expect(books._validateStatus(320)).toEqual(false);
     });
 
     it("should consider valid responses with status between 200 and 300", () => {
-      const books = new Axios(null, {
+      const books = new Axios({
         url: "/books",
       });
       expect(books._validateStatus(200)).toEqual(true);
@@ -441,7 +441,7 @@ describe("Axios configuration", () => {
       expect.assertions(1);
       const fooErrorMessage = "foo";
       const fooError = new Error(fooErrorMessage);
-      const books = new Axios(null, {
+      const books = new Axios({
         url: "/books",
         validateResponse: () => {
           return Promise.reject(fooError);
@@ -457,7 +457,7 @@ describe("Axios configuration", () => {
     it("should resolve if response pass validation", async () => {
       expect.assertions(1);
       let called;
-      const books = new Axios(null, {
+      const books = new Axios({
         url: "/books",
         validateResponse: () => {
           called = true;
@@ -478,7 +478,7 @@ describe("Axios configuration", () => {
         status: 401,
       };
       axios.stubs.instance.rejects(error);
-      const books = new Axios(null, {
+      const books = new Axios({
         url: "/books",
         errorHandler: (err) => {
           expect(err).toBe(error);
@@ -499,7 +499,7 @@ describe("Axios configuration", () => {
         statusText: "Foo new error",
       };
       axios.stubs.instance.rejects(error);
-      const books = new Axios(null, {
+      const books = new Axios({
         url: "/books",
       });
       try {
@@ -519,7 +519,7 @@ describe("Axios configuration", () => {
         },
       };
       axios.stubs.instance.rejects(error);
-      const books = new Axios(null, {
+      const books = new Axios({
         url: "/books",
       });
       try {
@@ -535,7 +535,7 @@ describe("Axios configuration", () => {
       expect.assertions(1);
       const error = new Error("Foo error");
       axios.stubs.instance.rejects(error);
-      const books = new Axios(null, {
+      const books = new Axios({
         url: "/books",
       });
       try {
@@ -549,7 +549,7 @@ describe("Axios configuration", () => {
       expect.assertions(1);
       const error = new Error();
       axios.stubs.instance.rejects(error);
-      const books = new Axios(null, {
+      const books = new Axios({
         url: "/books",
       });
       try {

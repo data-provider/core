@@ -22,16 +22,16 @@ describe("retry config", () => {
       baseUrl: "http://localhost:3100",
     });
 
-    apiStatsReset = new Axios(null, { url: "/api/stats/reset", tags: ["mocks"] });
+    apiStatsReset = new Axios({ url: "/api/stats/reset", tags: ["mocks"] });
     await apiStatsReset.create();
 
-    apiStatsCallCount = new Axios(null, {
+    apiStatsCallCount = new Axios({
       url: "/api/stats/call-count",
       cache: false,
       tags: ["mocks"],
     });
 
-    booksServerError = new Axios(null, {
+    booksServerError = new Axios({
       url: "/api/books/server-error",
       tags: ["mocks"],
       initialState: {
@@ -114,7 +114,7 @@ describe("retry config", () => {
 
   describe("when api GET fails with a 404 error", () => {
     it("should not retry", async () => {
-      const booksNotFoundError = new Axios(null, {
+      const booksNotFoundError = new Axios({
         url: "/api/books/not-found-error",
         retries: 3,
         tags: ["mocks"],
