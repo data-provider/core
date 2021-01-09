@@ -28,7 +28,7 @@ describe("SessionStorage Storage", () => {
 
   describe("Available methods", () => {
     it("should have all CRUD methods", () => {
-      const userData = new SessionStorage("userData", { root: storage.mock });
+      const userData = new SessionStorage({ id: "userData", root: storage.mock });
       expect(userData.read).toBeDefined();
       expect(userData.update).toBeDefined();
       expect(userData.delete).toBeDefined();
@@ -36,14 +36,14 @@ describe("SessionStorage Storage", () => {
 
     it("should return a sessionStorage mock from window if root object is not defined", () => {
       expect.assertions(1);
-      const userData = new SessionStorage("userData");
+      const userData = new SessionStorage({ id: "userData" });
       expect(userData._storage.removeItem).toEqual(undefined);
     });
   });
 
   describe("Tags", () => {
     it("should contain memory tag", () => {
-      const userData = new SessionStorage("userData", { root: storage.mock });
+      const userData = new SessionStorage({ id: "userData", root: storage.mock });
       expect(userData._tags).toContain("session-storage");
     });
   });
@@ -55,7 +55,7 @@ describe("SessionStorage Storage", () => {
     };
 
     beforeEach(() => {
-      userData = new SessionStorage("userData");
+      userData = new SessionStorage({ id: "userData" });
     });
 
     it("should clean the cache when finish successfully", async () => {
@@ -83,9 +83,7 @@ describe("SessionStorage Storage", () => {
     let userData;
 
     beforeEach(() => {
-      userData = new SessionStorage("userData", {
-        root: storage.mock,
-      });
+      userData = new SessionStorage({ id: "userData", root: storage.mock });
     });
 
     it("should be true while resource is being loaded, false when finished", () => {
@@ -129,9 +127,7 @@ describe("SessionStorage Storage", () => {
 
     beforeEach(() => {
       storage.stubs.getItem.returns(JSON.stringify(fooData));
-      userData = new SessionStorage("userData", {
-        root: storage.mock,
-      });
+      userData = new SessionStorage({ id: "userData", root: storage.mock });
     });
 
     describe("browserStorage key", () => {
@@ -161,9 +157,7 @@ describe("SessionStorage Storage", () => {
 
       it("should return default value correspondent to query while resource is being loaded", () => {
         expect.assertions(2);
-        userData = new SessionStorage("userData", {
-          root: storage.mock,
-        });
+        userData = new SessionStorage({ id: "userData", root: storage.mock });
         let queriedData = userData.query({ prop: "foo" });
         const promise = queriedData.read();
         expect(queriedData.state.data).toEqual(fooData.foo);
@@ -182,9 +176,7 @@ describe("SessionStorage Storage", () => {
 
     beforeEach(() => {
       storage.stubs.getItem.returns(JSON.stringify(fooData));
-      userData = new SessionStorage("userData", {
-        root: storage.mock,
-      });
+      userData = new SessionStorage({ id: "userData", root: storage.mock });
     });
 
     describe("browserStorage key", () => {
@@ -249,9 +241,7 @@ describe("SessionStorage Storage", () => {
 
     beforeEach(() => {
       storage.stubs.getItem.returns(JSON.stringify(fooData));
-      userData = new SessionStorage("userData", {
-        root: storage.mock,
-      });
+      userData = new SessionStorage({ id: "userData", root: storage.mock });
     });
 
     it("should clean the cache when finish successfully", async () => {
@@ -281,7 +271,7 @@ describe("SessionStorage Storage", () => {
 
     describe("when no options are defined", () => {
       beforeEach(() => {
-        fooData = new SessionStorage("fooData");
+        fooData = new SessionStorage({ id: "fooData" });
       });
 
       it("should contain the browser-storage tag", () => {
@@ -295,24 +285,18 @@ describe("SessionStorage Storage", () => {
 
     describe("when passing tags", () => {
       it("should contain the session-storage tag even when a custom tag is received", () => {
-        fooData = new SessionStorage("fooData", {
-          tags: ["foo-tag"],
-        });
+        fooData = new SessionStorage({ id: "fooData", tags: ["foo-tag"] });
         expect(providers.getByTag("session-storage").elements[0]).toEqual(fooData);
       });
 
       it("should contain the ocal-storage tag even when an array of custom tags is received", () => {
-        fooData = new SessionStorage("fooData", {
-          tags: ["foo-tag", "foo-tag-2"],
-        });
+        fooData = new SessionStorage({ id: "fooData", tags: ["foo-tag", "foo-tag-2"] });
         expect(providers.getByTag("session-storage").elements[0]).toEqual(fooData);
       });
 
       it("should contain defined custom tag if received", () => {
         const FOO_TAG = "foo-tag";
-        fooData = new SessionStorage("fooData", {
-          tags: [FOO_TAG],
-        });
+        fooData = new SessionStorage({ id: "fooData", tags: [FOO_TAG] });
         expect(providers.getByTag(FOO_TAG).elements[0]).toEqual(fooData);
       });
 
@@ -320,9 +304,7 @@ describe("SessionStorage Storage", () => {
         expect.assertions(2);
         const FOO_TAG = "foo-tag";
         const FOO_TAG_2 = "foo-tag-2";
-        fooData = new SessionStorage("fooData", {
-          tags: [FOO_TAG, FOO_TAG_2],
-        });
+        fooData = new SessionStorage({ id: "fooData", tags: [FOO_TAG, FOO_TAG_2] });
         expect(providers.getByTag(FOO_TAG).elements[0]).toEqual(fooData);
         expect(providers.getByTag(FOO_TAG_2).elements[0]).toEqual(fooData);
       });
@@ -332,7 +314,7 @@ describe("SessionStorage Storage", () => {
   describe("Instance id", () => {
     it("should be assigned based on first argument", () => {
       const FOO_ID = "foo-id";
-      const fooData = new SessionStorage(FOO_ID);
+      const fooData = new SessionStorage({ id: FOO_ID });
       expect(providers.getById(FOO_ID).elements[0]).toEqual(fooData);
     });
   });

@@ -34,7 +34,7 @@ describe("Local Storage", () => {
 
   describe("Available methods", () => {
     it("should have all CRUD methods", () => {
-      const userData = new LocalStorage("userData", { root: storage.mock });
+      const userData = new LocalStorage({ id: "userData", root: storage.mock });
       expect(userData.read).toBeDefined();
       expect(userData.update).toBeDefined();
       expect(userData.delete).toBeDefined();
@@ -42,14 +42,14 @@ describe("Local Storage", () => {
 
     it("should return a localStorage mock from window if root object is not defined", () => {
       expect.assertions(1);
-      const userData = new LocalStorage("userData");
+      const userData = new LocalStorage({ id: "userData" });
       expect(userData._storage.removeItem).toEqual(undefined);
     });
   });
 
   describe("Tags", () => {
     it("should contain memory tag", () => {
-      const userData = new LocalStorage("userData", { root: storage.mock });
+      const userData = new LocalStorage({ id: "userData", root: storage.mock });
       expect(userData._tags).toContain("local-storage");
     });
   });
@@ -61,7 +61,7 @@ describe("Local Storage", () => {
     };
 
     beforeEach(() => {
-      userData = new LocalStorage("userData");
+      userData = new LocalStorage({ id: "userData" });
     });
 
     it("should clean the cache when finish successfully", async () => {
@@ -89,9 +89,7 @@ describe("Local Storage", () => {
     let userData;
 
     beforeEach(() => {
-      userData = new LocalStorage("userData", {
-        storageFallback: false,
-      });
+      userData = new LocalStorage({ id: "userData", storageFallback: false });
     });
 
     it("should return an empty object as root value", async () => {
@@ -168,7 +166,7 @@ describe("Local Storage", () => {
       error = new Error("foo");
       storage = new Storage("localStorage");
       storage.stubs.getItem.throws(error);
-      userData = new LocalStorage("userData", { root: storage.mock });
+      userData = new LocalStorage({ id: "userData", root: storage.mock });
     });
 
     it("should return an empty object as root value", async () => {
@@ -203,9 +201,7 @@ describe("Local Storage", () => {
     let userData;
 
     beforeEach(() => {
-      userData = new LocalStorage("userData", {
-        root: storage.mock,
-      });
+      userData = new LocalStorage({ id: "userData", root: storage.mock });
     });
 
     it("should be true while resource is being loaded, false when finished", () => {
@@ -271,9 +267,7 @@ describe("Local Storage", () => {
 
     beforeEach(() => {
       storage.stubs.getItem.returns(JSON.stringify(fooData));
-      userData = new LocalStorage("userData", {
-        root: storage.mock,
-      });
+      userData = new LocalStorage({ id: "userData", root: storage.mock });
     });
 
     describe("localStorage key", () => {
@@ -303,9 +297,7 @@ describe("Local Storage", () => {
 
       it("should return default value correspondent to query while resource is being loaded", () => {
         expect.assertions(2);
-        userData = new LocalStorage("userData", {
-          root: storage.mock,
-        });
+        userData = new LocalStorage({ id: "userData", root: storage.mock });
         let queriedData = userData.query({ prop: "foo" });
         const promise = queriedData.read();
         expect(queriedData.state.data).toEqual(fooData.foo);
@@ -324,9 +316,7 @@ describe("Local Storage", () => {
 
     beforeEach(() => {
       storage.stubs.getItem.returns(JSON.stringify(fooData));
-      userData = new LocalStorage("userData", {
-        root: storage.mock,
-      });
+      userData = new LocalStorage({ id: "userData", root: storage.mock });
     });
 
     describe("localStorage key", () => {
@@ -404,9 +394,7 @@ describe("Local Storage", () => {
 
     beforeEach(() => {
       storage.stubs.getItem.returns(JSON.stringify(fooData));
-      userData = new LocalStorage("userData", {
-        root: storage.mock,
-      });
+      userData = new LocalStorage({ id: "userData", root: storage.mock });
     });
 
     it("should clean the cache when finish successfully", async () => {
@@ -449,7 +437,7 @@ describe("Local Storage", () => {
 
     describe("when no options are defined", () => {
       beforeEach(() => {
-        fooData = new LocalStorage("fooData");
+        fooData = new LocalStorage({ id: "fooData" });
       });
 
       it("should contain the browser-storage tag", () => {
@@ -463,24 +451,18 @@ describe("Local Storage", () => {
 
     describe("when passing tags", () => {
       it("should contain the local-storage tag even when a custom tag is received", () => {
-        fooData = new LocalStorage("fooData", {
-          tags: ["foo-tag"],
-        });
+        fooData = new LocalStorage({ id: "fooData", tags: ["foo-tag"] });
         expect(providers.getByTag("local-storage").elements[0]).toEqual(fooData);
       });
 
       it("should contain the ocal-storage tag even when an array of custom tags is received", () => {
-        fooData = new LocalStorage("fooData", {
-          tags: ["foo-tag", "foo-tag-2"],
-        });
+        fooData = new LocalStorage({ id: "fooData", tags: ["foo-tag", "foo-tag-2"] });
         expect(providers.getByTag("local-storage").elements[0]).toEqual(fooData);
       });
 
       it("should contain defined custom tag if received", () => {
         const FOO_TAG = "foo-tag";
-        fooData = new LocalStorage("fooData", {
-          tags: [FOO_TAG],
-        });
+        fooData = new LocalStorage({ id: "fooData", tags: [FOO_TAG] });
         expect(providers.getByTag(FOO_TAG).elements[0]).toEqual(fooData);
       });
 
@@ -488,9 +470,7 @@ describe("Local Storage", () => {
         expect.assertions(2);
         const FOO_TAG = "foo-tag";
         const FOO_TAG_2 = "foo-tag-2";
-        fooData = new LocalStorage("fooData", {
-          tags: [FOO_TAG, FOO_TAG_2],
-        });
+        fooData = new LocalStorage({ id: "fooData", tags: [FOO_TAG, FOO_TAG_2] });
         expect(providers.getByTag(FOO_TAG).elements[0]).toEqual(fooData);
         expect(providers.getByTag(FOO_TAG_2).elements[0]).toEqual(fooData);
       });
@@ -500,7 +480,7 @@ describe("Local Storage", () => {
   describe("Instance id", () => {
     it("should be assigned based on first argument", () => {
       const FOO_ID = "foo-id";
-      const fooData = new LocalStorage(FOO_ID);
+      const fooData = new LocalStorage({ id: FOO_ID });
       expect(providers.getById(FOO_ID).elements[0]).toEqual(fooData);
     });
   });

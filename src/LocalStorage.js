@@ -12,12 +12,9 @@ Unless required by applicable law or agreed to in writing, software distributed 
 import { Storage } from "./Storage";
 import { TAG, LOCAL_TAG } from "./tags";
 
-import { providerArgsV3 } from "@data-provider/core";
-
 export class LocalStorage extends Storage {
-  constructor(...args) {
-    const [id, options, queryValue] = providerArgsV3(args);
-    super({ id, ...options, storageKey: "localStorage" }, queryValue);
+  constructor(options, queryValue) {
+    super({ ...options, storageKey: "localStorage" }, queryValue);
   }
 
   get baseTags() {
