@@ -3,12 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@data-provider/axios": "2.1.2",
-    "@data-provider/core": "2.1.2",
-    "@data-provider/react": "1.4.0",
-    "@testing-library/jest-dom": "4.2.4",
-    "@testing-library/react": "9.5.0",
-    "@testing-library/user-event": "7.2.1",
+    "@data-provider/axios": "3.0.0",
+    "@data-provider/core": "3.0.0",
+    "@data-provider/react": "1.5.1",
     "react": "17.0.1",
     "react-dom": "17.0.1",
     "react-redux": "7.2.0",
@@ -20,7 +17,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "json-server": "json-server --watch db.json --port=3100"
+    "json-server": "json-server --watch db.json --port=3100",
+    "start:all": "start-server-and-test json-server 3100 start"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -38,6 +36,7 @@
     ]
   },
   "devDependencies": {
-    "json-server": "0.16.1"
+    "json-server": "0.16.3",
+    "start-server-and-test": "1.11.7"
   }
 }
