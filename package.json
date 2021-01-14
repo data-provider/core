@@ -1,6 +1,6 @@
 {
   "name": "@data-provider/memory",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Memory origin addon for Data Provider",
   "keywords": [
     "data-provider",
@@ -52,7 +52,7 @@
     "@stryker-mutator/core": "4.3.1",
     "@stryker-mutator/jest-runner": "4.3.1",
     "babel-core": "7.0.0-bridge.0",
-    "babel-jest": "26.6.1",
+    "babel-jest": "26.6.3",
     "babel-polyfill": "6.26.0",
     "eslint": "7.17.0",
     "eslint-config-prettier": "7.1.0",
