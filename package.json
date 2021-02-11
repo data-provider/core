@@ -55,9 +55,9 @@
     "lodash.isplainobject": "4.0.6"
   },
   "devDependencies": {
-    "@babel/core": "7.12.3",
-    "@babel/preset-env": "7.12.1",
-    "@babel/register": "7.12.1",
+    "@babel/core": "7.12.13",
+    "@babel/preset-env": "7.12.13",
+    "@babel/register": "7.12.13",
     "@rollup/plugin-babel": "5.2.2",
     "@rollup/plugin-commonjs": "16.0.0",
     "@rollup/plugin-json": "4.1.0",
