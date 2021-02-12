@@ -63,7 +63,7 @@
     "lint-staged": "10.5.4",
     "prettier": "2.2.1",
     "redux": "4.0.5",
-    "rollup": "2.38.0",
+    "rollup": "2.38.5",
     "rollup-plugin-terser": "7.0.2",
     "sinon": "9.2.4"
   },
