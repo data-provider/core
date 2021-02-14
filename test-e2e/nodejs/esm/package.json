@@ -6,8 +6,8 @@
     "test": "node index.js"
   },
   "devDependencies": {
-    "@babel/core": "7.12.13",
-    "@babel/preset-env": "7.12.13",
+    "@babel/core": "7.12.16",
+    "@babel/preset-env": "7.12.16",
     "@babel/register": "7.12.13",
     "babel-plugin-module-resolver": "4.1.0",
     "regenerator-runtime": "0.13.7"
