@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
-    "@data-provider/core": "2.6.1",
+    "@data-provider/core": "2.10.0",
     "is-promise": "4.0.0",
     "prop-types": "15.7.2",
     "react": "17.0.1",
