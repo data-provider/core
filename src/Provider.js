@@ -281,13 +281,13 @@ class Provider {
     return { ...this.queryValue, ...queryValue };
   }
 
-  // TODO in V3. Remove id argument
-
   createChildMethod(options, queryValue) {
     return new this.constructor(options, queryValue);
   }
 
-  configMethod() {}
+  configMethod() {
+    // To be overwritten by addons
+  }
 
   readMethod() {
     return Promise.resolve(this.state.data);
