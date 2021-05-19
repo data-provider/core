@@ -1,6 +1,6 @@
 {
   "name": "@data-provider/core",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Async Data Provider agnostic about data origins",
   "keywords": [
     "data",
@@ -94,6 +94,6 @@
     "test-e2e/nodejs/esm/src/**/*.js": "eslint"
   },
   "engines": {
-    "node": "10.x || 12.x || 14.x || 15.x"
+    "node": "12.x || 14.x || 15.x || 16.x"
   }
 }
