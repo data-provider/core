@@ -13,9 +13,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [3.0.1] - 2021-05-19
 
+### Added
+- chore(deps): Add Node v16.x to engines
+
 ### Changed
 - chore(deps): Update dependencies
-- chore(deps): Add Node v16.x to engines
 
 ### Removed
 - chore(deps): Remove Node v10.x from engines
