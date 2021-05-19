@@ -4,20 +4,20 @@ const { authorsProvider } = require("../authors");
 
 const { booksProvider } = require("./providers");
 
-const booksWithAuthorName = new Selector(
-  [authorsProvider, booksProvider],
-  function (query, results) {
-    return results[1].map(function (book) {
-      return {
-        id: book.id,
-        authorName: results[0].find(function (author) {
-          return author.id === book.author;
-        }).name,
-        title: book.title,
-      };
-    });
-  }
-);
+const booksWithAuthorName = new Selector([authorsProvider, booksProvider], function (
+  query,
+  results
+) {
+  return results[1].map(function (book) {
+    return {
+      id: book.id,
+      authorName: results[0].find(function (author) {
+        return author.id === book.author;
+      }).name,
+      title: book.title,
+    };
+  });
+});
 
 const booksSearch = new Selector(booksWithAuthorName, function (query, booksResults) {
   if (!query.search.length) {

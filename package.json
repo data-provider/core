@@ -45,7 +45,8 @@
     "test:ci": "npm run test:unit && npm run test:e2e:ci",
     "test:mutation": "stryker run",
     "lint": "eslint src test test-e2e/browser/vanilla-app/public/main.js test-e2e/browser/react-app/src test-e2e/browser/cypress test-e2e/nodejs/cjs test-e2e/nodejs/esm/*.js test-e2e/nodejs/esm/src",
-    "lint-staged": "lint-staged"
+    "lint-staged": "lint-staged",
+    "prepare": "is-ci || husky install"
   },
   "peerDependencies": {
     "redux": "4.x"
@@ -55,31 +56,32 @@
     "lodash.isplainobject": "4.0.6"
   },
   "devDependencies": {
-    "@babel/core": "7.12.16",
-    "@babel/preset-env": "7.12.16",
-    "@babel/register": "7.12.13",
-    "@rollup/plugin-babel": "5.2.3",
+    "@babel/core": "7.14.3",
+    "@babel/preset-env": "7.14.2",
+    "@babel/register": "7.13.16",
+    "@rollup/plugin-babel": "5.3.0",
     "@rollup/plugin-commonjs": "16.0.0",
     "@rollup/plugin-json": "4.1.0",
-    "@rollup/plugin-node-resolve": "11.1.1",
-    "@stryker-mutator/core": "4.4.1",
-    "@stryker-mutator/jest-runner": "4.4.1",
+    "@rollup/plugin-node-resolve": "11.2.1",
+    "@stryker-mutator/core": "5.0.0",
+    "@stryker-mutator/jest-runner": "5.0.0",
     "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "10.1.0",
     "babel-polyfill": "6.26.0",
-    "eslint": "7.19.0",
-    "eslint-config-prettier": "7.2.0",
-    "eslint-plugin-prettier": "3.3.1",
-    "eslint-plugin-react": "7.22.0",
+    "eslint": "7.26.0",
+    "eslint-config-prettier": "8.3.0",
+    "eslint-plugin-prettier": "3.4.0",
+    "eslint-plugin-react": "7.23.2",
     "eslint-plugin-react-hooks": "4.2.0",
-    "husky": "4.3.8",
+    "husky": "6.0.0",
+    "is-ci": "^3.0.0",
     "jest": "26.6.3",
-    "lint-staged": "10.5.4",
-    "prettier": "2.2.1",
-    "redux": "4.0.5",
-    "rollup": "2.44.0",
+    "lint-staged": "11.0.0",
+    "prettier": "2.3.0",
+    "redux": "4.1.0",
+    "rollup": "2.48.0",
     "rollup-plugin-terser": "7.0.2",
-    "sinon": "9.2.4"
+    "sinon": "10.0.0"
   },
   "lint-staged": {
     "*.js": "eslint",
@@ -90,11 +92,6 @@
     "test-e2e/browser/react-app/src/**/*.js": "eslint",
     "test-e2e/nodejs/cjs/**/*.js": "eslint",
     "test-e2e/nodejs/esm/src/**/*.js": "eslint"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm run lint-staged"
-    }
   },
   "engines": {
     "node": "10.x || 12.x || 14.x || 15.x"
