@@ -60,10 +60,8 @@ describe("Selector dependencies cache", () => {
           spies.dependenciesRead[this.id]();
           setTimeout(() => {
             if (!hasToThrow) {
-              // console.log("Resolving", this.id);
               resolve(getProviderResult(this.id));
             } else {
-              // console.log("Rejecting", this.id);
               reject(hasToThrow);
             }
           }, timeouts[this.id] || 50);
