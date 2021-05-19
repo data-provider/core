@@ -4,20 +4,20 @@ import { authorsProvider } from "data/authors";
 
 import { booksProvider } from "./providers";
 
-export const booksWithAuthorName = new Selector(
-  [authorsProvider, booksProvider],
-  function (query, results) {
-    return results[1].map(function (book) {
-      return {
-        id: book.id,
-        authorName: results[0].find(function (author) {
-          return author.id === book.author;
-        }).name,
-        title: book.title,
-      };
-    });
-  }
-);
+export const booksWithAuthorName = new Selector([authorsProvider, booksProvider], function (
+  query,
+  results
+) {
+  return results[1].map(function (book) {
+    return {
+      id: book.id,
+      authorName: results[0].find(function (author) {
+        return author.id === book.author;
+      }).name,
+      title: book.title,
+    };
+  });
+});
 
 export const booksSearch = new Selector(booksWithAuthorName, function (query, booksResults) {
   if (!query.search.length) {

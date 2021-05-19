@@ -54,30 +54,27 @@ const useErrorCustomProp = (provider, key = defaultKeys[2]) => {
   return { error, errorProp };
 };
 
-export const withDataProviderBranch = (provider, keys) => (
-  Component,
-  LoadingComponent,
-  ErrorComponent
-) => (props) => {
-  const providerToRead = useProvider(provider, props);
-  const { dataProp, loadingProp, errorProp, loading, error } = useDataProviderCustomProps(
-    providerToRead,
-    keys
-  );
-  if (loading) {
-    if (LoadingComponent) {
-      return <LoadingComponent {...props} {...loadingProp} />;
+export const withDataProviderBranch =
+  (provider, keys) => (Component, LoadingComponent, ErrorComponent) => (props) => {
+    const providerToRead = useProvider(provider, props);
+    const { dataProp, loadingProp, errorProp, loading, error } = useDataProviderCustomProps(
+      providerToRead,
+      keys
+    );
+    if (loading) {
+      if (LoadingComponent) {
+        return <LoadingComponent {...props} {...loadingProp} />;
+      }
+      return null;
     }
-    return null;
-  }
-  if (error) {
-    if (ErrorComponent) {
-      return <ErrorComponent {...props} {...errorProp} />;
+    if (error) {
+      if (ErrorComponent) {
+        return <ErrorComponent {...props} {...errorProp} />;
+      }
+      return null;
     }
-    return null;
-  }
-  return <Component {...props} {...dataProp} />;
-};
+    return <Component {...props} {...dataProp} />;
+  };
 
 export const withDataProvider = (provider, keys) => (Component) => (props) => {
   const providerToRead = useProvider(provider, props);

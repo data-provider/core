@@ -5,10 +5,10 @@
   "dependencies": {
     "is-promise": "4.0.0",
     "prop-types": "15.7.2",
-    "react": "17.0.1",
-    "react-dom": "17.0.1",
-    "react-redux": "7.2.2",
-    "redux": "4.0.5"
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
+    "react-redux": "7.2.4",
+    "redux": "4.1.0"
   },
   "scripts": {
     "start": "react-app-rewired start",
@@ -30,9 +30,9 @@
     ]
   },
   "devDependencies": {
-    "react-scripts": "4.0.1",
+    "react-scripts": "4.0.3",
     "react-app-rewired": "2.1.8",
     "serve": "11.3.2",
-    "start-server-and-test": "1.11.7"
+    "start-server-and-test": "1.12.0"
   }
 }

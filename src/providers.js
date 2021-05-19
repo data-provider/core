@@ -35,10 +35,9 @@ export class ProvidersHandler {
 
   _addListener(method, eventName, fn) {
     const removeListenersFuncs = this.call.apply(this, [method, eventName, fn]);
-    const removeListeners = () => {
+    return () => {
       removeListenersFuncs.forEach((removeListener) => removeListener());
     };
-    return removeListeners;
   }
 
   onNewProvider(cb) {
