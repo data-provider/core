@@ -66,10 +66,8 @@ describe("Selector when cleanDependenciesCache method is called", () => {
           spies.dependenciesRead[this.id]();
           setTimeout(() => {
             if (!hasToThrow) {
-              // console.log("Resolving", this.id);
               resolve(getProviderResult(this.id));
             } else {
-              // console.log("Rejecting", this.id);
               reject(hasToThrow);
             }
           }, timeouts[this.id] || 50);
@@ -215,7 +213,7 @@ describe("Selector when cleanDependenciesCache method is called", () => {
       () => dependency1,
       () => dependency2,
       () => dependency4,
-      new Promise((resolve) => resolve(5)),
+      new Promise.resolve(5),
       (query, dependency1Result, dependency2Result, dependency3Result, dependency4Result) => {
         spies.selectorRead();
         return [dependency1Result, dependency2Result, dependency3Result, dependency4Result];
