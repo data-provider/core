@@ -213,7 +213,7 @@ describe("Selector when cleanDependenciesCache method is called", () => {
       () => dependency1,
       () => dependency2,
       () => dependency4,
-      new Promise.resolve(5),
+      Promise.resolve(5),
       (query, dependency1Result, dependency2Result, dependency3Result, dependency4Result) => {
         spies.selectorRead();
         return [dependency1Result, dependency2Result, dependency3Result, dependency4Result];
