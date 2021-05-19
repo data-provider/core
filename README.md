@@ -215,8 +215,8 @@ Please read the [contributing guidelines](.github/CONTRIBUTING.md) and [code of 
 [npm-downloads-url]: https://www.npmjs.com/package/@data-provider/core
 [npm-dependencies-image]: https://img.shields.io/david/data-provider/core.svg
 [npm-dependencies-url]: https://david-dm.org/data-provider/core
-[quality-gate-image]: https://sonarcloud.io/api/project_badges/measure?project=data-provider-core&metric=alert_status
-[quality-gate-url]: https://sonarcloud.io/dashboard?id=data-provider-core
+[quality-gate-image]: https://sonarcloud.io/api/project_badges/measure?project=data-provider_core&metric=alert_status
+[quality-gate-url]: https://sonarcloud.io/dashboard?id=data-provider_core
 [release-image]: https://img.shields.io/github/release-date/data-provider/core.svg
 [release-url]: https://github.com/data-provider/core/releases
 [stryker-image]: https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2Fdata-provider%2Fcore%2Fmaster
