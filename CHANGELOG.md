@@ -18,7 +18,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 - chore(deps): Update dependencies
-- style: Remove Sonar smells
 
 ### Removed
 - chore(deps): Remove Node v10.x from engines
