@@ -1,6 +1,6 @@
 {
   "name": "@data-provider/memory",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "description": "Memory origin addon for Data Provider",
   "keywords": [
     "data-provider",
@@ -44,7 +44,7 @@
   "devDependencies": {
     "@babel/core": "7.12.10",
     "@babel/preset-env": "7.12.11",
-    "@data-provider/core": "3.0.0",
+    "@data-provider/core": "3.0.1",
     "@rollup/plugin-babel": "5.2.2",
     "@rollup/plugin-commonjs": "17.0.0",
     "@rollup/plugin-json": "4.1.0",
