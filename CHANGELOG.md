@@ -13,8 +13,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [3.0.2] - 2021-05-20
 
+### Added
+- chore(deps): Add Node v16.x to engines
+
 ### Changed
-- chore(deps): Update devDependencies
+- chore(deps): Update dependencies
+- style: Remove Sonar smells
+
+### Removed
+- chore(deps): Remove Node v10.x from engines
 
 ## [3.0.1] - 2021-01-14
 
