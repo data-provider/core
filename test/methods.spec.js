@@ -31,7 +31,7 @@ describe("Axios data providers", () => {
 
   describe("Available methods", () => {
     it("should have all crud methods available", () => {
-      const books = new Axios("/books");
+      const books = new Axios({ id: "/books" });
       expect(books.create).toBeDefined();
       expect(books.read).toBeDefined();
       expect(books.update).toBeDefined();
@@ -43,9 +43,7 @@ describe("Axios data providers", () => {
     let books;
 
     beforeAll(() => {
-      books = new Axios("/books", {
-        delete: true,
-      });
+      books = new Axios({ id: "/books", delete: true });
     });
 
     it("should be true while resource is being loaded, false when finished", () => {
@@ -85,7 +83,7 @@ describe("Axios data providers", () => {
     let books;
 
     beforeAll(() => {
-      books = new Axios("/books");
+      books = new Axios({ id: "/books" });
     });
 
     it("should be null while resource is being loaded, null when finished successfully", () => {
@@ -120,7 +118,7 @@ describe("Axios data providers", () => {
       axios.stubs.instance.resolves({
         data: "foo-data",
       });
-      books = new Axios("/books");
+      books = new Axios({ id: "/books" });
     });
 
     it("should be undefined while resource is being loaded, and returned value when finished successfully", () => {
@@ -139,7 +137,7 @@ describe("Axios data providers", () => {
       axios.stubs.instance.resolves({
         data: "",
       });
-      books = new Axios("/books");
+      books = new Axios({ id: "/books" });
     });
 
     it("should clean the cache when finish successfully", async () => {
@@ -150,7 +148,25 @@ describe("Axios data providers", () => {
       await books.update("");
       promise = books.read();
       expect(books.state.loading).toEqual(true);
-      return promise.then(() => {
+      await promise.then(() => {
+        expect(books.state.loading).toEqual(false);
+      });
+    });
+
+    it("should clean the cache when finish successfully even when cleanCacheThrottle is configured", async () => {
+      expect.assertions(3);
+      books.config({
+        cleanCacheThrottle: 3000,
+      });
+      let promise = books.read();
+      expect(books.state.loading).toEqual(true);
+      await promise;
+      books.cleanCache();
+      await books.read();
+      await books.update("");
+      promise = books.read();
+      expect(books.state.loading).toEqual(true);
+      await promise.then(() => {
         expect(books.state.loading).toEqual(false);
       });
     });
@@ -162,7 +178,7 @@ describe("Axios data providers", () => {
       axios.stubs.instance.resolves({
         data: "",
       });
-      books = new Axios("/books");
+      books = new Axios({ id: "/books" });
     });
 
     it("should clean the cache when finish successfully", async () => {
@@ -177,6 +193,24 @@ describe("Axios data providers", () => {
         expect(books.state.loading).toEqual(false);
       });
     });
+
+    it("should clean the cache when finish successfully even when cleanCacheThrottle is configured", async () => {
+      expect.assertions(3);
+      books.config({
+        cleanCacheThrottle: 3000,
+      });
+      let promise = books.read();
+      expect(books.state.loading).toEqual(true);
+      await promise;
+      books.cleanCache();
+      await books.read();
+      await books.create("");
+      promise = books.read();
+      expect(books.state.loading).toEqual(true);
+      await promise.then(() => {
+        expect(books.state.loading).toEqual(false);
+      });
+    });
   });
 
   describe("delete method", () => {
@@ -185,7 +219,7 @@ describe("Axios data providers", () => {
       axios.stubs.instance.resolves({
         data: "",
       });
-      books = new Axios("/books");
+      books = new Axios({ id: "/books" });
     });
 
     it("should clean the cache when finish successfully", async () => {
@@ -197,6 +231,24 @@ describe("Axios data providers", () => {
       promise = books.read();
       expect(books.state.loading).toEqual(true);
       return promise.then(() => {
+        expect(books.state.loading).toEqual(false);
+      });
+    });
+
+    it("should clean the cache when finish successfully even when cleanCacheThrottle is configured", async () => {
+      expect.assertions(3);
+      books.config({
+        cleanCacheThrottle: 3000,
+      });
+      let promise = books.read();
+      expect(books.state.loading).toEqual(true);
+      await promise;
+      books.cleanCache();
+      await books.read();
+      await books.delete();
+      promise = books.read();
+      expect(books.state.loading).toEqual(true);
+      await promise.then(() => {
         expect(books.state.loading).toEqual(false);
       });
     });

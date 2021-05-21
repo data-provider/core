@@ -26,11 +26,8 @@ import {
 import { defaultConfig } from "./defaultConfig";
 
 export class Axios extends Provider {
-  constructor(id, options, query) {
-    const opts = options || {};
-    const tags = opts.tags ? [...opts.tags] : [];
-    tags.unshift(TAG);
-    super(id, { ...defaultConfig, ...opts, tags }, query);
+  constructor(options, queryValue) {
+    super({ ...defaultConfig, ...options }, queryValue);
   }
 
   _addOnceBeforeRequest(onceBeforeRequest) {
@@ -205,7 +202,7 @@ export class Axios extends Provider {
   _cleanAfterRequestAndDispatch(request, eventName, data) {
     return request.then((responseData) => {
       this.emit(eventName, data);
-      this.cleanCache();
+      this.cleanCache({ force: true });
       return Promise.resolve(responseData);
     });
   }
@@ -266,5 +263,9 @@ export class Axios extends Provider {
       ...this._headers,
       ...headers,
     };
+  }
+
+  get baseTags() {
+    return TAG;
   }
 }

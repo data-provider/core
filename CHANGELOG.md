@@ -9,6 +9,61 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 ### Fixed
 ### Removed
+### BREAKING CHANGES
+
+## [3.0.1] - 2021-01-27
+
+### Changed
+- chore(deps): Update devDependencies
+- chore(deps): Update axios to v0.21.1
+
+## [3.0.0] - 2021-01-09
+
+### Added
+- chore: Add data-provider addons recommended tags to package.json
+
+### Changed
+- docs: Adapt docs to data-provider v3 API
+- chore(deps): Update dependencies
+
+### BREAKING CHANGES
+- feat: Remove v2 compatibility
+
+## [2.2.0] - 2021-01-07
+
+### Added
+- feat: Add compatibility with @data-provider/core v3 arguments.
+
+## [2.1.7] - 2020-12-27
+
+### Added
+- docs(readme): Add example about using default tag
+
+### Changed
+- chore(deps): Update dependencies
+- refactor: Use baseTags getter to define base tag (#108)
+- chore(ci): Add GitHub action to run mutation tests on master branch
+
+## [2.1.6] - 2020-12-18
+
+### Changed
+- chore(ci): Migrate from Travis CI to GitHub actions. (#103)
+- chore(deps): Support all Node.js releases that have not passed their end date
+- chore(deps): Update dependencies
+
+## [2.1.5] - 2020-11-24
+
+### Added
+- chore(release): Add github actions to check package version and publish to gpr
+
+### Changed
+- feat(cache): Force the cleaning of the cache after CUD requests
+
+## [2.1.4] - 2020-10-31
+
+### Changed
+- chore(deps): Update dependencies
+- chore: Rename stryker commands
 
 ## [2.1.3] - 2020-06-21
 

@@ -25,13 +25,9 @@ describe("providers clean method", () => {
   beforeAll(() => {
     providers.clear();
     allAxiosSources = providers.getByTag(TAG);
-    api_1 = new Axios("foo-1");
-    api_2 = new Axios("foo-2", {
-      tags: ["tag-1"],
-    });
-    api_3 = new Axios("foo-3", {
-      tags: ["tag-1", "tag-2"],
-    });
+    api_1 = new Axios({ id: "foo-1" });
+    api_2 = new Axios({ id: "foo-2", tags: ["tag-1"] });
+    api_3 = new Axios({ id: "foo-3", tags: ["tag-1", "tag-2"] });
   });
 
   beforeEach(() => {
