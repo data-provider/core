@@ -263,8 +263,8 @@ Please read the [contributing guidelines](.github/CONTRIBUTING.md) and [code of 
 [npm-downloads-url]: https://www.npmjs.com/package/@data-provider/axios
 [npm-dependencies-image]: https://img.shields.io/david/data-provider/axios.svg
 [npm-dependencies-url]: https://david-dm.org/data-provider/axios
-[quality-gate-image]: https://sonarcloud.io/api/project_badges/measure?project=data-provider-axios&metric=alert_status
-[quality-gate-url]: https://sonarcloud.io/dashboard?id=data-provider-axios
+[quality-gate-image]: https://sonarcloud.io/api/project_badges/measure?project=data-provider_axios&metric=alert_status
+[quality-gate-url]: https://sonarcloud.io/dashboard?id=data-provider_axios
 [release-image]: https://img.shields.io/github/release-date/data-provider/axios.svg
 [release-url]: https://github.com/data-provider/axios/releases
 

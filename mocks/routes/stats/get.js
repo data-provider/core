@@ -8,17 +8,21 @@ http://www.apache.org/licenses/LICENSE-2.0
 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 */
 
-const { getAll } = require("./storage");
+const { getAll } = require("../../stats/storage");
 
-const getStats = {
-  url: "/api/stats/call-count",
-  method: "GET",
-  response: (req, res) => {
-    res.status(200);
-    res.send(getAll());
-  }
-};
-
-module.exports = {
-  getStats
-};
+module.exports = [
+  {
+    id: "get-stats-call-count",
+    method: "GET",
+    url: "/api/stats/call-count",
+    variants: [
+      {
+        id: "real",
+        response: (req, res) => {
+          res.status(200);
+          res.send(getAll());
+        },
+      },
+    ],
+  },
+];
