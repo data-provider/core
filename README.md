@@ -165,7 +165,7 @@ Please read the [contributing guidelines](.github/CONTRIBUTING.md) and [code of 
 [npm-downloads-url]: https://www.npmjs.com/package/@data-provider/browser-storage
 [npm-dependencies-image]: https://img.shields.io/david/data-provider/browser-storage.svg
 [npm-dependencies-url]: https://david-dm.org/data-provider/browser-storage
-[quality-gate-image]: https://sonarcloud.io/api/project_badges/measure?project=data-provider-browser-storage&metric=alert_status
-[quality-gate-url]: https://sonarcloud.io/dashboard?id=data-provider-browser-storage
+[quality-gate-image]: https://sonarcloud.io/api/project_badges/measure?project=data-provider_browser-storage&metric=alert_status
+[quality-gate-url]: https://sonarcloud.io/dashboard?id=data-provider_browser-storage
 [release-image]: https://img.shields.io/github/release-date/data-provider/browser-storage.svg
 [release-url]: https://github.com/data-provider/browser-storage/releases
