@@ -116,7 +116,7 @@ Please read the [contributing guidelines](.github/CONTRIBUTING.md) and [code of 
 [npm-downloads-url]: https://www.npmjs.com/package/@data-provider/memory
 [npm-dependencies-image]: https://img.shields.io/david/data-provider/memory.svg
 [npm-dependencies-url]: https://david-dm.org/data-provider/memory
-[quality-gate-image]: https://sonarcloud.io/api/project_badges/measure?project=data-provider-memory&metric=alert_status
-[quality-gate-url]: https://sonarcloud.io/dashboard?id=data-provider-memory
+[quality-gate-image]: https://sonarcloud.io/api/project_badges/measure?project=data-provider_memory&metric=alert_status
+[quality-gate-url]: https://sonarcloud.io/dashboard?id=data-provider_memory
 [release-image]: https://img.shields.io/github/release-date/data-provider/memory.svg
 [release-url]: https://github.com/data-provider/memory/releases
