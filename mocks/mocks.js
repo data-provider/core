@@ -9,24 +9,15 @@ http://www.apache.org/licenses/LICENSE-2.0
 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 */
 
-const { Feature } = require("@mocks-server/main");
-
-const {
-  getBooksSuccess,
-  getBooksServerError,
-  getBooksNotFoundError
-} = require("./fixtures/books/get");
-const { getStats } = require("./fixtures/stats/get");
-const { resetStats } = require("./fixtures/stats/post");
-
-const base = new Feature([
-  getBooksSuccess,
-  getBooksServerError,
-  getBooksNotFoundError,
-  getStats,
-  resetStats
-]);
-
-module.exports = {
-  base
-};
+module.exports = [
+  {
+    id: "base",
+    routesVariants: [
+      "books-success:default",
+      "books-server-error:default",
+      "books-not-found-error:default",
+      "get-stats-call-count:real",
+      "reset-stats:real",
+    ],
+  },
+];
