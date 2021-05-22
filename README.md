@@ -546,7 +546,7 @@ Please read the [contributing guidelines](.github/CONTRIBUTING.md) and [code of 
 [npm-downloads-url]: https://www.npmjs.com/package/@data-provider/react
 [npm-dependencies-image]: https://img.shields.io/david/data-provider/react.svg
 [npm-dependencies-url]: https://david-dm.org/data-provider/react
-[quality-gate-image]: https://sonarcloud.io/api/project_badges/measure?project=data-provider-react&metric=alert_status
-[quality-gate-url]: https://sonarcloud.io/dashboard?id=data-provider-react
+[quality-gate-image]: https://sonarcloud.io/api/project_badges/measure?project=data-provider_react&metric=alert_status
+[quality-gate-url]: https://sonarcloud.io/dashboard?id=data-provider_react
 [release-image]: https://img.shields.io/github/release-date/data-provider/react.svg
 [release-url]: https://github.com/data-provider/react/releases
