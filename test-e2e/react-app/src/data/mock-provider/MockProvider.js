@@ -45,7 +45,9 @@ class MockProvider extends Provider {
     this.cleanCache();
   }
 
-  _debouncedCleanCache() {}
+  _debouncedCleanCache() {
+    //do nothing
+  }
 
   configMethod(options) {
     if (options.cleanCacheDebounceTime > 0) {

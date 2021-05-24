@@ -6,7 +6,7 @@ import { booksProvider } from "./providers";
 
 export const booksWithAuthorName = new Selector(
   [authorsProvider, booksProvider],
-  function (results) {
+  function (query, results) {
     return results[1].map(function (book) {
       return {
         id: book.id,
@@ -24,7 +24,7 @@ export const booksWithAuthorName = new Selector(
 
 export const booksSearch = new Selector(
   booksWithAuthorName,
-  function (booksResults, query) {
+  function (query, booksResults) {
     if (!query.search.length) {
       return [];
     }
@@ -43,7 +43,7 @@ export const booksSearch = new Selector(
 
 export const authorBooks = new Selector(
   booksProvider,
-  function (booksResults, query) {
+  function (query, booksResults) {
     return booksResults.filter(function (book) {
       return book.author === query.author;
     });

@@ -24,7 +24,8 @@ describe("HOCs", () => {
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
-    provider = new MockProvider(BOOKS_ID, {
+    provider = new MockProvider({
+      id: BOOKS_ID,
       data: BOOKS,
     });
   });

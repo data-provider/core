@@ -83,82 +83,73 @@ const useErrorCustomProp = (provider, key = defaultKeys[2]) => {
   return { error, errorProp };
 };
 
-export const withDataLoadedErrorComponents = (provider, keys) => (
-  Component,
-  LoadingComponent,
-  ErrorComponent
-) => {
-  const WithDataLoadedErrorComponents = (props) => {
-    const providerToRead = useProvider(provider, props);
-    const { dataProp, loadedProp, errorProp, loaded, error } = useDataLoadedErrorCustomProps(
-      providerToRead,
-      keys
-    );
-    if (error) {
-      if (ErrorComponent) {
-        return <ErrorComponent {...props} {...errorProp} />;
+export const withDataLoadedErrorComponents =
+  (provider, keys) => (Component, LoadingComponent, ErrorComponent) => {
+    const WithDataLoadedErrorComponents = (props) => {
+      const providerToRead = useProvider(provider, props);
+      const { dataProp, loadedProp, errorProp, loaded, error } = useDataLoadedErrorCustomProps(
+        providerToRead,
+        keys
+      );
+      if (error) {
+        if (ErrorComponent) {
+          return <ErrorComponent {...props} {...errorProp} />;
+        }
+        return null;
       }
-      return null;
-    }
-    if (!loaded) {
-      if (LoadingComponent) {
-        return <LoadingComponent {...props} {...loadedProp} />;
+      if (!loaded) {
+        if (LoadingComponent) {
+          return <LoadingComponent {...props} {...loadedProp} />;
+        }
+        return null;
       }
-      return null;
-    }
-    return <Component {...props} {...dataProp} />;
+      return <Component {...props} {...dataProp} />;
+    };
+    hoistNonReactStatics(WithDataLoadedErrorComponents, Component);
+    WithDataLoadedErrorComponents.displayName = `WithDataLoadedErrorComponents${getDisplayName(
+      Component
+    )}`;
+    return WithDataLoadedErrorComponents;
   };
-  hoistNonReactStatics(WithDataLoadedErrorComponents, Component);
-  WithDataLoadedErrorComponents.displayName = `WithDataLoadedErrorComponents${getDisplayName(
-    Component
-  )}`;
-  return WithDataLoadedErrorComponents;
-};
 
-export const withDataLoadingErrorComponents = (provider, keys) => (
-  Component,
-  LoadingComponent,
-  ErrorComponent
-) => {
-  const WithDataLoadingErrorComponents = (props) => {
-    const providerToRead = useProvider(provider, props);
-    const { dataProp, loadingProp, errorProp, loading, error } = useDataLoadingErrorCustomProps(
-      providerToRead,
-      keys
-    );
-    if (loading) {
-      if (LoadingComponent) {
-        return <LoadingComponent {...props} {...loadingProp} />;
+export const withDataLoadingErrorComponents =
+  (provider, keys) => (Component, LoadingComponent, ErrorComponent) => {
+    const WithDataLoadingErrorComponents = (props) => {
+      const providerToRead = useProvider(provider, props);
+      const { dataProp, loadingProp, errorProp, loading, error } = useDataLoadingErrorCustomProps(
+        providerToRead,
+        keys
+      );
+      if (loading) {
+        if (LoadingComponent) {
+          return <LoadingComponent {...props} {...loadingProp} />;
+        }
+        return null;
       }
-      return null;
-    }
-    if (error) {
-      if (ErrorComponent) {
-        return <ErrorComponent {...props} {...errorProp} />;
+      if (error) {
+        if (ErrorComponent) {
+          return <ErrorComponent {...props} {...errorProp} />;
+        }
+        return null;
       }
-      return null;
-    }
-    return <Component {...props} {...dataProp} />;
+      return <Component {...props} {...dataProp} />;
+    };
+    hoistNonReactStatics(WithDataLoadingErrorComponents, Component);
+    WithDataLoadingErrorComponents.displayName = `WithDataLoadingErrorComponents${getDisplayName(
+      Component
+    )}`;
+    return WithDataLoadingErrorComponents;
   };
-  hoistNonReactStatics(WithDataLoadingErrorComponents, Component);
-  WithDataLoadingErrorComponents.displayName = `WithDataLoadingErrorComponents${getDisplayName(
-    Component
-  )}`;
-  return WithDataLoadingErrorComponents;
-};
 
-export const withDataProviderBranch = (provider, keys) => (
-  Component,
-  LoadingComponent,
-  ErrorComponent
-) => {
-  deprecatedMethod("withDataProviderBranch", "withDataLoadingErrorComponents");
-  return withDataLoadingErrorComponents(provider, keys)(
-    Component,
-    LoadingComponent,
-    ErrorComponent
-  );
-};
+export const withDataProviderBranch =
+  (provider, keys) => (Component, LoadingComponent, ErrorComponent) => {
+    deprecatedMethod("withDataProviderBranch", "withDataLoadingErrorComponents");
+    return withDataLoadingErrorComponents(provider, keys)(
+      Component,
+      LoadingComponent,
+      ErrorComponent
+    );
+  };
 
 export const withDataLoadedError = (provider, keys) => (Component) => {
   const WithDataLoadedError = (props) => {
