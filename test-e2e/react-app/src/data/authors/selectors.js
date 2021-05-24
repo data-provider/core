@@ -4,7 +4,7 @@ import { authorsProvider } from "./providers";
 
 export const authorsSearch = new Selector(
   authorsProvider,
-  function (authorsResults, query) {
+  function (query, authorsResults) {
     if (!query.search.length) {
       return [];
     }
