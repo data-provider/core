@@ -24,7 +24,8 @@ describe("withPolling", () => {
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
-    provider = new MockProvider(BOOKS_ID, {
+    provider = new MockProvider({
+      id: BOOKS_ID,
       data: BOOKS,
     });
     selector = new Selector(provider, (result) => result);

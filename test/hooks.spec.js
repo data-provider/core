@@ -22,7 +22,8 @@ describe("hooks", () => {
   let provider, BooksComponent, Component;
 
   beforeEach(() => {
-    provider = new MockProvider(BOOKS_ID, {
+    provider = new MockProvider({
+      id: BOOKS_ID,
       data: BOOKS,
     });
   });
