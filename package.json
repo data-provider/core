@@ -55,7 +55,7 @@
     "@rollup/plugin-commonjs": "19.0.0",
     "@rollup/plugin-json": "4.1.0",
     "@rollup/plugin-node-resolve": "13.0.0",
-    "@testing-library/jest-dom": "5.12.0",
+    "@testing-library/jest-dom": "5.14.1",
     "@testing-library/react": "11.2.7",
     "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "10.1.0",
