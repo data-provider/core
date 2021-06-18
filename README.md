@@ -53,6 +53,7 @@ Apart of the common Data Provider options, next ones are available:
 	* Arguments:
 		* `error` _(Error)_: Error object produced by a failed request.
 	* Returns: Should return a rejected Promise, containing the new Error.
+* `axiosConfig` _(Object)_: Options for the Axios request. If provided, this object is passed directly to Axios as [request configuration](https://github.com/axios/axios#request-config).
 
 ## Queries
 
