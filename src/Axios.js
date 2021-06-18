@@ -190,9 +190,10 @@ export class Axios extends Provider {
     });
   }
 
-  _deleteRequest(url) {
+  _deleteRequest(url, data) {
     return this._doRequest({
       url,
+      data,
       validateStatus: this._validateStatus,
       method: this._deleteVerb,
       headers: this.headers,
@@ -245,9 +246,12 @@ export class Axios extends Provider {
     );
   }
 
-  delete() {
+  delete(data) {
     this._doBeforeRequest();
-    return this._cleanAfterRequestAndDispatch(this._deleteRequest(this._getUrl()), DELETE_SUCCESS);
+    return this._cleanAfterRequestAndDispatch(
+      this._deleteRequest(this._getUrl(), data),
+      DELETE_SUCCESS
+    );
   }
 
   get headers() {

@@ -158,18 +158,24 @@ booksCollection.query({
 });
 ```
 
-### `delete()`
-
+### `delete(data)`
 Sends a "delete" request. By default, it will use the `DELETE` HTTP verb, but this behavior can be changed using the `deleteVerb` option. It emits an `deleteSuccess` event when the request finish successfully, and __automatically cleans the cache of the provider__.
 
 #### Example
-
+Request body is optional.
 ```javascript
 booksCollection.query({
   queryString: {
     id: 2
   }
 }).delete();
+```
+
+Sending a body will be like create or update requests:
+```javascript
+booksCollection.delete({
+  title: "Fahrenheit 451"
+});
 ```
 
 > When cleaning the cache after a successful request, all methods use the `force` option under the hood, so the cache will be cleaned inmediately, no matter the `cleanCacheThrottle` option configured for the provider, as the resource should have changed in the API also inmediatly.

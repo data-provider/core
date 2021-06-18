@@ -235,6 +235,19 @@ describe("Axios data providers", () => {
       });
     });
 
+    it("should support delete with body", async () => {
+      expect.assertions(3);
+      let promise = books.read();
+      expect(books.state.loading).toEqual(true);
+      await promise;
+      await books.delete({ id: "book" });
+      promise = books.read();
+      expect(books.state.loading).toEqual(true);
+      return promise.then(() => {
+        expect(books.state.loading).toEqual(false);
+      });
+    });
+
     it("should clean the cache when finish successfully even when cleanCacheThrottle is configured", async () => {
       expect.assertions(3);
       books.config({
