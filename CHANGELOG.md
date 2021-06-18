@@ -11,6 +11,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Removed
 ### BREAKING CHANGES
 
+## [3.1.0] - 2021-06-18
+### Added
+- feat(#140): Support body params in delete method
+- docs: Add axiosConfig option to docs
+
+### Changed
+- chore(deps): Update dependencies
+
 ## [3.0.2] - 2021-05-21
 
 ### Added

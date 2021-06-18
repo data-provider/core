@@ -53,6 +53,7 @@ Apart of the common Data Provider options, next ones are available:
 	* Arguments:
 		* `error` _(Error)_: Error object produced by a failed request.
 	* Returns: Should return a rejected Promise, containing the new Error.
+* `axiosConfig` _(Object)_: Options for the Axios request. If provided, this object is passed directly to Axios as [request configuration](https://github.com/axios/axios#request-config).
 
 ## Queries
 
@@ -158,18 +159,27 @@ booksCollection.query({
 });
 ```
 
-### `delete()`
-
+### `delete(data)`
 Sends a "delete" request. By default, it will use the `DELETE` HTTP verb, but this behavior can be changed using the `deleteVerb` option. It emits an `deleteSuccess` event when the request finish successfully, and __automatically cleans the cache of the provider__.
 
-#### Example
+#### Arguments
 
+* `data` _(Object)_: Optional. Data to be sent as request body.
+
+#### Examples
+
+With no request body
 ```javascript
 booksCollection.query({
   queryString: {
     id: 2
   }
 }).delete();
+```
+
+With request body
+```javascript
+booksCollection.query().delete({ id: 2 });
 ```
 
 > When cleaning the cache after a successful request, all methods use the `force` option under the hood, so the cache will be cleaned inmediately, no matter the `cleanCacheThrottle` option configured for the provider, as the resource should have changed in the API also inmediatly.
