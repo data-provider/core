@@ -54,8 +54,8 @@
     "path-to-regexp": "6.2.0"
   },
   "devDependencies": {
-    "@babel/core": "7.14.6",
-    "@babel/preset-env": "7.14.7",
+    "@babel/core": "7.14.8",
+    "@babel/preset-env": "7.14.8",
     "@data-provider/core": "3.0.1",
     "@mocks-server/admin-api-paths": "2.1.0",
     "@mocks-server/main": "2.4.0",
