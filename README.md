@@ -54,6 +54,7 @@ Apart of the common Data Provider options, next ones are available:
 		* `error` _(Error)_: Error object produced by a failed request.
 	* Returns: Should return a rejected Promise, containing the new Error.
 * `axiosConfig` _(Object)_: Options for the Axios request. If provided, this object is passed directly to Axios as [request configuration](https://github.com/axios/axios#request-config).
+* `queryStringConfig` _(Object)_: Options for the [query-string library](https://github.com/sindresorhus/query-string#readme), which is used under the hood to serialize query string parameters. If provided, this object is passed directly to `query-string` as [options for the `stringify` method](https://github.com/sindresorhus/query-string#stringifyobject-options). Default options are the same from the library.
 
 ## Queries
 

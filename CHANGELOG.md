@@ -7,9 +7,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [unreleased]
 ### Added
 ### Changed
+- feat(#6): Use [query-string](https://www.npmjs.com/package/query-string) package to format query strings. Allow configuring query-string options using the `queryStringConfig` option of this package. This is a BREAKING CHANGE because query-string default options are used (read BREAKING CHANGES bellow for further info)
 ### Fixed
 ### Removed
 ### BREAKING CHANGES
+- Arrays in query strings were converted into a list separated by "%2C" (url encoded comma). Now it uses the `query-string` package using its default options, so arrays are serialized duplicating keys (`?foo=1&foo=2`). This behaviour can be configured using the new `queryStringConfig` option.
+- query string keys now are sorted by default.
 
 ## [3.1.0] - 2021-06-18
 ### Added

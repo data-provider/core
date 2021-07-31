@@ -59,6 +59,21 @@ describe("Axios queries", () => {
       expect(axios.stubs.instance.getCall(0).args[0].url).toEqual("/books?author=foo");
     });
 
+    it("should add query params to axios request as duplicated keys", async () => {
+      axios.stubs.instance.resetHistory();
+      const books = new Axios({
+        url: "/books",
+      }).query({
+        queryString: {
+          authors: ["foo", "foo2", "foo3"],
+        },
+      });
+      await books.read();
+      expect(axios.stubs.instance.getCall(0).args[0].url).toEqual(
+        "/books?authors=foo&authors=foo2&authors=foo3"
+      );
+    });
+
     it("should add query params to axios request when url includes protocol", async () => {
       axios.stubs.instance.resetHistory();
       const books = new Axios({
@@ -161,7 +176,7 @@ describe("Axios queries", () => {
       });
       await books.read();
       expect(axios.stubs.instance.getCall(0).args[0].url).toEqual(
-        "/books/foo/cervantes?page=2&order=asc"
+        "/books/foo/cervantes?order=asc&page=2"
       );
     });
 
@@ -181,8 +196,26 @@ describe("Axios queries", () => {
       });
       await books.read();
       expect(axios.stubs.instance.getCall(0).args[0].url).toEqual(
-        "https://www.domain.com:3000/books/foo/cervantes?page=2&order=asc"
+        "https://www.domain.com:3000/books/foo/cervantes?order=asc&page=2"
       );
+    });
+  });
+
+  describe("queryStringConfig option", () => {
+    it('when arrayFormat option is "comma", it should add query params to axios request as comma separated list', async () => {
+      axios.stubs.instance.resetHistory();
+      const books = new Axios({
+        url: "/books",
+        queryStringConfig: {
+          arrayFormat: "comma",
+        },
+      }).query({
+        queryString: {
+          authors: ["foo", "foo2", "foo3"],
+        },
+      });
+      await books.read();
+      expect(axios.stubs.instance.getCall(0).args[0].url).toEqual("/books?authors=foo,foo2,foo3");
     });
   });
 
