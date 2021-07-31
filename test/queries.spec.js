@@ -45,7 +45,7 @@ describe("Axios queries", () => {
     });
   });
 
-  describe.only("Queried providers", () => {
+  describe("Queried providers", () => {
     it("should add query params to axios request", async () => {
       axios.stubs.instance.resetHistory();
       const books = new Axios({
@@ -59,7 +59,7 @@ describe("Axios queries", () => {
       expect(axios.stubs.instance.getCall(0).args[0].url).toEqual("/books?author=foo");
     });
 
-    it("should add query params to axios request as comma separated list when it is an array", async () => {
+    it("should add query params to axios request as duplicated keys", async () => {
       axios.stubs.instance.resetHistory();
       const books = new Axios({
         url: "/books",
@@ -70,7 +70,7 @@ describe("Axios queries", () => {
       });
       await books.read();
       expect(axios.stubs.instance.getCall(0).args[0].url).toEqual(
-        "/books?authors=foo%2Cfoo2%2Cfoo3"
+        "/books?authors=foo&authors=foo2&authors=foo3"
       );
     });
 
@@ -176,7 +176,7 @@ describe("Axios queries", () => {
       });
       await books.read();
       expect(axios.stubs.instance.getCall(0).args[0].url).toEqual(
-        "/books/foo/cervantes?page=2&order=asc"
+        "/books/foo/cervantes?order=asc&page=2"
       );
     });
 
@@ -196,8 +196,26 @@ describe("Axios queries", () => {
       });
       await books.read();
       expect(axios.stubs.instance.getCall(0).args[0].url).toEqual(
-        "https://www.domain.com:3000/books/foo/cervantes?page=2&order=asc"
+        "https://www.domain.com:3000/books/foo/cervantes?order=asc&page=2"
       );
+    });
+  });
+
+  describe("queryStringConfig option", () => {
+    it('when arrayFormat option is "comma", it should add query params to axios request as comma separated list', async () => {
+      axios.stubs.instance.resetHistory();
+      const books = new Axios({
+        url: "/books",
+        queryStringConfig: {
+          arrayFormat: "comma",
+        },
+      }).query({
+        queryString: {
+          authors: ["foo", "foo2", "foo3"],
+        },
+      });
+      await books.read();
+      expect(axios.stubs.instance.getCall(0).args[0].url).toEqual("/books?authors=foo,foo2,foo3");
     });
   });
 
