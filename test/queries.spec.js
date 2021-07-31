@@ -45,7 +45,7 @@ describe("Axios queries", () => {
     });
   });
 
-  describe("Queried providers", () => {
+  describe.only("Queried providers", () => {
     it("should add query params to axios request", async () => {
       axios.stubs.instance.resetHistory();
       const books = new Axios({
@@ -57,6 +57,21 @@ describe("Axios queries", () => {
       });
       await books.read();
       expect(axios.stubs.instance.getCall(0).args[0].url).toEqual("/books?author=foo");
+    });
+
+    it("should add query params to axios request as comma separated list when it is an array", async () => {
+      axios.stubs.instance.resetHistory();
+      const books = new Axios({
+        url: "/books",
+      }).query({
+        queryString: {
+          authors: ["foo", "foo2", "foo3"],
+        },
+      });
+      await books.read();
+      expect(axios.stubs.instance.getCall(0).args[0].url).toEqual(
+        "/books?authors=foo%2Cfoo2%2Cfoo3"
+      );
     });
 
     it("should add query params to axios request when url includes protocol", async () => {
