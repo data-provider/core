@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 ### Removed
 ### BREAKING CHANGES
-- Arrays in query strings were converted into a list separated by "%2C" (url encoded comma). Now it uses the `arrayFormat` `none` by default, so arrays are serialized duplicating keys, but it can be configured using the new `queryStringConfig` option.
+- Arrays in query strings were converted into a list separated by "%2C" (url encoded comma). Now it uses the `query-string` package using its default options, so arrays are serialized duplicating keys (`?foo=1&foo=2`). This behaviour can be configured using the new `queryStringConfig` option.
 - query string keys now are sorted by default.
 
 ## [3.1.0] - 2021-06-18
