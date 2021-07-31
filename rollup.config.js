@@ -33,7 +33,7 @@ const BASE_PLUGINS = [
 
 const BASE_CONFIG = {
   input: "src/index.js",
-  external: ["@data-provider/core", "axios", "axios-retry", "path-to-regexp"],
+  external: ["@data-provider/core", "axios", "axios-retry", "path-to-regexp", "query-string"],
   plugins: [...BASE_PLUGINS, terser()],
 };
 
@@ -42,6 +42,7 @@ const GLOBALS = {
   axios: "axios",
   "axios-retry": "axiosRetry",
   "path-to-regexp": "pathToRegexp",
+  "query-string": "queryString",
 };
 
 module.exports = [

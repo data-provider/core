@@ -164,7 +164,7 @@ describe("Axios queries", () => {
         });
       await queriedBooks.read();
       expect(axios.stubs.instance.getCall(0).args[0].url).toEqual(
-        "/books/foo/cervantes?page=2&order=asc"
+        "/books/foo/cervantes?order=asc&page=2"
       );
     });
 
@@ -188,7 +188,7 @@ describe("Axios queries", () => {
         });
       await queriedBooks.read();
       expect(axios.stubs.instance.getCall(0).args[0].url).toEqual(
-        "https://www.domain.com:3000/books/foo/cervantes?page=2&order=asc"
+        "https://www.domain.com:3000/books/foo/cervantes?order=asc&page=2"
       );
     });
   });

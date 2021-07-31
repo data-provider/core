@@ -32,4 +32,6 @@ export const defaultConfig = {
     errorToReturn.data = error.response && error.response.data;
     return Promise.reject(errorToReturn);
   },
+  axiosConfig: {},
+  queryStringConfig: {},
 };

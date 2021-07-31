@@ -13,6 +13,7 @@ import { Provider } from "@data-provider/core";
 import { compile } from "path-to-regexp";
 import axios from "axios";
 import axiosRetry from "axios-retry";
+import queryString from "query-string";
 
 import {
   once,
@@ -54,7 +55,8 @@ export class Axios extends Provider {
     this._baseUrl = configuration.baseUrl;
     this._onBeforeRequest = configuration.onBeforeRequest;
     this._url = configuration.url;
-    this._axiosConfig = configuration.axiosConfig || {};
+    this._axiosConfig = configuration.axiosConfig;
+    this._queryStringConfig = configuration.queryStringConfig;
 
     if (configuration.retries !== this._retries) {
       this._retries = configuration.retries;
@@ -78,27 +80,22 @@ export class Axios extends Provider {
     this._setUrl(this._baseUrl + this._url);
   }
 
-  _getQueryString(queryString) {
-    if (!queryString || isEmpty(queryString)) {
+  _getQueryString(queryStringValue) {
+    if (!queryStringValue || isEmpty(queryStringValue)) {
       return "";
     }
-    return (
-      "?" +
-      Object.keys(queryString)
-        .map((key) => `${encodeURIComponent(key)}=${encodeURIComponent(queryString[key])}`)
-        .join("&")
-    );
+    return `?${queryString.stringify(queryStringValue, this._queryStringConfig)}`;
   }
 
   _getUrl() {
-    const queryString = this.queryValue.queryString;
+    const queryStringValue = this.queryValue.queryString;
     const urlParams = this.queryValue.urlParams;
     if (urlParams && !isEmpty(urlParams)) {
       return `${this.url.base}/${this.url.segment(urlParams)}${
         this.url.trailingSlash
-      }${this._getQueryString(queryString)}`;
+      }${this._getQueryString(queryStringValue)}`;
     }
-    return `${this.url.full}${this._getQueryString(queryString)}`;
+    return `${this.url.full}${this._getQueryString(queryStringValue)}`;
   }
 
   _setUrl(fullUrl) {
