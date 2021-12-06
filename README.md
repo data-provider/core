@@ -1,6 +1,6 @@
 [![Build status][build-image]][build-url] [![Coverage Status][coveralls-image]][coveralls-url] [![Quality Gate][quality-gate-image]][quality-gate-url] [![Mutation testing badge](https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2Fdata-provider%2Fbrowser-storage%2Fmaster)](https://dashboard.stryker-mutator.io/reports/github.com/data-provider/browser-storage/master)
 
-[![NPM dependencies][npm-dependencies-image]][npm-dependencies-url] [![Renovate](https://img.shields.io/badge/renovate-enabled-brightgreen.svg)](https://renovatebot.com) [![Last commit][last-commit-image]][last-commit-url] [![Last release][release-image]][release-url] 
+[![Renovate](https://img.shields.io/badge/renovate-enabled-brightgreen.svg)](https://renovatebot.com) [![Last commit][last-commit-image]][last-commit-url] [![Last release][release-image]][release-url] 
 
 [![NPM downloads][npm-downloads-image]][npm-downloads-url] [![License][license-image]][license-url]
 
@@ -163,8 +163,6 @@ Please read the [contributing guidelines](.github/CONTRIBUTING.md) and [code of 
 [license-url]: https://github.com/data-provider/browser-storage/blob/master/LICENSE
 [npm-downloads-image]: https://img.shields.io/npm/dm/@data-provider/browser-storage.svg
 [npm-downloads-url]: https://www.npmjs.com/package/@data-provider/browser-storage
-[npm-dependencies-image]: https://img.shields.io/david/data-provider/browser-storage.svg
-[npm-dependencies-url]: https://david-dm.org/data-provider/browser-storage
 [quality-gate-image]: https://sonarcloud.io/api/project_badges/measure?project=data-provider_browser-storage&metric=alert_status
 [quality-gate-url]: https://sonarcloud.io/dashboard?id=data-provider_browser-storage
 [release-image]: https://img.shields.io/github/release-date/data-provider/browser-storage.svg
