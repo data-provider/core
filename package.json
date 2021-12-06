@@ -52,7 +52,6 @@
     "@rollup/plugin-node-resolve": "13.0.6",
     "@stryker-mutator/core": "5.5.1",
     "@stryker-mutator/jest-runner": "5.5.1",
-    "babel-core": "6.26.3",
     "babel-jest": "27.4.2",
     "babel-polyfill": "6.26.0",
     "eslint": "8.4.0",
