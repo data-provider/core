@@ -3,11 +3,15 @@
     "browser": true,
     "es6": true
   },
-  "parser": "babel-eslint",
-  "extends": ["plugin:react/recommended"],
+  "parser": "@babel/eslint-parser",
   "parserOptions": {
-    "sourceType": "module"
+    "sourceType": "module",
+    "requireConfigFile" : false,
+    "babelOptions": {
+      "presets": ["@babel/preset-react"]
+    }
   },
+  "extends": ["plugin:react/recommended"],
   "globals": {
   },
   "settings": {

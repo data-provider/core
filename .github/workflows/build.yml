@@ -10,12 +10,10 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node: ["12.22.1", "14.17.0", "15.14.0", "16.1.0"]
+        node: ["12.22.1", "14.17.0", "16.1.0", "17.2.0"]
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
       - name: Extract branch name
         shell: bash
         run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF##*/})"
@@ -43,8 +41,15 @@ jobs:
       - name: Test unit
         run: npm run test:unit
       - name: Test E2E
+        if: ${{ matrix.node != '17.2.0'}}
         run: npm run test:e2e:ci
         id: test-e2e
+      - name: Test E2E Node 17
+        if: ${{ matrix.node == '17.2.0'}}
+        run: npm run test:e2e:ci
+        env:
+          NODE_OPTIONS: --openssl-legacy-provider 
+        id: test-e2e-node-17
       - name: Upload E2E tests screenshots
         if: ${{ always() && steps.test-e2e.outcome == 'failure' }}
         uses: actions/upload-artifact@v2
@@ -64,6 +69,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
       - name: Download test results
         uses: actions/download-artifact@v2
         with:
