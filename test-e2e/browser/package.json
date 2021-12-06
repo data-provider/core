@@ -15,7 +15,7 @@
     "test": "npm run test:vanilla-app && npm run test:react-app"
   },
   "devDependencies": {
-    "cypress": "7.5.0",
-    "start-server-and-test": "1.12.5"
+    "cypress": "9.1.1",
+    "start-server-and-test": "1.14.0"
   }
 }
