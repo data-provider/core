@@ -8,10 +8,10 @@
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
     "start:react-app": "cd react-app && npm start",
-    "test:react-app": "start-server-and-test start:react-app http-get://localhost:3000 cypress:run"
+    "test:react-app": "start-server-and-test start:react-app http-get://127.0.0.1:3000 cypress:run"
   },
   "devDependencies": {
-    "cypress": "7.7.0",
-    "start-server-and-test": "1.13.1"
+    "cypress": "9.1.1",
+    "start-server-and-test": "1.14.0"
   }
 }

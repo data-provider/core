@@ -28,7 +28,10 @@ describe("usePolling", () => {
       id: BOOKS_ID,
       data: BOOKS,
     });
-    selector = new Selector(provider, (result) => result);
+    selector = new Selector(provider, (query, result) => result, {
+      id: "books-selector",
+      initialState: { data: [], loading: true },
+    });
     sandbox.spy(provider, "cleanCache");
   });
 

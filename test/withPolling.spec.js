@@ -28,7 +28,7 @@ describe("withPolling", () => {
       id: BOOKS_ID,
       data: BOOKS,
     });
-    selector = new Selector(provider, (result) => result);
+    selector = new Selector(provider, (query, result) => result);
     sandbox.spy(provider, "cleanCache");
   });
 
