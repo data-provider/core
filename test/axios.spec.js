@@ -25,7 +25,7 @@ describe("axios requests", () => {
 
   beforeAll(async () => {
     providers.getByTag("mocks").config({
-      baseUrl: "http://localhost:3100",
+      baseUrl: "http://127.0.0.1:3100",
     });
 
     apiStatsReset = new Axios({ id: "reset-stats", url: "/api/stats/reset", tags: ["mocks"] });

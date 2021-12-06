@@ -40,10 +40,10 @@ describe("Axios configuration", () => {
       expect.assertions(1);
       const books = new Axios({
         url: "/books",
-        baseUrl: "http://localhost:3000",
+        baseUrl: "http://127.0.0.1:3000",
       });
       await books.read();
-      expect(axios.stubs.instance.getCall(0).args[0].url).toEqual("http://localhost:3000/books");
+      expect(axios.stubs.instance.getCall(0).args[0].url).toEqual("http://127.0.0.1:3000/books");
     });
 
     it("should work with config method", async () => {
@@ -55,10 +55,10 @@ describe("Axios configuration", () => {
       expect(axios.stubs.instance.getCall(0).args[0].url).toEqual("/books");
       books.cleanCache();
       books.config({
-        baseUrl: "http://localhost:3000",
+        baseUrl: "http://127.0.0.1:3000",
       });
       await books.read();
-      expect(axios.stubs.instance.getCall(1).args[0].url).toEqual("http://localhost:3000/books");
+      expect(axios.stubs.instance.getCall(1).args[0].url).toEqual("http://127.0.0.1:3000/books");
     });
   });
 

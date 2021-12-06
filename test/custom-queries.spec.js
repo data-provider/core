@@ -108,14 +108,14 @@ describe("Axios queries", () => {
     it("should replace params in axios request when url includes protocol", async () => {
       axios.stubs.instance.resetHistory();
       const books = new Axios({
-        url: "http://localhost/books/:id",
+        url: "http://127.0.0.1/books/:id",
       });
       books.addQuery("byId", byId);
 
       const queriedBooks = books.queries.byId("foo");
 
       await queriedBooks.read();
-      expect(axios.stubs.instance.getCall(0).args[0].url).toEqual("http://localhost/books/foo");
+      expect(axios.stubs.instance.getCall(0).args[0].url).toEqual("http://127.0.0.1/books/foo");
     });
 
     it("should replace many params in axios request when chaining custom queries", async () => {

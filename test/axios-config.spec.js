@@ -17,7 +17,7 @@ const { Axios } = require("../src/index");
 
 describe("axios config", () => {
   let books;
-  const mocksSettingsUrl = `http://localhost:3100${DEFAULT_BASE_PATH}${SETTINGS}`;
+  const mocksSettingsUrl = `http://127.0.0.1:3100${DEFAULT_BASE_PATH}${SETTINGS}`;
 
   beforeAll(async () => {
     await fetch(mocksSettingsUrl, {
@@ -32,7 +32,7 @@ describe("axios config", () => {
     books = new Axios({
       id: "books",
       url: "/api/books/success",
-      baseUrl: "http://localhost:3100",
+      baseUrl: "http://127.0.0.1:3100",
       axiosConfig: {
         timeout: 1000,
       },
