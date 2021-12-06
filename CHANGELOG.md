@@ -17,7 +17,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - chore: Support any NodeJs version >=12.x.
 - chore: Run tests also in NodeJs 17 in pipelines. Remove tests execution using NodeJs 15
 - chore: Update dependencies
-- test: Use 127.0.0.1 instead of localhost when requesting in tests for Node 17 support
 
 ### Fixed
 - docs: Remove broken npm dependencies badge
