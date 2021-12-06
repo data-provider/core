@@ -10,8 +10,8 @@
     "test:install": "cd vanilla-app && npm i && cd ../react-app && npm i",
     "start:vanilla-app": "cd vanilla-app && npm run build-and-serve",
     "start:react-app": "cd react-app && npm start",
-    "test:vanilla-app": "start-server-and-test start:vanilla-app http-get://localhost:3000 cypress:run",
-    "test:react-app": "start-server-and-test start:react-app http-get://localhost:3000 cypress:run",
+    "test:vanilla-app": "start-server-and-test start:vanilla-app http-get://127.0.0.1:3000 cypress:run",
+    "test:react-app": "start-server-and-test start:react-app http-get://127.0.0.1:3000 cypress:run",
     "test": "npm run test:vanilla-app && npm run test:react-app"
   },
   "devDependencies": {
