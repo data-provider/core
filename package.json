@@ -52,7 +52,7 @@
     "axios": "0.24.0",
     "axios-retry": "3.2.4",
     "path-to-regexp": "6.2.0",
-    "query-string": "7.0.1"
+    "query-string": "7.1.0"
   },
   "devDependencies": {
     "@babel/core": "7.16.7",
