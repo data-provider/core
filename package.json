@@ -55,8 +55,8 @@
     "query-string": "7.1.0"
   },
   "devDependencies": {
-    "@babel/core": "7.16.7",
-    "@babel/preset-env": "7.16.8",
+    "@babel/core": "7.16.12",
+    "@babel/preset-env": "7.16.11",
     "@data-provider/core": "3.1.0",
     "@mocks-server/admin-api-paths": "2.2.0",
     "@mocks-server/main": "2.6.0",
