@@ -43,7 +43,7 @@
     "@data-provider/core": "3.x"
   },
   "devDependencies": {
-    "@babel/core": "7.16.12",
+    "@babel/core": "7.17.0",
     "@babel/preset-env": "7.16.11",
     "@data-provider/core": "3.1.0",
     "@rollup/plugin-babel": "5.3.0",
