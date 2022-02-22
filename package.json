@@ -70,7 +70,7 @@
     "babel-polyfill": "6.26.0",
     "cross-fetch": "3.1.5",
     "eslint": "8.9.0",
-    "eslint-config-prettier": "8.3.0",
+    "eslint-config-prettier": "8.4.0",
     "eslint-plugin-prettier": "4.0.0",
     "husky": "7.0.4",
     "is-ci": "3.0.1",
