@@ -1,0 +1,30 @@
+{
+  "env": {
+    "browser": true,
+    "es6": true,
+    "node": true
+  },
+  "parser": "@babel/eslint-parser",
+  "extends": ["plugin:react/recommended"],
+  "parserOptions": {
+    "sourceType": "module"
+  },
+  "plugins": ["prettier", "react", "react-hooks"],
+  "rules": {
+    "prettier/prettier": [
+      "error",
+      {
+        "printWidth": 99,
+        "parser": "flow"
+      }
+    ],
+    "no-undef": "error",
+    "no-unused-vars": ["error", { "vars": "all", "args": "after-used", "ignoreRestSiblings": false }]
+  },
+  "settings": {
+    "react": {
+      "pragma": "React",
+      "version": "^17.0.0"
+    }
+  }
+}

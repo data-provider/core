@@ -1,0 +1,86 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+ul li {
+  margin: 0;
+}
+
+* {
+  color: white;
+}
+
+input, select, button {
+  color: black;
+  font-size: 0.8em;
+  margin-bottom: 0.8em;
+}
+
+button {
+  cursor: pointer;
+}
+
+.new {
+  margin-top: 0.8em;
+}
+
+@media only screen and (min-width: 60em) {
+  .container {
+    width: 90%;
+    max-width: 80rem;
+  }
+}
+
+.root {
+  text-align: center;
+  background-color: #282c34;
+  min-height: 100vh;
+  color: white;
+  padding-top: 3em;
+}
+
+header {
+  font-size: 1.2em;
+}
+
+.content {
+  font-size: 1.1em;
+}
+
+.content.loading ul {
+  opacity: 0.6;
+}
+
+.content .delete {
+  font-size: 0.7em;
+  cursor: pointer;
+  margin-right: 0.2em;
+}
+
+.content__title {
+  font-size: 1em;
+  font-weight: 600;
+  opacity: 2;
+}
+
+.content__title .loading {
+  visibility: hidden;
+}
+
+.content.loading .content__title span.loading {
+  visibility: visible;
+}
+
+.author-name {
+  font-size: 0.7em;
+  font-style: italic;
+}
