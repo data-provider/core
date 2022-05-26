@@ -1,11 +1,11 @@
-const { Selector } = require("../../../../../dist/index.cjs");
+const { Selector } = require("@data-provider/core/dist/index.cjs");
 
 const { authorsProvider } = require("../authors");
 
 const { booksProvider } = require("./providers");
 
 const booksWithAuthorName = new Selector([authorsProvider, booksProvider], function (
-  query,
+  _query,
   results
 ) {
   return results[1].map(function (book) {

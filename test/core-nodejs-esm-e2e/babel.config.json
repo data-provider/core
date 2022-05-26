@@ -4,8 +4,7 @@
     ["module-resolver", {
       "root": ["."],
       "alias": {
-        "data": "./src/data",
-        "@data-provider/core": "../../../dist/index.esm.js"
+        "data": "./src/data"
       }
     }]
   ]
