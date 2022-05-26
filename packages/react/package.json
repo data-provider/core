@@ -33,11 +33,7 @@
   "module": "dist/index.esm.js",
   "scripts": {
     "build": "rollup --config",
-    "test": "jest",
-    "test:e2e": "cd test-e2e && npm run test:react-app",
-    "test:e2e:ci": "npm run build && npm run test:e2e:install && npm run test:e2e",
-    "test:e2e:install": "cd test-e2e && npm i && cd react-app && npm i",
-    "test:unit": "npm run test -- --coverage --ci --verbose=false --coverageReporters=lcov --coverageReporters=text-summary"
+    "test:unit": "jest --coverage --ci --verbose=false --coverageReporters=lcov --coverageReporters=text-summary"
   },
   "dependencies": {
     "hoist-non-react-statics": "3.3.2"

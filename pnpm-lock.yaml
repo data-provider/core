@@ -287,9 +287,6 @@ importers:
     devDependencies:
       '@data-provider/core': link:../core
 
-  test/core-browser-app-e2e:
-    specifiers: {}
-
   test/core-nodejs-cjs-e2e:
     specifiers:
       '@data-provider/core': workspace:*
@@ -306,6 +303,15 @@ importers:
     devDependencies:
       babel-plugin-module-resolver: 4.1.0
       regenerator-runtime: 0.13.9
+
+  test/core-react-app-e2e:
+    specifiers: {}
+
+  test/core-vanilla-app-e2e:
+    specifiers: {}
+
+  test/core-web-specs:
+    specifiers: {}
 
   test/react-e2e:
     specifiers: {}

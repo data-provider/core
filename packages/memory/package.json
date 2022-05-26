@@ -36,7 +36,6 @@
   "module": "dist/index.esm.js",
   "scripts": {
     "build": "rollup --config",
-    "test": "jest",
     "test:unit": "jest",
     "test:mutation": "stryker run"
   },

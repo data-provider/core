@@ -28,6 +28,10 @@ module.exports = {
         allow: [],
         depConstraints: [
           {
+            sourceTag: "type:specs",
+            onlyDependOnLibsWithTags: ["type:mock"],
+          },
+          {
             sourceTag: "type:example",
             onlyDependOnLibsWithTags: ["type:lib"],
           },
@@ -37,7 +41,7 @@ module.exports = {
           },
           {
             sourceTag: "type:lib",
-            onlyDependOnLibsWithTags: ["type:lib", "type:mock"],
+            onlyDependOnLibsWithTags: ["type:lib"],
           },
           {
             sourceTag: "type:app",

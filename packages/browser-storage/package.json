@@ -37,8 +37,7 @@
   "module": "dist/index.esm.js",
   "scripts": {
     "build": "rollup --config",
-    "test": "jest",
-    "test:unit": "npm run test -- --coverage --ci --verbose=false --coverageReporters=lcov --coverageReporters=text-summary",
+    "test:unit": "jest --coverage --ci --verbose=false --coverageReporters=lcov --coverageReporters=text-summary",
     "test:mutation": "stryker run"
   },
   "peerDependencies": {
