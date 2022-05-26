@@ -1,4 +1,5 @@
 packages:
   - 'examples/*'
+  - 'mocks/*'
   - 'packages/*'
   - 'test/*'

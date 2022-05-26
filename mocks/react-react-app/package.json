@@ -1,9 +1,7 @@
 {
-  "name": "react-app",
-  "version": "1.0.0",
   "private": true,
   "dependencies": {
-    "@data-provider/core": "3.1.0",
+    "@data-provider/core": "workspace:*",
     "is-promise": "4.0.0",
     "prop-types": "15.7.2",
     "react": "17.0.2",
@@ -14,7 +12,6 @@
   "scripts": {
     "start": "react-app-rewired start",
     "build": "react-app-rewired build",
-    "eject": "react-scripts eject",
     "serve": "serve -l 3000",
     "build-and-serve": "npm run build && npm run serve"
   },
@@ -29,10 +26,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "react-app-rewired": "2.1.11",
-    "react-scripts": "4.0.3",
-    "serve": "13.0.2"
   }
 }

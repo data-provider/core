@@ -1,5 +1,0 @@
-{
-  "extends": [
-    "github>data-provider/ci-cd-shared-config"
-  ]
-}

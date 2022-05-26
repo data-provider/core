@@ -17,7 +17,11 @@
   "author": "Javier Brea",
   "license": "Apache-2.0",
   "homepage": "https://www.data-provider.org",
-  "repository": "https://github.com/data-provider/memory",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/data-provider/core.git",
+    "directory": "packages/memory"
+  },
   "funding": {
     "type": "opencollective",
     "url": "https://opencollective.com/data-provider"
@@ -31,8 +35,6 @@
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js",
   "scripts": {
-    "lint": "eslint src test *.js",
-    "lint-staged": "lint-staged",
     "build": "rollup --config",
     "test": "jest",
     "test:unit": "jest",
@@ -42,29 +44,7 @@
     "@data-provider/core": "3.x"
   },
   "devDependencies": {
-    "@babel/core": "7.17.5",
-    "@babel/preset-env": "7.16.11",
-    "@data-provider/core": "3.1.0",
-    "@rollup/plugin-babel": "5.3.1",
-    "@rollup/plugin-commonjs": "21.0.2",
-    "@rollup/plugin-json": "4.1.0",
-    "@rollup/plugin-node-resolve": "13.1.3",
-    "@stryker-mutator/core": "5.6.1",
-    "@stryker-mutator/jest-runner": "5.6.1",
-    "babel-jest": "27.5.1",
-    "babel-polyfill": "6.26.0",
-    "eslint": "8.11.0",
-    "eslint-config-prettier": "8.5.0",
-    "eslint-plugin-prettier": "4.0.0",
-    "husky": "7.0.4",
-    "is-ci": "3.0.1",
-    "jest": "27.5.1",
-    "lint-staged": "12.3.5",
-    "prettier": "2.5.1",
-    "redux": "4.1.2",
-    "rollup": "2.70.0",
-    "rollup-plugin-terser": "7.0.2",
-    "sinon": "12.0.1"
+    "@data-provider/core": "workspace:*"
   },
   "engines": {
     "node": ">=12.0.0"

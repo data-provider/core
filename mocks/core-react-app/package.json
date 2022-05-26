@@ -1,6 +1,4 @@
 {
-  "name": "react-app",
-  "version": "1.0.0",
   "private": true,
   "dependencies": {
     "is-promise": "4.0.0",
@@ -28,11 +26,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "react-app-rewired": "2.1.11",
-    "react-scripts": "4.0.3",
-    "serve": "13.0.2",
-    "start-server-and-test": "1.14.0"
   }
 }

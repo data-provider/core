@@ -2,7 +2,7 @@
   "private": true,
   "scripts": {
     "nx": "nx",
-    "lint": "eslint examples packages scripts",
+    "lint": "eslint examples mocks test packages scripts",
     "lint-staged": "lint-staged",
     "prepare": "is-ci || husky install",
     "project:coverage:to-relative": "node ./scripts/commands/project-coverage-to-relative.js",
@@ -37,6 +37,8 @@
     "@rollup/plugin-babel": "5.3.1",
     "@rollup/plugin-commonjs": "21.1.0",
     "@rollup/plugin-node-resolve": "13.3.0",
+    "@stryker-mutator/core": "5.6.1",
+    "@stryker-mutator/jest-runner": "5.6.1",
     "@testing-library/cypress": "8.0.2",
     "@typescript-eslint/parser": "5.23.0",
     "babel-jest": "27.5.1",
@@ -64,7 +66,11 @@
     "prettier": "2.6.2",
     "react": "17.0.2",
     "react-app-rewired": "2.2.1",
+    "react-dom": "17.0.2",
+    "react-redux": "7.2.6",
+    "react-test-renderer": "17.0.2",
     "react-scripts": "4.0.3",
+    "redux": "4.1.2",
     "request": "2.88.2",
     "request-promise": "4.2.6",
     "rollup": "2.73.0",
@@ -82,8 +88,10 @@
     "packages/**/*.js": "eslint",
     "test/**/*.js": "eslint",
     "mocks/**/*.js": "eslint",
+    "examples/**/*.js": "eslint",
     "scripts/**/*.js": "eslint",
-    "*.js": "eslint"
+    "*.js": "eslint",
+    "*.cjs": "eslint"
   },
   "type": "module",
   "engines": {

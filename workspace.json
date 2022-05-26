@@ -5,9 +5,16 @@
     "basic-tutorial": "examples/basic-tutorial",
     "browser-storage": "packages/browser-storage",
     "core": "packages/core",
+    "core-browser-app-e2e": "test/core-browser-app-e2e",
+    "core-nodejs-cjs": "test/core-nodejs-cjs",
+    "core-nodejs-esm-e2e": "test/core-nodejs-esm-e2e",
+    "core-react-app": "mocks/core-react-app",
+    "core-vanilla-app": "mocks/core-vanilla-app",
+    "react-react-app": "mocks/react-react-app",
     "custom-origins": "examples/custom-origins",
     "memory": "packages/memory",
     "prismic": "packages/prismic",
-    "react": "packages/react"
+    "react": "packages/react",
+    "react-e2e": "test/react-e2e"
   }
 }
