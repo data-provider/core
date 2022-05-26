@@ -23,7 +23,7 @@ jobs:
         node-version: '16.x'
         registry-url: 'https://npm.pkg.github.com'
         # Defaults to the user or organization that owns the workflow file
-        scope: '@mocks-server'
+        scope: '@data-provider'
         cache: 'pnpm'
     - run: pnpm -r publish --no-git-checks
       env:
