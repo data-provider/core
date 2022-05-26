@@ -28,6 +28,7 @@ const runTests = async () => {
     clearInterval(interval);
   };
 
+  // eslint-disable-next-line no-shadow
   const expect = (assertion, value) => {
     expects++;
     console.log(`- ${assertion}: ${value ? "ok" : "ko"}`);

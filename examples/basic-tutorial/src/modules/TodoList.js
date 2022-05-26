@@ -11,16 +11,13 @@ const TodoList = ({ showCompletedByDefault, title }) => {
     <div>
       <h2>{title}</h2>
       <FilteredTodoList showCompleted={showCompleted} />
-      <Filters
-        onClick={show => setShowCompleted(show)}
-        showCompleted={showCompleted}
-      />
+      <Filters onClick={(show) => setShowCompleted(show)} showCompleted={showCompleted} />
     </div>
   );
 };
 
 TodoList.propTypes = {
   title: PropTypes.string.isRequired,
-}
+};
 
 export default TodoList;

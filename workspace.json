@@ -6,7 +6,7 @@
     "browser-storage": "packages/browser-storage",
     "core": "packages/core",
     "core-browser-app-e2e": "test/core-browser-app-e2e",
-    "core-nodejs-cjs": "test/core-nodejs-cjs",
+    "core-nodejs-cjs-e2e": "test/core-nodejs-cjs-e2e",
     "core-nodejs-esm-e2e": "test/core-nodejs-esm-e2e",
     "core-react-app": "mocks/core-react-app",
     "core-vanilla-app": "mocks/core-vanilla-app",

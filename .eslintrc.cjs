@@ -5,7 +5,9 @@ module.exports = {
     es6: true,
   },
   parserOptions: {
+    sourceType: "module",
     ecmaVersion: 2018,
+    requireConfigFile: false,
   },
   plugins: ["prettier", "@nrwl/nx"],
   extends: ["prettier"],
@@ -26,6 +28,10 @@ module.exports = {
         allow: [],
         depConstraints: [
           {
+            sourceTag: "type:example",
+            onlyDependOnLibsWithTags: ["type:lib"],
+          },
+          {
             sourceTag: "type:mock",
             onlyDependOnLibsWithTags: ["type:lib"],
           },
@@ -39,7 +45,13 @@ module.exports = {
           },
           {
             sourceTag: "type:test",
-            onlyDependOnLibsWithTags: ["type:lib", "type:app", "type:mock", "type:specs"],
+            onlyDependOnLibsWithTags: [
+              "type:lib",
+              "type:app",
+              "type:mock",
+              "type:specs",
+              "type:example",
+            ],
           },
         ],
       },

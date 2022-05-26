@@ -3,23 +3,23 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@data-provider/axios": [
-        "packages/axios/src/index.js"
+      "@data-provider/axios/*": [
+        "packages/axios/*"
       ],
-      "@data-provider/browser-storage": [
-        "packages/browser-storage/src/index.js"
+      "@data-provider/browser-storage/*": [
+        "packages/browser-storage/*"
       ],
-      "@data-provider/core": [
-        "packages/core/src/index.js"
+      "@data-provider/core/*": [
+        "packages/core/*"
       ],
-      "@data-provider/memory": [
-        "packages/memory/src/index.js"
+      "@data-provider/memory/*": [
+        "packages/memory/*"
       ],
-      "@data-provider/prismic": [
-        "packages/prismic/src/index.js"
+      "@data-provider/prismic/*": [
+        "packages/prismic/*"
       ],
-      "@data-provider/react": [
-        "packages/react/src/index.js"
+      "@data-provider/react/*": [
+        "packages/react/*"
       ]
     }
   }

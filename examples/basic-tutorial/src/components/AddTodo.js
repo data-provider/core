@@ -4,18 +4,18 @@ const AddTodo = ({ onSubmit }) => {
   return (
     <div>
       <form
-        onSubmit={e => {
-          e.preventDefault()
+        onSubmit={(e) => {
+          e.preventDefault();
           if (!input.value.trim()) {
-            return
+            return;
           }
-          onSubmit(input.value)
-          input.value = ''
+          onSubmit(input.value);
+          input.value = "";
         }}
       >
         <input
-          ref={node => {
-            input = node
+          ref={(node) => {
+            input = node;
           }}
         />
         <button type="submit">Add Todo</button>

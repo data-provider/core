@@ -3,12 +3,12 @@ import { Selector } from "@data-provider/core";
 
 export const todos = new Axios({
   id: "todos",
-  url: "/todos"
+  url: "/todos",
 });
 
 export const todo = new Axios({
   id: "todo",
-  url: "/todos/:id"
+  url: "/todos/:id",
 });
 
 export const todosFiltered = new Selector(
@@ -17,36 +17,32 @@ export const todosFiltered = new Selector(
     if (queryValue.completed === null) {
       return todosResults;
     }
-    return todosResults.filter(todo => todo.completed === queryValue.completed)
+    return todosResults.filter((todoResult) => todoResult.completed === queryValue.completed);
   },
   {
     id: "todos-filtered",
     initialState: {
-      data: []
+      data: [],
     },
   }
 );
 
-const cleanTodosCache = response => {
+const cleanTodosCache = (response) => {
   todos.cleanCache();
   return Promise.resolve(response);
 };
 
-export const createTodo = text => {
+export const createTodo = (text) => {
   return todos.create({
     text,
-    completed: false
+    completed: false,
   });
 };
 
 export const updateTodo = (id, completed) => {
-  return todo.query({ urlParams: { id }})
-    .update({ completed })
-    .then(cleanTodosCache);
+  return todo.query({ urlParams: { id } }).update({ completed }).then(cleanTodosCache);
 };
 
-export const deleteTodo = id => {
-  return todo.query({ urlParams: { id }})
-    .delete()
-    .then(cleanTodosCache);
+export const deleteTodo = (id) => {
+  return todo.query({ urlParams: { id } }).delete().then(cleanTodosCache);
 };

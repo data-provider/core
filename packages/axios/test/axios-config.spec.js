@@ -12,7 +12,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 const { providers } = require("@data-provider/core");
 
 const { DEFAULT_BASE_PATH, SETTINGS } = require("@mocks-server/admin-api-paths");
-const fetch = require("cross-fetch");
+const crossFetch = require("cross-fetch");
 const { Axios } = require("../src/index");
 
 describe("axios config", () => {
@@ -20,7 +20,7 @@ describe("axios config", () => {
   const mocksSettingsUrl = `http://127.0.0.1:3100${DEFAULT_BASE_PATH}${SETTINGS}`;
 
   beforeAll(async () => {
-    await fetch(mocksSettingsUrl, {
+    await crossFetch(mocksSettingsUrl, {
       method: "PATCH",
       body: JSON.stringify({
         delay: 3000,
@@ -44,7 +44,7 @@ describe("axios config", () => {
 
   afterAll(async () => {
     providers.clear();
-    await fetch(mocksSettingsUrl, {
+    await crossFetch(mocksSettingsUrl, {
       method: "PATCH",
       body: JSON.stringify({
         delay: 0,

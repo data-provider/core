@@ -2,6 +2,9 @@
   "name": "node-cjs-tests",
   "version": "1.0.0",
   "private": true,
+  "dependencies": {
+    "@data-provider/core": "workspace:*"
+  },
   "scripts": {
     "test:e2e": "node index.js"
   }

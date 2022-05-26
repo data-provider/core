@@ -10,7 +10,7 @@ const DATA_PROVIDER_STORE = "data";
 
 const store = createStore(
   combineReducers({
-    [DATA_PROVIDER_STORE]: storeManager.reducer
+    [DATA_PROVIDER_STORE]: storeManager.reducer,
   }),
   window && window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 );
@@ -21,5 +21,5 @@ render(
   <Provider store={store}>
     <App />
   </Provider>,
-  document.getElementById('root')
+  document.getElementById("root")
 );

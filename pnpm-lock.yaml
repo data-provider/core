@@ -280,13 +280,19 @@ importers:
   test/core-browser-app-e2e:
     specifiers: {}
 
-  test/core-nodejs-cjs:
-    specifiers: {}
+  test/core-nodejs-cjs-e2e:
+    specifiers:
+      '@data-provider/core': workspace:*
+    dependencies:
+      '@data-provider/core': link:../../packages/core
 
   test/core-nodejs-esm-e2e:
     specifiers:
+      '@data-provider/core': workspace:*
       babel-plugin-module-resolver: 4.1.0
       regenerator-runtime: 0.13.9
+    dependencies:
+      '@data-provider/core': link:../../packages/core
     devDependencies:
       babel-plugin-module-resolver: 4.1.0
       regenerator-runtime: 0.13.9

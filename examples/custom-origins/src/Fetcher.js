@@ -1,5 +1,5 @@
 const { Provider } = require("@data-provider/core");
-const fetch = require("cross-fetch");
+const crossFetch = require("cross-fetch");
 
 class Fetcher extends Provider {
   configMethod(options) {
@@ -7,7 +7,7 @@ class Fetcher extends Provider {
   }
 
   readMethod() {
-    return fetch(`${this._baseUrl}${this.queryValue.url || ""}`).then((res) => {
+    return crossFetch(`${this._baseUrl}${this.queryValue.url || ""}`).then((res) => {
       if (res.status >= 400) {
         throw new Error("Bad response from server");
       }
@@ -17,7 +17,7 @@ class Fetcher extends Provider {
 
   // This method has duplicated code intentionally due to the simplication of the docs examples
   update(data) {
-    return fetch(`${this._baseUrl}${this.queryValue.url || ""}`, {
+    return crossFetch(`${this._baseUrl}${this.queryValue.url || ""}`, {
       method: "PATCH",
       body: JSON.stringify(data),
     }).then((res) => {

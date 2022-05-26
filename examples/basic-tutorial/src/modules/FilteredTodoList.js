@@ -11,9 +11,7 @@ const FilteredTodoList = ({ showCompleted }) => {
   if (loading && !todos) {
     return <div>Loading...</div>;
   }
-  return (
-    <TodoList todos={todos} onTodoClick={updateTodo} />
-  );
+  return <TodoList todos={todos} onTodoClick={updateTodo} />;
 };
 
 export default FilteredTodoList;

@@ -4,7 +4,7 @@ const Todo = ({ onClick, id, completed, text }) => (
   <li
     onClick={() => onClick(id, !completed)}
     style={{
-      textDecoration: completed ? "line-through" : "none"
+      textDecoration: completed ? "line-through" : "none",
     }}
   >
     {text}
@@ -14,7 +14,7 @@ const Todo = ({ onClick, id, completed, text }) => (
 Todo.propTypes = {
   onClick: PropTypes.func.isRequired,
   completed: PropTypes.bool.isRequired,
-  text: PropTypes.string.isRequired
+  text: PropTypes.string.isRequired,
 };
 
 export default Todo;

@@ -1,9 +1,9 @@
 import Proptypes from "prop-types";
 
-const Author = ({ id, name, deleteIcon }) => {
+const Author = ({ id, name: authorName, deleteIcon }) => {
   return (
     <li id={`author-${id}`}>
-      {deleteIcon} {name}
+      {deleteIcon} {authorName}
     </li>
   );
 };
