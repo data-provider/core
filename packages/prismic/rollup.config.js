@@ -24,7 +24,7 @@ const BASE_PLUGINS = [
     preferBuiltins: true,
   }),
   commonjs({
-    include: "node_modules/**",
+    include: /node_modules/,
   }),
   json(),
   babel({
