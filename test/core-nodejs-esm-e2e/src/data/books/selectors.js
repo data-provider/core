@@ -1,11 +1,11 @@
-import { Selector } from "@data-provider/core";
+import { Selector } from "@data-provider/core/dist/index.esm";
 
 import { authorsProvider } from "data/authors";
 
 import { booksProvider } from "./providers";
 
 export const booksWithAuthorName = new Selector([authorsProvider, booksProvider], function (
-  query,
+  _query,
   results
 ) {
   return results[1].map(function (book) {

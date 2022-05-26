@@ -1,4 +1,4 @@
-import { Provider } from "@data-provider/core";
+import { Provider } from "@data-provider/core/dist/index.esm";
 
 class MockProvider extends Provider {
   readMethod() {

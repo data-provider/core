@@ -1,4 +1,4 @@
-import { Selector } from "@data-provider/core/dist/index.esm.js";
+import { Selector } from "@data-provider/core/dist/index.esm";
 
 import { authorsProvider } from "./providers";
 

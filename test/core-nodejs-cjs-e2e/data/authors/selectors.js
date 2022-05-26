@@ -1,4 +1,4 @@
-const { Selector } = require("@data-provider/core/dist/index.cjs");
+const { Selector } = require("@data-provider/core");
 
 const { authorsProvider } = require("./providers");
 

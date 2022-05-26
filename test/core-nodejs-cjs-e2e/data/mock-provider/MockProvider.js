@@ -1,4 +1,4 @@
-const { Provider } = require("@data-provider/core/dist/index.cjs");
+const { Provider } = require("@data-provider/core");
 
 class MockProvider extends Provider {
   readMethod() {
