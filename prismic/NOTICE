@@ -1,0 +1,6 @@
+data-provider prismic
+Copyright 2019 Javier Brea
+
+Portions of this software were developed at XbyOrange company.
+  Forked from XByOrange Mercury Prismic v1.2.0, distributed under The Apache Software License, Version 2.0.
+  Github repository "xbyorange/mercury-browser-storage" (https://github.com/XbyOrange/mercury-browser-storage), branch master, commit 801bb8d598d85c021b40144ca1380af42a32e66f. The  original project files were wrongly licensed because an error of the main maintainer, Javier Brea, who received instructions from the XbyOrange company about licensing it as Apache2.0, but didn't include the appropiate license header in all repository files by error. The error has been fixed and XbyOrange license headers have been added to all original files, as it was the real intention of the XbyOrange company.
