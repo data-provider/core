@@ -29,8 +29,7 @@
     "lint-staged": "lint-staged",
     "build": "rollup --config",
     "test": "jest",
-    "test:unit": "npm run test -- --coverage --ci --verbose=false --coverageReporters=lcov --coverageReporters=text-summary",
-    "prepare": "is-ci || husky install"
+    "test:unit": "npm run test -- --coverage --ci --verbose=false --coverageReporters=lcov --coverageReporters=text-summary"
   },
   "peerDependencies": {
     "@data-provider/core": "3.x"
@@ -60,11 +59,6 @@
     "rollup": "2.68.0",
     "rollup-plugin-terser": "7.0.2",
     "sinon": "12.0.1"
-  },
-  "lint-staged": {
-    "*.js": "eslint",
-    "src/**/*.js": "eslint",
-    "test/**/*.js": "eslint"
   },
   "engines": {
     "node": ">=12.0.0"

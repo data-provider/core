@@ -45,8 +45,7 @@
     "test:ci": "npm run test:unit && npm run test:e2e:ci",
     "test:mutation": "stryker run",
     "lint": "eslint src test test-e2e/browser/vanilla-app/public/main.js test-e2e/browser/react-app/src test-e2e/browser/cypress test-e2e/nodejs/cjs test-e2e/nodejs/esm/*.js test-e2e/nodejs/esm/src",
-    "lint-staged": "lint-staged",
-    "prepare": "is-ci || husky install"
+    "lint-staged": "lint-staged"
   },
   "peerDependencies": {
     "redux": "4.x"
@@ -82,16 +81,6 @@
     "rollup": "2.61.1",
     "rollup-plugin-terser": "7.0.2",
     "sinon": "12.0.1"
-  },
-  "lint-staged": {
-    "*.js": "eslint",
-    "src/**/*.js": "eslint",
-    "test/**/*.js": "eslint",
-    "test-e2e/browser/cypress/**/*.js": "eslint",
-    "test-e2e/browser/vanilla-app/public/main.js": "eslint",
-    "test-e2e/browser/react-app/src/**/*.js": "eslint",
-    "test-e2e/nodejs/cjs/**/*.js": "eslint",
-    "test-e2e/nodejs/esm/src/**/*.js": "eslint"
   },
   "engines": {
     "node": ">=12.0.0"

@@ -1,0 +1,6 @@
+**/node_modules
+**/.tmp
+/mocks/*/public
+/mocks/*/build
+/packages/*/dist
+/packages/*/coverage

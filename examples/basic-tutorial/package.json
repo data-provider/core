@@ -1,0 +1,37 @@
+{
+  "private": true,
+  "dependencies": {
+    "@data-provider/axios": "4.1.0",
+    "@data-provider/core": "3.1.0",
+    "@data-provider/react": "1.6.0",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
+    "react-redux": "7.2.6",
+    "react-scripts": "4.0.3",
+    "redux": "4.1.2"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "json-server": "json-server --watch db.json --port=3100",
+    "start:all": "start-server-and-test json-server 3100 start"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "json-server": "0.17.0",
+    "start-server-and-test": "1.14.0"
+  }
+}

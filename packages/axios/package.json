@@ -42,8 +42,7 @@
     "test": "jest --runInBand",
     "mocks-and-test": "start-server-and-test mocks tcp:127.0.0.1:3100 test",
     "test:unit": "npm run mocks-and-test",
-    "test:mutation": "start-server-and-test mocks:silent tcp:127.0.0.1:3100 stryker:run",
-    "prepare": "is-ci || husky install"
+    "test:mutation": "start-server-and-test mocks:silent tcp:127.0.0.1:3100 stryker:run"
   },
   "peerDependencies": {
     "@data-provider/core": "3.x"
@@ -82,11 +81,6 @@
     "rollup-plugin-terser": "7.0.2",
     "sinon": "12.0.1",
     "start-server-and-test": "1.14.0"
-  },
-  "lint-staged": {
-    "*.js": "eslint",
-    "src/**/*.js": "eslint",
-    "test/**/*.js": "eslint"
   },
   "engines": {
     "node": ">=12.0.0"

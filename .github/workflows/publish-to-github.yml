@@ -1,0 +1,30 @@
+name: publish-to-github
+on:
+  release:
+    types: [created]
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Install pnpm
+      uses: pnpm/action-setup@v2.2.1
+      with:
+        version: "6.x"
+    - uses: actions/setup-node@v3
+      with:
+        node-version: '16.x'
+        registry-url: 'https://npm.pkg.github.com'
+        cache: 'pnpm'
+    - run: pnpm install
+    - run: pnpm run build:all
+    - uses: actions/setup-node@v3
+      with:
+        node-version: '16.x'
+        registry-url: 'https://npm.pkg.github.com'
+        # Defaults to the user or organization that owns the workflow file
+        scope: '@mocks-server'
+        cache: 'pnpm'
+    - run: pnpm -r publish --no-git-checks
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
