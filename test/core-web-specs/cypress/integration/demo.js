@@ -15,24 +15,6 @@ describe("Demo page", () => {
     cy.visit("/");
   });
 
-  describe("loaders", () => {
-    it("should display books loading", () => {
-      books.shouldBeLoading();
-    });
-
-    it("should display books placeholder", () => {
-      books.shouldDisplayPlaceholder();
-    });
-
-    it("should display authors loading", () => {
-      authors.shouldBeLoading();
-    });
-
-    it("should display authors placeholder", () => {
-      authors.shouldDisplayPlaceholder();
-    });
-  });
-
   describe("authors column", () => {
     it("should display 4 results", () => {
       authors.shouldDisplayItems(4);
