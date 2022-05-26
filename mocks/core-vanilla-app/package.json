@@ -5,7 +5,6 @@
   },
   "scripts": {
     "build": "cross-env node ./commands/copyLibrary.js",
-    "serve": "serve -l 3000",
-    "build-and-serve": "npm run build && npm run serve"
+    "serve": "serve -l 3000"
   }
 }

@@ -1,6 +1,7 @@
 {
   "private": true,
   "dependencies": {
+    "@data-provider/react": "workspace:*",
     "@data-provider/core": "workspace:*",
     "is-promise": "4.0.0",
     "prop-types": "15.7.2",
@@ -12,8 +13,7 @@
   "scripts": {
     "start": "react-app-rewired start",
     "build": "react-app-rewired build",
-    "serve": "serve -l 3000",
-    "build-and-serve": "npm run build && npm run serve"
+    "serve": "serve -l 3000"
   },
   "browserslist": {
     "production": [
