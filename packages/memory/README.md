@@ -1,8 +1,15 @@
-[![Build status][build-image]][build-url] [![Coverage Status][coveralls-image]][coveralls-url] [![Quality Gate][quality-gate-image]][quality-gate-url] [![Mutation testing badge](https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2Fdata-provider%2Fmemory%2Fmaster)](https://dashboard.stryker-mutator.io/reports/github.com/data-provider/memory/master)
+<p align="center"><a href="https://www.data-provider.org" target="_blank" rel="noopener noreferrer"><img width="120" src="https://www.data-provider.org/img/logo_120.png" alt="Data Provider logo"></a></p>
 
-[![Renovate](https://img.shields.io/badge/renovate-enabled-brightgreen.svg)](https://renovatebot.com) [![Last commit][last-commit-image]][last-commit-url] [![Last release][release-image]][release-url] 
+<p align="center">
+  <a href="https://github.com/data-provider/core/actions?query=workflow%3Abuild+branch%3Amaster"><img src="https://github.com/data-provider/core/workflows/build/badge.svg?branch=master" alt="Build Status"></a>
+  <a href="https://codecov.io/gh/data-provider/core"><img src="https://codecov.io/gh/data-provider/core/branch/master/graph/badge.svg?token=2S8ZR55AJV" alt="Coverage"></a>
+  <a href="https://sonarcloud.io/project/overview?id=data-provider_core_memory"><img src="https://sonarcloud.io/api/project_badges/measure?project=data-provider_core_memory&metric=alert_status" alt="Quality Gate"></a>
+  <a href="https://www.npmjs.com/package/@data-provider/memory"><img src="https://img.shields.io/npm/dm/@data-provider/memory.svg" alt="Downloads"></a>
+  <a href="https://renovatebot.com"><img src="https://img.shields.io/badge/renovate-enabled-brightgreen.svg" alt="Renovate"></a>
+  <a href="https://github.com/data-provider/core/blob/master/packages/memory/LICENSE"><img src="https://img.shields.io/npm/l/@data-provider/memory.svg" alt="License"></a>
+</p>
 
-[![NPM downloads][npm-downloads-image]][npm-downloads-url] [![License][license-image]][license-url]
+---
 
 # Memory origin addon for Data Provider
 
@@ -98,23 +105,8 @@ providers.getByTag("memory").cleanCache();
 ## Contributing
 
 Contributors are welcome.
-Please read the [contributing guidelines](.github/CONTRIBUTING.md) and [code of conduct](.github/CODE_OF_CONDUCT.md).
+Please read the [contributing guidelines](https://github.com/data-provider/core/blob/master/.github/CONTRIBUTING.md) and [code of conduct](https://github.com/data-provider/core/blob/master/.github/CODE_OF_CONDUCT.md).
 
 [data-provider]: https://www.data-provider.org
 [get-started]: https://www.data-provider.org/docs/getting-started
 [basic-tutorial]: https://www.data-provider.org/docs/basics-intro
-
-[coveralls-image]: https://coveralls.io/repos/github/data-provider/memory/badge.svg
-[coveralls-url]: https://coveralls.io/github/data-provider/memory
-[build-image]: https://github.com/data-provider/memory/workflows/build/badge.svg?branch=master
-[build-url]: https://github.com/data-provider/memory/actions?query=workflow%3Abuild+branch%3Amaster
-[last-commit-image]: https://img.shields.io/github/last-commit/data-provider/memory.svg
-[last-commit-url]: https://github.com/data-provider/memory/commits
-[license-image]: https://img.shields.io/npm/l/@data-provider/memory.svg
-[license-url]: https://github.com/data-provider/memory/blob/master/LICENSE
-[npm-downloads-image]: https://img.shields.io/npm/dm/@data-provider/memory.svg
-[npm-downloads-url]: https://www.npmjs.com/package/@data-provider/memory
-[quality-gate-image]: https://sonarcloud.io/api/project_badges/measure?project=data-provider_memory&metric=alert_status
-[quality-gate-url]: https://sonarcloud.io/dashboard?id=data-provider_memory
-[release-image]: https://img.shields.io/github/release-date/data-provider/memory.svg
-[release-url]: https://github.com/data-provider/memory/releases

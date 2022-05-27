@@ -1,8 +1,15 @@
-[![Build status][build-image]][build-url] [![Coverage Status][coveralls-image]][coveralls-url] [![Quality Gate][quality-gate-image]][quality-gate-url]
+<p align="center"><a href="https://www.data-provider.org" target="_blank" rel="noopener noreferrer"><img width="120" src="https://www.data-provider.org/img/logo_120.png" alt="Data Provider logo"></a></p>
 
-[![Renovate](https://img.shields.io/badge/renovate-enabled-brightgreen.svg)](https://renovatebot.com) [![Last commit][last-commit-image]][last-commit-url] [![Last release][release-image]][release-url] 
+<p align="center">
+  <a href="https://github.com/data-provider/core/actions?query=workflow%3Abuild+branch%3Amaster"><img src="https://github.com/data-provider/core/workflows/build/badge.svg?branch=master" alt="Build Status"></a>
+  <a href="https://codecov.io/gh/data-provider/core"><img src="https://codecov.io/gh/data-provider/core/branch/master/graph/badge.svg?token=2S8ZR55AJV" alt="Coverage"></a>
+  <a href="https://sonarcloud.io/project/overview?id=data-provider_core_react"><img src="https://sonarcloud.io/api/project_badges/measure?project=data-provider_core_react&metric=alert_status" alt="Quality Gate"></a>
+  <a href="https://www.npmjs.com/package/@data-provider/react"><img src="https://img.shields.io/npm/dm/@data-provider/react.svg" alt="Downloads"></a>
+  <a href="https://renovatebot.com"><img src="https://img.shields.io/badge/renovate-enabled-brightgreen.svg" alt="Renovate"></a>
+  <a href="https://github.com/data-provider/core/blob/master/packages/react/LICENSE"><img src="https://img.shields.io/npm/l/@data-provider/react.svg" alt="License"></a>
+</p>
 
-[![NPM downloads][npm-downloads-image]][npm-downloads-url] [![License][license-image]][license-url]
+---
 
 # React bindings for [@data-provider][data-provider]
 
@@ -524,7 +531,7 @@ export default withDataLoadedErrorComponents(books)(BooksList, BooksNotLoaded, B
 ## Contributing
 
 Contributors are welcome.
-Please read the [contributing guidelines](.github/CONTRIBUTING.md) and [code of conduct](.github/CODE_OF_CONDUCT.md).
+Please read the [contributing guidelines](https://github.com/data-provider/core/blob/master/.github/CONTRIBUTING.md) and [code of conduct](https://github.com/data-provider/core/blob/master/.github/CODE_OF_CONDUCT.md).
 
 [data-provider]: https://www.data-provider.org
 [data-provider-selectors]: https://www.data-provider.org/docs/api-selector
@@ -533,18 +540,3 @@ Please read the [contributing guidelines](.github/CONTRIBUTING.md) and [code of 
 [basic-tutorial]: https://www.data-provider.org/docs/basics-intro
 
 [react-redux-hooks]: https://react-redux.js.org/api/hooks
-
-[coveralls-image]: https://coveralls.io/repos/github/data-provider/react/badge.svg
-[coveralls-url]: https://coveralls.io/github/data-provider/react
-[build-image]: https://github.com/data-provider/react/workflows/build/badge.svg?branch=master
-[build-url]: https://github.com/data-provider/react/actions?query=workflow%3Abuild+branch%3Amaster
-[last-commit-image]: https://img.shields.io/github/last-commit/data-provider/react.svg
-[last-commit-url]: https://github.com/data-provider/react/commits
-[license-image]: https://img.shields.io/npm/l/@data-provider/react.svg
-[license-url]: https://github.com/data-provider/react/blob/master/LICENSE
-[npm-downloads-image]: https://img.shields.io/npm/dm/@data-provider/react.svg
-[npm-downloads-url]: https://www.npmjs.com/package/@data-provider/react
-[quality-gate-image]: https://sonarcloud.io/api/project_badges/measure?project=data-provider_react&metric=alert_status
-[quality-gate-url]: https://sonarcloud.io/dashboard?id=data-provider_react
-[release-image]: https://img.shields.io/github/release-date/data-provider/react.svg
-[release-url]: https://github.com/data-provider/react/releases
