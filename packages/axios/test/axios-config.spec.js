@@ -23,7 +23,9 @@ describe("axios config", () => {
     await crossFetch(mocksSettingsUrl, {
       method: "PATCH",
       body: JSON.stringify({
-        delay: 3000,
+        mocks: {
+          delay: 3000,
+        },
       }),
       headers: {
         "Content-Type": "application/json",
@@ -47,7 +49,9 @@ describe("axios config", () => {
     await crossFetch(mocksSettingsUrl, {
       method: "PATCH",
       body: JSON.stringify({
-        delay: 0,
+        mocks: {
+          delay: 0,
+        },
       }),
       headers: {
         "Content-Type": "application/json",
