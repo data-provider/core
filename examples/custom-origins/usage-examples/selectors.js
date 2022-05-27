@@ -3,8 +3,8 @@ const { jsonPlaceHolderApi } = require("./providers");
 
 const postWithUserData = new Selector(
   (queryValue) => jsonPlaceHolderApi.query({ url: `posts/${queryValue.id}` }),
-  (queryValue, post) => jsonPlaceHolderApi.query({ url: `users/${post.userId}` }),
-  (queryValue, postData, userData) => {
+  (_queryValue, post) => jsonPlaceHolderApi.query({ url: `users/${post.userId}` }),
+  (_queryValue, postData, userData) => {
     return {
       ...postData,
       userName: userData.name,

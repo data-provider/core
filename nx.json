@@ -26,6 +26,12 @@
     ".github/workflows/*.*": "*"
   },
   "targetDependencies": {
+    "start": [
+      {
+        "target": "build",
+        "projects": "dependencies"
+      }
+    ],
     "build": [
       {
         "target": "build",

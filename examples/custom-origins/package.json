@@ -1,28 +1,7 @@
 {
   "private": true,
-  "scripts": {
-    "lint": "eslint src usage-examples",
-    "test": "jest"
-  },
-  "peerDependencies": {
-    "@data-provider/core": "3.x"
-  },
   "dependencies": {
-    "cross-fetch": "3.1.4"
-  },
-  "devDependencies": {
-    "@babel/core": "7.16.0",
-    "@babel/preset-env": "7.16.4",
-    "@data-provider/core": "3.1.0",
-    "babel-jest": "27.4.2",
-    "babel-polyfill": "6.26.0",
-    "eslint": "8.4.0",
-    "eslint-config-prettier": "8.3.0",
-    "eslint-plugin-prettier": "4.0.0",
-    "jest": "27.4.3",
-    "prettier": "2.5.1",
-    "redux": "4.1.2",
-    "sinon": "12.0.1"
+    "@data-provider/core": "workspace:*"
   },
   "engines": {
     "node": ">=12.0.0"
