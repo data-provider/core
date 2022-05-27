@@ -11,6 +11,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Removed
 ### BREAKING CHANGES
 
+## [5.0.0] - 2022-05-27
+
+### Changed
+- chore(deps): Drop support for Node 12.
+- chore(deps): Update dependencies
+
 ## [4.1.0] - 2021-12-06
 
 ### Changed

@@ -1,6 +1,6 @@
 {
   "name": "@data-provider/browser-storage",
-  "version": "3.1.0",
+  "version": "4.0.0",
   "description": "Data Provider addon providing localStorage and sessionStorage origins",
   "keywords": [
     "data-provider",
@@ -41,12 +41,12 @@
     "test:mutation": "stryker run"
   },
   "peerDependencies": {
-    "@data-provider/core": "3.x"
+    "@data-provider/core": "4.x"
   },
   "devDependencies": {
     "@data-provider/core": "workspace:*"
   },
   "engines": {
-    "node": ">=12.0.0"
+    "node": ">=14.0.0"
   }
 }

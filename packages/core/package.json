@@ -1,6 +1,6 @@
 {
   "name": "@data-provider/core",
-  "version": "3.1.0",
+  "version": "4.0.0",
   "description": "Async Data Provider agnostic about data origins",
   "keywords": [
     "data",
@@ -48,6 +48,6 @@
     "lodash.isplainobject": "4.0.6"
   },
   "engines": {
-    "node": ">=12.0.0"
+    "node": ">=14.0.0"
   }
 }

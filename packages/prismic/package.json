@@ -1,6 +1,6 @@
 {
   "name": "@data-provider/prismic",
-  "version": "3.1.0",
+  "version": "4.0.0",
   "description": "Data Provider for reading data from Prismic CMS API",
   "keywords": [
     "data-provider",
@@ -33,7 +33,7 @@
     "test:unit": "jest --coverage --ci --verbose=false --coverageReporters=lcov --coverageReporters=text-summary"
   },
   "peerDependencies": {
-    "@data-provider/core": "3.x"
+    "@data-provider/core": "4.x"
   },
   "dependencies": {
     "prismic-javascript": "2.1.5"
@@ -42,6 +42,6 @@
     "@data-provider/core": "workspace:*"
   },
   "engines": {
-    "node": ">=12.0.0"
+    "node": ">=14.0.0"
   }
 }

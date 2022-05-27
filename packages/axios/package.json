@@ -1,6 +1,6 @@
 {
   "name": "@data-provider/axios",
-  "version": "4.1.0",
+  "version": "5.0.0",
   "description": "REST API Data Provider origin addon using Axios",
   "keywords": [
     "data-provider",
@@ -47,7 +47,7 @@
     "test:mutation": "start-server-and-test mocks:silent tcp:127.0.0.1:3100 stryker:run"
   },
   "peerDependencies": {
-    "@data-provider/core": "3.x"
+    "@data-provider/core": "4.x"
   },
   "dependencies": {
     "axios": "0.27.2",
@@ -59,6 +59,6 @@
     "@data-provider/core": "workspace:*"
   },
   "engines": {
-    "node": ">=12.0.0"
+    "node": ">=14.0.0"
   }
 }
