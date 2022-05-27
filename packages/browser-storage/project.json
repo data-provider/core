@@ -1,0 +1,5 @@
+{
+  "root": "packages/browser-storage/",
+  "projectType": "library",
+  "tags": ["type:lib"]
+}

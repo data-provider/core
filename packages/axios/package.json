@@ -1,0 +1,64 @@
+{
+  "name": "@data-provider/axios",
+  "version": "4.1.0",
+  "description": "REST API Data Provider origin addon using Axios",
+  "keywords": [
+    "data-provider",
+    "data-provider-addon",
+    "data-provider-origin",
+    "addon",
+    "origin",
+    "axios",
+    "reactive",
+    "data",
+    "crud",
+    "cache",
+    "api",
+    "rest"
+  ],
+  "author": "Javier Brea",
+  "license": "Apache-2.0",
+  "homepage": "https://www.data-provider.org",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/data-provider/core.git",
+    "directory": "packages/axios"
+  },
+  "funding": {
+    "type": "opencollective",
+    "url": "https://opencollective.com/data-provider"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist"
+  ],
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.esm.js",
+  "scripts": {
+    "mocks": "mocks-server",
+    "mocks:silent": "mocks-server --log=silent",
+    "build": "rollup --config",
+    "stryker:run": "stryker run",
+    "test": "jest --runInBand",
+    "mocks-and-test": "start-server-and-test mocks tcp:127.0.0.1:3100 test",
+    "test:unit": "npm run mocks-and-test",
+    "test:mutation": "start-server-and-test mocks:silent tcp:127.0.0.1:3100 stryker:run"
+  },
+  "peerDependencies": {
+    "@data-provider/core": "3.x"
+  },
+  "dependencies": {
+    "axios": "0.26.0",
+    "axios-retry": "3.2.4",
+    "path-to-regexp": "6.2.0",
+    "query-string": "7.1.1"
+  },
+  "devDependencies": {
+    "@data-provider/core": "workspace:*"
+  },
+  "engines": {
+    "node": ">=12.0.0"
+  }
+}

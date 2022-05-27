@@ -1,0 +1,13 @@
+{
+  "private": true,
+  "scripts": {
+    "test:e2e": "node index.js"
+  },
+  "dependencies": {
+    "@data-provider/core": "workspace:*"
+  },
+  "devDependencies": {
+    "babel-plugin-module-resolver": "4.1.0",
+    "regenerator-runtime": "0.13.9"
+  }
+}

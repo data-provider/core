@@ -1,0 +1,5 @@
+{
+  "root": "examples/custom-origins/",
+  "projectType": "application",
+  "tags": ["type:example"]
+}

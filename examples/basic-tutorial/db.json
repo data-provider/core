@@ -1,0 +1,14 @@
+{
+  "todos": [
+    {
+      "text": "Check the example repo",
+      "completed": true,
+      "id": 1
+    },
+    {
+      "id": 2,
+      "text": "Finish the basic tutorial",
+      "completed": false
+    }
+  ]
+}

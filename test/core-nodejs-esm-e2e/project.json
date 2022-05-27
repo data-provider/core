@@ -1,0 +1,5 @@
+{
+  "root": "test/core-nodejs-esm-e2e/",
+  "projectType": "application",
+  "tags": ["type:test"]
+}

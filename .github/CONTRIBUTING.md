@@ -14,8 +14,6 @@ The following is a set of guidelines for contributing to this project. These are
 * [Pull Requests](#pull-requests)
 * [Styleguides](#styleguides)
   * [Git Commit Messages](#git-commit-messages)
-  * [JavaScript Styleguide](#javascript-styleguide)
-  * [Tests Styleguide](#tests-styleguide)
 * [Developer's certificate of origin](#developers-certificate-of-origin)
 
 ## Code of Conduct
@@ -31,7 +29,7 @@ Individuals making significant and valuable contributions are given commit-acces
 There are a few basic ground-rules for contributors:
 
 1. **No `--force` pushes** or modifying the Git history in any way.
-2. **All modifications** should be subject to a **pull request** to solicit feedback from other contributors. The base branch of the pull request should be the "release" branch. All issues should be merged into it until is ready to declare a formal release.
+2. **All modifications** should be subject to a **pull request** to solicit feedback from other contributors. The base branch of the pull request should correspond with the assigned "release milestone" of the related issue. When an issue is created, it will be prioritized and a "release milestone" will be assigned to it, at the criteria of contributors. A branch will be created from master for that release milestone, and all related issues should be merged into it, until is ready to declare a formal release.
 
 ### Releases
 
@@ -65,30 +63,6 @@ This document may also be subject to pull-requests or changes by contributors wh
 * Use the imperative mood ("Move cursor to..." not "Moves cursor to...")
 * Limit the first line to 72 characters or less
 * Reference issues and pull requests liberally after the first line
-
-### JavaScript Styleguide
-
-All JavaScript must adhere to the style defined in the `.eslintrc.json` file.
-
-### Tests Styleguide
-
-- Fail tests first. How do you know if it is actually testing anything if the assert never failed?
-- Treat `describe` as a noun or situation (Situations usually start with "when").
-- Treat `it` as a statement about state or how an operation changes state. Usually, all `it` should start with "should".
-- Prefer fewer asserts per `it`.
-- Prefer one file for all specs of a javascript file, but, if it grows too much, split it into many files adding a sufix describing the behavior being tested in it (`file.behavior.js`)
-
-#### Example
-
-```js
-describe("a dog", () => {
-  describe("when is happy", () => {
-    it("should wags its tail", () => {
-      expect(dog.tail.moving).to.be.true();
-    });
-  });
-});
-```
 
 ## Developer's Certificate of Origin
 

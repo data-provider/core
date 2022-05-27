@@ -1,0 +1,5 @@
+{
+  "root": "packages/axios/",
+  "projectType": "library",
+  "tags": ["type:lib"]
+}

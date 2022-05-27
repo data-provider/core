@@ -1,10 +1,10 @@
 # See https://help.github.com/ignore-files/ for more about ignoring files.
 
-# dependencies
-/node_modules
+#environment variables
+#.env
 
-# testing
-/coverage
+# dependencies
+node_modules
 
 # misc
 .DS_Store
@@ -16,24 +16,8 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+.pnpm-debug.log*
 
-# idea
+# ides
 .idea
-
-
-# idea
-/.idea
-
-# output files
-/dist
-
-# History files
-/.history/**
-
-# Vscode config
-jsconfig.json
-
-# stryker temp files
-/reports
-.stryker-tmp
-stryker.conf.local.js
+.vs

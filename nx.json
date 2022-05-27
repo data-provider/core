@@ -1,0 +1,60 @@
+{
+  "extends": "@nrwl/workspace/presets/npm.json",
+  "npmScope": "@data-provider",
+  "affected": {
+    "defaultBase": "master"
+  },
+  "tasksRunnerOptions": {
+    "default": {
+      "runner": "@nrwl/workspace/tasks-runners/default",
+      "options": {
+        "cacheableOperations": ["build"]
+      }
+    }
+  },
+  "implicitDependencies": {
+    "pnpm-workspace.yaml": "*",
+    "pnpm-lock.yaml": "*",
+    "workspace.json": "*",
+    "package.json": {
+      "dependencies": "*",
+      "devDependencies": "*"
+    },
+    "tsconfig.base.json": "*",
+    "nx.json": "*",
+    "scripts/**/*.*": "*",
+    ".github/workflows/*.*": "*"
+  },
+  "targetDependencies": {
+    "start": [
+      {
+        "target": "build",
+        "projects": "dependencies"
+      }
+    ],
+    "build": [
+      {
+        "target": "build",
+        "projects": "dependencies"
+      }
+    ],
+    "serve": [
+      {
+        "target": "build",
+        "projects": "self"
+      }
+    ],
+    "test:e2e": [
+      {
+        "target": "build",
+        "projects": "dependencies"
+      }
+    ],
+    "test:unit": [
+      {
+        "target": "build",
+        "projects": "dependencies"
+      }
+    ]
+  }
+}
