@@ -28,7 +28,7 @@ describe("usePolling", () => {
       id: BOOKS_ID,
       data: BOOKS,
     });
-    selector = new Selector(provider, (query, result) => result, {
+    selector = new Selector(provider, (_query, result) => result, {
       id: "books-selector",
       initialState: { data: [], loading: true },
     });
