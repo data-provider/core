@@ -84,7 +84,7 @@ describe("Selector with multiple dependencies", () => {
 
     dependency3 = new Selector(
       dependency1,
-      (query, testResult) => {
+      (_query, testResult) => {
         spies.dependency3Read();
         return testResult;
       },
@@ -95,7 +95,7 @@ describe("Selector with multiple dependencies", () => {
 
     dependency4 = new Selector(
       [dependency2, dependency3],
-      (query, [provider2Results, selectorResults]) => {
+      (_query, [provider2Results, selectorResults]) => {
         spies.dependency4Read();
         return Promise.resolve({
           provider2Results,
@@ -109,7 +109,7 @@ describe("Selector with multiple dependencies", () => {
 
     dependency5 = new Selector(
       (query) => dependency4.query(query),
-      (query, dependency4Results) => {
+      (_query, dependency4Results) => {
         spies.dependency5Read();
         return {
           dependency4Results,
@@ -210,7 +210,7 @@ describe("Selector with multiple dependencies", () => {
 
     selector = new Selector(
       (query) => dependency16.query(query),
-      (query, selector2Results) => {
+      (_query, selector2Results) => {
         spies.selectorRead();
         return selector2Results;
       },

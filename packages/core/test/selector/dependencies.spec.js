@@ -70,7 +70,7 @@ describe("Selector dependencies", () => {
 
   describe("when defined as data provider instance", () => {
     beforeEach(() => {
-      selector = new Selector(dependency1, (query, dependencyResult) => {
+      selector = new Selector(dependency1, (_query, dependencyResult) => {
         spies.dependency4Read();
         return dependencyResult;
       });
@@ -101,7 +101,7 @@ describe("Selector dependencies", () => {
 
   describe("when defined with an invalid data provider", () => {
     beforeEach(() => {
-      selector = new Selector("foo", (query, dependencyResult) => {
+      selector = new Selector("foo", (_query, dependencyResult) => {
         return dependencyResult;
       });
     });
@@ -118,7 +118,7 @@ describe("Selector dependencies", () => {
       selector = new Selector(
         dependency1,
         dependency2,
-        (query, dependency1Result, dependency2Result) => {
+        (_query, dependency1Result, dependency2Result) => {
           spies.dependency4Read({
             dependency1Result,
             dependency2Result,
@@ -181,7 +181,7 @@ describe("Selector dependencies", () => {
     beforeEach(() => {
       selector = new Selector(
         [dependency1, dependency2],
-        (query, [dependency1Result, dependency2Result]) => {
+        (_query, [dependency1Result, dependency2Result]) => {
           spies.dependency4Read({
             dependency1Result,
             dependency2Result,
@@ -238,7 +238,7 @@ describe("Selector dependencies", () => {
           querySpy(query);
           return dependency1;
         },
-        (query, dependencyResult) => {
+        (_query, dependencyResult) => {
           spies.dependency4Read();
           return dependencyResult;
         }
@@ -1189,7 +1189,7 @@ describe("Selector dependencies", () => {
         () => {
           return [
             catchDependency(
-              new Promise((resolve, reject) => {
+              new Promise((_resolve, reject) => {
                 setTimeout(() => {
                   reject(errorToThrow);
                 }, 1000);

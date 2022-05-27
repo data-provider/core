@@ -52,7 +52,7 @@ describe("Selector cleanCacheThrottle option", () => {
     };
 
     provider = new TestProvider();
-    selector = new Selector(provider, (query, results) => results);
+    selector = new Selector(provider, (_query, results) => results);
     selector.cleanDependenciesCache();
     provider.config({
       cleanCacheThrottle: null,

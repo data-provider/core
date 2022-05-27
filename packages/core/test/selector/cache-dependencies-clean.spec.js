@@ -78,7 +78,7 @@ describe("Selector when cleanDependenciesCache method is called", () => {
     dependency1 = new TestProvider({ id: "dependency1" });
     dependency2 = new TestProvider({ id: "dependency2" });
     dependency3 = new TestProvider({ id: "dependency3" });
-    dependency4 = new Selector(dependency3, (query, dependencyResult) => {
+    dependency4 = new Selector(dependency3, (_query, dependencyResult) => {
       return dependencyResult;
     });
 
@@ -86,7 +86,7 @@ describe("Selector when cleanDependenciesCache method is called", () => {
       dependency1,
       dependency2,
       dependency4,
-      (query, dependency1Result, dependency2Result, dependency3Result) => {
+      (_query, dependency1Result, dependency2Result, dependency3Result) => {
         spies.selectorRead();
         return [dependency1Result, dependency2Result, dependency3Result];
       }
@@ -190,7 +190,7 @@ describe("Selector when cleanDependenciesCache method is called", () => {
       () => dependency1,
       () => dependency2,
       () => dependency4,
-      (query, dependency1Result, dependency2Result, dependency3Result) => {
+      (_query, dependency1Result, dependency2Result, dependency3Result) => {
         spies.selectorRead();
         return [dependency1Result, dependency2Result, dependency3Result];
       }
@@ -214,7 +214,7 @@ describe("Selector when cleanDependenciesCache method is called", () => {
       () => dependency2,
       () => dependency4,
       Promise.resolve(5),
-      (query, dependency1Result, dependency2Result, dependency3Result, dependency4Result) => {
+      (_query, dependency1Result, dependency2Result, dependency3Result, dependency4Result) => {
         spies.selectorRead();
         return [dependency1Result, dependency2Result, dependency3Result, dependency4Result];
       }
@@ -238,7 +238,7 @@ describe("Selector when cleanDependenciesCache method is called", () => {
       () => dependency2,
       () => dependency4,
       5,
-      (query, dependency1Result, dependency2Result, dependency3Result, dependency4Result) => {
+      (_query, dependency1Result, dependency2Result, dependency3Result, dependency4Result) => {
         spies.selectorRead();
         return [dependency1Result, dependency2Result, dependency3Result, dependency4Result];
       }
@@ -347,7 +347,7 @@ describe("Selector when cleanDependenciesCache method is called", () => {
       catchDependency(dependency5, () => {
         return [dependency1, dependency2, dependency3];
       }),
-      (query, result) => {
+      (_query, result) => {
         spies.selectorRead();
         return result;
       }
@@ -447,7 +447,7 @@ describe("Selector when cleanDependenciesCache method is called", () => {
     });
     selector = new Selector(
       [dependency1, dependency2, dependency3],
-      (query, [dependency1Result, dependency2Result, dependency3Result]) => {
+      (_query, [dependency1Result, dependency2Result, dependency3Result]) => {
         spies.selectorRead();
         return [dependency1Result, dependency2Result, dependency3Result];
       }

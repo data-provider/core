@@ -13,6 +13,10 @@ const sinon = require("sinon");
 
 const { Provider, Selector, providers } = require("../../src/index");
 
+const doNothing = () => {
+  //do nothing
+};
+
 describe("Selector cache", () => {
   let sandbox;
   let spies;
@@ -44,7 +48,7 @@ describe("Selector cache", () => {
     };
 
     provider = new TestProvider();
-    selector = new Selector(provider, (query, testResult) => {
+    selector = new Selector(provider, (_query, testResult) => {
       spies.selectorRead();
       return testResult;
     });
@@ -185,7 +189,7 @@ describe("Selector cache", () => {
       providers.clear();
       selector = new Selector(
         (query) => provider.query(query),
-        (query, testResult) => {
+        (_query, testResult) => {
           spies.selectorRead();
           return testResult;
         }
@@ -254,11 +258,11 @@ describe("Selector cache", () => {
     });
 
     it("should clean cache", async () => {
-      selector.read().catch(() => {});
-      selector.read().catch(() => {});
-      selector.read().catch(() => {});
-      await selector.read().catch(() => {});
-      await selector.read().catch(() => {});
+      selector.read().catch(doNothing);
+      selector.read().catch(doNothing);
+      selector.read().catch(doNothing);
+      await selector.read().catch(doNothing);
+      await selector.read().catch(doNothing);
       expect(spies.selectorRead.callCount).toEqual(2);
     });
   });

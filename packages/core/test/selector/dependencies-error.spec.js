@@ -13,6 +13,10 @@ const sinon = require("sinon");
 
 const { Provider, Selector, providers, catchDependency } = require("../../src/index");
 
+const doNothing = () => {
+  //do nothing
+};
+
 describe("Selector dependencies errors", () => {
   const DEPENDENCY_1_RESULT = "dependency-1-result";
   const DEPENDENCY_2_RESULT = "dependency-2-result";
@@ -76,7 +80,7 @@ describe("Selector dependencies errors", () => {
       selectorSpy = sandbox.spy();
       sandbox.spy(dependency1, "read");
       sandbox.spy(dependency2, "read");
-      selector = new Selector(dependency1, dependency2, (query, dependencyResult) => {
+      selector = new Selector(dependency1, dependency2, (_query, dependencyResult) => {
         selectorSpy();
         return dependencyResult;
       });
@@ -113,15 +117,15 @@ describe("Selector dependencies errors", () => {
     it("should not cache dependency result", async () => {
       expect.assertions(1);
       hasToThrow = FOO_ERROR;
-      await selector.read().catch(() => {});
-      await selector.read().catch(() => {});
+      await selector.read().catch(doNothing);
+      await selector.read().catch(doNothing);
       expect(dependency1.read.callCount).toEqual(2);
     });
 
     it("should not cache selector result", async () => {
       expect.assertions(1);
       hasToThrow = FOO_ERROR;
-      await selector.read().catch(() => {});
+      await selector.read().catch(doNothing);
       hasToThrow = null;
       await selector.read();
       expect(selectorSpy.callCount).toEqual(1);
@@ -142,7 +146,7 @@ describe("Selector dependencies errors", () => {
           eventReceived();
         });
       });
-      await selector.read().catch(() => {});
+      await selector.read().catch(doNothing);
       hasToThrow = null;
       dependency1.cleanCache();
 
@@ -164,7 +168,7 @@ describe("Selector dependencies errors", () => {
           catchSpy(err);
           return catchReturns;
         }),
-        (query, dependencyResult) => {
+        (_query, dependencyResult) => {
           selectorSpy();
           return dependencyResult;
         }

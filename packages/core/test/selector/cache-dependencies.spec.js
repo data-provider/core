@@ -75,7 +75,7 @@ describe("Selector dependencies cache", () => {
     selector = new Selector(
       dependency1,
       dependency2,
-      (query, dependency1Result, dependency2Result) => {
+      (_query, dependency1Result, dependency2Result) => {
         spies.selectorRead();
         return [dependency1Result, dependency2Result];
       }
@@ -178,7 +178,7 @@ describe("Selector dependencies cache", () => {
       catchDependency(dependency3, () => {
         return [dependency1, dependency2];
       }),
-      (query, result) => {
+      (_query, result) => {
         spies.selectorRead();
         return result;
       }
@@ -216,7 +216,7 @@ describe("Selector dependencies cache", () => {
     });
     selector = new Selector(
       [dependency1, dependency2],
-      (query, [dependency1Result, dependency2Result]) => {
+      (_query, [dependency1Result, dependency2Result]) => {
         spies.selectorRead();
         return [dependency1Result, dependency2Result];
       }
