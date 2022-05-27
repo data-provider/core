@@ -16,7 +16,7 @@ importers:
       '@nrwl/eslint-plugin-nx': 13.8.3
       '@nrwl/tao': 13.8.3
       '@nrwl/workspace': 13.8.3
-      '@rollup/plugin-babel': 5.3.0
+      '@rollup/plugin-babel': 5.3.1
       '@rollup/plugin-commonjs': 21.0.1
       '@rollup/plugin-json': 4.1.0
       '@rollup/plugin-node-resolve': 13.0.6
@@ -82,7 +82,7 @@ importers:
       '@nrwl/eslint-plugin-nx': 13.8.3_9261d69daa8b00f33ff26a19bd4271fe
       '@nrwl/tao': 13.8.3
       '@nrwl/workspace': 13.8.3_b34b2322de60a64ff6afc92143922fbf
-      '@rollup/plugin-babel': 5.3.0_@babel+core@7.18.2+rollup@2.73.0
+      '@rollup/plugin-babel': 5.3.1_@babel+core@7.18.2+rollup@2.73.0
       '@rollup/plugin-commonjs': 21.0.1_rollup@2.73.0
       '@rollup/plugin-json': 4.1.0_rollup@2.73.0
       '@rollup/plugin-node-resolve': 13.0.6_rollup@2.73.0
@@ -3037,8 +3037,8 @@ packages:
       webpack-dev-server: 3.11.1_webpack@4.44.2
     dev: true
 
-  /@rollup/plugin-babel/5.3.0_@babel+core@7.18.2+rollup@2.73.0:
-    resolution: {integrity: sha512-9uIC8HZOnVLrLHxayq/PTzw+uS25E14KPUBh5ktF+18Mjo5yK0ToMMx6epY0uEgkjwJw0aBW4x2horYXh8juWw==}
+  /@rollup/plugin-babel/5.3.1_@babel+core@7.18.2+rollup@2.73.0:
+    resolution: {integrity: sha512-WFfdLWU/xVWKeRQnKmIAQULUI7Il0gZnBIH/ZFO069wYIfPu+8zrfp/KMW0atmELoRDq8FbiP3VCss9MhCut7Q==}
     engines: {node: '>= 10.0.0'}
     peerDependencies:
       '@babel/core': ^7.0.0
