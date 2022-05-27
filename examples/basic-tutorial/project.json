@@ -1,0 +1,5 @@
+{
+  "root": "examples/basic-tutorial/",
+  "projectType": "application",
+  "tags": ["type:example"]
+}

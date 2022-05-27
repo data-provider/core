@@ -1,0 +1,52 @@
+{
+  "name": "@data-provider/react",
+  "version": "2.0.0",
+  "description": "React bindings for @data-provider",
+  "keywords": [
+    "data-provider",
+    "addon",
+    "react",
+    "hooks",
+    "HOCs",
+    "data",
+    "reactive"
+  ],
+  "author": "Javier Brea",
+  "license": "MIT",
+  "homepage": "https://www.data-provider.org",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/data-provider/core.git",
+    "directory": "packages/react"
+  },
+  "funding": {
+    "type": "opencollective",
+    "url": "https://opencollective.com/data-provider"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist"
+  ],
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.esm.js",
+  "scripts": {
+    "build": "rollup --config",
+    "test:unit": "jest --coverage --ci --verbose=false --coverageReporters=lcov --coverageReporters=text-summary"
+  },
+  "dependencies": {
+    "hoist-non-react-statics": "3.3.2"
+  },
+  "peerDependencies": {
+    "@data-provider/core": ">=2.5.2",
+    "react": ">=16.8.0",
+    "react-redux": ">=7.1.0"
+  },
+  "devDependencies": {
+    "@data-provider/core": "workspace:*"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}

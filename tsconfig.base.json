@@ -1,0 +1,26 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@data-provider/axios/*": [
+        "packages/axios/*"
+      ],
+      "@data-provider/browser-storage/*": [
+        "packages/browser-storage/*"
+      ],
+      "@data-provider/core/*": [
+        "packages/core/*"
+      ],
+      "@data-provider/memory/*": [
+        "packages/memory/*"
+      ],
+      "@data-provider/prismic/*": [
+        "packages/prismic/*"
+      ],
+      "@data-provider/react/*": [
+        "packages/react/*"
+      ]
+    }
+  }
+}

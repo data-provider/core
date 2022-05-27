@@ -1,0 +1,52 @@
+github_checks:
+    annotations: true
+coverage:
+  status:
+    project:
+      default:
+        target: auto
+        threshold: 0%
+        base: auto
+      axios:
+        flags:
+          - axios
+      browser-storage:
+        flags:
+          - browser-storage
+      core:
+        flags:
+          - core
+      memory:
+        flags:
+          - memory
+      prismic:
+        flags:
+          - prismic
+      react:
+        flags:
+          - react
+flags:
+  axios:
+    paths:
+      - packages/axios/**
+    carryforward: true
+  browser-storage:
+    paths:
+      - packages/browser-storage/**
+    carryforward: true
+  core:
+    paths:
+      - packages/core/**
+    carryforward: true
+  memory:
+    paths:
+      - packages/memory/**
+    carryforward: true
+  prismic:
+    paths:
+      - packages/prismic/**
+    carryforward: true
+  react:
+    paths:
+      - packages/react/**
+    carryforward: true

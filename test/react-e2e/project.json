@@ -1,0 +1,6 @@
+{
+  "root": "test/react-e2e/",
+  "projectType": "application",
+  "implicitDependencies": ["react-react-app"],
+  "tags": ["type:test"]
+}

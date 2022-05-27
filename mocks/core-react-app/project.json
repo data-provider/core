@@ -1,0 +1,5 @@
+{
+  "root": "mocks/core-react-app/",
+  "projectType": "application",
+  "tags": ["type:mock"]
+}

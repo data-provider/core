@@ -1,0 +1,10 @@
+{
+  "private": true,
+  "dependencies": {
+    "@data-provider/core": "workspace:*"
+  },
+  "scripts": {
+    "build": "cross-env node ./commands/copyLibrary.js",
+    "serve": "serve -l 3000"
+  }
+}

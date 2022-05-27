@@ -1,0 +1,23 @@
+{
+  "env": {
+    "es6": true
+  },
+  "parser": "@babel/eslint-parser",
+  "plugins": ["prettier", "react", "react-hooks"],
+  "extends": ["plugin:react/recommended"],
+  "parserOptions": {
+    "sourceType": "module",
+    "requireConfigFile" : false,
+    "babelOptions": {
+      "presets": ["@babel/preset-react"]
+    }
+  },
+  "globals": {
+  },
+  "settings": {
+    "react": {
+      "pragma": "React",
+      "version": "^17.0.0"
+    }
+  }
+}

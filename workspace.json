@@ -1,0 +1,22 @@
+{
+  "version": 2,
+  "projects": {
+    "axios": "packages/axios",
+    "basic-tutorial": "examples/basic-tutorial",
+    "browser-storage": "packages/browser-storage",
+    "core": "packages/core",
+    "core-react-app-e2e": "test/core-react-app-e2e",
+    "core-nodejs-cjs-e2e": "test/core-nodejs-cjs-e2e",
+    "core-nodejs-esm-e2e": "test/core-nodejs-esm-e2e",
+    "core-react-app": "mocks/core-react-app",
+    "core-vanilla-app-e2e": "test/core-vanilla-app-e2e",
+    "core-web-specs": "test/core-web-specs",
+    "core-vanilla-app": "mocks/core-vanilla-app",
+    "react-react-app": "mocks/react-react-app",
+    "custom-origins": "examples/custom-origins",
+    "memory": "packages/memory",
+    "prismic": "packages/prismic",
+    "react": "packages/react",
+    "react-e2e": "test/react-e2e"
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "root": "test/core-web-specs/",
+  "projectType": "application",
+  "implicitDependencies": ["core-react-app", "core-vanilla-app"],
+  "tags": ["type:specs"]
+}

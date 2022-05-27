@@ -1,0 +1,48 @@
+name: affected-projects
+on:
+  pull_request:
+jobs:
+  comment-affected:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Derive appropriate SHAs for base and head for `nx affected` commands
+        uses: nrwl/nx-set-shas@v2
+        with:
+          main-branch-name: ${{github.event.pull_request.base.ref}}
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2.2.1
+        with:
+          version: "6.x"
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '17.x'
+          cache: 'pnpm'
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        run: |
+          echo "::set-output name=pnpm_cache_dir::$(pnpm store path)"
+      - uses: actions/cache@v3
+        name: Setup pnpm cache
+        with:
+          path: ${{ steps.pnpm-cache.outputs.pnpm_cache_dir }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+      - name: Install dependencies
+        run: pnpm install
+      - name: Affected report
+        id: affected-report
+        run: echo "::set-output name=report::$(./scripts/commands/affected-report.sh origin/${{github.event.pull_request.base.ref}})"
+      - name: Comment affected
+        uses: unsplash/comment-on-pr@v1.3.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          msg: ${{ steps.affected-report.outputs.report }}
+          delete_prev_regex_msg: ${{ steps.affected-report.outputs.report }}
+          check_for_duplicate_msg: false

@@ -1,0 +1,25 @@
+{
+  "private": true,
+  "dependencies": {
+    "@data-provider/axios": "workspace:*",
+    "@data-provider/core": "workspace:*",
+    "@data-provider/react": "workspace:*"
+  },
+  "scripts": {
+    "start:app": "react-scripts start",
+    "json-server": "json-server --watch db.json --port=3100",
+    "start": "start-server-and-test json-server 3100 start:app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

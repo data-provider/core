@@ -1,0 +1,12 @@
+{
+  "private": true,
+  "dependencies": {
+    "@data-provider/core": "workspace:*"
+  },
+  "scripts": {
+    "build": "echo \"Built!\""
+  },
+  "engines": {
+    "node": ">=12.0.0"
+  }
+}

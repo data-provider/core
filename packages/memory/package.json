@@ -1,0 +1,51 @@
+{
+  "name": "@data-provider/memory",
+  "version": "4.0.0",
+  "description": "Memory origin addon for Data Provider",
+  "keywords": [
+    "data-provider",
+    "data-provider-addon",
+    "data-provider-origin",
+    "addon",
+    "origin",
+    "data",
+    "crud",
+    "memory",
+    "reactive",
+    "events"
+  ],
+  "author": "Javier Brea",
+  "license": "Apache-2.0",
+  "homepage": "https://www.data-provider.org",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/data-provider/core.git",
+    "directory": "packages/memory"
+  },
+  "funding": {
+    "type": "opencollective",
+    "url": "https://opencollective.com/data-provider"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist"
+  ],
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.esm.js",
+  "scripts": {
+    "build": "rollup --config",
+    "test:unit": "jest",
+    "test:mutation": "stryker run"
+  },
+  "peerDependencies": {
+    "@data-provider/core": "4.x"
+  },
+  "devDependencies": {
+    "@data-provider/core": "workspace:*"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}

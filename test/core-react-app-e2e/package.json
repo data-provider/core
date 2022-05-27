@@ -1,0 +1,8 @@
+{
+  "private": true,
+  "scripts": {
+    "cypress:run": "pnpm -w run nx cypress:run core-web-specs",
+    "start:app": "pnpm -w run nx serve core-react-app",
+    "test:e2e": "start-server-and-test start:app http-get://127.0.0.1:3000 cypress:run"
+  }
+}

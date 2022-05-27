@@ -1,0 +1,9 @@
+{
+  "private": true,
+  "scripts": {
+    "test:e2e": "node index.js"
+  },
+  "dependencies": {
+    "@data-provider/core": "workspace:*"
+  }
+}

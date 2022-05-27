@@ -1,0 +1,5 @@
+{
+  "root": "mocks/core-vanilla-app/",
+  "projectType": "application",
+  "tags": ["type:mock"]
+}

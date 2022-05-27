@@ -1,0 +1,5 @@
+{
+  "root": "packages/prismic/",
+  "projectType": "library",
+  "tags": ["type:lib"]
+}

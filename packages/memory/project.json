@@ -1,0 +1,5 @@
+{
+  "root": "packages/memory/",
+  "projectType": "library",
+  "tags": ["type:lib"]
+}

@@ -1,0 +1,47 @@
+{
+  "name": "@data-provider/prismic",
+  "version": "4.0.0",
+  "description": "Data Provider for reading data from Prismic CMS API",
+  "keywords": [
+    "data-provider",
+    "data-provider-addon",
+    "data-provider-origin",
+    "origin",
+    "cms",
+    "prismic",
+    "client",
+    "api-client",
+    "reactive"
+  ],
+  "author": "Javier Brea",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/data-provider/core.git",
+    "directory": "packages/prismic"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist"
+  ],
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.esm.js",
+  "scripts": {
+    "build": "rollup --config",
+    "test:unit": "jest --coverage --ci --verbose=false --coverageReporters=lcov --coverageReporters=text-summary"
+  },
+  "peerDependencies": {
+    "@data-provider/core": "4.x"
+  },
+  "dependencies": {
+    "prismic-javascript": "2.1.5"
+  },
+  "devDependencies": {
+    "@data-provider/core": "workspace:*"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}

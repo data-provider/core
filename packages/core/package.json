@@ -1,0 +1,53 @@
+{
+  "name": "@data-provider/core",
+  "version": "4.0.0",
+  "description": "Async Data Provider agnostic about data origins",
+  "keywords": [
+    "data",
+    "provider",
+    "async",
+    "redux",
+    "selector",
+    "cache",
+    "reactive",
+    "state",
+    "modular",
+    "front-end",
+    "nodejs"
+  ],
+  "author": "Javier Brea",
+  "license": "Apache-2.0",
+  "funding": {
+    "type": "opencollective",
+    "url": "https://opencollective.com/data-provider"
+  },
+  "homepage": "https://www.data-provider.org",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/data-provider/core.git",
+    "directory": "packages/core"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist"
+  ],
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.esm.js",
+  "scripts": {
+    "build": "rollup --config && cross-env node scripts/commands/build.mjs",
+    "test:unit": "jest",
+    "test:mutation": "stryker run"
+  },
+  "peerDependencies": {
+    "redux": "4.x"
+  },
+  "dependencies": {
+    "is-promise": "4.0.0",
+    "lodash.isplainobject": "4.0.6"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}
