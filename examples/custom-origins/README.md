@@ -19,13 +19,8 @@ pnpm nx build custom-origins
 Then, you can use `Node.js  to run the different code examples __in the [./usage-examples](./usage-examples) folder__:
 
 ```sh
+cd examples/custom-origins/usage-examples
 node usage-of-update-method.js
-```
-
-```sh
 node usage-with-promises.js
-```
-
-```sh
 node usage-with-selectors.js
 ```
