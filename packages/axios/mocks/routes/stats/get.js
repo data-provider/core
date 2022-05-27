@@ -18,7 +18,7 @@ module.exports = [
     variants: [
       {
         id: "real",
-        response: (req, res) => {
+        response: (_req, res) => {
           res.status(200);
           res.send(getAll());
         },

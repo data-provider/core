@@ -22,7 +22,7 @@ module.exports = [
     variants: [
       {
         id: "default",
-        response: (req, res) => {
+        response: (_req, res) => {
           addBooksSuccess();
           res.status(200);
           res.send([
@@ -42,7 +42,7 @@ module.exports = [
     variants: [
       {
         id: "default",
-        response: (req, res) => {
+        response: (_req, res) => {
           addBooksServerError();
           res.status(500);
           res.send({
@@ -61,7 +61,7 @@ module.exports = [
     variants: [
       {
         id: "default",
-        response: (req, res) => {
+        response: (_req, res) => {
           addBooksNotFoundError();
           res.status(404);
           res.send({

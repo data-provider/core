@@ -22,7 +22,7 @@ class StorageMock {
     return this._value;
   }
 
-  setItem(namespace, value) {
+  setItem(_namespace, value) {
     this._value = value;
   }
 }

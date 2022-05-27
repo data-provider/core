@@ -18,7 +18,7 @@ module.exports = [
     variants: [
       {
         id: "real",
-        response: (req, res) => {
+        response: (_req, res) => {
           reset();
           res.status(200);
           res.send();
