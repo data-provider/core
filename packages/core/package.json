@@ -36,7 +36,7 @@
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js",
   "scripts": {
-    "build": "rollup --config",
+    "build": "rollup --config && cross-env node scripts/commands/build.mjs",
     "test:unit": "jest",
     "test:mutation": "stryker run"
   },

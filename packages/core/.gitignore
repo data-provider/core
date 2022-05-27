@@ -37,3 +37,9 @@ jsconfig.json
 /reports
 .stryker-tmp
 stryker.conf.local.js
+
+# generated
+
+/README.md
+/LICENSE
+/NOTICE
