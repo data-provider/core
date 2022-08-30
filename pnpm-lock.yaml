@@ -26,7 +26,7 @@ importers:
       '@stryker-mutator/jest-runner': 6.1.2
       '@testing-library/cypress': 8.0.3
       '@testing-library/jest-dom': 5.16.5
-      '@testing-library/react': 12.1.2
+      '@testing-library/react': 12.1.5
       '@typescript-eslint/parser': 5.36.0
       babel-jest: 27.5.1
       babel-loader: 8.2.5
@@ -96,7 +96,7 @@ importers:
       '@stryker-mutator/jest-runner': 6.1.2_@stryker-mutator+core@6.1.2
       '@testing-library/cypress': 8.0.3_cypress@9.7.0
       '@testing-library/jest-dom': 5.16.5
-      '@testing-library/react': 12.1.2_react-dom@18.2.0+react@18.2.0
+      '@testing-library/react': 12.1.5_react-dom@18.2.0+react@18.2.0
       '@typescript-eslint/parser': 5.36.0_eslint@8.23.0+typescript@4.8.2
       babel-jest: 27.5.1_@babel+core@7.18.13
       babel-loader: 8.2.5_987cc70bded3fa81b046dafa8784ef98
@@ -3338,15 +3338,16 @@ packages:
       redent: 3.0.0
     dev: true
 
-  /@testing-library/react/12.1.2_react-dom@18.2.0+react@18.2.0:
-    resolution: {integrity: sha512-ihQiEOklNyHIpo2Y8FREkyD1QAea054U0MVbwH1m8N9TxeFz+KoJ9LkqoKqJlzx2JDm56DVwaJ1r36JYxZM05g==}
+  /@testing-library/react/12.1.5_react-dom@18.2.0+react@18.2.0:
+    resolution: {integrity: sha512-OfTXCJUFgjd/digLUuPxa0+/3ZxsQmE7ub9kcbW/wi96Bh3o/p5vrETcBGfP17NWPGqeYYl5LTRpwyGoMC4ysg==}
     engines: {node: '>=12'}
     peerDependencies:
-      react: '*'
-      react-dom: '*'
+      react: <18.0.0
+      react-dom: <18.0.0
     dependencies:
       '@babel/runtime': 7.18.3
       '@testing-library/dom': 8.13.0
+      '@types/react-dom': 17.0.17
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
     dev: true
@@ -3560,6 +3561,20 @@ packages:
 
   /@types/range-parser/1.2.4:
     resolution: {integrity: sha512-EEhsLsD6UsDM1yFhAvy0Cjr6VwmpMWqFBCb9w07wVugF7w9nfajxLuVmngTIpgS6svCnm6Vaw+MZhoDCKnOfsw==}
+    dev: true
+
+  /@types/react-dom/17.0.17:
+    resolution: {integrity: sha512-VjnqEmqGnasQKV0CWLevqMTXBYG9GbwuE6x3VetERLh0cq2LTptFE73MrQi2S7GkKXCf2GgwItB/melLnxfnsg==}
+    dependencies:
+      '@types/react': 17.0.48
+    dev: true
+
+  /@types/react/17.0.48:
+    resolution: {integrity: sha512-zJ6IYlJ8cYYxiJfUaZOQee4lh99mFihBoqkOSEGV+dFi9leROW6+PgstzQ+w3gWTnUfskALtQPGHK6dYmPj+2A==}
+    dependencies:
+      '@types/prop-types': 15.7.5
+      '@types/scheduler': 0.16.2
+      csstype: 3.1.0
     dev: true
 
   /@types/react/18.0.9:
