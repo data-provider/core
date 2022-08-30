@@ -252,7 +252,7 @@ describe("Selector cleanCacheThrottle option", () => {
         cleanCacheThrottle: 500,
       });
       await selector.read();
-      var start = new Date();
+      let start = new Date();
       selector.cleanDependenciesCache(); // This one cleans the cache
       selector.cleanDependenciesCache(); // throttled
       selector.cleanDependenciesCache(); // throttled
@@ -289,7 +289,7 @@ describe("Selector cleanCacheThrottle option", () => {
         cleanCacheThrottle: 100,
       });
       await selector.read();
-      var start = new Date();
+      let start = new Date();
       selector.cleanDependenciesCache(); // This one cleans the cache
       selector.cleanDependenciesCache(); // throttled
       logTime(start, "First block");

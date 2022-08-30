@@ -265,7 +265,7 @@ describe("Provider cleanCacheThrottle option", () => {
       provider.config({
         cleanCacheThrottle: 500,
       });
-      var start = new Date();
+      let start = new Date();
       provider.cleanCache(); // This one cleans the cache
       provider.cleanCache(); // throttled
       provider.cleanCache(); // throttled
@@ -301,7 +301,7 @@ describe("Provider cleanCacheThrottle option", () => {
       provider.config({
         cleanCacheThrottle: 100,
       });
-      var start = new Date();
+      let start = new Date();
       provider.cleanCache(); // This one cleans the cache
       provider.cleanCache(); // throttled
       logTime(start, "First block");
