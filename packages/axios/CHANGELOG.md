@@ -11,6 +11,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Removed
 ### BREAKING CHANGES
 
+## [unreleased]
+
+### Changed
+- chore(deps): Update axios-retry to 3.3.1
+
 ## [5.0.0] - 2022-05-27
 
 ### Changed
