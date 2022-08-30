@@ -11,7 +11,7 @@ export const debounce = function (func, wait = 100) {
 
 class MockProvider extends Provider {
   readMethod() {
-    var that = this;
+    let that = this;
     return new Promise(function (resolve, reject) {
       setTimeout(function () {
         if (!that._errorToThrow) {
