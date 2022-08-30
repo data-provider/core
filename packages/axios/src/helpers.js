@@ -23,7 +23,7 @@ export const TAG = "axios";
 export const PATH_SEP = "/";
 
 export const once = (func) => {
-  var executed = false;
+  let executed = false;
   let result;
   return function () {
     if (!executed) {
