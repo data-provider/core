@@ -218,9 +218,9 @@ importers:
   packages/prismic:
     specifiers:
       '@data-provider/core': workspace:*
-      prismic-javascript: 2.1.5
+      prismic-javascript: 2.7.1
     dependencies:
-      prismic-javascript: 2.1.5
+      prismic-javascript: 2.7.1
     devDependencies:
       '@data-provider/core': link:../core
 
@@ -11284,8 +11284,8 @@ packages:
       react-is: 18.2.0
     dev: true
 
-  /prismic-javascript/2.1.5:
-    resolution: {integrity: sha512-rBZ97TpvrshbwrqzZpO7kZWzzNu/iczBCwRn90Gtdt3P7k6f7o9bNVD+8khmt9nmM1nvdQkU9w17R4UU+uxVGg==}
+  /prismic-javascript/2.7.1:
+    resolution: {integrity: sha512-4Mm2jBtQzjwN57est94wKFR6twvs3AhKx0BOR2IztUFyUEJhIp6iFHXNMQqTMP/q4cZ56hL0BtK5ecBkylNcyA==}
     deprecated: 'prismic-javascript has moved to @prismicio/client! No worries, you''re safe to stay on prismic-javascript but it will no longer receive updates nor fixes (excluding security ones). Upgrading to @prismicio/client should be seamless for most users, if any doubt check out the changelog: https://github.com/prismicio/prismic-javascript/releases or reach out to us on our community forum: https://community.prismic.io'
     dependencies:
       cross-fetch: 2.2.6
@@ -13704,7 +13704,7 @@ packages:
     dev: true
 
   /whatwg-url/5.0.0:
-    resolution: {integrity: sha1-lmRU6HZUYuN2RNNib2dCzotwll0=}
+    resolution: {integrity: sha512-saE57nupxk6v3HY35+jzBwYa0rKSy0XR8JSxZPwgLr7ys0IBzhGviA1/TUGJLmSVqs8pb9AnvICXEuOHLprYTw==}
     dependencies:
       tr46: 0.0.3
       webidl-conversions: 3.0.1
