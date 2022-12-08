@@ -29,13 +29,8 @@ module.exports = {
 
   // The glob patterns Jest uses to detect test files
   testMatch: ["<rootDir>/test/**/?(*.)+(spec|test).js?(x)"],
-  // testMatch: ["<rootDir>/test/methods.spec.js"],
-
-  transform: {
-    ".js$": "babel-jest",
-  },
-
-  setupFiles: ["<rootDir>/jest.init.js"],
+  // testMatch: ["<rootDir>/test/selectors.spec.js"],
+  transformIgnorePatterns: ["<rootDir>/node_modules/.pnpm/(?!(axios)@)", "\\.pnp\\.[^\\/]+$"],
 
   testSequencer: "<rootDir>/jest.testSequencer.js",
 };

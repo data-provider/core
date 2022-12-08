@@ -11,6 +11,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Removed
 ### BREAKING CHANGES
 
+## [5.0.2] - 2022-12-08
+
+### Changed
+- chore(deps): Update axios-retry to 1.2.1
+- chore(deps): Update query-string to 7.1.3
+
 ## [5.0.1] - 2022-08-30
 
 ### Changed
