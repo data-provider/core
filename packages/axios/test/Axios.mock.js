@@ -11,9 +11,9 @@ Unless required by applicable law or agreed to in writing, software distributed 
 
 const sinon = require("sinon");
 
-jest.mock("axios-retry");
+const axios = require("axios").default;
 
-const axios = require("axios");
+jest.mock("axios-retry");
 
 const Mock = class Mock {
   constructor() {

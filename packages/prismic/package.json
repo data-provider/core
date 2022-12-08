@@ -36,7 +36,7 @@
     "@data-provider/core": "4.x"
   },
   "dependencies": {
-    "prismic-javascript": "2.1.5"
+    "prismic-javascript": "2.7.1"
   },
   "devDependencies": {
     "@data-provider/core": "workspace:*"
