@@ -44,7 +44,7 @@
     "@rollup/plugin-node-resolve": "13.3.0",
     "@stryker-mutator/core": "6.1.2",
     "@stryker-mutator/jest-runner": "6.1.2",
-    "@testing-library/cypress": "8.0.3",
+    "@testing-library/cypress": "8.0.7",
     "@testing-library/jest-dom": "5.16.5",
     "@testing-library/react": "12.1.5",
     "@typescript-eslint/parser": "5.36.0",
