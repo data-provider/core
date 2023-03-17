@@ -68,7 +68,7 @@
     "is-ci": "3.0.1",
     "is-promise": "4.0.0",
     "jest": "27.5.1",
-    "json-server": "0.17.0",
+    "json-server": "0.17.2",
     "lint-staged": "13.0.3",
     "lodash": "4.17.21",
     "prettier": "2.8.1",
