@@ -1,4 +1,9 @@
-<p align="center"><a href="https://www.data-provider.org" target="_blank" rel="noopener noreferrer"><img width="120" src="https://www.data-provider.org/img/logo_120.png" alt="Data Provider logo"></a></p>
+# Important Notice
+
+> **⚠ Project Discontinuation**  
+> We regret to inform you that this project is no longer maintained. For an alternative solution, consider using [React Query](https://tanstack.com/query)
+
+<p align="center"><a href="https://data-provider.javierbrea.com" target="_blank" rel="noopener noreferrer"><img width="120" src="https://data-provider.javierbrea.com/img/logo_120.png" alt="Data Provider logo"></a></p>
 
 <p align="center">
   <a href="https://github.com/data-provider/core/actions?query=workflow%3Abuild+branch%3Amaster"><img src="https://github.com/data-provider/core/workflows/build/badge.svg?branch=master" alt="Build Status"></a>
@@ -21,10 +26,10 @@ Create a new provider using the `LocalStorage` or `SessionStorage` classes.
 
 #### Arguments
 
-* `options` _(Object)_: Apart of [common data-provider options](https://www.data-provider.org/docs/api-provider), this plugin also accept next options:
+* `options` _(Object)_: Apart of [common data-provider options](https://data-provider.javierbrea.com/docs/api-provider), this plugin also accept next options:
   * `id` _(String)_: Id of the provider, will be used also as the `key` where the provider data is stored in `localStorage` or `sessionStorage`.
   * `storageFallback` _(Boolean)_: Default `true`. If there is an error trying to access to `window.localStorage` or `window.sessionStorage`, a mock will be used instead, and data will be persisted in memory. This could happen if `localStorage` is disabled by the browser, for example. If you want to handle exceptions by yourself, you can disable this behavior setting this option to `false`, and then all calls to `read`, `update` or `delete` methods will be rejected with the correspondent error, which will be stored also in the `error` property of the provider state.
-  * `initialState` _(Object)_: Same option than the one described in the [data-provider API docs](https://www.data-provider.org/docs/api-provider), except the `data` property, which in this case has no effect, as the initial data set in the state will be the data retrieved synchronously from the real `localStorage` or `sessionStorage`.
+  * `initialState` _(Object)_: Same option than the one described in the [data-provider API docs](https://data-provider.javierbrea.com/docs/api-provider), except the `data` property, which in this case has no effect, as the initial data set in the state will be the data retrieved synchronously from the real `localStorage` or `sessionStorage`.
 
 #### Example
 
@@ -156,6 +161,6 @@ Apart of this common tag, each different type of `browser-storage` origin also h
 Contributors are welcome.
 Please read the [contributing guidelines](https://github.com/data-provider/core/blob/master/.github/CONTRIBUTING.md) and [code of conduct](https://github.com/data-provider/core/blob/master/.github/CODE_OF_CONDUCT.md).
 
-[data-provider]: https://www.data-provider.org
-[get-started]: https://www.data-provider.org/docs/getting-started
-[basic-tutorial]: https://www.data-provider.org/docs/basics-intro
+[data-provider]: https://data-provider.javierbrea.com
+[get-started]: https://data-provider.javierbrea.com/docs/getting-started
+[basic-tutorial]: https://data-provider.javierbrea.com/docs/basics-intro

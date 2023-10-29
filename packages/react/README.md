@@ -1,4 +1,9 @@
-<p align="center"><a href="https://www.data-provider.org" target="_blank" rel="noopener noreferrer"><img width="120" src="https://www.data-provider.org/img/logo_120.png" alt="Data Provider logo"></a></p>
+# Important Notice
+
+> **⚠ Project Discontinuation**  
+> We regret to inform you that this project is no longer maintained. For an alternative solution, consider using [React Query](https://tanstack.com/query)
+
+<p align="center"><a href="https://data-provider.javierbrea.com" target="_blank" rel="noopener noreferrer"><img width="120" src="https://data-provider.javierbrea.com/img/logo_120.png" alt="Data Provider logo"></a></p>
 
 <p align="center">
   <a href="https://github.com/data-provider/core/actions?query=workflow%3Abuild+branch%3Amaster"><img src="https://github.com/data-provider/core/workflows/build/badge.svg?branch=master" alt="Build Status"></a>
@@ -207,7 +212,7 @@ This hook can also be used with [Data Provider selectors][data-provider-selector
 
 * `provider` _(Object)_: [Data Provider][data-provider] provider or selector instance.
 * `interval` _(Number)_: Interval in miliseconds to clean the provider dependencies cache. Default is 5000.
-* `options` _(Object)_: Options object that will be passed as is to the `cleanCache` method of providers or `cleanDependenciesCache` method of selectors. Check the [data-provider API documentation](https://www.data-provider.org/docs/api-providers-and-selectors-methods) for further info. Options can be defined as second argument if interval is omitted.
+* `options` _(Object)_: Options object that will be passed as is to the `cleanCache` method of providers or `cleanDependenciesCache` method of selectors. Check the [data-provider API documentation](https://data-provider.javierbrea.com/docs/api-providers-and-selectors-methods) for further info. Options can be defined as second argument if interval is omitted.
 
 #### Examples
 
@@ -460,7 +465,7 @@ This High Order Component works as the hook `usePolling` described above.
 
 * `provider` _(Object)_: [Data Provider][data-provider] provider or selector instance, or a function as described in the [withDataLoadingError HOC docs](#withdataloadingerrorprovider-custompropertiesnamescomponent)
 * `interval` _(Number)_: Interval in miliseconds to clean the provider dependencies cache. Default is 5000.
-* `options` _(Object)_: Options object that will be passed as is to the `cleanCache` method of providers or `cleanDependenciesCache` method of selectors. Check the [data-provider API documentation](https://www.data-provider.org/docs/api-providers-and-selectors-methods) for further info. Options can be defined as second argument if interval is omitted.
+* `options` _(Object)_: Options object that will be passed as is to the `cleanCache` method of providers or `cleanDependenciesCache` method of selectors. Check the [data-provider API documentation](https://data-provider.javierbrea.com/docs/api-providers-and-selectors-methods) for further info. Options can be defined as second argument if interval is omitted.
 
 #### Example
 
@@ -533,10 +538,10 @@ export default withDataLoadedErrorComponents(books)(BooksList, BooksNotLoaded, B
 Contributors are welcome.
 Please read the [contributing guidelines](https://github.com/data-provider/core/blob/master/.github/CONTRIBUTING.md) and [code of conduct](https://github.com/data-provider/core/blob/master/.github/CODE_OF_CONDUCT.md).
 
-[data-provider]: https://www.data-provider.org
-[data-provider-selectors]: https://www.data-provider.org/docs/api-selector
+[data-provider]: https://data-provider.javierbrea.com
+[data-provider-selectors]: https://data-provider.javierbrea.com/docs/api-selector
 [axios]: https://github.com/axios/axios
-[get-started]: https://www.data-provider.org/docs/getting-started
-[basic-tutorial]: https://www.data-provider.org/docs/basics-intro
+[get-started]: https://data-provider.javierbrea.com/docs/getting-started
+[basic-tutorial]: https://data-provider.javierbrea.com/docs/basics-intro
 
 [react-redux-hooks]: https://react-redux.js.org/api/hooks

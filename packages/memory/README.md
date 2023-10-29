@@ -1,4 +1,9 @@
-<p align="center"><a href="https://www.data-provider.org" target="_blank" rel="noopener noreferrer"><img width="120" src="https://www.data-provider.org/img/logo_120.png" alt="Data Provider logo"></a></p>
+# Important Notice
+
+> **⚠ Project Discontinuation**  
+> We regret to inform you that this project is no longer maintained. For an alternative solution, consider using [React Query](https://tanstack.com/query)
+
+<p align="center"><a href="https://data-provider.javierbrea.com" target="_blank" rel="noopener noreferrer"><img width="120" src="https://data-provider.javierbrea.com/img/logo_120.png" alt="Data Provider logo"></a></p>
 
 <p align="center">
   <a href="https://github.com/data-provider/core/actions?query=workflow%3Abuild+branch%3Amaster"><img src="https://github.com/data-provider/core/workflows/build/badge.svg?branch=master" alt="Build Status"></a>
@@ -107,6 +112,6 @@ providers.getByTag("memory").cleanCache();
 Contributors are welcome.
 Please read the [contributing guidelines](https://github.com/data-provider/core/blob/master/.github/CONTRIBUTING.md) and [code of conduct](https://github.com/data-provider/core/blob/master/.github/CODE_OF_CONDUCT.md).
 
-[data-provider]: https://www.data-provider.org
-[get-started]: https://www.data-provider.org/docs/getting-started
-[basic-tutorial]: https://www.data-provider.org/docs/basics-intro
+[data-provider]: https://data-provider.javierbrea.com
+[get-started]: https://data-provider.javierbrea.com/docs/getting-started
+[basic-tutorial]: https://data-provider.javierbrea.com/docs/basics-intro

@@ -1,4 +1,9 @@
-<p align="center"><a href="https://www.data-provider.org" target="_blank" rel="noopener noreferrer"><img width="120" src="https://www.data-provider.org/img/logo_120.png" alt="Data Provider logo"></a></p>
+# Important Notice
+
+> **⚠ Project Discontinuation**  
+> We regret to inform you that this project is no longer maintained. For an alternative solution, consider using [React Query](https://tanstack.com/query)
+
+<p align="center"><a href="https://data-provider.javierbrea.com" target="_blank" rel="noopener noreferrer"><img width="120" src="https://data-provider.javierbrea.com/img/logo_120.png" alt="Data Provider logo"></a></p>
 
 <p align="center">
   <a href="https://github.com/data-provider/core/actions?query=workflow%3Abuild+branch%3Amaster"><img src="https://github.com/data-provider/core/workflows/build/badge.svg?branch=master" alt="Build Status"></a>
@@ -47,7 +52,7 @@ Configure instance for all next `read` executions.
 		* fullResponse - _`<Boolean>`_ If `true`, the full response of the Prismic api will be used as value. If `false`, only the `response.results` property will be returned, which is the default behavior.
 		* release - _`<String>`_ Prismic release to be read. This parameter will be passed as `ref` to the [prismic-javascript][prismic-javascript-url] query.
 
-Read about how to configure all @data-provider/prismic instances at a time using the [Data Provider `providers` handler](https://www.data-provider.org/docs/api-providers).
+Read about how to configure all @data-provider/prismic instances at a time using the [Data Provider `providers` handler](https://data-provider.javierbrea.com/docs/api-providers).
 
 Example of how to change all `@data-provider/prismic` requests urls at a time:
 
@@ -105,9 +110,9 @@ providers.getByTag("prismic").cleanCache();
 Contributors are welcome.
 Please read the [contributing guidelines](https://github.com/data-provider/core/blob/master/.github/CONTRIBUTING.md) and [code of conduct](https://github.com/data-provider/core/blob/master/.github/CODE_OF_CONDUCT.md).
 
-[data-provider]: https://www.data-provider.org
-[get-started]: https://www.data-provider.org/docs/getting-started
-[basic-tutorial]: https://www.data-provider.org/docs/basics-intro
+[data-provider]: https://data-provider.javierbrea.com
+[get-started]: https://data-provider.javierbrea.com/docs/getting-started
+[basic-tutorial]: https://data-provider.javierbrea.com/docs/basics-intro
 [prismic-javascript-url]: https://www.npmjs.com/package/prismic-javascript
 [data-provider-react]: https://github.com/data-provider/core/blob/master/packages/react/README.md
 

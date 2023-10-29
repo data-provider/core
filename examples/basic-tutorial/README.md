@@ -1,6 +1,6 @@
 # Data Provider basic tutorial
 
-This folder contains the source code of the [data-provider basic tutorial](https://www.data-provider.org/docs/basics-intro).
+This folder contains the source code of the [data-provider basic tutorial](https://data-provider.javierbrea.com/docs/basics-intro).
 
 # Requirements
 

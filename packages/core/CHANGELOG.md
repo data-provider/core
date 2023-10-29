@@ -60,7 +60,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Selector dependencies receive queryValue as first argument
 - Selector dependencies receive results of previous dependencies in an argument for each one
 - `reReadDependenciesMaxTime` option renamed to `readAgainMaxTime`
-- Migration to this major version from v2 can be achieved progressively, read [how to migrate from v2 to v3](https://www.data-provider.org/docs/guides-migrating-from-v2-to-v3) for further info
+- Migration to this major version from v2 can be achieved progressively, read [how to migrate from v2 to v3](https://data-provider.javierbrea.com/docs/guides-migrating-from-v2-to-v3) for further info
 
 ## [2.10.0] - 2021-01-07
 
@@ -210,7 +210,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [2.0.0] - 2020-03-14
 
-> DISCLAIMER: This major release still maintains the concept of the previous "data-provider" versions, but a lot of BREAKING CHANGES have been made to the interfaces in order to improve the usage experience, apart of performance improvements and fixes. A chapter "how to migrate from 1.x" will be added to the documentation website to facilitate the migration to this new version, as the maintenance of 1.X versions will be stopped soon. Read 2.0 pre-releases changelog and docs in https://www.data-provider.org for further info.
+> DISCLAIMER: This major release still maintains the concept of the previous "data-provider" versions, but a lot of BREAKING CHANGES have been made to the interfaces in order to improve the usage experience, apart of performance improvements and fixes. A chapter "how to migrate from 1.x" will be added to the documentation website to facilitate the migration to this new version, as the maintenance of 1.X versions will be stopped soon. Read 2.0 pre-releases changelog and docs in https://data-provider.javierbrea.com for further info.
 
 ### Added
 - feat(events): Pass child causing an `onChild` event to the listener function.
